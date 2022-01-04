@@ -29,8 +29,8 @@ namespace ToolBX.Collections.Deck
         void RemoveAll(Predicate<T> predicate);
         void RemoveAt(int index, int count);
 
-        IDeck<T> Add(params T[]? items);
-        IDeck<T> Add(IEnumerable<T> items);
+        void Add(params T[]? items);
+        void Add(IEnumerable<T> items);
 
         /// <summary>
         /// Inserts items at the beginning of deck.
@@ -116,14 +116,13 @@ namespace ToolBX.Collections.Deck
 
         void ICollection<T>.Add(T item) => Add(item);
 
-        public IDeck<T> Add(params T[]? items)
+        public void Add(params T[]? items)
         {
             if (items == null) Add(new List<T> { default! });
             else Add(items as IEnumerable<T>);
-            return this;
         }
 
-        public IDeck<T> Add(IEnumerable<T> items)
+        public void Add(IEnumerable<T> items)
         {
             if (items == null) throw new ArgumentNullException(nameof(items));
 
@@ -142,8 +141,6 @@ namespace ToolBX.Collections.Deck
             {
                 NewValues = copy
             });
-
-            return this;
         }
 
         private void Grow(int value)
@@ -496,10 +493,10 @@ namespace ToolBX.Collections.Deck
                 _index = 0;
                 Current = default!;
             }
-            //TODO Message
+
             public bool MoveNext()
             {
-                if (_version != _deck._version) throw new InvalidOperationException($"Can't enumerate {_deck.GetType().GetHumanReadableName()} : Collection was modified during enumeration.");
+                if (_version != _deck._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
 
                 if ((uint)_index < (uint)_deck.Count)
                 {
@@ -511,11 +508,10 @@ namespace ToolBX.Collections.Deck
                 Current = default!;
                 return false;
             }
-
-            //TODO Message
+            
             public void Reset()
             {
-                if (_version != _deck._version) throw new InvalidOperationException($"Can't enumerate {_deck.GetType().GetHumanReadableName()} : Collection was modified during enumeration.");
+                if (_version != _deck._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
                 _index = 0;
                 Current = default!;
             }

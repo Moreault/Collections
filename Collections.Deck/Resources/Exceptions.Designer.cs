@@ -88,6 +88,15 @@ namespace ToolBX.Collections.Deck.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string CannotEnumerateBecauseModified {
+            get {
+                return ResourceManager.GetString("CannotEnumerateBecauseModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t get item : index is expected to be between {0} and {1} but its value was {2}.
         /// </summary>
         internal static string CannotGetItemBecauseIndexIsOutOfRange {
@@ -160,7 +169,7 @@ namespace ToolBX.Collections.Deck.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Can&apos;t remove item from {0} : a range between {1} and {2} is expected but the values of index and count were {3} and {4} respectively.
         /// </summary>
         internal static string CannotRemoveItemBecauseRangeFallsOutsideBoundaries {
             get {

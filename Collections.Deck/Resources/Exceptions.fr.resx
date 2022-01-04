@@ -99,25 +99,25 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 	<data name="CannotInstantiateObjectBecauseParameterIsMandatory" xml:space="preserve">
-		<value>Impossible d'instancier {0} : Le paramètre {1} est obligatoire.</value>
+		<value>Impossible d'instancier {0} : le paramètre {1} est obligatoire.</value>
 	</data>
 	<data name="CannotInstantiateObjectBecauseParameterMustBePositiveNumber" xml:space="preserve">
 		<value>Impossible d'instancier {0} : {1} doit être un nombre positif mais sa valeur était {2}.</value>
 	</data>
 	<data name="CannotGetItemBecauseIndexIsOutOfRange" xml:space="preserve">
-		<value>Impossible d'obtenir l'item : On s'attend à ce que l'index soit entre {0} et {1} mais sa valeur était {2}.</value>
+		<value>Impossible d'obtenir l'item : on s'attend à ce que l'index soit entre {0} et {1} mais sa valeur était {2}.</value>
 	</data>
 	<data name="CannotSetItemBecauseIndexIsOutOfRange" xml:space="preserve">
-		<value>Impossible de modifier l'item : On s'attend à ce que l'index soit entre {0} et {1} mais sa valeur était {2}.</value>
+		<value>Impossible de modifier l'item : on s'attend à ce que l'index soit entre {0} et {1} mais sa valeur était {2}.</value>
 	</data>
 	<data name="CannotRemoveItemBecauseIndexIsOutOfRange" xml:space="preserve">
-		<value>Impossible de retirer l'item de {0} : On s'attend à ce que l'index soit entre {1} et {2} mais sa valeur était {3}</value>
+		<value>Impossible de retirer l'item de {0} : on s'attend à ce que l'index soit entre {1} et {2} mais sa valeur était {3}</value>
 	</data>
 	<data name="CannotRemoveItemBecauseItIsNotInCollection" xml:space="preserve">
 		<value>Impossible de retirer l'item de {0} : {1} n'est pas dans la collection.</value>
 	</data>
 	<data name="CannotRemoveItemBecauseNoItemFitPredicate" xml:space="preserve">
-		<value>Impossible de retirer l'item de {0} : Il n'y a aucun item correspondant au prédicat dans la collection.</value>
+		<value>Impossible de retirer l'item de {0} : il n'y a aucun item correspondant au prédicat dans la collection.</value>
 	</data>
 	<data name="CannotCopyBecauseIndexIsOutOfRange" xml:space="preserve">
 		<value>Impossible de copier {0} : on s'attend à ce que l'index soit entre {1} et {2} mais sa valeur était {3}</value>
@@ -136,5 +136,8 @@
 	</data>
 	<data name="CannotRemoveItemBecauseRangeFallsOutsideBoundaries" xml:space="preserve">
 		<value>Impossible de retirer l'item de {0} : on s'attend à recevoir une valeur entre {1} et {2} mais les valeurs de 'index' et 'count' étaient de {3} et {4} respectivement</value>
+	</data>
+	<data name="CannotEnumerateBecauseModified" xml:space="preserve">
+		<value>Impossible d'énumérer {0} : la collection a été modifiée durant l'énumération</value>
 	</data>
 </root>
