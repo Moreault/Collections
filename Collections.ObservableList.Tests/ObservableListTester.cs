@@ -6,14 +6,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ToolBX.Collections.Deck;
+using ToolBX.Collections.ObservableList;
 using ToolBX.Eloquentest;
 using ToolBX.Eloquentest.Extensions;
 
-namespace Collections.Deck.Tests;
+namespace Collections.ObservableList.Tests;
 
 [TestClass]
-public class DeckTester
+public class ObservableListTester
 {
     [TestClass]
     public class LastIndex : Tester
@@ -22,10 +22,10 @@ public class DeckTester
         public void WhenCollectionIsEmpty_ReturnMinusOdne()
         {
             //Arrange
-            var deck = new Deck<Dummy>();
+            var ObservableList = new ObservableList<Dummy>();
 
             //Act
-            var result = deck.LastIndex;
+            var result = ObservableList.LastIndex;
 
             //Assert
             result.Should().Be(-1);
@@ -35,10 +35,10 @@ public class DeckTester
         public void WhenCollectionContainsOneItem_ReturnZero()
         {
             //Arrange
-            var deck = new Deck<Dummy> { Fixture.Create<Dummy>() };
+            var ObservableList = new ObservableList<Dummy> { Fixture.Create<Dummy>() };
 
             //Act
-            var result = deck.LastIndex;
+            var result = ObservableList.LastIndex;
 
             //Assert
             result.Should().Be(0);
@@ -48,13 +48,13 @@ public class DeckTester
         public void WhenCollectionContainsABunchOfItems_ReturnLastIndex()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
 
             //Act
-            var result = deck.LastIndex;
+            var result = ObservableList.LastIndex;
 
             //Assert
-            result.Should().Be(deck.Count - 1);
+            result.Should().Be(ObservableList.Count - 1);
         }
     }
 
@@ -65,10 +65,10 @@ public class DeckTester
         public void Always_ReturnFalse()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
 
             //Act
-            var result = deck.IsReadOnly;
+            var result = ObservableList.IsReadOnly;
 
             //Assert
             result.Should().BeFalse();
@@ -82,11 +82,11 @@ public class DeckTester
         public void WhenIndexIsNegative_Throw()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
             var index = -1;
 
             //Act
-            var action = () => deck[index];
+            var action = () => ObservableList[index];
 
             //Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
@@ -96,11 +96,11 @@ public class DeckTester
         public void WhenIndexIsGreaterThanLastIndex_Throw()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
-            var index = deck.LastIndex + 1;
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = ObservableList.LastIndex + 1;
 
             //Act
-            var action = () => deck[index];
+            var action = () => ObservableList[index];
 
             //Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
@@ -110,28 +110,28 @@ public class DeckTester
         public void WhenIndexIsZero_ReturnFirstItem()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
             var index = 0;
 
             //Act
-            var result = deck[index];
+            var result = ObservableList[index];
 
             //Assert
-            result.Should().Be(deck.First());
+            result.Should().Be(ObservableList.First());
         }
 
         [TestMethod]
         public void WhenIndexIsLastIndex_ReturnLastItem()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
-            var index = deck.LastIndex;
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = ObservableList.LastIndex;
 
             //Act
-            var result = deck[index];
+            var result = ObservableList[index];
 
             //Assert
-            result.Should().Be(deck.Last());
+            result.Should().Be(ObservableList.Last());
         }
 
         [TestMethod]
@@ -139,11 +139,11 @@ public class DeckTester
         {
             //Arrange
             var list = Fixture.CreateMany<string>().ToList();
-            var deck = list.ToDeck();
-            var index = deck.GetRandomIndex();
+            var ObservableList = list.ToObservableList();
+            var index = ObservableList.GetRandomIndex();
 
             //Act
-            var result = deck[index];
+            var result = ObservableList[index];
 
             //Assert
             result.Should().Be(list[index]);
@@ -157,12 +157,12 @@ public class DeckTester
         public void WhenIndexIsNegative_Throw()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
             var index = -1;
             var value = Fixture.Create<string>();
 
             //Act
-            var action = () => deck[index] = value;
+            var action = () => ObservableList[index] = value;
 
             //Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
@@ -172,12 +172,12 @@ public class DeckTester
         public void WhenIndexIsGreaterThanLastIndex_Throw()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
-            var index = deck.LastIndex + 1;
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = ObservableList.LastIndex + 1;
             var value = Fixture.Create<string>();
 
             //Act
-            var action = () => deck[index] = value;
+            var action = () => ObservableList[index] = value;
 
             //Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
@@ -187,32 +187,32 @@ public class DeckTester
         public void WhenIndexIsWithinBounds_ReplaceItemAtIndex()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
-            var index = deck.GetRandomIndex();
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = ObservableList.GetRandomIndex();
             var value = Fixture.Create<string>();
 
             //Act
-            deck[index] = value;
+            ObservableList[index] = value;
 
             //Assert
-            deck[index].Should().Be(value);
+            ObservableList[index].Should().Be(value);
         }
 
         [TestMethod]
         public void WhenIndexIsWithinBounds_TriggerCollectionChanged()
         {
             //Arrange
-            var deck = Fixture.CreateMany<string>().ToDeck();
-            var index = deck.GetRandomIndex();
+            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = ObservableList.GetRandomIndex();
             var value = Fixture.Create<string>();
 
-            var oldItem = deck[index];
+            var oldItem = ObservableList[index];
 
             var eventArgs = new List<CollectionChangeEventArgs<string>>();
-            deck.CollectionChanged += (sender, args) => eventArgs.Add(args);
+            ObservableList.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            deck[index] = value;
+            ObservableList[index] = value;
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<string>>
@@ -235,7 +235,7 @@ public class DeckTester
             //Arrange
 
             //Act
-            var result = new Deck<string>();
+            var result = new ObservableList<string>();
 
             //Assert
             result.Should().BeEmpty();
@@ -248,7 +248,7 @@ public class DeckTester
             var items = Fixture.Create<string[]>();
 
             //Act
-            var result = new Deck<string>(items);
+            var result = new ObservableList<string>(items);
 
             //Assert
             result.Should().BeEquivalentTo(items);
@@ -260,7 +260,7 @@ public class DeckTester
             //Arrange
 
             //Act
-            var action = () => new Deck<Dummy>(null!);
+            var action = () => new ObservableList<Dummy>(null!);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -273,14 +273,14 @@ public class DeckTester
             var items = Fixture.Create<List<string>>();
 
             //Act
-            var result = new Deck<string>(items);
+            var result = new ObservableList<string>(items);
 
             //Assert
             result.Should().BeEquivalentTo(items);
         }
 
         [TestMethod]
-        public void WhenUsingInitializer_AddThoseItemsToDeck()
+        public void WhenUsingInitializer_AddThoseItemsToObservableList()
         {
             //Arrange
             var item1 = Fixture.Create<string>();
@@ -288,7 +288,7 @@ public class DeckTester
             var item3 = Fixture.Create<string>();
 
             //Act
-            var result = new Deck<string> { item1, item2, item3 };
+            var result = new ObservableList<string> { item1, item2, item3 };
 
             //Assert
             result.Should().BeEquivalentTo(item1, item2, item3);
@@ -296,10 +296,10 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Add : Tester<Deck<string>>
+    public class Add : Tester<ObservableList<string>>
     {
         [TestMethod]
-        public void WhenUsingTheICollectionOverload_AddToDeck()
+        public void WhenUsingTheICollectionOverload_AddToObservableList()
         {
             //Arrange
             var item = Fixture.Create<string>();
@@ -491,7 +491,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Clear : Tester<Deck<string>>
+    public class Clear : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void Always_RemoveAllItems()
@@ -543,10 +543,10 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Contains : Tester<Deck<string>>
+    public class Contains : Tester<ObservableList<string>>
     {
         [TestMethod]
-        public void WhenItemIsInDeck_ReturnTrue()
+        public void WhenItemIsInObservableList_ReturnTrue()
         {
             //Arrange
             var item = Fixture.Create<string>();
@@ -560,7 +560,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenItemIsNotInDeck_ReturnFalse()
+        public void WhenItemIsNotInObservableList_ReturnFalse()
         {
             //Arrange
             var item = Fixture.Create<string>();
@@ -574,7 +574,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class CopyTo : Tester<Deck<string>>
+    public class CopyTo : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void Always_CopyToArray()
@@ -592,7 +592,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Copy : Tester<Deck<string>>
+    public class Copy : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenIndexIsZero_ReturnAnExactCopy()
@@ -652,7 +652,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenStartingIndexIsLastIndex_ReturnDeckWithOnlyTheLastItemInIt()
+        public void WhenStartingIndexIsLastIndex_ReturnObservableListWithOnlyTheLastItemInIt()
         {
             //Arrange
             var items = Fixture.CreateMany<string>().ToList();
@@ -668,7 +668,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenIndexIsGreaterThanZero_CopyDeckStartingFromIndex()
+        public void WhenIndexIsGreaterThanZero_CopyObservableListStartingFromIndex()
         {
             //Arrange
             var items = Fixture.CreateMany<string>(6).ToList();
@@ -679,7 +679,7 @@ public class DeckTester
             var result = Instance.Copy(startingIndex);
 
             //Assert
-            result.Should().BeEquivalentTo(new Deck<string>
+            result.Should().BeEquivalentTo(new ObservableList<string>
             {
                 items[3], items[4], items[5]
             });
@@ -687,7 +687,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Copy_WithCount : Tester<Deck<string>>
+    public class Copy_WithCount : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenStartingIndexIsNegative_Throw()
@@ -770,7 +770,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenStartingIndexIsZeroAndCountIsTheSameAsCollection_ReturnCopyOfDeck()
+        public void WhenStartingIndexIsZeroAndCountIsTheSameAsCollection_ReturnCopyOfObservableList()
         {
             //Arrange
             var items = Fixture.CreateMany<string>(8).ToList();
@@ -788,10 +788,10 @@ public class DeckTester
     }
 
     [TestClass]
-    public class IndexOf_IList : Tester<Deck<string>>
+    public class IndexOf_IList : Tester<ObservableList<string>>
     {
         [TestMethod]
-        public void WhenItemIsInDeck_ReturnItsIndex()
+        public void WhenItemIsInObservableList_ReturnItsIndex()
         {
             //Arrange
             var items = Fixture.CreateMany<string>().ToList();
@@ -807,7 +807,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenItemIsNotInDeck_ReturnMinusOne()
+        public void WhenItemIsNotInObservableList_ReturnMinusOne()
         {
             //Arrange
             var items = Fixture.CreateMany<string>().ToList();
@@ -824,10 +824,10 @@ public class DeckTester
     }
 
     [TestClass]
-    public class FirstIndexOf_Item : Tester<Deck<string>>
+    public class FirstIndexOf_Item : Tester<ObservableList<string>>
     {
         [TestMethod]
-        public void WhenItemIsInDeck_ReturnItsIndex()
+        public void WhenItemIsInObservableList_ReturnItsIndex()
         {
             //Arrange
             var items = Fixture.CreateMany<string>().ToList();
@@ -843,7 +843,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenItemIsNotInDeck_ReturnMinusOne()
+        public void WhenItemIsNotInObservableList_ReturnMinusOne()
         {
             //Arrange
             var items = Fixture.CreateMany<string>().ToList();
@@ -860,7 +860,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class FirstIndexOf_Predicate : Tester<Deck<Dummy>>
+    public class FirstIndexOf_Predicate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -923,10 +923,10 @@ public class DeckTester
     }
 
     [TestClass]
-    public class LastIndexOf_Item : Tester<Deck<string>>
+    public class LastIndexOf_Item : Tester<ObservableList<string>>
     {
         [TestMethod]
-        public void WhenItemIsInDeck_ReturnItsIndex()
+        public void WhenItemIsInObservableList_ReturnItsIndex()
         {
             //Arrange
             var items = Fixture.CreateMany<string>().ToList();
@@ -942,7 +942,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenItemIsNotInDeck_ReturnMinusOne()
+        public void WhenItemIsNotInObservableList_ReturnMinusOne()
         {
             //Arrange
             var items = Fixture.CreateMany<string>().ToList();
@@ -959,7 +959,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class LastIndexOf_Predicate : Tester<Deck<Dummy>>
+    public class LastIndexOf_Predicate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -1022,7 +1022,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class IndexesOf_Item : Tester<Deck<string>>
+    public class IndexesOf_Item : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenThereAreNoOccurences_ReturnEmpty()
@@ -1041,7 +1041,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenThereIsOnlyOneOccurence_ReturnItsIndexInADeck()
+        public void WhenThereIsOnlyOneOccurence_ReturnItsIndexInAObservableList()
         {
             //Arrange
             var item = Fixture.Create<string>();
@@ -1053,7 +1053,7 @@ public class DeckTester
             var result = Instance.IndexesOf(item);
 
             //Assert
-            result.Should().BeEquivalentTo(new Deck<int> { Instance.LastIndex });
+            result.Should().BeEquivalentTo(new ObservableList<int> { Instance.LastIndex });
         }
 
         [TestMethod]
@@ -1071,12 +1071,12 @@ public class DeckTester
             var result = Instance.IndexesOf(item);
 
             //Assert
-            result.Should().BeEquivalentTo(new Deck<int> { 0, 4, 5 });
+            result.Should().BeEquivalentTo(new ObservableList<int> { 0, 4, 5 });
         }
     }
 
     [TestClass]
-    public class IndexesOf_Precidate : Tester<Deck<Dummy>>
+    public class IndexesOf_Precidate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -1121,7 +1121,7 @@ public class DeckTester
             var result = Instance.IndexesOf(x => x.Id == id);
 
             //Assert
-            result.Should().BeEquivalentTo(new Deck<int> { 3 });
+            result.Should().BeEquivalentTo(new ObservableList<int> { 3 });
         }
 
         [TestMethod]
@@ -1139,12 +1139,12 @@ public class DeckTester
             var result = Instance.IndexesOf(x => x.Id == id);
 
             //Assert
-            result.Should().BeEquivalentTo(new Deck<int> { 3, 4, 5 });
+            result.Should().BeEquivalentTo(new ObservableList<int> { 3, 4, 5 });
         }
     }
 
     [TestClass]
-    public class TryRemoveAll_Item : Tester<Deck<string>>
+    public class TryRemoveAll_Item : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenContainsItem_RemoveAllOfThem()
@@ -1224,7 +1224,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class RemoveAll_Item : Tester<Deck<string>>
+    public class RemoveAll_Item : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenContainsItem_RemoveAllOfThem()
@@ -1304,7 +1304,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class TryRemoveAll_Predicate : Tester<Deck<Dummy>>
+    public class TryRemoveAll_Predicate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -1397,7 +1397,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class RemoveAll_Predicate : Tester<Deck<Dummy>>
+    public class RemoveAll_Predicate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -1490,7 +1490,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Insert_IList : Tester<Deck<string>>
+    public class Insert_IList : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void Always_Insert()
@@ -1588,7 +1588,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Insert_Enumerable_NoIndex : Tester<Deck<string>>
+    public class Insert_Enumerable_NoIndex : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenItemsAreNull_Throw()
@@ -1669,7 +1669,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Insert_Params_NoIndex : Tester<Deck<string>>
+    public class Insert_Params_NoIndex : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenPassingSingleNull_InsertNullValue()
@@ -1755,7 +1755,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Insert_Enumerable_WithIndex : Tester<Deck<string>>
+    public class Insert_Enumerable_WithIndex : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenIndexIsNegative_Throw()
@@ -1810,7 +1810,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenIndexIsLastIndex_InsertAtTheEndOfDeckSameAsAddWould()
+        public void WhenIndexIsLastIndex_InsertAtTheEndOfObservableListSameAsAddWould()
         {
             //Arrange
             var items = Fixture.CreateMany<string>(3).ToArray();
@@ -1836,7 +1836,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenIndexIsInTheMiddleOfDeck_InsertInTheMiddle()
+        public void WhenIndexIsInTheMiddleOfObservableList_InsertInTheMiddle()
         {
             //Arrange
             var index = 2;
@@ -1861,7 +1861,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenInsertingDeckIntoItself_InsertIt()
+        public void WhenInsertingObservableListIntoItself_InsertIt()
         {
             //Arrange
             var index = 1;
@@ -1885,7 +1885,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenInsertingDeckIntoItself_IncreaseCount()
+        public void WhenInsertingObservableListIntoItself_IncreaseCount()
         {
             //Arrange
             var index = 1;
@@ -1901,7 +1901,7 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenInsertingDeckIntoItself_TriggerEventOnce()
+        public void WhenInsertingObservableListIntoItself_TriggerEventOnce()
         {
             //Arrange
             var index = 1;
@@ -1927,7 +1927,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class Remove_ICollection : Tester<Deck<string>>
+    public class Remove_ICollection : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenItemIsInCollection_ReturnTrue()
@@ -2042,7 +2042,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class RemoveAt : Tester<Deck<string>>
+    public class RemoveAt : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenIndexIsNegative_Throw()
@@ -2130,7 +2130,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class RemoveAt_Range : Tester<Deck<string>>
+    public class RemoveAt_Range : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenIndexIsNegative_Throw()
@@ -2274,7 +2274,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class TryRemoveFirst_Item : Tester<Deck<string>>
+    public class TryRemoveFirst_Item : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenItemIsInCollection_RemoveFirstOccurenceOnly()
@@ -2399,7 +2399,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class RemoveFirst_Item : Tester<Deck<string>>
+    public class RemoveFirst_Item : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenItemIsInCollection_RemoveFirstOccurenceOnly()
@@ -2489,7 +2489,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class TryRemoveFirst_Predicate : Tester<Deck<Dummy>>
+    public class TryRemoveFirst_Predicate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -2620,7 +2620,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class RemoveFirst_Predicate : Tester<Deck<Dummy>>
+    public class RemoveFirst_Predicate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -2712,7 +2712,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class TryRemoveLast_Item : Tester<Deck<string>>
+    public class TryRemoveLast_Item : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenItemIsInCollection_RemoveFirstOccurenceOnly()
@@ -2837,7 +2837,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class RemoveLast_Item : Tester<Deck<string>>
+    public class RemoveLast_Item : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenItemIsInCollection_RemoveFirstOccurenceOnly()
@@ -2927,7 +2927,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class TryRemoveLast_Predicate : Tester<Deck<Dummy>>
+    public class TryRemoveLast_Predicate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -3058,7 +3058,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class RemoveLast_Predicate : Tester<Deck<Dummy>>
+    public class RemoveLast_Predicate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -3150,7 +3150,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class ToStringMethod : Tester<Deck<string>>
+    public class ToStringMethod : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnEmptyMessage()
@@ -3161,7 +3161,7 @@ public class DeckTester
             var result = Instance.ToString();
 
             //Assert
-            result.Should().Be("Empty Deck<String>");
+            result.Should().Be("Empty ObservableList<String>");
         }
 
         [TestMethod]
@@ -3174,12 +3174,12 @@ public class DeckTester
             var result = Instance.ToString();
 
             //Assert
-            result.Should().Be("Deck<String> with 3 items");
+            result.Should().Be("ObservableList<String> with 3 items");
         }
     }
 
     [TestClass]
-    public class EqualsMethod : Tester<Deck<string>>
+    public class EqualsMethod : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenComparedWithEquivalentArray_ReturnTrue()
@@ -3210,10 +3210,10 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenComparedWithEquivalentDeck_ReturnTrue()
+        public void WhenComparedWithEquivalentObservableList_ReturnTrue()
         {
             //Arrange
-            var items = Fixture.CreateMany<string>().ToDeck();
+            var items = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(items);
 
             //Act
@@ -3252,7 +3252,7 @@ public class DeckTester
         public void WhenComparedWithEquivalentCollectionButInDifferentOrder_ReturnFalse()
         {
             //Arrange
-            var items = Fixture.CreateMany<string>().ToDeck();
+            var items = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(items[1]);
             Instance.Add(items[0]);
             Instance.Add(items[2]);
@@ -3266,7 +3266,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class EqualsMethod_Object : Tester<Deck<string>>
+    public class EqualsMethod_Object : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenComparedWithEquivalentArray_ReturnTrue()
@@ -3297,10 +3297,10 @@ public class DeckTester
         }
 
         [TestMethod]
-        public void WhenComparedWithEquivalentDeck_ReturnTrue()
+        public void WhenComparedWithEquivalentObservableList_ReturnTrue()
         {
             //Arrange
-            var items = Fixture.CreateMany<string>().ToDeck();
+            var items = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(items);
 
             //Act
@@ -3339,7 +3339,7 @@ public class DeckTester
         public void WhenComparedWithEquivalentCollectionButInDifferentOrder_ReturnFalse()
         {
             //Arrange
-            var items = Fixture.CreateMany<string>().ToDeck();
+            var items = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(items[1]);
             Instance.Add(items[0]);
             Instance.Add(items[2]);
@@ -3353,14 +3353,14 @@ public class DeckTester
     }
 
     [TestClass]
-    public class EqualsOperator_Deck : Tester<Deck<string>>
+    public class EqualsOperator_ObservableList : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
-            var b = Fixture.Create<Deck<string>>();
+            ObservableList<string> a = null;
+            var b = Fixture.Create<ObservableList<string>>();
 
             //Act
             var result = a == b;
@@ -3373,8 +3373,8 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
-            Deck<string> b = null;
+            var a = Fixture.Create<ObservableList<string>>();
+            ObservableList<string> b = null;
 
             //Act
             var result = a == b;
@@ -3387,8 +3387,8 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
-            Deck<string> b = null;
+            ObservableList<string> a = null;
+            ObservableList<string> b = null;
 
             //Act
             var result = a == b;
@@ -3413,7 +3413,7 @@ public class DeckTester
         public void WhenAreDifferentReferencesButContainTheSameItemsInTheSameOrder_ReturnTrue()
         {
             //Arrange
-            var b = Fixture.CreateMany<string>().ToDeck();
+            var b = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(b);
 
             //Act
@@ -3427,7 +3427,7 @@ public class DeckTester
         public void WhenAreDifferentReferencesButContainTheSameItemsInDifferentOrder_ReturnFalse()
         {
             //Arrange
-            var b = Fixture.CreateMany<string>().ToDeck();
+            var b = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(b[1]);
             Instance.Add(b[0]);
             Instance.Add(b[2]);
@@ -3443,7 +3443,7 @@ public class DeckTester
         public void WhenContainDifferentItems_ReturnFalse()
         {
             //Arrange
-            var b = Fixture.CreateMany<string>().ToDeck();
+            var b = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(Fixture.CreateMany<string>());
 
             //Act
@@ -3455,14 +3455,14 @@ public class DeckTester
     }
 
     [TestClass]
-    public class NotEqualsOperator_Deck : Tester<Deck<string>>
+    public class NotEqualsOperator_ObservableList : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
-            var b = Fixture.Create<Deck<string>>();
+            ObservableList<string> a = null;
+            var b = Fixture.Create<ObservableList<string>>();
 
             //Act
             var result = a != b;
@@ -3475,8 +3475,8 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
-            Deck<string> b = null;
+            var a = Fixture.Create<ObservableList<string>>();
+            ObservableList<string> b = null;
 
             //Act
             var result = a != b;
@@ -3489,8 +3489,8 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
-            Deck<string> b = null;
+            ObservableList<string> a = null;
+            ObservableList<string> b = null;
 
             //Act
             var result = a != b;
@@ -3515,7 +3515,7 @@ public class DeckTester
         public void WhenAreDifferentReferencesButContainTheSameItemsInTheSameOrder_ReturnTrue()
         {
             //Arrange
-            var b = Fixture.CreateMany<string>().ToDeck();
+            var b = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(b);
 
             //Act
@@ -3529,7 +3529,7 @@ public class DeckTester
         public void WhenAreDifferentReferencesButContainTheSameItemsInDifferentOrder_ReturnFalse()
         {
             //Arrange
-            var b = Fixture.CreateMany<string>().ToDeck();
+            var b = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(b[1]);
             Instance.Add(b[0]);
             Instance.Add(b[2]);
@@ -3545,7 +3545,7 @@ public class DeckTester
         public void WhenContainDifferentItems_ReturnFalse()
         {
             //Arrange
-            var b = Fixture.CreateMany<string>().ToDeck();
+            var b = Fixture.CreateMany<string>().ToObservableList();
             Instance.Add(Fixture.CreateMany<string>());
 
             //Act
@@ -3557,13 +3557,13 @@ public class DeckTester
     }
 
     [TestClass]
-    public class EqualsOperator_Array : Tester<Deck<string>>
+    public class EqualsOperator_Array : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             var b = Fixture.Create<string[]>();
 
             //Act
@@ -3577,7 +3577,7 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
+            var a = Fixture.Create<ObservableList<string>>();
             string[] b = null;
 
             //Act
@@ -3591,7 +3591,7 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             string[] b = null;
 
             //Act
@@ -3647,13 +3647,13 @@ public class DeckTester
     }
 
     [TestClass]
-    public class NotEqualsOperator_Array : Tester<Deck<string>>
+    public class NotEqualsOperator_Array : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             var b = Fixture.Create<string[]>();
 
             //Act
@@ -3667,7 +3667,7 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
+            var a = Fixture.Create<ObservableList<string>>();
             string[] b = null;
 
             //Act
@@ -3681,7 +3681,7 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             string[] b = null;
 
             //Act
@@ -3749,13 +3749,13 @@ public class DeckTester
     }
 
     [TestClass]
-    public class EqualsOperator_IEnumerable : Tester<Deck<string>>
+    public class EqualsOperator_IEnumerable : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             IEnumerable<string> b = Fixture.Create<string[]>();
 
             //Act
@@ -3769,7 +3769,7 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
+            var a = Fixture.Create<ObservableList<string>>();
             IEnumerable<string> b = null;
 
             //Act
@@ -3783,7 +3783,7 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             IEnumerable<string> b = null;
 
             //Act
@@ -3839,13 +3839,13 @@ public class DeckTester
     }
 
     [TestClass]
-    public class NotEqualsOperator_IEnumerable : Tester<Deck<string>>
+    public class NotEqualsOperator_IEnumerable : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             IEnumerable<string> b = Fixture.Create<string[]>();
 
             //Act
@@ -3859,7 +3859,7 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
+            var a = Fixture.Create<ObservableList<string>>();
             IEnumerable<string> b = null;
 
             //Act
@@ -3873,7 +3873,7 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             IEnumerable<string> b = null;
 
             //Act
@@ -3929,13 +3929,13 @@ public class DeckTester
     }
 
     [TestClass]
-    public class EqualsOperator_ICollection : Tester<Deck<string>>
+    public class EqualsOperator_ICollection : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             ICollection<string> b = Fixture.Create<string[]>();
 
             //Act
@@ -3949,7 +3949,7 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
+            var a = Fixture.Create<ObservableList<string>>();
             ICollection<string> b = null;
 
             //Act
@@ -3963,7 +3963,7 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             ICollection<string> b = null;
 
             //Act
@@ -4019,13 +4019,13 @@ public class DeckTester
     }
 
     [TestClass]
-    public class NotEqualsOperator_ICollection : Tester<Deck<string>>
+    public class NotEqualsOperator_ICollection : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             ICollection<string> b = Fixture.Create<string[]>();
 
             //Act
@@ -4039,7 +4039,7 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
+            var a = Fixture.Create<ObservableList<string>>();
             ICollection<string> b = null;
 
             //Act
@@ -4053,7 +4053,7 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             ICollection<string> b = null;
 
             //Act
@@ -4110,13 +4110,13 @@ public class DeckTester
 
 
     [TestClass]
-    public class EqualsOperator_IList : Tester<Deck<string>>
+    public class EqualsOperator_IList : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             var b = Fixture.Create<List<string>>();
 
             //Act
@@ -4130,7 +4130,7 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
+            var a = Fixture.Create<ObservableList<string>>();
             List<string> b = null;
 
             //Act
@@ -4144,7 +4144,7 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             List<string> b = null;
 
             //Act
@@ -4200,13 +4200,13 @@ public class DeckTester
     }
 
     [TestClass]
-    public class NotEqualsOperator_IList : Tester<Deck<string>>
+    public class NotEqualsOperator_IList : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             var b = Fixture.Create<List<string>>();
 
             //Act
@@ -4220,7 +4220,7 @@ public class DeckTester
         public void WhenSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var a = Fixture.Create<Deck<string>>();
+            var a = Fixture.Create<ObservableList<string>>();
             List<string> b = null;
 
             //Act
@@ -4234,7 +4234,7 @@ public class DeckTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Deck<string> a = null;
+            ObservableList<string> a = null;
             List<string> b = null;
 
             //Act
@@ -4290,7 +4290,7 @@ public class DeckTester
     }
 
     [TestClass]
-    public class GetHashCode : Tester<Deck<string>>
+    public class GetHashCode : Tester<ObservableList<string>>
     {
         //TODO Test
     }
@@ -4302,44 +4302,44 @@ public class DeckTester
         public void WhenGettingNonGenericEnumerator_ReturnSameThingAsGeneric()
         {
             //Arrange
-            var deck = Fixture.CreateMany<Dummy>().ToDeck();
+            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
 
             //Act
-            var result = ((IEnumerable)deck).GetEnumerator();
+            var result = ((IEnumerable)ObservableList).GetEnumerator();
 
             //Assert
-            result.Should().BeEquivalentTo(deck.GetEnumerator());
+            result.Should().BeEquivalentTo(ObservableList.GetEnumerator());
         }
 
         [TestMethod]
         public void Always_CorrectlyEnumeratesEveryItem()
         {
             //Arrange
-            var deck = Fixture.CreateMany<Dummy>().ToDeck();
+            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
 
             var enumeratedItems = new List<Dummy>();
 
             //Act
-            foreach (var item in deck)
+            foreach (var item in ObservableList)
                 enumeratedItems.Add(item);
 
             //Assert
             enumeratedItems.Should().NotBeEmpty();
-            enumeratedItems.Should().BeEquivalentTo(deck);
-            enumeratedItems.Should().HaveCount(deck.Count);
+            enumeratedItems.Should().BeEquivalentTo(ObservableList);
+            enumeratedItems.Should().HaveCount(ObservableList.Count);
         }
 
         [TestMethod]
         public void WhenCollectionIsModifiedDuringEnumeration_Throw()
         {
             //Arrange
-            var deck = Fixture.CreateMany<Dummy>().ToDeck();
+            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
 
             //Act
             var action = () =>
             {
-                foreach (var item in deck)
-                    deck.Remove(item);
+                foreach (var item in ObservableList)
+                    ObservableList.Remove(item);
             };
 
             //Assert
@@ -4350,10 +4350,10 @@ public class DeckTester
         public void WhenUsingResetAfterCollectionChanged_Throw()
         {
             //Arrange
-            var deck = Fixture.CreateMany<Dummy>().ToDeck();
+            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
 
-            var enumerator = deck.GetEnumerator();
-            deck.RemoveAt(deck.GetRandomIndex());
+            var enumerator = ObservableList.GetEnumerator();
+            ObservableList.RemoveAt(ObservableList.GetRandomIndex());
 
             //Act
             var action = () => enumerator.Reset();
@@ -4366,8 +4366,8 @@ public class DeckTester
         public void WhenUsingResetWhileCollectionIsStillUnchanged_SetCurrentToDefault()
         {
             //Arrange
-            var deck = Fixture.CreateMany<Dummy>().ToDeck();
-            var enumerator = deck.GetEnumerator();
+            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
+            var enumerator = ObservableList.GetEnumerator();
 
             //Act
             enumerator.Reset();

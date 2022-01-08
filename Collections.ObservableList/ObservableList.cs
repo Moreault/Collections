@@ -1,14 +1,14 @@
 ﻿using Collections.Common;
 using System.Collections;
-using ToolBX.Collections.Deck.Resources;
+using ToolBX.Collections.ObservableList.Resources;
 using ToolBX.Reflection4Humans.Extensions;
 
-namespace ToolBX.Collections.Deck
+namespace ToolBX.Collections.ObservableList
 {
     /// <summary>
     /// An observable, dynamic one-dimensional array.
     /// </summary>
-    public interface IDeck<T> : IList<T>, IReadOnlyList<T>, IObservableCollection<T>
+    public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCollection<T>
     {
         new int Count { get; }
         new T this[int index] { get; set; }
@@ -33,30 +33,30 @@ namespace ToolBX.Collections.Deck
         void Add(IEnumerable<T> items);
 
         /// <summary>
-        /// Inserts items at the beginning of deck.
+        /// Inserts items at the beginning of ObservableList.
         /// </summary>
         void Insert(params T[] items);
 
         /// <summary>
-        /// Inserts items at the beginning of deck.
+        /// Inserts items at the beginning of ObservableList.
         /// </summary>
         void Insert(IEnumerable<T> items);
 
         void Insert(int index, params T[] items);
         void Insert(int index, IEnumerable<T> items);
 
-        IDeck<T> Copy(int startingIndex = 0);
-        IDeck<T> Copy(int startingIndex, int count);
+        IObservableList<T> Copy(int startingIndex = 0);
+        IObservableList<T> Copy(int startingIndex, int count);
         int FirstIndexOf(T item);
         int FirstIndexOf(Predicate<T> predicate);
         int LastIndexOf(T item);
         int LastIndexOf(Predicate<T> predicate);
-        IDeck<int> IndexesOf(T item);
-        IDeck<int> IndexesOf(Predicate<T> predicate);
+        IObservableList<int> IndexesOf(T item);
+        IObservableList<int> IndexesOf(Predicate<T> predicate);
     }
 
-    /// <inheritdoc cref="IDeck{T}"/>
-    public class Deck<T> : IDeck<T>, IEquatable<IEnumerable<T>>
+    /// <inheritdoc cref="IObservableList{T}"/>
+    public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
     {
         private T[] _items;
 
@@ -92,17 +92,17 @@ namespace ToolBX.Collections.Deck
 
         public event CollectionChangeEventHandler<T>? CollectionChanged;
 
-        public Deck()
+        public ObservableList()
         {
             _items = Array.Empty<T>();
         }
 
-        public Deck(params T[] items) : this(items as IEnumerable<T>)
+        public ObservableList(params T[] items) : this(items as IEnumerable<T>)
         {
 
         }
 
-        public Deck(IEnumerable<T> collection)
+        public ObservableList(IEnumerable<T> collection)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
@@ -173,20 +173,20 @@ namespace ToolBX.Collections.Deck
 
         void ICollection<T>.CopyTo(T[] array, int index) => Array.Copy(_items, 0, array, index, Count);
 
-        public IDeck<T> Copy(int startingIndex = 0)
+        public IObservableList<T> Copy(int startingIndex = 0)
         {
             return Copy(startingIndex, Count - startingIndex);
         }
 
-        public IDeck<T> Copy(int startingIndex, int count)
+        public IObservableList<T> Copy(int startingIndex, int count)
         {
             if (startingIndex < 0 || startingIndex > LastIndex) throw new ArgumentOutOfRangeException(nameof(startingIndex), string.Format(Exceptions.CannotCopyBecauseIndexIsOutOfRange, GetType().GetHumanReadableName(), 0, LastIndex, startingIndex));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), string.Format(Exceptions.CannotCopyBecauseCountIsNegative, GetType().GetHumanReadableName(), count));
             if (Count - startingIndex < count) throw new ArgumentException(string.Format(Exceptions.CannotCopyBecauseRangeFallsOutsideBoundaries, GetType().GetHumanReadableName(), 0, LastIndex, startingIndex, count));
 
-            if (startingIndex == 0 && count == _items.Length) return new Deck<T>(this);
+            if (startingIndex == 0 && count == _items.Length) return new ObservableList<T>(this);
 
-            var copy = new Deck<T>();
+            var copy = new ObservableList<T>();
             for (var i = startingIndex; i < startingIndex + count; i++)
                 copy.Add(this[i]);
             return copy;
@@ -221,9 +221,9 @@ namespace ToolBX.Collections.Deck
             return -1;
         }
 
-        public IDeck<int> IndexesOf(T item)
+        public IObservableList<int> IndexesOf(T item)
         {
-            var indexes = new Deck<int>();
+            var indexes = new ObservableList<int>();
 
             for (var i = 0; i < Count; i++)
             {
@@ -234,11 +234,11 @@ namespace ToolBX.Collections.Deck
             return indexes;
         }
 
-        public IDeck<int> IndexesOf(Predicate<T> predicate)
+        public IObservableList<int> IndexesOf(Predicate<T> predicate)
         {
             if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
-            var indexes = new Deck<int>();
+            var indexes = new ObservableList<int>();
             for (var i = 0; i < Count; i++)
             {
                 if (predicate(_items[i]))
@@ -459,59 +459,59 @@ namespace ToolBX.Collections.Deck
 
         public override bool Equals(object? obj) => Equals(obj as IEnumerable<T>);
 
-        public static bool operator ==(Deck<T>? a, Deck<T>? b) => a is null && b is null || a is not null && a.Equals(b);
+        public static bool operator ==(ObservableList<T>? a, ObservableList<T>? b) => a is null && b is null || a is not null && a.Equals(b);
 
-        public static bool operator !=(Deck<T>? a, Deck<T>? b) => !(a == b);
+        public static bool operator !=(ObservableList<T>? a, ObservableList<T>? b) => !(a == b);
 
-        public static bool operator ==(Deck<T>? a, IEnumerable<T>? b) => a is null && b is null || a is not null && a.Equals(b);
+        public static bool operator ==(ObservableList<T>? a, IEnumerable<T>? b) => a is null && b is null || a is not null && a.Equals(b);
 
-        public static bool operator !=(Deck<T>? a, IEnumerable<T>? b) => !(a == b);
+        public static bool operator !=(ObservableList<T>? a, IEnumerable<T>? b) => !(a == b);
 
-        public static bool operator ==(Deck<T>? a, IList<T>? b) => a is null && b is null || a is not null && a.Equals(b);
+        public static bool operator ==(ObservableList<T>? a, IList<T>? b) => a is null && b is null || a is not null && a.Equals(b);
 
-        public static bool operator !=(Deck<T>? a, IList<T>? b) => !(a == b);
+        public static bool operator !=(ObservableList<T>? a, IList<T>? b) => !(a == b);
 
-        public static bool operator ==(Deck<T>? a, ICollection<T>? b) => a is null && b is null || a is not null && a.Equals(b);
+        public static bool operator ==(ObservableList<T>? a, ICollection<T>? b) => a is null && b is null || a is not null && a.Equals(b);
 
-        public static bool operator !=(Deck<T>? a, ICollection<T>? b) => !(a == b);
+        public static bool operator !=(ObservableList<T>? a, ICollection<T>? b) => !(a == b);
 
         public override int GetHashCode() => _items.GetHashCode();
 
         public struct Enumerator : IEnumerator<T>
         {
-            private readonly Deck<T> _deck;
+            private readonly ObservableList<T> _ObservableList;
             private int _index;
             private readonly int _version;
 
             public T Current { get; private set; }
             object? IEnumerator.Current => Current;
 
-            internal Enumerator(Deck<T> deck)
+            internal Enumerator(ObservableList<T> ObservableList)
             {
-                _deck = deck;
-                _version = deck._version;
+                _ObservableList = ObservableList;
+                _version = ObservableList._version;
                 _index = 0;
                 Current = default!;
             }
 
             public bool MoveNext()
             {
-                if (_version != _deck._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
+                if (_version != _ObservableList._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
 
-                if ((uint)_index < (uint)_deck.Count)
+                if ((uint)_index < (uint)_ObservableList.Count)
                 {
-                    Current = _deck[_index++];
+                    Current = _ObservableList[_index++];
                     return true;
                 }
 
-                _index = _deck.Count + 1;
+                _index = _ObservableList.Count + 1;
                 Current = default!;
                 return false;
             }
             
             public void Reset()
             {
-                if (_version != _deck._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
+                if (_version != _ObservableList._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
                 _index = 0;
                 Current = default!;
             }

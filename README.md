@@ -1,8 +1,8 @@
 # Collections
 Modern and straightforward .NET Collections
 
-![Deck](https://github.com/Moreault/Collections/blob/master/deck.png)
-## Deck
+![ObservableList](https://github.com/Moreault/Collections/blob/master/ObservableList.png)
+## ObservableList
 An observable, dynamic one-dimensional array.
 
 Ever wish C#'s list would tell you if it has been modified in any way without having to clumsily wrap it like so
@@ -17,17 +17,17 @@ public void Add(Thing thing)
 }
 ```
 
-This is where Deck shines the brightest. 
+This is where ObservableList shines the brightest. 
 
 ```c#
-private readonly Deck<Thing> _things = new Deck<Thing>();
+private readonly ObservableList<Thing> _things = new ObservableList<Thing>();
 
 public void SomeInitializationMethodSomewhere()
 {
   _things.CollectionChanged += OnThingsChanged;
 }
 
-//This gets called whenever the Deck is changed be it through Add, Insert, Remove, RemoveAt, Clear, etc...
+//This gets called whenever the ObservableList is changed be it through Add, Insert, Remove, RemoveAt, Clear, etc...
 private void OnThingsChanged(object sender, CollectionChangeEventArgs<Thing> args)
 {
   foreach (var item in args.OldValues)

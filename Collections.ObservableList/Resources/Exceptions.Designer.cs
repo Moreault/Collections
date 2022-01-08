@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ToolBX.Collections.Deck.Resources {
+namespace ToolBX.Collections.ObservableList.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ToolBX.Collections.Deck.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ToolBX.Collections.Deck.Resources.Exceptions", typeof(Exceptions).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ToolBX.Collections.ObservableList.Resources.Exceptions", typeof(Exceptions).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -88,7 +88,7 @@ namespace ToolBX.Collections.Deck.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Can&apos;t enumerate {0} : collection was modified during enumeration.
         /// </summary>
         internal static string CannotEnumerateBecauseModified {
             get {
@@ -115,7 +115,7 @@ namespace ToolBX.Collections.Deck.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t instantiate {0} : Parameter {1} is mandatory..
+        ///   Looks up a localized string similar to Can&apos;t instantiate {0} : parameter {1} is mandatory.
         /// </summary>
         internal static string CannotInstantiateObjectBecauseParameterIsMandatory {
             get {
@@ -124,7 +124,7 @@ namespace ToolBX.Collections.Deck.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t instantiate {0} : {1} must be a positive number but its value was {2}..
+        ///   Looks up a localized string similar to Can&apos;t instantiate {0} : {1} must be a positive number but its value was {2}.
         /// </summary>
         internal static string CannotInstantiateObjectBecauseParameterMustBePositiveNumber {
             get {
@@ -133,7 +133,7 @@ namespace ToolBX.Collections.Deck.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t remove item from {0} : Count must be greater than zero but its value was {1}.
+        ///   Looks up a localized string similar to Can&apos;t remove item from {0} : count must be greater than zero but its value was {1}.
         /// </summary>
         internal static string CannotRemoveItemBecauseCountIsZero {
             get {
@@ -151,7 +151,7 @@ namespace ToolBX.Collections.Deck.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t remove item from {0} : {1} is not in collection..
+        ///   Looks up a localized string similar to Can&apos;t remove item from {0} : {1} is not in collection.
         /// </summary>
         internal static string CannotRemoveItemBecauseItIsNotInCollection {
             get {
@@ -160,7 +160,7 @@ namespace ToolBX.Collections.Deck.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t remove item from {0} : there is no item corresponding to predicate in collection..
+        ///   Looks up a localized string similar to Can&apos;t remove item from {0} : there is no item corresponding to predicate in collection.
         /// </summary>
         internal static string CannotRemoveItemBecauseNoItemFitPredicate {
             get {

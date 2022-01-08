@@ -3,16 +3,16 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using ToolBX.Collections.Deck;
+using ToolBX.Collections.ObservableList;
 using ToolBX.Eloquentest;
 
-namespace Collections.Deck.Tests;
+namespace Collections.ObservableList.Tests;
 
 [TestClass]
-public class DeckExtensionsTester
+public class ObservableListExtensionsTester
 {
     [TestClass]
-    public class ToDeck : Tester
+    public class ToObservableList : Tester
     {
         [TestMethod]
         public void WhenCollectionIsNull_Throw()
@@ -21,23 +21,23 @@ public class DeckExtensionsTester
             string[] collection = null;
 
             //Act
-            var action = () => collection.ToDeck();
+            var action = () => collection.ToObservableList();
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
         }
 
         [TestMethod]
-        public void WhenCollectionIsNotNull_ReturnDeck()
+        public void WhenCollectionIsNotNull_ReturnObservableList()
         {
             //Arrange
             var collection = Fixture.CreateMany<string>().ToList();
 
             //Act
-            var result = collection.ToDeck();
+            var result = collection.ToObservableList();
 
             //Assert
-            result.Should().BeOfType<Deck<string>>();
+            result.Should().BeOfType<ObservableList<string>>();
             result.Should().BeEquivalentTo(collection);
         }
     }

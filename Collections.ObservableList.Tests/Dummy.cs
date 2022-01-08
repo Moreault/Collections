@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Collections.Deck.Tests
+namespace Collections.ObservableList.Tests
 {
     public record Dummy
     {
