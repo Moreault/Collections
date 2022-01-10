@@ -479,39 +479,39 @@ namespace ToolBX.Collections.ObservableList
 
         public struct Enumerator : IEnumerator<T>
         {
-            private readonly ObservableList<T> _ObservableList;
+            private readonly ObservableList<T> _observableList;
             private int _index;
             private readonly int _version;
 
             public T Current { get; private set; }
             object? IEnumerator.Current => Current;
 
-            internal Enumerator(ObservableList<T> ObservableList)
+            internal Enumerator(ObservableList<T> observableList)
             {
-                _ObservableList = ObservableList;
-                _version = ObservableList._version;
+                _observableList = observableList;
+                _version = observableList._version;
                 _index = 0;
                 Current = default!;
             }
 
             public bool MoveNext()
             {
-                if (_version != _ObservableList._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
+                if (_version != _observableList._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
 
-                if ((uint)_index < (uint)_ObservableList.Count)
+                if ((uint)_index < (uint)_observableList.Count)
                 {
-                    Current = _ObservableList[_index++];
+                    Current = _observableList[_index++];
                     return true;
                 }
 
-                _index = _ObservableList.Count + 1;
+                _index = _observableList.Count + 1;
                 Current = default!;
                 return false;
             }
-            
+
             public void Reset()
             {
-                if (_version != _ObservableList._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
+                if (_version != _observableList._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
                 _index = 0;
                 Current = default!;
             }
