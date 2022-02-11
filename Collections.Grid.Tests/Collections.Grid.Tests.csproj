@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Collections.ObservableList\Collections.ObservableList.csproj" />
+    <ProjectReference Include="..\Collections.Grid\Collections.Grid.csproj" />
   </ItemGroup>
 
 </Project>

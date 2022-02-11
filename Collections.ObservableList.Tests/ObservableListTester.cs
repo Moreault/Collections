@@ -22,10 +22,10 @@ public class ObservableListTester
         public void WhenCollectionIsEmpty_ReturnMinusOdne()
         {
             //Arrange
-            var ObservableList = new ObservableList<Dummy>();
+            var observableList = new ObservableList<Dummy>();
 
             //Act
-            var result = ObservableList.LastIndex;
+            var result = observableList.LastIndex;
 
             //Assert
             result.Should().Be(-1);
@@ -35,10 +35,10 @@ public class ObservableListTester
         public void WhenCollectionContainsOneItem_ReturnZero()
         {
             //Arrange
-            var ObservableList = new ObservableList<Dummy> { Fixture.Create<Dummy>() };
+            var observableList = new ObservableList<Dummy> { Fixture.Create<Dummy>() };
 
             //Act
-            var result = ObservableList.LastIndex;
+            var result = observableList.LastIndex;
 
             //Assert
             result.Should().Be(0);
@@ -48,13 +48,13 @@ public class ObservableListTester
         public void WhenCollectionContainsABunchOfItems_ReturnLastIndex()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
 
             //Act
-            var result = ObservableList.LastIndex;
+            var result = observableList.LastIndex;
 
             //Assert
-            result.Should().Be(ObservableList.Count - 1);
+            result.Should().Be(observableList.Count - 1);
         }
     }
 
@@ -65,10 +65,10 @@ public class ObservableListTester
         public void Always_ReturnFalse()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
 
             //Act
-            var result = ObservableList.IsReadOnly;
+            var result = observableList.IsReadOnly;
 
             //Assert
             result.Should().BeFalse();
@@ -82,11 +82,11 @@ public class ObservableListTester
         public void WhenIndexIsNegative_Throw()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
             var index = -1;
 
             //Act
-            var action = () => ObservableList[index];
+            var action = () => observableList[index];
 
             //Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
@@ -96,11 +96,11 @@ public class ObservableListTester
         public void WhenIndexIsGreaterThanLastIndex_Throw()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
-            var index = ObservableList.LastIndex + 1;
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = observableList.LastIndex + 1;
 
             //Act
-            var action = () => ObservableList[index];
+            var action = () => observableList[index];
 
             //Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
@@ -110,28 +110,28 @@ public class ObservableListTester
         public void WhenIndexIsZero_ReturnFirstItem()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
             var index = 0;
 
             //Act
-            var result = ObservableList[index];
+            var result = observableList[index];
 
             //Assert
-            result.Should().Be(ObservableList.First());
+            result.Should().Be(observableList.First());
         }
 
         [TestMethod]
         public void WhenIndexIsLastIndex_ReturnLastItem()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
-            var index = ObservableList.LastIndex;
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = observableList.LastIndex;
 
             //Act
-            var result = ObservableList[index];
+            var result = observableList[index];
 
             //Assert
-            result.Should().Be(ObservableList.Last());
+            result.Should().Be(observableList.Last());
         }
 
         [TestMethod]
@@ -139,11 +139,11 @@ public class ObservableListTester
         {
             //Arrange
             var list = Fixture.CreateMany<string>().ToList();
-            var ObservableList = list.ToObservableList();
-            var index = ObservableList.GetRandomIndex();
+            var observableList = list.ToObservableList();
+            var index = observableList.GetRandomIndex();
 
             //Act
-            var result = ObservableList[index];
+            var result = observableList[index];
 
             //Assert
             result.Should().Be(list[index]);
@@ -157,12 +157,12 @@ public class ObservableListTester
         public void WhenIndexIsNegative_Throw()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
             var index = -1;
             var value = Fixture.Create<string>();
 
             //Act
-            var action = () => ObservableList[index] = value;
+            var action = () => observableList[index] = value;
 
             //Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
@@ -172,12 +172,12 @@ public class ObservableListTester
         public void WhenIndexIsGreaterThanLastIndex_Throw()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
-            var index = ObservableList.LastIndex + 1;
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = observableList.LastIndex + 1;
             var value = Fixture.Create<string>();
 
             //Act
-            var action = () => ObservableList[index] = value;
+            var action = () => observableList[index] = value;
 
             //Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
@@ -187,32 +187,32 @@ public class ObservableListTester
         public void WhenIndexIsWithinBounds_ReplaceItemAtIndex()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
-            var index = ObservableList.GetRandomIndex();
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = observableList.GetRandomIndex();
             var value = Fixture.Create<string>();
 
             //Act
-            ObservableList[index] = value;
+            observableList[index] = value;
 
             //Assert
-            ObservableList[index].Should().Be(value);
+            observableList[index].Should().Be(value);
         }
 
         [TestMethod]
         public void WhenIndexIsWithinBounds_TriggerCollectionChanged()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<string>().ToObservableList();
-            var index = ObservableList.GetRandomIndex();
+            var observableList = Fixture.CreateMany<string>().ToObservableList();
+            var index = observableList.GetRandomIndex();
             var value = Fixture.Create<string>();
 
-            var oldItem = ObservableList[index];
+            var oldItem = observableList[index];
 
             var eventArgs = new List<CollectionChangeEventArgs<string>>();
-            ObservableList.CollectionChanged += (sender, args) => eventArgs.Add(args);
+            observableList.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            ObservableList[index] = value;
+            observableList[index] = value;
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<string>>
@@ -1310,7 +1310,7 @@ public class ObservableListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null;
+            Predicate<Dummy> predicate = null!;
 
             //Act
             var action = () => Instance.TryRemoveAll(predicate);
@@ -1403,7 +1403,7 @@ public class ObservableListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null;
+            Predicate<Dummy> predicate = null!;
 
             //Act
             var action = () => Instance.RemoveAll(predicate);
@@ -3359,7 +3359,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             var b = Fixture.Create<ObservableList<string>>();
 
             //Act
@@ -3374,7 +3374,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            ObservableList<string> b = null;
+            ObservableList<string> b = null!;
 
             //Act
             var result = a == b;
@@ -3387,8 +3387,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            ObservableList<string> b = null;
+            ObservableList<string> a = null!;
+            ObservableList<string> b = null!;
 
             //Act
             var result = a == b;
@@ -3461,7 +3461,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             var b = Fixture.Create<ObservableList<string>>();
 
             //Act
@@ -3476,7 +3476,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            ObservableList<string> b = null;
+            ObservableList<string> b = null!;
 
             //Act
             var result = a != b;
@@ -3489,8 +3489,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            ObservableList<string> b = null;
+            ObservableList<string> a = null!;
+            ObservableList<string> b = null!;
 
             //Act
             var result = a != b;
@@ -3563,7 +3563,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             var b = Fixture.Create<string[]>();
 
             //Act
@@ -3578,7 +3578,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            string[] b = null;
+            string[] b = null!;
 
             //Act
             var result = a == b;
@@ -3591,8 +3591,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            string[] b = null;
+            ObservableList<string> a = null!;
+            string[] b = null!;
 
             //Act
             var result = a == b;
@@ -3653,7 +3653,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             var b = Fixture.Create<string[]>();
 
             //Act
@@ -3668,7 +3668,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            string[] b = null;
+            string[] b = null!;
 
             //Act
             var result = a != b;
@@ -3681,8 +3681,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            string[] b = null;
+            ObservableList<string> a = null!;
+            string[] b = null!;
 
             //Act
             var result = a != b;
@@ -3755,7 +3755,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             IEnumerable<string> b = Fixture.Create<string[]>();
 
             //Act
@@ -3770,7 +3770,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            IEnumerable<string> b = null;
+            IEnumerable<string> b = null!;
 
             //Act
             var result = a == b;
@@ -3783,8 +3783,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            IEnumerable<string> b = null;
+            ObservableList<string> a = null!;
+            IEnumerable<string> b = null!;
 
             //Act
             var result = a == b;
@@ -3845,7 +3845,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             IEnumerable<string> b = Fixture.Create<string[]>();
 
             //Act
@@ -3860,7 +3860,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            IEnumerable<string> b = null;
+            IEnumerable<string> b = null!;
 
             //Act
             var result = a != b;
@@ -3873,8 +3873,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            IEnumerable<string> b = null;
+            ObservableList<string> a = null!;
+            IEnumerable<string> b = null!;
 
             //Act
             var result = a != b;
@@ -3935,7 +3935,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             ICollection<string> b = Fixture.Create<string[]>();
 
             //Act
@@ -3950,7 +3950,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            ICollection<string> b = null;
+            ICollection<string> b = null!;
 
             //Act
             var result = a == b;
@@ -3963,8 +3963,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            ICollection<string> b = null;
+            ObservableList<string> a = null!;
+            ICollection<string> b = null!;
 
             //Act
             var result = a == b;
@@ -4025,7 +4025,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             ICollection<string> b = Fixture.Create<string[]>();
 
             //Act
@@ -4040,7 +4040,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            ICollection<string> b = null;
+            ICollection<string> b = null!;
 
             //Act
             var result = a != b;
@@ -4053,8 +4053,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            ICollection<string> b = null;
+            ObservableList<string> a = null!;
+            ICollection<string> b = null!;
 
             //Act
             var result = a != b;
@@ -4116,7 +4116,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             var b = Fixture.Create<List<string>>();
 
             //Act
@@ -4131,7 +4131,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            List<string> b = null;
+            List<string> b = null!;
 
             //Act
             var result = a == b;
@@ -4144,8 +4144,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            List<string> b = null;
+            ObservableList<string> a = null!;
+            List<string> b = null!;
 
             //Act
             var result = a == b;
@@ -4206,7 +4206,7 @@ public class ObservableListTester
         public void WhenFirstIsNull_ReturnFalse()
         {
             //Arrange
-            ObservableList<string> a = null;
+            ObservableList<string> a = null!;
             var b = Fixture.Create<List<string>>();
 
             //Act
@@ -4221,7 +4221,7 @@ public class ObservableListTester
         {
             //Arrange
             var a = Fixture.Create<ObservableList<string>>();
-            List<string> b = null;
+            List<string> b = null!;
 
             //Act
             var result = a != b;
@@ -4234,8 +4234,8 @@ public class ObservableListTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            ObservableList<string> a = null;
-            List<string> b = null;
+            ObservableList<string> a = null!;
+            List<string> b = null!;
 
             //Act
             var result = a != b;
@@ -4290,56 +4290,50 @@ public class ObservableListTester
     }
 
     [TestClass]
-    public class GetHashCode : Tester<ObservableList<string>>
-    {
-        //TODO Test
-    }
-
-    [TestClass]
     public class Enumerator : Tester
     {
         [TestMethod]
         public void WhenGettingNonGenericEnumerator_ReturnSameThingAsGeneric()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
+            var observableList = Fixture.CreateMany<Dummy>().ToObservableList();
 
             //Act
-            var result = ((IEnumerable)ObservableList).GetEnumerator();
+            var result = ((IEnumerable)observableList).GetEnumerator();
 
             //Assert
-            result.Should().BeEquivalentTo(ObservableList.GetEnumerator());
+            result.Should().BeEquivalentTo(observableList.GetEnumerator());
         }
 
         [TestMethod]
         public void Always_CorrectlyEnumeratesEveryItem()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
+            var observableList = Fixture.CreateMany<Dummy>().ToObservableList();
 
             var enumeratedItems = new List<Dummy>();
 
             //Act
-            foreach (var item in ObservableList)
+            foreach (var item in observableList)
                 enumeratedItems.Add(item);
 
             //Assert
             enumeratedItems.Should().NotBeEmpty();
-            enumeratedItems.Should().BeEquivalentTo(ObservableList);
-            enumeratedItems.Should().HaveCount(ObservableList.Count);
+            enumeratedItems.Should().BeEquivalentTo(observableList);
+            enumeratedItems.Should().HaveCount(observableList.Count);
         }
 
         [TestMethod]
         public void WhenCollectionIsModifiedDuringEnumeration_Throw()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
+            var observableList = Fixture.CreateMany<Dummy>().ToObservableList();
 
             //Act
             var action = () =>
             {
-                foreach (var item in ObservableList)
-                    ObservableList.Remove(item);
+                foreach (var item in observableList)
+                    observableList.Remove(item);
             };
 
             //Assert
@@ -4350,10 +4344,10 @@ public class ObservableListTester
         public void WhenUsingResetAfterCollectionChanged_Throw()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
+            var observableList = Fixture.CreateMany<Dummy>().ToObservableList();
 
-            var enumerator = ObservableList.GetEnumerator();
-            ObservableList.RemoveAt(ObservableList.GetRandomIndex());
+            var enumerator = observableList.GetEnumerator();
+            observableList.RemoveAt(observableList.GetRandomIndex());
 
             //Act
             var action = () => enumerator.Reset();
@@ -4366,8 +4360,8 @@ public class ObservableListTester
         public void WhenUsingResetWhileCollectionIsStillUnchanged_SetCurrentToDefault()
         {
             //Arrange
-            var ObservableList = Fixture.CreateMany<Dummy>().ToObservableList();
-            var enumerator = ObservableList.GetEnumerator();
+            var observableList = Fixture.CreateMany<Dummy>().ToObservableList();
+            var enumerator = observableList.GetEnumerator();
 
             //Act
             enumerator.Reset();

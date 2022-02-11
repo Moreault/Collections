@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Collections.ObservableList.Tests
+namespace Collections.ObservableList.Tests;
+
+public record Dummy
 {
-    public record Dummy
-    {
-        public int Id { get; init; }
-        public string Description { get; init; } = string.Empty;
-    }
+    public int Id { get; init; }
+    public string Description { get; init; } = string.Empty;
 }

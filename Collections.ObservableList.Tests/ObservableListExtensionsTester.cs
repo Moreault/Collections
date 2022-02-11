@@ -18,7 +18,7 @@ public class ObservableListExtensionsTester
         public void WhenCollectionIsNull_Throw()
         {
             //Arrange
-            string[] collection = null;
+            string[] collection = null!;
 
             //Act
             var action = () => collection.ToObservableList();
