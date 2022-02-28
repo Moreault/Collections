@@ -42,6 +42,7 @@ private void OnThingsChanged(object sender, CollectionChangeEventArgs<Thing> arg
 }
 ```
 
+![Grid](https://github.com/Moreault/Collections/blob/master/grid.png)
 ## Grid
 An observable, dynamic two-dimensional array.
 
@@ -108,4 +109,50 @@ var jagged = grid.ToJaggedArray();
 
 //And also turn it back into a grid!
 grid = jagged.ToGrid();
+```
+
+![Grid](https://github.com/Moreault/Collections/blob/master/inventory.png)
+## Inventory
+
+A linear-indexed collection of unique item entries with their quantity. 
+
+But what does that mean in English?
+Have you ever played an RPG? Think of Inventory<T> like a bag of items your party would carry. It can hold stacks of potions, swords or pieces of equipment you picked up along the way.
+
+Could this be used outside of video games? 
+Absolutely. If you need a collection that can list out unique item entries with their quantities, then this is for you. 
+
+### Getting started
+
+You set the inventory’s stack limit when you instantiate it and it cannot be modified afterwards.
+
+```c#
+
+//This Inventory will hold a maximum of 999 instances for every item
+var inventory = new Inventory<Item>(999);
+
+//You can, however, use the ToInventory() extension if you really need the same items with a different stack size for some reason.
+var newInventory = inventory.ToInventory(1500);
+
+//Attempting to add more items beyond that stack limit will result in an exception being thrown. 
+newInventory.Add(excalibur, 1501);
+
+//The same thing will happen if you attempt to remove more than it holds.
+newInventory.Remove(potion, 3000);
+
+//If you like “safe” methods that do not throw under questionable usage then you’ll be pleased to know that Inventory<T> has methods TryAdd() and TryRemove()
+
+//This will cap out the amount of rubber ducks in the inventory to its allowed maximum quantity of 1500 regardless of how many you try to add
+newInventory.TryAdd(rubberDuck, 30000);
+
+//TryAdd and TryRemove both return a result object which can tell you how many items were successfully added and how many remain
+var result = newInventory.TryAdd(rubberDuck, 30000);
+
+//There are also overloads to Add, Remove and other methods which use a predicate
+
+//The following will remove 45 quantity from all items that are named "Roger"
+newInventory.Remove(x => x.Name == "Roger", 45)
+
+//Like other collections in the larger namespace, it is also observable using the exact same syntax as the ObservableList
+inventory.CollectionChanged += OnCollectionChanged;
 ```

@@ -6713,6 +6713,126 @@ public class GridTester
     }
 
     [TestClass]
+    public class Swap : Tester<Grid<Dummy>>
+    {
+        [TestMethod]
+        public void WhenCurrentAndDestinationAreEqual_DoNotModifyGrid()
+        {
+            //Arrange
+            Instance[0, 0] = Fixture.Create<Dummy>();
+            Instance[1, 0] = Fixture.Create<Dummy>();
+            Instance[2, 0] = Fixture.Create<Dummy>();
+            Instance[0, 1] = Fixture.Create<Dummy>();
+            Instance[1, 1] = Fixture.Create<Dummy>();
+            Instance[2, 1] = Fixture.Create<Dummy>();
+            Instance[0, 2] = Fixture.Create<Dummy>();
+            Instance[1, 2] = Fixture.Create<Dummy>();
+            Instance[2, 2] = Fixture.Create<Dummy>();
+
+            var copy = Instance.Copy();
+
+            //Act
+            Instance.Swap(new Coordinates(1, 0), new Coordinates(1, 0));
+
+            //Assert
+            Instance.Should().BeEquivalentTo(copy);
+        }
+
+        [TestMethod]
+        public void WhenCurrentAndDestinationAreEqual_DoNotTriggerChange()
+        {
+            //Arrange
+            Instance[0, 0] = Fixture.Create<Dummy>();
+            Instance[1, 0] = Fixture.Create<Dummy>();
+            Instance[2, 0] = Fixture.Create<Dummy>();
+            Instance[0, 1] = Fixture.Create<Dummy>();
+            Instance[1, 1] = Fixture.Create<Dummy>();
+            Instance[2, 1] = Fixture.Create<Dummy>();
+            Instance[0, 2] = Fixture.Create<Dummy>();
+            Instance[1, 2] = Fixture.Create<Dummy>();
+            Instance[2, 2] = Fixture.Create<Dummy>();
+
+            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.Swap(new Coordinates(1, 0), new Coordinates(1, 0));
+
+            //Assert
+            eventArgs.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenCurrentAndDestinationAreDifferent_Swap()
+        {
+            //Arrange
+            Instance[0, 0] = Fixture.Create<Dummy>();
+            Instance[1, 0] = Fixture.Create<Dummy>();
+            Instance[2, 0] = Fixture.Create<Dummy>();
+            Instance[0, 1] = Fixture.Create<Dummy>();
+            Instance[1, 1] = Fixture.Create<Dummy>();
+            Instance[2, 1] = Fixture.Create<Dummy>();
+            Instance[0, 2] = Fixture.Create<Dummy>();
+            Instance[1, 2] = Fixture.Create<Dummy>();
+            Instance[2, 2] = Fixture.Create<Dummy>();
+
+            var firstItem = Instance[2, 0];
+            var secondItem = Instance[1, 2];
+
+            //Act
+            Instance.Swap(new Coordinates(2, 0), new Coordinates(1, 2));
+
+            //Assert
+            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            {
+                { 0, 0, Instance[0, 0] },
+                { 1, 0, Instance[1, 0] },
+                { 2, 0, secondItem },
+                { 0, 1, Instance[0, 1] },
+                { 1, 1, Instance[1, 1] },
+                { 2, 1, Instance[2, 1] },
+                { 0, 2, Instance[0, 2] },
+                { 1, 2, firstItem },
+                { 2, 2, Instance[2, 2] },
+            });
+        }
+
+        [TestMethod]
+        public void WhenCurrentAndDestinationAreDifferent_TriggerChangeWithNewIndexes()
+        {
+            //Arrange
+            Instance[0, 0] = Fixture.Create<Dummy>();
+            Instance[1, 0] = Fixture.Create<Dummy>();
+            Instance[2, 0] = Fixture.Create<Dummy>();
+            Instance[0, 1] = Fixture.Create<Dummy>();
+            Instance[1, 1] = Fixture.Create<Dummy>();
+            Instance[2, 1] = Fixture.Create<Dummy>();
+            Instance[0, 2] = Fixture.Create<Dummy>();
+            Instance[1, 2] = Fixture.Create<Dummy>();
+            Instance[2, 2] = Fixture.Create<Dummy>();
+
+            var firstItem = Instance[2, 0];
+            var secondItem = Instance[1, 2];
+
+            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.Swap(new Coordinates(2, 0), new Coordinates(1, 2));
+
+            //Assert
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            {
+                new()
+                {
+                    NewValues = new List<Cell<Dummy>> { new(2,0, secondItem), new(1, 2, firstItem) },
+                    OldValues = new List<Cell<Dummy>> { new(2,0, firstItem), new(1, 2, secondItem) },
+                }
+            });
+        }
+    }
+
+    [TestClass]
     public class ToStringMethod : Tester<Grid<string>>
     {
         [TestMethod]

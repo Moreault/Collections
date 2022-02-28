@@ -1144,6 +1144,156 @@ public class ObservableListTester
     }
 
     [TestClass]
+    public class Swap : Tester<ObservableList<string>>
+    {
+        [TestMethod]
+        public void WhenCurrentIndexIsNegative_Throw()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<string>().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry);
+
+            var currentIndex = -1;
+            var destinationIndex = 1;
+
+            //Act
+            var action = () => Instance.Swap(currentIndex, destinationIndex);
+
+            //Assert
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void WhenCurrentIndexIsOutOfRange_Throw()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<string>().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry);
+
+            var currentIndex = Instance.LastIndex + 1;
+            var destinationIndex = 1;
+
+            //Act
+            var action = () => Instance.Swap(currentIndex, destinationIndex);
+
+            //Assert
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void WhenDestinationIndexIsNegative_Throw()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<string>().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry);
+
+            var currentIndex = 0;
+            var destinationIndex = -1;
+
+            //Act
+            var action = () => Instance.Swap(currentIndex, destinationIndex);
+
+            //Assert
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void WhenDestinationIndexIsOutOfRange_Throw()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<string>().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry);
+
+            var currentIndex = 2;
+            var destinationIndex = Instance.LastIndex + 1;
+
+            //Act
+            var action = () => Instance.Swap(currentIndex, destinationIndex);
+
+            //Assert
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void WhenCurrentAndDestinationIndexesAreEqual_DoNotModifyCollection()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<string>().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry);
+
+            var currentIndex = entries.GetRandomIndex();
+            var destinationIndex = currentIndex;
+
+            var copy = Instance.Copy();
+
+            //Act
+            Instance.Swap(currentIndex, destinationIndex);
+
+            //Assert
+            Instance.Should().ContainInOrder(copy);
+        }
+
+        [TestMethod]
+        public void WhenCurrentAndDestinationAreBothInTheMiddleOfCollection_SwapThemTogether()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<string>(4).ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry);
+
+            var currentIndex = 2;
+            var destinationIndex = 1;
+
+            //Act
+            Instance.Swap(currentIndex, destinationIndex);
+
+            //Assert
+            Instance.Should().ContainInOrder(new List<string>
+            {
+                entries[0],
+                entries[2],
+                entries[1],
+                entries[3]
+            });
+        }
+
+        [TestMethod]
+        public void WhenSwappingFirstWithLastIndex_Swap()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<string>(4).ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry);
+
+            var currentIndex = Instance.LastIndex;
+            var destinationIndex = 0;
+
+            //Act
+            Instance.Swap(currentIndex, destinationIndex);
+
+            //Assert
+            Instance.Should().ContainInOrder(new List<string>
+            {
+                entries[3],
+                entries[1],
+                entries[2],
+                entries[0]
+            });
+        }
+    }
+
+    [TestClass]
+    public class TrySwapIndexes : Tester<ObservableList<string>>
+    {
+        //TODO Test
+    }
+
+    [TestClass]
     public class TryRemoveAll_Item : Tester<ObservableList<string>>
     {
         [TestMethod]

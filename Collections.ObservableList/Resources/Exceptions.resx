@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CannotInstantiateObjectBecauseParameterIsMandatory" xml:space="preserve">
-	  <value>Can't instantiate {0} : parameter {1} is mandatory</value>
+    <value>Can't instantiate {0} : parameter {1} is mandatory</value>
   </data>
   <data name="CannotInstantiateObjectBecauseParameterMustBePositiveNumber" xml:space="preserve">
-	  <value>Can't instantiate {0} : {1} must be a positive number but its value was {2}</value>
+    <value>Can't instantiate {0} : {1} must be a positive number but its value was {2}</value>
   </data>
   <data name="CannotGetItemBecauseIndexIsOutOfRange" xml:space="preserve">
     <value>Can't get item : index is expected to be between {0} and {1} but its value was {2}</value>
@@ -134,30 +134,36 @@
     <value>Can't remove item from {0} : index is expected to be between {1} and {2} but its value was {3}</value>
   </data>
   <data name="CannotRemoveItemBecauseItIsNotInCollection" xml:space="preserve">
-	  <value>Can't remove item from {0} : {1} is not in collection</value>
+    <value>Can't remove item from {0} : {1} is not in collection</value>
   </data>
   <data name="CannotRemoveItemBecauseNoItemFitPredicate" xml:space="preserve">
-	  <value>Can't remove item from {0} : there is no item corresponding to predicate in collection</value>
+    <value>Can't remove item from {0} : there is no item corresponding to predicate in collection</value>
   </data>
   <data name="CannotCopyBecauseIndexIsOutOfRange" xml:space="preserve">
-	  <value>Can't copy {0} : index is expected to be between {1} and {2} but its value was {3}</value>
+    <value>Can't copy {0} : index is expected to be between {1} and {2} but its value was {3}</value>
   </data>
   <data name="CannotCopyBecauseCountIsNegative" xml:space="preserve">
-	  <value>Can't copy {0} : count must be a positive number but its value was {1}</value>
+    <value>Can't copy {0} : count must be a positive number but its value was {1}</value>
   </data>
   <data name="CannotCopyBecauseRangeFallsOutsideBoundaries" xml:space="preserve">
-	  <value>Can't copy {0} : a range between {1} and {2} is expected but the values of startingIndex and count were {3} and {4} respectively</value>
+    <value>Can't copy {0} : a range between {1} and {2} is expected but the values of startingIndex and count were {3} and {4} respectively</value>
   </data>
   <data name="CannotInsertItemsBecauseIndexIsOutOfRange" xml:space="preserve">
-	  <value>Can't insert items into {0} : index is expected to be between {1} and {2} but its value was {3}</value>
+    <value>Can't insert items into {0} : index is expected to be between {1} and {2} but its value was {3}</value>
   </data>
   <data name="CannotRemoveItemBecauseCountIsZero" xml:space="preserve">
-	  <value>Can't remove item from {0} : count must be greater than zero but its value was {1}</value>
+    <value>Can't remove item from {0} : count must be greater than zero but its value was {1}</value>
   </data>
   <data name="CannotRemoveItemBecauseRangeFallsOutsideBoundaries" xml:space="preserve">
-	  <value>Can't remove item from {0} : a range between {1} and {2} is expected but the values of index and count were {3} and {4} respectively</value>
+    <value>Can't remove item from {0} : a range between {1} and {2} is expected but the values of index and count were {3} and {4} respectively</value>
   </data>
   <data name="CannotEnumerateBecauseModified" xml:space="preserve">
-	  <value>Can't enumerate {0} : collection was modified during enumeration</value>
+    <value>Can't enumerate {0} : collection was modified during enumeration</value>
+  </data>
+  <data name="CannotSwapItemsBecauseCurrentIndexIsOutOfRange" xml:space="preserve">
+    <value>Can't swap items : current index is expected to be within the collection's boundaries of 0 and {1} but its value was {1}</value>
+  </data>
+  <data name="CannotSwapItemsBecauseDestinationIndexIsOutOfRange" xml:space="preserve">
+    <value>Can't swap items : destination index is expected to be within the collection's boundaries of 0 and {1} but its value was {1}</value>
   </data>
 </root>

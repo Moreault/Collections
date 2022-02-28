@@ -186,5 +186,23 @@ namespace ToolBX.Collections.ObservableList.Resources {
                 return ResourceManager.GetString("CannotSetItemBecauseIndexIsOutOfRange", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t swap items : current index is expected to be within the collection&apos;s boundaries of 0 and {1} but its value was {1}.
+        /// </summary>
+        internal static string CannotSwapItemsBecauseCurrentIndexIsOutOfRange {
+            get {
+                return ResourceManager.GetString("CannotSwapItemsBecauseCurrentIndexIsOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t swap items : destination index is expected to be within the collection&apos;s boundaries of 0 and {1} but its value was {1}.
+        /// </summary>
+        internal static string CannotSwapItemsBecauseDestinationIndexIsOutOfRange {
+            get {
+                return ResourceManager.GetString("CannotSwapItemsBecauseDestinationIndexIsOutOfRange", resourceCulture);
+            }
+        }
     }
 }

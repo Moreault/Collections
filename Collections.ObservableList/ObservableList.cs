@@ -53,6 +53,7 @@ public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCol
     int LastIndexOf(Predicate<T> predicate);
     IObservableList<int> IndexesOf(T item);
     IObservableList<int> IndexesOf(Predicate<T> predicate);
+    void Swap(int currentIndex, int destinationIndex);
 }
 
 /// <inheritdoc cref="IObservableList{T}"/>
@@ -245,6 +246,22 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
                 indexes.Add(i);
         }
         return indexes;
+    }
+
+    public void Swap(int currentIndex, int destinationIndex)
+    {
+        //TODO Message saying you're a dumbass
+        if (currentIndex < 0 || currentIndex > LastIndex) throw new ArgumentOutOfRangeException(string.Format(Exceptions.CannotSwapItemsBecauseCurrentIndexIsOutOfRange, LastIndex, currentIndex));
+        //TODO Message saying you're a dumbass
+        if (destinationIndex < 0 || destinationIndex > LastIndex) throw new ArgumentOutOfRangeException(string.Format(Exceptions.CannotSwapItemsBecauseDestinationIndexIsOutOfRange, LastIndex, destinationIndex));
+
+        if (currentIndex == destinationIndex) return;
+
+        var firstItem = _items[currentIndex];
+        var secondItem = _items[destinationIndex];
+
+        _items[currentIndex] = secondItem;
+        _items[destinationIndex] = firstItem;
     }
 
     public void TryRemoveAll(T item)

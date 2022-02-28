@@ -95,6 +95,8 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
     /// </summary>
     IGrid<T> Copy(Boundaries<int> boundaries);
 
+    void Swap(Coordinates current, Coordinates destination);
+
     event GridChangedEvent<T> CollectionChanged;
 }
 
@@ -497,6 +499,23 @@ public class Grid<T> : IGrid<T>
             copy[key] = value;
         }
         return copy;
+    }
+
+    public void Swap(Coordinates current, Coordinates destination)
+    {
+        if (current == destination) return;
+
+        var firstItem = _items[current];
+        var secondItem = _items[destination];
+
+        _items[current] = secondItem;
+        _items[destination] = firstItem;
+
+        CollectionChanged?.Invoke(this, new GridChangedEventArgs<T>
+        {
+            NewValues = new List<Cell<T>> { new(destination, firstItem), new(current, secondItem) },
+            OldValues = new List<Cell<T>> { new(destination, secondItem), new(current, firstItem) }
+        });
     }
 
     public event GridChangedEvent<T>? CollectionChanged;

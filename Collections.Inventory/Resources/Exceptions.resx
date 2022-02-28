@@ -117,52 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CannotInstantiateObjectBecauseParameterIsMandatory" xml:space="preserve">
-    <value>Impossible d'instancier {0} : le paramètre {1} est obligatoire.</value>
+  <data name="CannotAddItemBecauseMaximumIsReached" xml:space="preserve">
+    <value>Can't add more items to collection : Number of items is greater than the maximum stack size of {0}</value>
   </data>
-  <data name="CannotInstantiateObjectBecauseParameterMustBePositiveNumber" xml:space="preserve">
-    <value>Impossible d'instancier {0} : {1} doit être un nombre positif mais sa valeur était {2}.</value>
+  <data name="CannotAddItemBecauseQuantityIsGreaterThanMaximum" xml:space="preserve">
+    <value>Can't add more items to collection : {0} is greater than the maximum stack size of {1}</value>
   </data>
-  <data name="CannotGetItemBecauseIndexIsOutOfRange" xml:space="preserve">
-    <value>Impossible d'obtenir l'item : on s'attend à ce que l'index soit entre {0} et {1} mais sa valeur était {2}.</value>
+  <data name="CannotAddItemBecauseQuantityMustBeGreaterThanZero" xml:space="preserve">
+    <value>Can't add {0} to collection : quantity must be greater than zero but its value was {1}</value>
   </data>
-  <data name="CannotSetItemBecauseIndexIsOutOfRange" xml:space="preserve">
-    <value>Impossible de modifier l'item : on s'attend à ce que l'index soit entre {0} et {1} mais sa valeur était {2}.</value>
+  <data name="CannotAddItemUsingPredicateBecauseQuantityMustBeGreaterThanZero" xml:space="preserve">
+    <value>Can't add item using predicate : quantity must be greater than zero but its value was {0}</value>
   </data>
-  <data name="CannotRemoveItemBecauseIndexIsOutOfRange" xml:space="preserve">
-    <value>Impossible de retirer l'item de {0} : on s'attend à ce que l'index soit entre {1} et {2} mais sa valeur était {3}</value>
+  <data name="CannotAddItemUsingPredicateBecauseThereIsNoMatch" xml:space="preserve">
+    <value>Can't add item using predicate : there is no match in the collection for '{0}'</value>
+  </data>
+  <data name="CannotInstantiateBecauseStackSizeMustBeGreaterThanZero" xml:space="preserve">
+    <value>Can't instantiate {0} : stackSize must be greater than zero but its value was {1}</value>
   </data>
   <data name="CannotRemoveItemBecauseItIsNotInCollection" xml:space="preserve">
-    <value>Impossible de retirer l'item de {0} : {1} n'est pas dans la collection.</value>
+    <value>Can't remove {0} from collection : the item has no entry in collection</value>
   </data>
-  <data name="CannotRemoveItemBecauseNoItemFitPredicate" xml:space="preserve">
-    <value>Impossible de retirer l'item de {0} : il n'y a aucun item correspondant au prédicat dans la collection.</value>
+  <data name="CannotRemoveItemBecauseQuantityIsGreaterThanStock" xml:space="preserve">
+    <value>Can't remove {0} from collection : trying to remove {1} from stock but its current quantity is only {2}</value>
   </data>
-  <data name="CannotCopyBecauseIndexIsOutOfRange" xml:space="preserve">
-    <value>Impossible de copier {0} : on s'attend à ce que l'index soit entre {1} et {2} mais sa valeur était {3}</value>
+  <data name="CannotRemoveItemBecauseQuantityMustBeGreaterThanZero" xml:space="preserve">
+    <value>Can't remove {0} from collection : quantity must be greater than zero but its value was {1}</value>
   </data>
-  <data name="CannotCopyBecauseCountIsNegative" xml:space="preserve">
-    <value>Impossible de copier {0} : count doit être un nombre positif mais sa valeur était {1}</value>
+  <data name="CannotRemoveItemUsingPredicateBecauseQuantityMustBeGreaterThanZero" xml:space="preserve">
+    <value>Can't remove item using predicate : quantity must be greater than zero but its value was {0}</value>
   </data>
-  <data name="CannotCopyBecauseRangeFallsOutsideBoundaries" xml:space="preserve">
-    <value>Impossible de copier {0} : on s'attend à recevoir une valeur entre {1} et {2} mais les valeurs de 'startingIndex' et 'count' étaient de {3} et {4} respectivement</value>
-  </data>
-  <data name="CannotInsertItemsBecauseIndexIsOutOfRange" xml:space="preserve">
-    <value>Impossible d'insérer les items dans {0} : on s'attend à ce que l'index soit entre {1} et {2} mais sa valeur était {3}</value>
-  </data>
-  <data name="CannotRemoveItemBecauseCountIsZero" xml:space="preserve">
-    <value>Impossible de retirer l'item de {0} : 'count' doit être plus grand que zéro mais sa valeur était {1}</value>
-  </data>
-  <data name="CannotRemoveItemBecauseRangeFallsOutsideBoundaries" xml:space="preserve">
-    <value>Impossible de retirer l'item de {0} : on s'attend à recevoir une valeur entre {1} et {2} mais les valeurs de 'index' et 'count' étaient de {3} et {4} respectivement</value>
-  </data>
-  <data name="CannotEnumerateBecauseModified" xml:space="preserve">
-    <value>Impossible d'énumérer {0} : la collection a été modifiée durant l'énumération</value>
-  </data>
-  <data name="CannotSwapItemsBecauseCurrentIndexIsOutOfRange" xml:space="preserve">
-    <value>Impossible d'échanger les items : on s'attend à ce que currentIndex soit entre 0 et {0} mais sa valeur était de {1}</value>
-  </data>
-  <data name="CannotSwapItemsBecauseDestinationIndexIsOutOfRange" xml:space="preserve">
-    <value>Impossible d'échanger les items : on s'attend à ce que destinationIndex soit entre 0 et {0} mais sa valeur était de {1}</value>
+  <data name="CannotRemoveItemUsingPredicateBecauseThereIsNoMatch" xml:space="preserve">
+    <value>Can't remove item using predicate : there is no match in the collection for '{0}'</value>
   </data>
 </root>

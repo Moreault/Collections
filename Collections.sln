@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.Grid", "Collect
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.Grid.Tests", "Collections.Grid.Tests\Collections.Grid.Tests.csproj", "{963A3EFE-DB89-4353-B5F5-202D1A0C83BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collections.Inventory", "Collections.Inventory\Collections.Inventory.csproj", "{FC5C048B-00AC-4342-B18C-4AC59D2EECF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collections.Inventory.Tests", "Collections.Inventory.Tests\Collections.Inventory.Tests.csproj", "{559909CB-4277-46BA-885D-DAF722239D09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{963A3EFE-DB89-4353-B5F5-202D1A0C83BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{963A3EFE-DB89-4353-B5F5-202D1A0C83BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{963A3EFE-DB89-4353-B5F5-202D1A0C83BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC5C048B-00AC-4342-B18C-4AC59D2EECF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC5C048B-00AC-4342-B18C-4AC59D2EECF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC5C048B-00AC-4342-B18C-4AC59D2EECF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC5C048B-00AC-4342-B18C-4AC59D2EECF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{559909CB-4277-46BA-885D-DAF722239D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{559909CB-4277-46BA-885D-DAF722239D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{559909CB-4277-46BA-885D-DAF722239D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{559909CB-4277-46BA-885D-DAF722239D09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
