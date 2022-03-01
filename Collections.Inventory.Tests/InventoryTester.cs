@@ -1,10 +1,10 @@
 using AutoFixture;
-using Collections.Common;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ToolBX.Collections.Common;
 using ToolBX.Collections.Inventory;
 using ToolBX.Collections.Inventory.Resources;
 using ToolBX.Eloquentest;
@@ -2527,7 +2527,7 @@ public class InventoryTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null;
+            Predicate<Dummy> predicate = null!;
 
             //Act
             var action = () => Instance.Clear(predicate);

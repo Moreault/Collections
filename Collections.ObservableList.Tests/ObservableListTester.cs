@@ -1,11 +1,11 @@
 using AutoFixture;
-using Collections.Common;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ToolBX.Collections.Common;
 using ToolBX.Collections.ObservableList;
 using ToolBX.Eloquentest;
 using ToolBX.Eloquentest.Extensions;

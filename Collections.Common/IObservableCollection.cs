@@ -1,4 +1,4 @@
-﻿namespace Collections.Common;
+﻿namespace ToolBX.Collections.Common;
 
 public interface IObservableCollection<T>
 {

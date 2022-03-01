@@ -1,4 +1,4 @@
-﻿namespace Collections.Common;
+﻿namespace ToolBX.Collections.Common;
 
 public delegate void CollectionChangeEventHandler<T>(object sender, CollectionChangeEventArgs<T> args);
 

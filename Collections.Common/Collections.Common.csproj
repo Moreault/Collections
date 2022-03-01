@@ -4,6 +4,29 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <Version>1.0.0</Version>
+	  <RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
+	  <PackageId>ToolBX.$(AssemblyName)</PackageId>
+	  <Product>ToolBX.$(AssemblyName)</Product>
+	  <Authors>Mathieu Moreault</Authors>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <RepositoryUrl>https://github.com/Moreault/Collections</RepositoryUrl>
+	  <PackageProjectUrl>https://github.com/Moreault/Collections</PackageProjectUrl>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <Description>Common types for the ToolBX.Collections namespaces. This package should not be referenced by your project directly.</Description>
+	  <PackageIcon>collections.common.png</PackageIcon>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\collections.common.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

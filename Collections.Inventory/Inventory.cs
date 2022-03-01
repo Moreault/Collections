@@ -1,5 +1,5 @@
-﻿using Collections.Common;
-using System.Collections;
+﻿using System.Collections;
+using ToolBX.Collections.Common;
 using ToolBX.Collections.Inventory.Resources;
 using ToolBX.Collections.ObservableList;
 using ToolBX.Reflection4Humans.Extensions;
