@@ -341,7 +341,8 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
     public void Insert(int index, IEnumerable<T> items)
     {
         if (items == null) throw new ArgumentNullException(nameof(items));
-        if (index < 0 || index > LastIndex) throw new ArgumentOutOfRangeException(nameof(index), string.Format(Exceptions.CannotInsertItemsBecauseIndexIsOutOfRange, GetType().GetHumanReadableName(), 0, LastIndex, index));
+        //TODO Test LastIndex + 1 behaviour
+        if (index < 0 || index > LastIndex + 1) throw new ArgumentOutOfRangeException(nameof(index), string.Format(Exceptions.CannotInsertItemsBecauseIndexIsOutOfRange, GetType().GetHumanReadableName(), 0, LastIndex, index));
         var copy = items.ToArray();
 
         if (_items.Length <= Count + copy.Length)

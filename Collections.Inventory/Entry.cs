@@ -1,16 +1,16 @@
 ﻿namespace ToolBX.Collections.Inventory;
 
-public record InventoryEntry<T>
+public record Entry<T>
 {
     public T Item { get; init; } = default!;
     public int Quantity { get; init; }
 
-    public InventoryEntry()
+    public Entry()
     {
 
     }
 
-    public InventoryEntry(T item, int quantity = 1)
+    public Entry(T item, int quantity = 1)
     {
         Item = item;
         Quantity = quantity;
@@ -22,5 +22,5 @@ public record InventoryEntry<T>
         quantity = Quantity;
     }
 
-    public override string ToString() => $"{Item} x{Quantity}";
+    public override string ToString() => $"{(Item is null ? "NULL" : Item.ToString())} x{Quantity}";
 }

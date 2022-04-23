@@ -1,17 +1,7 @@
-﻿using AutoFixture;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using ToolBX.Collections.Inventory;
-using ToolBX.Collections.Inventory.Resources;
-using ToolBX.Eloquentest;
-
-namespace Collections.Inventory.Tests;
+﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public class InventoryExtensionsTester
+public class InventoryTableExtensionsTester
 {
     [TestClass]
     public class ToInventory_EnumerableOfDummy : Tester
@@ -39,7 +29,7 @@ public class InventoryExtensionsTester
             var result = collection.ToInventory();
 
             //Assert
-            result.Should().BeOfType<Inventory<string>>();
+            result.Should().BeOfType<InventoryTable<string>>();
             result.Should().BeEmpty();
         }
 
@@ -53,7 +43,7 @@ public class InventoryExtensionsTester
             var result = collection.ToInventory();
 
             //Assert
-            result.Should().BeEquivalentTo(collection.Select(x => new InventoryEntry<string>(x)));
+            result.Should().BeEquivalentTo(collection.Select(x => new Entry<string>(x)));
         }
 
         [TestMethod]
@@ -77,7 +67,7 @@ public class InventoryExtensionsTester
             var result = collection.ToInventory();
 
             //Assert
-            result.Should().BeEquivalentTo(new Inventory<string>
+            result.Should().BeEquivalentTo(new InventoryTable<string>
             {
                 { "abc", 3 },
                 { "def", 3 },
@@ -118,7 +108,7 @@ public class InventoryExtensionsTester
         public void WhenEntriesNull_Throw()
         {
             //Arrange
-            IEnumerable<InventoryEntry<string>> collection = null;
+            IEnumerable<Entry<string>> collection = null!;
 
             //Act
             var action = () => collection.ToInventory(int.MaxValue);
@@ -131,47 +121,47 @@ public class InventoryExtensionsTester
         public void WhenStackSizeIsNegative_Throw()
         {
             //Arrange
-            var collection = Fixture.Create<List<InventoryEntry<string>>>();
+            var collection = Fixture.Create<List<Entry<string>>>();
             var stackSize = -Fixture.Create<int>();
 
             //Act
             var action = () => collection.ToInventory(stackSize);
 
             //Assert
-            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, "Inventory<String>", stackSize));
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, "InventoryTable<String>", stackSize));
         }
 
         [TestMethod]
         public void WhenStackSizeIsZero_Throw()
         {
             //Arrange
-            var collection = Fixture.Create<List<InventoryEntry<string>>>();
+            var collection = Fixture.Create<List<Entry<string>>>();
 
             //Act
             var action = () => collection.ToInventory(0);
 
             //Assert
-            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, "Inventory<String>", 0));
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, "InventoryTable<String>", 0));
         }
 
         [TestMethod]
         public void WhenEntriesEmpty_ReturnEmptyInventory()
         {
             //Arrange
-            var collection = Array.Empty<InventoryEntry<string>>();
+            var collection = Array.Empty<Entry<string>>();
 
             //Act
             var result = collection.ToInventory();
 
             //Assert
-            result.Should().BeEquivalentTo(new Inventory<string>());
+            result.Should().BeEquivalentTo(new InventoryTable<string>());
         }
 
         [TestMethod]
         public void WhenThereAreNoDuplicateEntries_ReturnEquivalentInventory()
         {
             //Arrange
-            var collection = Fixture.Create<List<InventoryEntry<string>>>();
+            var collection = Fixture.Create<List<Entry<string>>>();
 
             //Act
             var result = collection.ToInventory(int.MaxValue);
@@ -184,7 +174,7 @@ public class InventoryExtensionsTester
         public void WhenThereAreDuplicateEntries_MergeDuplicates()
         {
             //Arrange
-            var collection = new List<InventoryEntry<string>>
+            var collection = new List<Entry<string>>
             {
                 new("abc", 8),
                 new("def", 81),
@@ -197,7 +187,7 @@ public class InventoryExtensionsTester
             var result = collection.ToInventory(int.MaxValue);
 
             //Assert
-            result.Should().BeEquivalentTo(new Inventory<string>
+            result.Should().BeEquivalentTo(new InventoryTable<string>
             {
                 { "abc", 10 },
                 { "def", 85 },
@@ -209,7 +199,7 @@ public class InventoryExtensionsTester
         public void WhenThereAreDuplicateEntriesAndAddingQuantitiesTogetherBustsStackLimit_Throw()
         {
             //Arrange
-            var collection = new List<InventoryEntry<string>>
+            var collection = new List<Entry<string>>
             {
                 new("abc", 8),
                 new("def", 8),

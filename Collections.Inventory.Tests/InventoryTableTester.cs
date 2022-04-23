@@ -1,22 +1,10 @@
-using AutoFixture;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using ToolBX.Collections.Common;
-using ToolBX.Collections.Inventory;
-using ToolBX.Collections.Inventory.Resources;
-using ToolBX.Eloquentest;
-using ToolBX.Eloquentest.Extensions;
-
 namespace Collections.Inventory.Tests;
 
 [TestClass]
-public class InventoryTester
+public class InventoryTableTester
 {
     [TestClass]
-    public class LastIndex : Tester<Inventory<Dummy>>
+    public class LastIndex : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnMinusOne()
@@ -34,9 +22,7 @@ public class InventoryTester
         public void WhenIsNotEmpty_ReturnLastIndex()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>(3).ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>(3).ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -49,7 +35,165 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Indexer : Tester<Inventory<Dummy>>
+    public class StackSize : Tester<InventoryTable<Dummy>>
+    {
+        [TestMethod]
+        public void WhenNewValueIsSet_ReturnThatNewValue()
+        {
+            //Arrange
+            var value = Fixture.Create<int>();
+
+            //Act
+            Instance.StackSize = value;
+
+            //Assert
+            Instance.StackSize.Should().Be(value);
+        }
+
+        [TestMethod]
+        public void WhenValueIsZero_Throw()
+        {
+            //Arrange
+            var value = 0;
+
+            //Act
+            var action = () => Instance.StackSize = value;
+
+            //Assert
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, Instance.GetType().GetHumanReadableName(), value));
+        }
+
+        [TestMethod]
+        public void WhenValueIsNegative_Throw()
+        {
+            //Arrange
+            var value = -Fixture.Create<int>();
+
+            //Act
+            var action = () => Instance.StackSize = value;
+
+            //Assert
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, Instance.GetType().GetHumanReadableName(), value));
+        }
+
+        [TestMethod]
+        public void WhenValueIsGreaterThanAllStacksInCollections_DoNotChangeQuantities()
+        {
+            //Arrange
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, Fixture.CreateBetween(1, 99)).CreateMany().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            //Act
+            Instance.StackSize = 100;
+
+            //Assert
+            Instance.Should().BeEquivalentTo(entries);
+        }
+
+        [TestMethod]
+        public void WhenValueIsGreaterThanAllStacksInCollections_DoNotTriggerChange()
+        {
+            //Arrange
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, Fixture.CreateBetween(1, 99)).CreateMany().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.StackSize = 100;
+
+            //Assert
+            eventArgs.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenValueIsEqualToAllStacksInCollections_DoNotChangeQuantities()
+        {
+            //Arrange
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, 99).CreateMany().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            //Act
+            Instance.StackSize = 99;
+
+            //Assert
+            Instance.Should().BeEquivalentTo(entries);
+        }
+
+        [TestMethod]
+        public void WhenValueIsEqualToAllStacksInCollections_DoNotTriggerChange()
+        {
+            //Arrange
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, 99).CreateMany().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.StackSize = 99;
+
+            //Assert
+            eventArgs.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenValueIsLessThanStacksInCollection_RemoveExcessQuantities()
+        {
+            //Arrange
+            Instance.Add(Fixture.Create<Dummy>(), 58);
+            Instance.Add(Fixture.Create<Dummy>(), 95);
+            Instance.Add(Fixture.Create<Dummy>(), 72);
+
+            //Act
+            Instance.StackSize = 50;
+
+            //Assert
+            Instance.Should().BeEquivalentTo(new List<Entry<Dummy>>
+            {
+                new(Instance[0].Item, 50),
+                new(Instance[1].Item, 50),
+                new(Instance[2].Item, 50),
+            });
+        }
+
+        [TestMethod]
+        public void WhenValueIsLessThanStacksInCollection_TriggerChangeOnce()
+        {
+            //Arrange
+            Instance.Add(Fixture.Create<Dummy>(), 58);
+            Instance.Add(Fixture.Create<Dummy>(), 95);
+            Instance.Add(Fixture.Create<Dummy>(), 72);
+
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.StackSize = 50;
+
+            //Assert
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
+            {
+                new()
+                {
+                    OldValues = new List<Entry<Dummy>>
+                    {
+                        new(Instance[0].Item, 8),
+                        new(Instance[1].Item, 45),
+                        new(Instance[2].Item, 22),
+                    }
+                }
+            });
+        }
+    }
+
+    [TestClass]
+    public class Indexer : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenIndexIsNegative_Throw()
@@ -68,9 +212,7 @@ public class InventoryTester
         public void WhenIndexIsGreaterThanLastIndex_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -87,9 +229,7 @@ public class InventoryTester
         public void WhenIndexIsZero_ReturnFirstEntry()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -106,9 +246,7 @@ public class InventoryTester
         public void WhenIndexIsEqualToLastIndex_ReturnLastEntry()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -123,24 +261,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class StackSize : Tester
-    {
-        [TestMethod]
-        public void Always_ReturnValueInstancedWith()
-        {
-            //Arrange
-            var stackSize = Fixture.Create<int>();
-
-            //Act
-            var instance = new Inventory<Dummy>(stackSize);
-
-            //Assert
-            instance.StackSize.Should().Be(stackSize);
-        }
-    }
-
-    [TestClass]
-    public class TotalCount : Tester<Inventory<Dummy>>
+    public class TotalCount : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -158,9 +279,7 @@ public class InventoryTester
         public void WhenContainsOnlyOneEntry_ReturnQuantityOfThatEntry()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entry = Fixture.Create<InventoryEntry<Dummy>>();
+            var entry = Fixture.Create<Entry<Dummy>>();
             Instance.Add(entry.Item, entry.Quantity);
 
             //Act
@@ -174,9 +293,7 @@ public class InventoryTester
         public void WhenContainsMultipleEntries_ReturnSumOfAllQuantities()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -189,7 +306,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class StackCount : Tester<Inventory<Dummy>>
+    public class StackCount : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -207,9 +324,7 @@ public class InventoryTester
         public void WhenIsNotEmpty_ReturnNumberOfUniqueEntries()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -225,13 +340,29 @@ public class InventoryTester
     public class Constructor_Default : Tester
     {
         [TestMethod]
+        public void Always_InitializeStackSizeWithDefaultValue()
+        {
+            //Arrange
+
+            //Act
+            var result = new InventoryTable<Dummy>();
+
+            //Assert
+            result.StackSize.Should().Be(DefaultValues.StackSize);
+        }
+    }
+
+    [TestClass]
+    public class Constructor_StackSize : Tester
+    {
+        [TestMethod]
         public void WhenStackSizeIsNegative_Throw()
         {
             //Arrange
             var stackSize = -Fixture.Create<int>();
 
             //Act
-            var action = () => new Inventory<Dummy>(stackSize);
+            var action = () => new InventoryTable<Dummy>(stackSize);
 
             //Assert
             action.Should().Throw<ArgumentException>();
@@ -243,7 +374,7 @@ public class InventoryTester
             //Arrange
 
             //Act
-            var action = () => new Inventory<Dummy>(0);
+            var action = () => new InventoryTable<Dummy>(0);
 
             //Assert
             action.Should().Throw<ArgumentException>();
@@ -256,7 +387,7 @@ public class InventoryTester
             var stackSize = Fixture.Create<int>();
 
             //Act
-            var result = new Inventory<Dummy>(stackSize);
+            var result = new InventoryTable<Dummy>(stackSize);
 
             //Assert
             result.StackSize.Should().Be(stackSize);
@@ -274,7 +405,7 @@ public class InventoryTester
             var collection = Fixture.CreateMany<Dummy>();
 
             //Act
-            var action = () => new Inventory<Dummy>(collection, stackSize);
+            var action = () => new InventoryTable<Dummy>(collection, stackSize);
 
             //Assert
             action.Should().Throw<ArgumentException>();
@@ -287,7 +418,7 @@ public class InventoryTester
             var collection = Fixture.CreateMany<Dummy>();
 
             //Act
-            var action = () => new Inventory<Dummy>(collection, 0);
+            var action = () => new InventoryTable<Dummy>(collection, 0);
 
             //Assert
             action.Should().Throw<ArgumentException>();
@@ -301,7 +432,7 @@ public class InventoryTester
             IEnumerable<Dummy> collection = null!;
 
             //Act
-            var action = () => new Inventory<Dummy>(collection, stackSize);
+            var action = () => new InventoryTable<Dummy>(collection, stackSize);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -315,7 +446,7 @@ public class InventoryTester
             var collection = Fixture.CreateMany<Dummy>().ToList();
 
             //Act
-            var result = new Inventory<Dummy>(collection, stackSize);
+            var result = new InventoryTable<Dummy>(collection, stackSize);
 
             //Assert
             result.StackSize.Should().Be(stackSize);
@@ -329,10 +460,10 @@ public class InventoryTester
             var collection = Fixture.CreateMany<Dummy>().ToList();
 
             //Act
-            var result = new Inventory<Dummy>(collection, stackSize);
+            var result = new InventoryTable<Dummy>(collection, stackSize);
 
             //Assert
-            result.Should().BeEquivalentTo(collection.Select(x => new InventoryEntry<Dummy>(x)));
+            result.Should().BeEquivalentTo(collection.Select(x => new Entry<Dummy>(x)));
         }
     }
 
@@ -344,10 +475,10 @@ public class InventoryTester
         {
             //Arrange
             var stackSize = -Fixture.Create<int>();
-            var collection = Fixture.CreateMany<InventoryEntry<Dummy>>();
+            var collection = Fixture.CreateMany<Entry<Dummy>>();
 
             //Act
-            var action = () => new Inventory<Dummy>(collection, stackSize);
+            var action = () => new InventoryTable<Dummy>(collection, stackSize);
 
             //Assert
             action.Should().Throw<ArgumentException>();
@@ -357,10 +488,10 @@ public class InventoryTester
         public void WhenStackSizeIsZero_Throw()
         {
             //Arrange
-            var collection = Fixture.CreateMany<InventoryEntry<Dummy>>();
+            var collection = Fixture.CreateMany<Entry<Dummy>>();
 
             //Act
-            var action = () => new Inventory<Dummy>(collection, 0);
+            var action = () => new InventoryTable<Dummy>(collection, 0);
 
             //Assert
             action.Should().Throw<ArgumentException>();
@@ -371,10 +502,10 @@ public class InventoryTester
         {
             //Arrange
             var stackSize = Fixture.Create<int>();
-            IEnumerable<InventoryEntry<Dummy>> collection = null!;
+            IEnumerable<Entry<Dummy>> collection = null!;
 
             //Act
-            var action = () => new Inventory<Dummy>(collection, stackSize);
+            var action = () => new InventoryTable<Dummy>(collection, stackSize);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -385,10 +516,10 @@ public class InventoryTester
         {
             //Arrange
             var stackSize = Fixture.Create<int>();
-            var collection = Fixture.Build<InventoryEntry<Dummy>>().With(x => x.Quantity, stackSize).CreateMany().ToList();
+            var collection = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, stackSize).CreateMany().ToList();
 
             //Act
-            var result = new Inventory<Dummy>(collection, stackSize);
+            var result = new InventoryTable<Dummy>(collection, stackSize);
 
             //Assert
             result.StackSize.Should().Be(stackSize);
@@ -399,10 +530,10 @@ public class InventoryTester
         {
             //Arrange
             var stackSize = Fixture.Create<int>();
-            var collection = Fixture.Build<InventoryEntry<Dummy>>().With(x => x.Quantity, stackSize).CreateMany().ToList();
+            var collection = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, stackSize).CreateMany().ToList();
 
             //Act
-            var result = new Inventory<Dummy>(collection, stackSize);
+            var result = new InventoryTable<Dummy>(collection, stackSize);
 
             //Assert
             result.Should().BeEquivalentTo(collection);
@@ -413,10 +544,10 @@ public class InventoryTester
         {
             //Arrange
             var stackSize = Fixture.Create<int>();
-            var collection = Fixture.Build<InventoryEntry<Dummy>>().With(x => x.Quantity, stackSize + 1).CreateMany().ToList();
+            var collection = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, stackSize + 1).CreateMany().ToList();
 
             //Act
-            var action = () => new Inventory<Dummy>(collection, stackSize);
+            var action = () => new InventoryTable<Dummy>(collection, stackSize);
 
             //Assert
             action.Should().Throw<InventoryStackFullException>();
@@ -424,7 +555,193 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Add : Tester<Inventory<Dummy>>
+    public class Add_Entry : Tester<InventoryTable<Dummy>>
+    {
+        [TestMethod]
+        public void WhenEntryIsNull_Throw()
+        {
+            //Arrange
+            Entry<Dummy> item = null!;
+
+            //Act
+            var action = () => ((ICollection<Entry<Dummy>>)Instance).Add(item);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void WhenQuantityIsZero_Throw()
+        {
+            //Arrange
+            var item = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, 0).Create();
+
+            //Act
+            var action = () => ((ICollection<Entry<Dummy>>)Instance).Add(item);
+
+            //Assert
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotAddItemBecauseQuantityMustBeGreaterThanZero, item.Item, 0));
+        }
+
+        [TestMethod]
+        public void WhenQuantityIsNegative_Throw()
+        {
+            //Arrange
+            var item = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, -Fixture.Create<int>()).Create();
+
+            //Act
+            var action = () => ((ICollection<Entry<Dummy>>)Instance).Add(item);
+
+            //Assert
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotAddItemBecauseQuantityMustBeGreaterThanZero, item.Item, item.Quantity));
+        }
+
+        [TestMethod]
+        public void WhenThisItemIsAlreadyInStock_AddNewQuantityToOldQuantity()
+        {
+            //Arrange
+            var oldQuantity = Fixture.Create<int>();
+            var item = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, oldQuantity).Create();
+            Instance.Add(item.Item, oldQuantity);
+
+            var newQuantity = Fixture.Create<int>();
+
+            //Act
+            ((ICollection<Entry<Dummy>>)Instance).Add(item with { Quantity = newQuantity });
+
+            //Assert
+            Instance.QuantityOf(item.Item).Should().Be(oldQuantity + newQuantity);
+        }
+
+        [TestMethod]
+        public void WhenThisItemIsAlreadyInStock_TriggerChange()
+        {
+            //Arrange
+            var oldQuantity = Fixture.Create<int>();
+            var item = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, oldQuantity).Create();
+            Instance.Add(item.Item, oldQuantity);
+
+            var newQuantity = Fixture.Create<int>();
+
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            ((ICollection<Entry<Dummy>>)Instance).Add(item with { Quantity = newQuantity });
+
+            //Assert
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
+            {
+                new()
+                {
+                    NewValues = new List<Entry<Dummy>> { new(item.Item, newQuantity) }
+                }
+            });
+        }
+
+        [TestMethod]
+        public void WhenItemIsNotCurrentlyInStock_AddNewEntry()
+        {
+            //Arrange
+            var item = Fixture.Create<Entry<Dummy>>();
+
+            //Act
+            ((ICollection<Entry<Dummy>>)Instance).Add(item);
+
+            //Assert
+            Instance.QuantityOf(item.Item).Should().Be(item.Quantity);
+        }
+
+        [TestMethod]
+        public void WhenItemIsNotCurrentlyInStock_TriggerChange()
+        {
+            //Arrange
+            var item = Fixture.Create<Entry<Dummy>>();
+
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            ((ICollection<Entry<Dummy>>)Instance).Add(item);
+
+            //Assert
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
+            {
+                new()
+                {
+                    NewValues = new List<Entry<Dummy>> { new(item.Item, item.Quantity) }
+                }
+            });
+        }
+
+        [TestMethod]
+        public void WhenItemIsAlreadyInStockAndNewQuantityIsEqualToStackSize_DoNotThrow()
+        {
+            //Arrange
+            Instance.StackSize = 99;
+            var oldQuantity = 44;
+            var item = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, oldQuantity).Create();
+            Instance.Add(item.Item, oldQuantity);
+
+            var newQuantity = 55;
+
+            //Act
+            ((ICollection<Entry<Dummy>>)Instance).Add(item with { Quantity = newQuantity });
+
+            //Assert
+            Instance.QuantityOf(item.Item).Should().Be(oldQuantity + newQuantity);
+        }
+
+        [TestMethod]
+        public void WhenItemIsAlreadyInStockAndNewQuantityIsGreaterThanStackSize_Throw()
+        {
+            //Arrange
+            Instance.StackSize = 99;
+            var oldQuantity = 50;
+            var item = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, oldQuantity).Create();
+            Instance.Add(item.Item, oldQuantity);
+
+            var newQuantity = 50;
+
+            //Act
+            var action = () => ((ICollection<Entry<Dummy>>)Instance).Add(item with { Quantity = newQuantity });
+
+            //Assert
+            action.Should().Throw<InventoryStackFullException>();
+        }
+
+        [TestMethod]
+        public void WhenItemIsNotCurrentlyInStockAndQuantityIsGreaterThanStackSize_DoNotThrow()
+        {
+            //Arrange
+            Instance.StackSize = 99;
+            var item = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, Instance.StackSize).Create();
+
+            //Act
+            ((ICollection<Entry<Dummy>>)Instance).Add(item);
+
+            //Assert
+            Instance.QuantityOf(item.Item).Should().Be(item.Quantity);
+        }
+
+        [TestMethod]
+        public void WhenItemIsNotCurrentlyInStockAndQuantityIsGreaterThanStackSize_Throw()
+        {
+            //Arrange
+            Instance.StackSize = 99;
+
+            var item = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, Instance.StackSize + 1).Create();
+
+            //Act
+            var action = () => ((ICollection<Entry<Dummy>>)Instance).Add(item);
+
+            //Assert
+            action.Should().Throw<InventoryStackFullException>();
+        }
+    }
+
+    [TestClass]
+    public class Add : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenQuantityIsZero_Throw()
@@ -457,7 +774,6 @@ public class InventoryTester
         public void WhenThisItemIsAlreadyInStock_AddNewQuantityToOldQuantity()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
             var item = Fixture.Create<Dummy>();
             var oldQuantity = Fixture.Create<int>();
             Instance.Add(item, oldQuantity);
@@ -475,26 +791,24 @@ public class InventoryTester
         public void WhenThisItemIsAlreadyInStock_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var oldQuantity = Fixture.Create<int>();
             Instance.Add(item, oldQuantity);
 
             var newQuantity = Fixture.Create<int>();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Add(item, newQuantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    NewValues = new List<InventoryEntry<Dummy>> { new(item, newQuantity) }
+                    NewValues = new List<Entry<Dummy>> { new(item, newQuantity) }
                 }
             });
         }
@@ -503,8 +817,6 @@ public class InventoryTester
         public void WhenItemIsNotCurrentlyInStock_AddNewEntry()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var quantity = Fixture.Create<int>();
 
@@ -519,23 +831,21 @@ public class InventoryTester
         public void WhenItemIsNotCurrentlyInStock_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var quantity = Fixture.Create<int>();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Add(item, quantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    NewValues = new List<InventoryEntry<Dummy>> { new(item, quantity) }
+                    NewValues = new List<Entry<Dummy>> { new(item, quantity) }
                 }
             });
         }
@@ -544,8 +854,7 @@ public class InventoryTester
         public void WhenItemIsAlreadyInStockAndNewQuantityIsEqualToStackSize_DoNotThrow()
         {
             //Arrange
-            ConstructWith(99);
-
+            Instance.StackSize = 99;
             var item = Fixture.Create<Dummy>();
             var oldQuantity = 44;
             Instance.Add(item, oldQuantity);
@@ -563,7 +872,7 @@ public class InventoryTester
         public void WhenItemIsAlreadyInStockAndNewQuantityIsGreaterThanStackSize_Throw()
         {
             //Arrange
-            ConstructWith(99);
+            Instance.StackSize = 99;
 
             var item = Fixture.Create<Dummy>();
             var oldQuantity = 50;
@@ -582,7 +891,7 @@ public class InventoryTester
         public void WhenItemIsNotCurrentlyInStockAndQuantityIsGreaterThanStackSize_DoNotThrow()
         {
             //Arrange
-            ConstructWith(99);
+            Instance.StackSize = 99;
 
             var item = Fixture.Create<Dummy>();
             var quantity = Instance.StackSize;
@@ -598,7 +907,7 @@ public class InventoryTester
         public void WhenItemIsNotCurrentlyInStockAndQuantityIsGreaterThanStackSize_Throw()
         {
             //Arrange
-            ConstructWith(99);
+            Instance.StackSize = 99;
 
             var item = Fixture.Create<Dummy>();
             var quantity = Instance.StackSize + 1;
@@ -609,11 +918,10 @@ public class InventoryTester
             //Assert
             action.Should().Throw<Exception>();
         }
-
     }
 
     [TestClass]
-    public class TryAdd : Tester<Inventory<Dummy>>
+    public class TryAdd : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenQuantityIsZero_Throw()
@@ -643,7 +951,6 @@ public class InventoryTester
         public void WhenThisItemIsAlreadyInStock_AddNewQuantityToOldQuantity()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
             var item = Fixture.Create<Dummy>();
             var oldQuantity = Fixture.Create<int>();
             Instance.TryAdd(item, oldQuantity);
@@ -661,26 +968,24 @@ public class InventoryTester
         public void WhenThisItemIsAlreadyInStock_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var oldQuantity = Fixture.Create<int>();
             Instance.TryAdd(item, oldQuantity);
 
             var newQuantity = Fixture.Create<int>();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryAdd(item, newQuantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    NewValues = new List<InventoryEntry<Dummy>> { new(item, newQuantity) }
+                    NewValues = new List<Entry<Dummy>> { new(item, newQuantity) }
                 }
             });
         }
@@ -689,8 +994,6 @@ public class InventoryTester
         public void WhenItemIsNotCurrentlyInStock_AddNewEntry()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var quantity = Fixture.Create<int>();
 
@@ -705,23 +1008,21 @@ public class InventoryTester
         public void WhenItemIsNotCurrentlyInStock_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var quantity = Fixture.Create<int>();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryAdd(item, quantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    NewValues = new List<InventoryEntry<Dummy>> { new(item, quantity) }
+                    NewValues = new List<Entry<Dummy>> { new(item, quantity) }
                 }
             });
         }
@@ -730,7 +1031,7 @@ public class InventoryTester
         public void WhenItemIsAlreadyInStockAndNewQuantityIsEqualToStackSize_DoNotThrow()
         {
             //Arrange
-            ConstructWith(99);
+            Instance.StackSize = 99;
 
             var item = Fixture.Create<Dummy>();
             var oldQuantity = 44;
@@ -749,7 +1050,7 @@ public class InventoryTester
         public void WhenItemIsAlreadyInStockAndNewQuantityIsGreaterThanStackSize_SetMaximumSizeToStack()
         {
             //Arrange
-            ConstructWith(99);
+            Instance.StackSize = 99;
 
             var item = Fixture.Create<Dummy>();
             var oldQuantity = 50;
@@ -768,7 +1069,7 @@ public class InventoryTester
         public void WhenItemIsNotCurrentlyInStockAndQuantityIsGreaterThanStackSize_DoNotThrow()
         {
             //Arrange
-            ConstructWith(99);
+            Instance.StackSize = 99;
 
             var item = Fixture.Create<Dummy>();
             var quantity = Instance.StackSize;
@@ -784,7 +1085,7 @@ public class InventoryTester
         public void WhenItemIsNotCurrentlyInStockAndQuantityIsGreaterThanStackSize_SetMaximumSizeToStack()
         {
             //Arrange
-            ConstructWith(99);
+            Instance.StackSize = 99;
 
             var item = Fixture.Create<Dummy>();
             var quantity = Instance.StackSize + 1;
@@ -800,8 +1101,6 @@ public class InventoryTester
         public void WhenAllItemsAreAdded_ReturnAllItemsAdded()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var quantity = Fixture.Create<int>();
 
@@ -816,7 +1115,7 @@ public class InventoryTester
         public void WhenNoItemsAreAdded_ReturnNoItemsAdded()
         {
             //Arrange
-            ConstructWith(10);
+            Instance.StackSize = 10;
 
             var item = Fixture.Create<Dummy>();
             var quantity = Fixture.Create<int>();
@@ -833,7 +1132,7 @@ public class InventoryTester
         public void WhenSomeItemsAreAdded_ReturnNumberOfItemsAddedOutOfTotal()
         {
             //Arrange
-            ConstructWith(10);
+            Instance.StackSize = 10;
 
             var item = Fixture.Create<Dummy>();
             var quantity = Fixture.Create<int>();
@@ -848,7 +1147,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Add_Predicate : Tester<Inventory<Dummy>>
+    public class Add_Predicate : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenQuantityIsNegative_Throw()
@@ -896,9 +1195,7 @@ public class InventoryTester
         public void WhenPredicateHasNoMatch_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -913,9 +1210,7 @@ public class InventoryTester
         public void WhenPredicateHasOneMatch_AddToThatEntry()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -940,9 +1235,7 @@ public class InventoryTester
         public void WhenPredicateHasOneMatch_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -950,18 +1243,18 @@ public class InventoryTester
             var random = entries[index].Item;
             var newQuantity = Fixture.Create<int>();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Add(x => x.Id == random.Id, newQuantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    NewValues = new List<InventoryEntry<Dummy>>
+                    NewValues = new List<Entry<Dummy>>
                     {
                         new(random, newQuantity)
                     }
@@ -973,11 +1266,9 @@ public class InventoryTester
         public void WhenPredicateHasMultipleMatches_AddToAllThoseEntries()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).CreateMany().ToList();
 
             foreach (var (dummy, quantity) in entries)
@@ -997,11 +1288,9 @@ public class InventoryTester
         public void WhenPredicateHasMultipleMatches_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).CreateMany().ToList();
 
             foreach (var (dummy, quantity) in entries)
@@ -1009,14 +1298,14 @@ public class InventoryTester
 
             var newQuantity = Fixture.Create<int>();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Add(x => x.Id == id, newQuantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
@@ -1029,15 +1318,15 @@ public class InventoryTester
         public void WhenPredicateHasMultipleMatchesAndOneOfThoseWillBustStackSizeWithNewQuantity_Throw()
         {
             //Arrange
-            ConstructWith(50);
+            Instance.StackSize = 50;
 
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create())
                 .With(x => x.Quantity, 20).CreateMany().ToList();
 
-            var bustingEntry = Fixture.Build<InventoryEntry<Dummy>>()
+            var bustingEntry = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, Fixture.Build<Dummy>().With(y => y.Id, id).Create())
                 .With(x => x.Quantity, 49).Create();
 
@@ -1057,7 +1346,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class TryAdd_Predicate : Tester<Inventory<Dummy>>
+    public class TryAdd_Predicate : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -1105,9 +1394,7 @@ public class InventoryTester
         public void WhenThereIsZeroPredicateMatch_DoNotModifyStock()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -1126,15 +1413,13 @@ public class InventoryTester
         public void WhenThereIsZeroPredicateMatch_DoNotTriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
             var quantity = Fixture.Create<int>();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -1148,9 +1433,7 @@ public class InventoryTester
         public void WhenThereIsZeroPredicateMatch_ReturnZeroItemsAdded()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -1167,9 +1450,7 @@ public class InventoryTester
         public void WhenThereIsOneMatch_AddToThatItemOnly()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -1190,9 +1471,7 @@ public class InventoryTester
         public void WhenThereIsOneMatch_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -1201,18 +1480,18 @@ public class InventoryTester
             var entry = entries.GetRandom();
             var id = entry.Item.Id;
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryAdd(x => x.Id == id, quantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    NewValues = new List<InventoryEntry<Dummy>>
+                    NewValues = new List<Entry<Dummy>>
                     {
                         new(entry.Item, quantity)
                     }
@@ -1224,9 +1503,7 @@ public class InventoryTester
         public void WhenThereIsOneMatch_ReturnItemsAdded()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -1246,11 +1523,9 @@ public class InventoryTester
         public void WhenThereAreMultipleMatches_AddToAllThoseItems()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
@@ -1271,11 +1546,9 @@ public class InventoryTester
         public void WhenThereAreMultipleMatches_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
@@ -1283,14 +1556,14 @@ public class InventoryTester
 
             var quantity = Fixture.Create<int>();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryAdd(x => x.Id == id, quantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
@@ -1303,11 +1576,9 @@ public class InventoryTester
         public void WhenThereAreMultipleMatches_ReturnAllItemsAdded()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
@@ -1326,11 +1597,11 @@ public class InventoryTester
         public void WhenItemsWouldNormallyBustStackLimit_SetStacksToMaximum()
         {
             //Arrange
-            ConstructWith(50);
+            Instance.StackSize = 50;
 
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).With(x => x.Quantity, 40).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
@@ -1351,11 +1622,11 @@ public class InventoryTester
         public void WhenItemsWouldNormallyBustStackLimit_TriggerChange()
         {
             //Arrange
-            ConstructWith(50);
+            Instance.StackSize = 50;
 
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).With(x => x.Quantity, 40).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
@@ -1363,14 +1634,14 @@ public class InventoryTester
 
             var quantity = 20;
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryAdd(x => x.Id == id, quantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
@@ -1383,11 +1654,11 @@ public class InventoryTester
         public void WhenItemsWouldNormallyBustStackLimit_ReturnItemsAddedAndNotAdded()
         {
             //Arrange
-            ConstructWith(50);
+            Instance.StackSize = 50;
 
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).With(x => x.Quantity, 40).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
@@ -1395,7 +1666,7 @@ public class InventoryTester
 
             var quantity = 20;
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -1407,14 +1678,30 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Remove : Tester<Inventory<Dummy>>
+    public class Contains_Entry : Tester<InventoryTable<Dummy>>
+    {
+        //TODO Test
+    }
+
+    [TestClass]
+    public class CopyTo : Tester<InventoryTable<Dummy>>
+    {
+        //TODO Test
+    }
+
+    [TestClass]
+    public class Remove_Entry : Tester<InventoryTable<Dummy>>
+    {
+        //TODO Test
+    }
+
+    [TestClass]
+    public class Remove : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenQuantityIsNegative_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var quantity = -Fixture.Create<int>();
 
@@ -1431,8 +1718,6 @@ public class InventoryTester
         public void WhenQuantityIsZero_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var quantity = 0;
 
@@ -1449,9 +1734,7 @@ public class InventoryTester
         public void WhenNullAndNoNullInStock_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1466,9 +1749,7 @@ public class InventoryTester
         public void WhenItemIsNotInStock_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1483,9 +1764,7 @@ public class InventoryTester
         public void WhenNullIsInStockButNotEnoughQuantity_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1502,9 +1781,7 @@ public class InventoryTester
         public void WhenItemIsInStockButNotEnoughQuantity_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1522,9 +1799,7 @@ public class InventoryTester
         public void WhenQuantityIsEqualToWhatIsInStockForItem_RemoveItemEntirely()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1543,9 +1818,7 @@ public class InventoryTester
         public void WhenQuantityIsEqualToWhatIsInStockForItem_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1553,18 +1826,18 @@ public class InventoryTester
             var itemQuantity = Fixture.Create<int>();
             Instance.Add(item, itemQuantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Remove(item, itemQuantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>
+                    OldValues = new List<Entry<Dummy>>
                     {
                         new(item, itemQuantity)
                     }
@@ -1576,9 +1849,7 @@ public class InventoryTester
         public void WhenQuantityIsLessThanWhatIsInStockForItem_SubstractQuantityForItem()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1596,27 +1867,25 @@ public class InventoryTester
         public void WhenQuantityIsLessThanWhatIsInStockForItem_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
             var item = Fixture.Create<Dummy>();
             Instance.Add(item, 12);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Remove(item, 8);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>
+                    OldValues = new List<Entry<Dummy>>
                     {
                         new(item, 8)
                     }
@@ -1626,14 +1895,12 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class TryRemove : Tester<Inventory<Dummy>>
+    public class TryRemove : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenQuantityIsNegative_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var quantity = -Fixture.Create<int>();
 
@@ -1650,8 +1917,6 @@ public class InventoryTester
         public void WhenQuantityIsZero_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             var quantity = 0;
 
@@ -1668,9 +1933,7 @@ public class InventoryTester
         public void WhenNullAndNoNullInStock_DoNotThrow()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1685,13 +1948,11 @@ public class InventoryTester
         public void WhenNullAndNoNullInStock_DoNotTriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -1705,9 +1966,7 @@ public class InventoryTester
         public void WhenItemIsNotInStock_DoNotThrow()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1722,13 +1981,11 @@ public class InventoryTester
         public void WhenItemIsNotInStock_DoNotTriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -1742,9 +1999,7 @@ public class InventoryTester
         public void WhenNullIsInStockButNotEnoughQuantity_ClearEntireStack()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1761,9 +2016,7 @@ public class InventoryTester
         public void WhenItemIsInStockButNotEnoughQuantity_ClearEntireStack()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1781,9 +2034,7 @@ public class InventoryTester
         public void WhenQuantityIsEqualToWhatIsInStockForItem_RemoveItemEntirely()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1802,9 +2053,7 @@ public class InventoryTester
         public void WhenQuantityIsEqualToWhatIsInStockForItem_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1812,18 +2061,18 @@ public class InventoryTester
             var itemQuantity = Fixture.Create<int>();
             Instance.Add(item, itemQuantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryRemove(item, itemQuantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>
+                    OldValues = new List<Entry<Dummy>>
                     {
                         new(item, itemQuantity)
                     }
@@ -1835,9 +2084,7 @@ public class InventoryTester
         public void WhenQuantityIsLessThanWhatIsInStockForItem_SubstractQuantityForItem()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -1855,27 +2102,25 @@ public class InventoryTester
         public void WhenQuantityIsLessThanWhatIsInStockForItem_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
             var item = Fixture.Create<Dummy>();
             Instance.Add(item, 12);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryRemove(item, 8);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>
+                    OldValues = new List<Entry<Dummy>>
                     {
                         new(item, 8)
                     }
@@ -1887,8 +2132,6 @@ public class InventoryTester
         public void WhenRemovingAllItemsInStack_ReturnAllItemsRemoved()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             Instance.Add(item, 12);
 
@@ -1903,8 +2146,6 @@ public class InventoryTester
         public void WhenRemovingNoItemInStack_ReturnNoItemsRemoved()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
 
             //Act
@@ -1918,8 +2159,6 @@ public class InventoryTester
         public void WhenRemovingSomeItemsInStack_ReturnRemovedAndNotRemoved()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var item = Fixture.Create<Dummy>();
             Instance.Add(item, 12);
 
@@ -1932,7 +2171,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Remove_Predicate : Tester<Inventory<Dummy>>
+    public class Remove_Predicate : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -1980,9 +2219,7 @@ public class InventoryTester
         public void WhenThereIsNoMatch_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -1997,9 +2234,7 @@ public class InventoryTester
         public void WhenThereIsAMatchButRemovalWouldBustTheLowerQuantityLimitOfAtLeastOneItem_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.Build<InventoryEntry<Dummy>>().With(x => x.Quantity, 5).CreateMany().ToList();
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, 5).CreateMany().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -2014,9 +2249,7 @@ public class InventoryTester
         public void WhenThereIsOneMatchAndRemovalDoesNotBustLowerQuantityLimit_RemoveNumberOfItemFromEntry()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -2034,27 +2267,25 @@ public class InventoryTester
         public void WhenThereIsOneMatchAndRemovalDoesNotBustLowerQuantityLimit_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
             var entry = entries.GetRandom();
             var quantity = entry.Quantity;
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Remove(x => x.Id == entry.Item.Id, quantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>
+                    OldValues = new List<Entry<Dummy>>
                     {
                         entry
                     }
@@ -2066,11 +2297,9 @@ public class InventoryTester
         public void WhenThereAreMultipleMatchesAndNoneBustTheLowerQuantityLimit_RemoveNumberFromThoseEntries()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).With(x => x.Quantity, 25).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
@@ -2087,24 +2316,22 @@ public class InventoryTester
         public void WhenThereAreMultipleMatchesAndNoneBustTheLowerQuantityLimit_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).With(x => x.Quantity, 25).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Remove(x => x.Id == id, 15);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
@@ -2115,7 +2342,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class TryRemove_Predicate : Tester<Inventory<Dummy>>
+    public class TryRemove_Predicate : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -2163,9 +2390,7 @@ public class InventoryTester
         public void WhenThereIsNoMatch_DoNotModify()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -2182,13 +2407,11 @@ public class InventoryTester
         public void WhenThereIsNoMatch_DoNotTriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -2202,9 +2425,7 @@ public class InventoryTester
         public void WhenThereIsAMatchButRemovalWouldBustTheLowerQuantityLimitOfAtLeastOneItem_SetToZero()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.Build<InventoryEntry<Dummy>>().With(x => x.Quantity, 5).CreateMany().ToList();
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, 5).CreateMany().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -2221,9 +2442,7 @@ public class InventoryTester
         public void WhenThereIsAMatchButRemovalWouldBustTheLowerQuantityLimitOfAtLeastOneItem_ReturnRemovedAndNotRemoved()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.Build<InventoryEntry<Dummy>>().With(x => x.Quantity, 5).CreateMany().ToList();
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, 5).CreateMany().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -2240,26 +2459,24 @@ public class InventoryTester
         public void WhenThereIsAMatchButRemovalWouldBustTheLowerQuantityLimitOfAtLeastOneItem_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.Build<InventoryEntry<Dummy>>().With(x => x.Quantity, 5).CreateMany().ToList();
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, 5).CreateMany().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
             var item = entries.GetRandom().Item;
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryRemove(x => x.Id == item.Id, 14);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>
+                    OldValues = new List<Entry<Dummy>>
                     {
                         new(item, 5)
                     }
@@ -2271,9 +2488,7 @@ public class InventoryTester
         public void WhenThereIsOneMatchAndRemovalDoesNotBustLowerQuantityLimit_RemoveNumberOfItemFromEntry()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
@@ -2291,27 +2506,25 @@ public class InventoryTester
         public void WhenThereIsOneMatchAndRemovalDoesNotBustLowerQuantityLimit_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
             var entry = entries.GetRandom();
             var quantity = entry.Quantity;
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryRemove(x => x.Id == entry.Item.Id, quantity);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>
+                    OldValues = new List<Entry<Dummy>>
                     {
                         entry
                     }
@@ -2323,11 +2536,9 @@ public class InventoryTester
         public void WhenThereAreMultipleMatchesAndNoneBustTheLowerQuantityLimit_RemoveNumberFromThoseEntries()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).With(x => x.Quantity, 25).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
@@ -2344,24 +2555,22 @@ public class InventoryTester
         public void WhenThereAreMultipleMatchesAndNoneBustTheLowerQuantityLimit_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var id = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>()
+            var entries = Fixture.Build<Entry<Dummy>>()
                 .With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Id, id).Create()).With(x => x.Quantity, 25).CreateMany().ToList();
 
             foreach (var (dummy, entryQuantity) in entries)
                 Instance.Add(dummy, entryQuantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.TryRemove(x => x.Id == id, 15);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
@@ -2372,19 +2581,17 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Clear_Item : Tester<Inventory<Dummy>>
+    public class Clear_Item : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenItemIsNullAndThereIsNoOccurenceOfNullInStock_DoNotTriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -2398,13 +2605,11 @@ public class InventoryTester
         public void WhenThereIsNoOccurenceOfItemInStock_DoNotTriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -2418,9 +2623,7 @@ public class InventoryTester
         public void WhenItemIsNullAndThereIsAnOccurenceOfNullInStock_RemoveEntireStack()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2437,9 +2640,7 @@ public class InventoryTester
         public void WhenItemIsNullAndThereIsAnOccurenceOfNullInStock_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2447,18 +2648,18 @@ public class InventoryTester
 
             Instance.Add((Dummy)null!, oldQuantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Clear((Dummy)null!);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>()
+                    OldValues = new List<Entry<Dummy>>()
                     {
                         new(null!, oldQuantity)
                     }
@@ -2470,14 +2671,12 @@ public class InventoryTester
         public void WhenThereIsAnOccurenceOfItem_RemoveEntireStack()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
             var item = Fixture.Create<Dummy>();
-            Instance.Add((Dummy)null!, Fixture.Create<int>());
+            Instance.Add(item, Fixture.Create<int>());
 
             //Act
             Instance.Clear(item);
@@ -2490,9 +2689,7 @@ public class InventoryTester
         public void WhenThereIsAnOccurenceOfItem_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2500,18 +2697,18 @@ public class InventoryTester
             var oldQuantity = Fixture.Create<int>();
             Instance.Add(item, oldQuantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Clear(item);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>()
+                    OldValues = new List<Entry<Dummy>>()
                     {
                         new(item, oldQuantity)
                     }
@@ -2521,7 +2718,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Clear_Predicate : Tester<Inventory<Dummy>>
+    public class Clear_Predicate : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -2555,7 +2752,7 @@ public class InventoryTester
             //Arrange
             var predicate = Fixture.Create<Predicate<Dummy>>();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -2569,9 +2766,7 @@ public class InventoryTester
         public void WhenThereIsNoMatchForPredicate_DoNotModify()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2588,13 +2783,11 @@ public class InventoryTester
         public void WhenThereIsNoMatchForPredicate_DoNotTriggerEvent()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -2608,9 +2801,7 @@ public class InventoryTester
         public void WhenThereIsOneMatchForPredicate_RemoveThatStackOfItems()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2627,26 +2818,24 @@ public class InventoryTester
         public void WhenThereIsOneMatchForPredicate_TriggerEvent()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
             var entry = entries.GetRandom();
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Clear(x => x.Id == entry.Item.Id);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
-                    OldValues = new List<InventoryEntry<Dummy>>
+                    OldValues = new List<Entry<Dummy>>
                     {
                         entry
                     }
@@ -2658,9 +2847,7 @@ public class InventoryTester
         public void WhenThereAreMultipleMatches_RemoveThoseStacks()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2675,20 +2862,18 @@ public class InventoryTester
         public void WhenThereAreMultipleMatches_TriggerEvent()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Clear(x => x.Id > 0);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
@@ -2699,13 +2884,13 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Clear_All : Tester<Inventory<Dummy>>
+    public class Clear_All : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenInventoryIsEmpty_DoNotTriggerChange()
         {
             //Arrange
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -2719,9 +2904,7 @@ public class InventoryTester
         public void WhenInventoryIsNotEmpty_RemoveEverything()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2736,20 +2919,18 @@ public class InventoryTester
         public void WhenInventoryIsNotEmpty_TriggerChange()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var eventArgs = new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>();
+            var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Clear();
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<InventoryEntry<Dummy>>>
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<Dummy>>>
             {
                 new()
                 {
@@ -2760,15 +2941,13 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class QuantityOf : Tester<Inventory<Dummy>>
+    public class QuantityOf : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenItemIsNullAndNoNullInStock_ReturnZero()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2785,9 +2964,7 @@ public class InventoryTester
         public void WhenThereIsNoEntryWithItemInStock_ReturnZero()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2804,9 +2981,7 @@ public class InventoryTester
         public void WhenItemIsNullAndThereIsAnEntryWithNull_ReturnQuantityOfNull()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2825,13 +3000,11 @@ public class InventoryTester
         public void WhenThereIsEntryWithItemInStock_ReturnItsQuantity()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var entry = Fixture.Create<InventoryEntry<Dummy>>();
+            var entry = Fixture.Create<Entry<Dummy>>();
             Instance.Add(entry.Item, entry.Quantity);
 
             //Act
@@ -2843,7 +3016,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class QuantityOf_Predicate : Tester<Inventory<Dummy>>
+    public class QuantityOf_Predicate : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -2875,9 +3048,7 @@ public class InventoryTester
         public void WhenThereIsNoMatch_ReturnZero()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2892,9 +3063,7 @@ public class InventoryTester
         public void WhenThereIsOneMatch_ReturnSizeOfThatStack()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2909,9 +3078,7 @@ public class InventoryTester
         public void WhenThereAreMultipleMatches_ReturnSumOfAllMatches()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2924,7 +3091,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class IndexOf : Tester<Inventory<Dummy>>
+    public class IndexOf : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenCollectionIsEmpty_ReturnMinusOne()
@@ -2942,9 +3109,7 @@ public class InventoryTester
         public void WhenItemIsNotInCollection_ReturnMinusOne()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2959,9 +3124,7 @@ public class InventoryTester
         public void WhenItemIsInCollection_ReturnItsIndex()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -2976,7 +3139,7 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class IndexesOf : Tester<Inventory<Dummy>>
+    public class IndexesOf : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
@@ -3008,9 +3171,7 @@ public class InventoryTester
         public void WhenInventoryIsNotEmptyButThereIsZeroMatch_ReturnEmpty()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3025,9 +3186,7 @@ public class InventoryTester
         public void WhenThereIsOnlyOneMatchAndItsTheLastIndex_ReturnLastIndex()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3042,9 +3201,7 @@ public class InventoryTester
         public void WhenThereIsOnlyOneMatchAndItsTheFirstIndex_ReturnFirstIndex()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3059,15 +3216,13 @@ public class InventoryTester
         public void WhenThereAreMultipleMatches_ReturnAll()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
             var level = Fixture.Create<int>();
 
-            var entries = Fixture.Build<InventoryEntry<Dummy>>().With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Level, level).Create()).CreateMany(3).ToList();
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Item, () => Fixture.Build<Dummy>().With(y => y.Level, level).Create()).CreateMany(3).ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var otherEntries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var otherEntries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3080,15 +3235,13 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Swap : Tester<Inventory<Dummy>>
+    public class Swap : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenCurrentIsNegative_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3106,9 +3259,7 @@ public class InventoryTester
         public void WhenDestinationIsNegative_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3126,9 +3277,7 @@ public class InventoryTester
         public void WhenCurrentIsOutsideRange_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3146,9 +3295,7 @@ public class InventoryTester
         public void WhenDestinationIsOutsideRange_Throw()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3166,9 +3313,7 @@ public class InventoryTester
         public void WhenCurrentAndDestinationAreEqual_DoNotModifyCollection()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3186,9 +3331,7 @@ public class InventoryTester
         public void WhenCurrentAndDestinationAreWithinRange_Swap()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3199,7 +3342,7 @@ public class InventoryTester
             Instance.Swap(current, destination);
 
             //Assert
-            Instance.Should().ContainInOrder(new List<InventoryEntry<Dummy>>
+            Instance.Should().ContainInOrder(new List<Entry<Dummy>>
             {
                 entries[0],
                 entries[2],
@@ -3209,7 +3352,13 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class ToStringMethod : Tester<Inventory<Dummy>>
+    public class RemoveAt : Tester<InventoryTable<Dummy>>
+    {
+        //TODO Test
+    }
+
+    [TestClass]
+    public class ToStringMethod : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnEmptyMessage()
@@ -3220,16 +3369,14 @@ public class InventoryTester
             var result = Instance.ToString();
 
             //Assert
-            result.Should().BeEquivalentTo("Empty Inventory<Dummy>");
+            result.Should().BeEquivalentTo("Empty InventoryTable<Dummy>");
         }
 
         [TestMethod]
         public void WhenContainsItems_ReturnAmount()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>(3).ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>(3).ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3237,25 +3384,23 @@ public class InventoryTester
             var result = Instance.ToString();
 
             //Assert
-            result.Should().BeEquivalentTo("Inventory<Dummy> with 3 unique items");
+            result.Should().BeEquivalentTo("InventoryTable<Dummy> with 3 stacks of items");
         }
     }
 
     [TestClass]
-    public class Equals_Interface : Tester<Inventory<Dummy>>
+    public class Equals_ConcreteType : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenOtherIsNull_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
             //Act
-            var result = Instance.Equals((IInventory<Dummy>)null!);
+            var result = Instance.Equals((InventoryTable<Dummy>)null!);
 
             //Assert
             result.Should().BeFalse();
@@ -3265,104 +3410,7 @@ public class InventoryTester
         public void WhenOtherIsSameReference_ReturnTrue()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
-            foreach (var (dummy, quantity) in entries)
-                Instance.Add(dummy, quantity);
-
-            //Act
-            var result = Instance.Equals((IInventory<Dummy>)Instance);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherHasSameStackSizeButDifferentItems_ReturnFalse()
-        {
-            //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
-            foreach (var (dummy, quantity) in entries)
-                Instance.Add(dummy, quantity);
-
-            IInventory<Dummy> other = Fixture.CreateMany<InventoryEntry<Dummy>>().ToInventory(int.MaxValue);
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherHasSameItemsButDifferentStackSize_ReturnFalse()
-        {
-            //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
-            foreach (var (dummy, quantity) in entries)
-                Instance.Add(dummy, quantity);
-
-            IInventory<Dummy> other = entries.ToInventory(int.MaxValue - 1);
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenStackSizesAndItemsAreTheSame_ReturnTrue()
-        {
-            //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
-            foreach (var (dummy, quantity) in entries)
-                Instance.Add(dummy, quantity);
-
-            IInventory<Dummy> other = entries.ToInventory(int.MaxValue);
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-    }
-
-    [TestClass]
-    public class Equals_ConcreteType : Tester<Inventory<Dummy>>
-    {
-        [TestMethod]
-        public void WhenOtherIsNull_ReturnFalse()
-        {
-            //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
-            foreach (var (dummy, quantity) in entries)
-                Instance.Add(dummy, quantity);
-
-            //Act
-            var result = Instance.Equals((Inventory<Dummy>)null!);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSameReference_ReturnTrue()
-        {
-            //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3377,13 +3425,11 @@ public class InventoryTester
         public void WhenOtherHasSameStackSizeButDifferentItems_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = Fixture.CreateMany<InventoryEntry<Dummy>>().ToInventory(int.MaxValue);
+            var other = Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
 
             //Act
             var result = Instance.Equals(other);
@@ -3396,9 +3442,7 @@ public class InventoryTester
         public void WhenOtherHasSameItemsButDifferentStackSize_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3415,9 +3459,7 @@ public class InventoryTester
         public void WhenStackSizesAndItemsAreTheSame_ReturnTrue()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3432,15 +3474,13 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Equals_Object : Tester<Inventory<Dummy>>
+    public class Equals_Object : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenOtherIsNull_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3455,9 +3495,7 @@ public class InventoryTester
         public void WhenOtherIsSameReference_ReturnTrue()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3472,13 +3510,11 @@ public class InventoryTester
         public void WhenOtherHasSameStackSizeButDifferentItems_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            object other = Fixture.CreateMany<InventoryEntry<Dummy>>().ToInventory(int.MaxValue);
+            object other = Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
 
             //Act
             var result = Instance.Equals(other);
@@ -3491,9 +3527,7 @@ public class InventoryTester
         public void WhenOtherHasSameItemsButDifferentStackSize_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3510,9 +3544,7 @@ public class InventoryTester
         public void WhenStackSizesAndItemsAreTheSame_ReturnTrue()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3527,14 +3559,14 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class Equals_Operator : Tester<Inventory<Dummy>>
+    public class Equals_Operator : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenFirstIsNullAndSecondIsNot_ReturnFalse()
         {
             //Arrange
-            Inventory<Dummy> instance = null!;
-            var other = (Inventory<Dummy>)Fixture.CreateMany<InventoryEntry<Dummy>>().ToInventory(int.MaxValue);
+            InventoryTable<Dummy> instance = null!;
+            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
 
             //Act
             var result = instance == other;
@@ -3547,8 +3579,8 @@ public class InventoryTester
         public void WhenFirstIsNotNullAndSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var instance = (Inventory<Dummy>)Fixture.CreateMany<InventoryEntry<Dummy>>().ToInventory(int.MaxValue);
-            Inventory<Dummy> other = null!;
+            var instance = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            InventoryTable<Dummy> other = null!;
 
             //Act
             var result = instance == other;
@@ -3561,8 +3593,8 @@ public class InventoryTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Inventory<Dummy> instance = null!;
-            Inventory<Dummy> other = null!;
+            InventoryTable<Dummy> instance = null!;
+            InventoryTable<Dummy> other = null!;
 
             //Act
             var result = instance == other;
@@ -3575,9 +3607,7 @@ public class InventoryTester
         public void WhenOtherIsSameReference_ReturnTrue()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3592,13 +3622,11 @@ public class InventoryTester
         public void WhenOtherHasSameStackSizeButDifferentItems_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (Inventory<Dummy>)Fixture.CreateMany<InventoryEntry<Dummy>>().ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
 
             //Act
             var result = Instance == other;
@@ -3611,13 +3639,11 @@ public class InventoryTester
         public void WhenOtherHasSameItemsButDifferentStackSize_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (Inventory<Dummy>)entries.ToInventory(int.MaxValue - 1);
+            var other = (InventoryTable<Dummy>)entries.ToInventory(int.MaxValue - 1);
 
             //Act
             var result = Instance == other;
@@ -3630,13 +3656,11 @@ public class InventoryTester
         public void WhenStackSizesAndItemsAreTheSame_ReturnTrue()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (Inventory<Dummy>)entries.ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)entries.ToInventory(int.MaxValue);
 
             //Act
             var result = Instance == other;
@@ -3647,14 +3671,14 @@ public class InventoryTester
     }
 
     [TestClass]
-    public class NotEquals_Operator : Tester<Inventory<Dummy>>
+    public class NotEquals_Operator : Tester<InventoryTable<Dummy>>
     {
         [TestMethod]
         public void WhenFirstIsNullAndSecondIsNot_ReturnFalse()
         {
             //Arrange
-            Inventory<Dummy> instance = null!;
-            var other = (Inventory<Dummy>)Fixture.CreateMany<InventoryEntry<Dummy>>().ToInventory(int.MaxValue);
+            InventoryTable<Dummy> instance = null!;
+            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
 
             //Act
             var result = instance != other;
@@ -3667,8 +3691,8 @@ public class InventoryTester
         public void WhenFirstIsNotNullAndSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var instance = (Inventory<Dummy>)Fixture.CreateMany<InventoryEntry<Dummy>>().ToInventory(int.MaxValue);
-            Inventory<Dummy> other = null!;
+            var instance = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            InventoryTable<Dummy> other = null!;
 
             //Act
             var result = instance != other;
@@ -3681,8 +3705,8 @@ public class InventoryTester
         public void WhenBothAreNull_ReturnTrue()
         {
             //Arrange
-            Inventory<Dummy> instance = null!;
-            Inventory<Dummy> other = null!;
+            InventoryTable<Dummy> instance = null!;
+            InventoryTable<Dummy> other = null!;
 
             //Act
             var result = instance != other;
@@ -3695,9 +3719,7 @@ public class InventoryTester
         public void WhenOtherIsSameReference_ReturnTrue()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
@@ -3712,13 +3734,11 @@ public class InventoryTester
         public void WhenOtherHasSameStackSizeButDifferentItems_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (Inventory<Dummy>)Fixture.CreateMany<InventoryEntry<Dummy>>().ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
 
             //Act
             var result = Instance != other;
@@ -3731,13 +3751,11 @@ public class InventoryTester
         public void WhenOtherHasSameItemsButDifferentStackSize_ReturnFalse()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (Inventory<Dummy>)entries.ToInventory(int.MaxValue - 1);
+            var other = (InventoryTable<Dummy>)entries.ToInventory(int.MaxValue - 1);
 
             //Act
             var result = Instance != other;
@@ -3750,19 +3768,148 @@ public class InventoryTester
         public void WhenStackSizesAndItemsAreTheSame_ReturnTrue()
         {
             //Arrange
-            ConstructWith(int.MaxValue);
-
-            var entries = Fixture.CreateMany<InventoryEntry<Dummy>>().ToList();
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (Inventory<Dummy>)entries.ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)entries.ToInventory(int.MaxValue);
 
             //Act
             var result = Instance != other;
 
             //Assert
             result.Should().BeFalse();
+        }
+    }
+
+    [TestClass]
+    public class Serialization : Tester<InventoryTable<Dummy>>
+    {
+        [TestMethod]
+        [Ignore("XML not yet supported")]
+        public void WhenSerializingXml_DeserializeEquivalentObject()
+        {
+            //Arrange
+            ConstructWith(int.MaxValue);
+
+            var entries = Fixture.CreateMany<Entry<Dummy>>();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var serializer = new XmlSerializer(typeof(InventoryTable<Dummy>));
+            var stringWriter = new StringWriter();
+            using var xmlWriter = XmlWriter.Create(stringWriter);
+            serializer.Serialize(xmlWriter, Instance);
+            var xml = stringWriter.ToString();
+
+            //Act
+            var stringReader = new StringReader(xml);
+            var result = (InventoryTable<Dummy>)serializer.Deserialize(stringReader)!;
+
+            //Assert
+            Instance.Should().BeEquivalentTo(result);
+        }
+
+        //TODO Support XML
+        [TestMethod]
+        [Ignore("XML not yet supported")]
+        public void WhenSerializingXml_DeserializeWithCorrectStackSize()
+        {
+            //Arrange
+            Instance.StackSize = 99;
+
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, Fixture.CreateBetween(1, 99)).CreateMany();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var serializer = new XmlSerializer(typeof(InventoryTable<Dummy>));
+            var stringWriter = new StringWriter();
+            using var xmlWriter = XmlWriter.Create(stringWriter);
+            serializer.Serialize(xmlWriter, Instance);
+            var xml = stringWriter.ToString();
+
+            //Act
+            var stringReader = new StringReader(xml);
+            var result = (InventoryTable<Dummy>)serializer.Deserialize(stringReader)!;
+
+            //Assert
+            result.StackSize.Should().Be(99);
+        }
+
+        [TestMethod]
+        public void WhenSerializingJsonUsingNewtonsoft_DeserializeEquivalentObject()
+        {
+            //Arrange
+            ConstructWith(int.MaxValue);
+
+            var entries = Fixture.CreateMany<Entry<Dummy>>();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var json = JsonConvert.SerializeObject(Instance);
+
+            //Act
+            var result = JsonConvert.DeserializeObject<InventoryTable<Dummy>>(json);
+
+            //Assert
+            result.Should().BeEquivalentTo(Instance);
+        }
+
+        [TestMethod]
+        public void WhenSerializingJsonUsingNewtonsoft_DeserializeWithCorrectStackSize()
+        {
+            //Arrange
+            ConstructWith(99);
+
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, Fixture.CreateBetween(1, 99)).CreateMany();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var json = JsonConvert.SerializeObject(Instance);
+
+            //Act
+            var result = JsonConvert.DeserializeObject<InventoryTable<Dummy>>(json);
+
+            //Assert
+            result.StackSize.Should().Be(Instance.StackSize);
+        }
+
+        [TestMethod]
+        public void WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
+        {
+            //Arrange
+            ConstructWith(int.MaxValue);
+
+            var entries = Fixture.CreateMany<Entry<Dummy>>();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var json = System.Text.Json.JsonSerializer.Serialize(Instance);
+
+            //Act
+            var result = System.Text.Json.JsonSerializer.Deserialize<InventoryTable<Dummy>>(json);
+
+            //Assert
+            result.Should().BeEquivalentTo(Instance);
+        }
+
+        [TestMethod]
+        public void WhenSerializingJsonUsingSystemText_DeserializeWithCorrectStackSize()
+        {
+            //Arrange
+            ConstructWith(99);
+
+            var entries = Fixture.Build<Entry<Dummy>>().With(x => x.Quantity, Fixture.CreateBetween(1, 99)).CreateMany();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var json = System.Text.Json.JsonSerializer.Serialize(Instance);
+
+            //Act
+            var result = System.Text.Json.JsonSerializer.Deserialize<InventoryTable<Dummy>>(json);
+
+            //Assert
+            result.Should().BeEquivalentTo(Instance);
         }
     }
 }
