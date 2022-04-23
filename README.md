@@ -124,15 +124,18 @@ Absolutely. If you need a collection that can list out unique item entries with 
 
 ### Getting started
 
-You set the inventory’s stack limit when you instantiate it and it cannot be modified afterwards.
+You can set the inventory's stack limit when you instantiate it or later on using the StackSize property.
 
 ```c#
 
 //This Inventory will hold a maximum of 999 instances for every item
-var inventory = new Inventory<Item>(999);
+var inventory = new InventoryTable<Item>(999);
 
-//You can, however, use the ToInventory() extension if you really need the same items with a different stack size for some reason.
-var newInventory = inventory.ToInventory(1500);
+//You can, however, use the ToInventoryTable() extension if you really need the same items with a different stack size for some reason.
+var newInventory = inventory.ToInventoryTable(1500);
+
+//Or turn it into an InventoryList using the similar extension method
+var inventoryList = inventory.ToInventoryList(1500);
 
 //Attempting to add more items beyond that stack limit will result in an exception being thrown. 
 newInventory.Add(excalibur, 1501);
@@ -140,7 +143,7 @@ newInventory.Add(excalibur, 1501);
 //The same thing will happen if you attempt to remove more than it holds.
 newInventory.Remove(potion, 3000);
 
-//If you like “safe” methods that do not throw under questionable usage then you’ll be pleased to know that Inventory<T> has methods TryAdd() and TryRemove()
+//If you like “safe” methods that do not throw under questionable usage then you’ll be pleased to know that InventoryTable<T> and InventoryList<T> both have TryAdd() and TryRemove() methods
 
 //This will cap out the amount of rubber ducks in the inventory to its allowed maximum quantity of 1500 regardless of how many you try to add
 newInventory.TryAdd(rubberDuck, 30000);

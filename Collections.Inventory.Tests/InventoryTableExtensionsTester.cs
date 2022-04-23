@@ -13,7 +13,7 @@ public class InventoryTableExtensionsTester
             IEnumerable<string> collection = null!;
 
             //Act
-            var action = () => collection.ToInventory();
+            var action = () => collection.ToInventoryTable();
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -26,7 +26,7 @@ public class InventoryTableExtensionsTester
             var collection = new List<string>();
 
             //Act
-            var result = collection.ToInventory();
+            var result = collection.ToInventoryTable();
 
             //Assert
             result.Should().BeOfType<InventoryTable<string>>();
@@ -40,7 +40,7 @@ public class InventoryTableExtensionsTester
             var collection = Fixture.CreateMany<string>().ToList();
 
             //Act
-            var result = collection.ToInventory();
+            var result = collection.ToInventoryTable();
 
             //Assert
             result.Should().BeEquivalentTo(collection.Select(x => new Entry<string>(x)));
@@ -64,7 +64,7 @@ public class InventoryTableExtensionsTester
             };
 
             //Act
-            var result = collection.ToInventory();
+            var result = collection.ToInventoryTable();
 
             //Assert
             result.Should().BeEquivalentTo(new InventoryTable<string>
@@ -94,7 +94,7 @@ public class InventoryTableExtensionsTester
             };
 
             //Act
-            var action = () => collection.ToInventory(2);
+            var action = () => collection.ToInventoryTable(2);
 
             //Assert
             action.Should().Throw<InventoryStackFullException>();
@@ -111,7 +111,7 @@ public class InventoryTableExtensionsTester
             IEnumerable<Entry<string>> collection = null!;
 
             //Act
-            var action = () => collection.ToInventory(int.MaxValue);
+            var action = () => collection.ToInventoryTable(int.MaxValue);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -125,7 +125,7 @@ public class InventoryTableExtensionsTester
             var stackSize = -Fixture.Create<int>();
 
             //Act
-            var action = () => collection.ToInventory(stackSize);
+            var action = () => collection.ToInventoryTable(stackSize);
 
             //Assert
             action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, "InventoryTable<String>", stackSize));
@@ -138,7 +138,7 @@ public class InventoryTableExtensionsTester
             var collection = Fixture.Create<List<Entry<string>>>();
 
             //Act
-            var action = () => collection.ToInventory(0);
+            var action = () => collection.ToInventoryTable(0);
 
             //Assert
             action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, "InventoryTable<String>", 0));
@@ -151,7 +151,7 @@ public class InventoryTableExtensionsTester
             var collection = Array.Empty<Entry<string>>();
 
             //Act
-            var result = collection.ToInventory();
+            var result = collection.ToInventoryTable();
 
             //Assert
             result.Should().BeEquivalentTo(new InventoryTable<string>());
@@ -164,7 +164,7 @@ public class InventoryTableExtensionsTester
             var collection = Fixture.Create<List<Entry<string>>>();
 
             //Act
-            var result = collection.ToInventory(int.MaxValue);
+            var result = collection.ToInventoryTable(int.MaxValue);
 
             //Assert
             result.Should().BeEquivalentTo(collection);
@@ -184,7 +184,7 @@ public class InventoryTableExtensionsTester
             };
 
             //Act
-            var result = collection.ToInventory(int.MaxValue);
+            var result = collection.ToInventoryTable(int.MaxValue);
 
             //Assert
             result.Should().BeEquivalentTo(new InventoryTable<string>
@@ -209,7 +209,7 @@ public class InventoryTableExtensionsTester
             };
 
             //Act
-            var action = () => collection.ToInventory(9);
+            var action = () => collection.ToInventoryTable(9);
 
             //Assert
             action.Should().Throw<InventoryStackFullException>();

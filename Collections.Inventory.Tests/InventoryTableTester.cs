@@ -3429,7 +3429,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            var other = Fixture.CreateMany<Entry<Dummy>>().ToInventoryTable(int.MaxValue);
 
             //Act
             var result = Instance.Equals(other);
@@ -3446,7 +3446,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = entries.ToInventory(int.MaxValue - 1);
+            var other = entries.ToInventoryTable(int.MaxValue - 1);
 
             //Act
             var result = Instance.Equals(other);
@@ -3463,7 +3463,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = entries.ToInventory(int.MaxValue);
+            var other = entries.ToInventoryTable(int.MaxValue);
 
             //Act
             var result = Instance.Equals(other);
@@ -3514,7 +3514,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            object other = Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            object other = Fixture.CreateMany<Entry<Dummy>>().ToInventoryTable(int.MaxValue);
 
             //Act
             var result = Instance.Equals(other);
@@ -3531,7 +3531,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            object other = entries.ToInventory(int.MaxValue - 1);
+            object other = entries.ToInventoryTable(int.MaxValue - 1);
 
             //Act
             var result = Instance.Equals(other);
@@ -3548,7 +3548,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            object other = entries.ToInventory(int.MaxValue);
+            object other = entries.ToInventoryTable(int.MaxValue);
 
             //Act
             var result = Instance.Equals(other);
@@ -3566,7 +3566,7 @@ public class InventoryTableTester
         {
             //Arrange
             InventoryTable<Dummy> instance = null!;
-            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventoryTable(int.MaxValue);
 
             //Act
             var result = instance == other;
@@ -3579,7 +3579,7 @@ public class InventoryTableTester
         public void WhenFirstIsNotNullAndSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var instance = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            var instance = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventoryTable(int.MaxValue);
             InventoryTable<Dummy> other = null!;
 
             //Act
@@ -3626,7 +3626,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventoryTable(int.MaxValue);
 
             //Act
             var result = Instance == other;
@@ -3643,7 +3643,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (InventoryTable<Dummy>)entries.ToInventory(int.MaxValue - 1);
+            var other = (InventoryTable<Dummy>)entries.ToInventoryTable(int.MaxValue - 1);
 
             //Act
             var result = Instance == other;
@@ -3660,7 +3660,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (InventoryTable<Dummy>)entries.ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)entries.ToInventoryTable(int.MaxValue);
 
             //Act
             var result = Instance == other;
@@ -3678,7 +3678,7 @@ public class InventoryTableTester
         {
             //Arrange
             InventoryTable<Dummy> instance = null!;
-            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventoryTable(int.MaxValue);
 
             //Act
             var result = instance != other;
@@ -3691,7 +3691,7 @@ public class InventoryTableTester
         public void WhenFirstIsNotNullAndSecondIsNull_ReturnFalse()
         {
             //Arrange
-            var instance = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            var instance = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventoryTable(int.MaxValue);
             InventoryTable<Dummy> other = null!;
 
             //Act
@@ -3738,7 +3738,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)Fixture.CreateMany<Entry<Dummy>>().ToInventoryTable(int.MaxValue);
 
             //Act
             var result = Instance != other;
@@ -3755,7 +3755,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (InventoryTable<Dummy>)entries.ToInventory(int.MaxValue - 1);
+            var other = (InventoryTable<Dummy>)entries.ToInventoryTable(int.MaxValue - 1);
 
             //Act
             var result = Instance != other;
@@ -3772,7 +3772,7 @@ public class InventoryTableTester
             foreach (var (dummy, quantity) in entries)
                 Instance.Add(dummy, quantity);
 
-            var other = (InventoryTable<Dummy>)entries.ToInventory(int.MaxValue);
+            var other = (InventoryTable<Dummy>)entries.ToInventoryTable(int.MaxValue);
 
             //Act
             var result = Instance != other;
