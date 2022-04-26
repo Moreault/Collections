@@ -117,6 +117,9 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     void ICollection<T>.Add(T item) => Add(item);
 
+    //Required for XML Serialization
+    public void Add(object item) => Add((T)item);
+
     public void Add(params T[]? items)
     {
         if (items == null) Add(new List<T> { default! });

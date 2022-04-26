@@ -2845,7 +2845,74 @@ public class InventoryListTester
     [TestClass]
     public class IndexesOf_Item : Tester<InventoryList<Dummy>>
     {
-        //TODO Test
+        [TestMethod]
+        public void WhenIsEmpty_ReturnEmptyList()
+        {
+            //Arrange
+            var item = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.IndexesOf(item);
+
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsButNotTheOneSought_ReturnEmpty()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var item = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.IndexesOf(item);
+
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsOneSoughtItem_ReturnThatItemIndex()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var item = Fixture.Create<Dummy>();
+            Instance.Add(item, Fixture.Create<int>());
+
+            //Act
+            var result = Instance.IndexesOf(item);
+
+            //Assert
+            result.Should().BeEquivalentTo(new List<int> { 3 });
+        }
+
+        [TestMethod]
+        public void WhenContainsMultipleEntriesOfThisItem_ReturnAllIndexes()
+        {
+            //Arrange
+            var entries = Fixture.CreateMany<Entry<Dummy>>(9).ToList();
+            foreach (var entry in entries)
+                Instance.Add(entry.Item, entry.Quantity);
+
+            var item = Fixture.Create<Dummy>();
+            Instance.Insert(2, item, Fixture.Create<int>());
+            Instance.Insert(4, item, Fixture.Create<int>());
+            Instance.Insert(7, item, Fixture.Create<int>());
+
+            //Act
+            var result = Instance.IndexesOf(item);
+
+            //Assert
+            result.Should().BeEquivalentTo(new List<int> { 2, 4, 7 });
+        }
+
     }
 
     [TestClass]

@@ -4,7 +4,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using ToolBX.Collections.Common;
 using ToolBX.Collections.ObservableList;
 using ToolBX.Eloquentest;
@@ -4520,5 +4524,65 @@ public class ObservableListTester
             enumerator.Current.Should().BeNull();
         }
 
+    }
+
+    [TestClass]
+    public class Serialization : Tester<ObservableList<Dummy>>
+    {
+        [TestMethod]
+        public void WhenSerializingXml_DeserializeEquivalentObject()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance.Add(item);
+
+            var serializer = new XmlSerializer(typeof(ObservableList<Dummy>));
+            var stringWriter = new StringWriter();
+            using var xmlWriter = XmlWriter.Create(stringWriter);
+            serializer.Serialize(xmlWriter, Instance);
+            var xml = stringWriter.ToString();
+
+            //Act
+            var stringReader = new StringReader(xml);
+            var result = (ObservableList<Dummy>)serializer.Deserialize(stringReader)!;
+
+            //Assert
+            Instance.Should().BeEquivalentTo(result);
+        }
+
+        [TestMethod]
+        public void WhenSerializingJsonUsingNewtonsoft_DeserializeEquivalentObject()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance.Add(item);
+
+            var json = JsonConvert.SerializeObject(Instance);
+
+            //Act
+            var result = JsonConvert.DeserializeObject<ObservableList<Dummy>>(json);
+
+            //Assert
+            result.Should().BeEquivalentTo(Instance);
+        }
+
+        [TestMethod]
+        public void WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance.Add(item);
+
+            var json = System.Text.Json.JsonSerializer.Serialize(Instance);
+
+            //Act
+            var result = System.Text.Json.JsonSerializer.Deserialize<ObservableList<Dummy>>(json);
+
+            //Assert
+            result.Should().BeEquivalentTo(Instance);
+        }
     }
 }
