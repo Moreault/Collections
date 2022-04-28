@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ToolBX.Collections.Grid;
+using ToolBX.Collections.Grid.Resources;
 using ToolBX.Eloquentest;
 
 namespace Collections.Grid.Tests;
@@ -198,6 +199,79 @@ public class GridExtensionsTester
                 }
 
             }
+            result.Should().BeEquivalentTo(expected);
+        }
+    }
+
+    [TestClass]
+    public class ToGrid_ColumnCount : Tester
+    {
+        [TestMethod]
+        public void WhenCollectionIsNull_Throw()
+        {
+            //Arrange
+            IEnumerable<int> collection = null!;
+            var columnCount = Fixture.Create<int>();
+
+            //Act
+            var action = () => collection.ToGrid(columnCount);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void WhenColumnCountIsZero_Throw()
+        {
+            //Arrange
+            var collection = Fixture.CreateMany<int>().ToList();
+            var columnCount = 0;
+
+            //Act
+            var action = () => collection.ToGrid(columnCount);
+
+            //Assert
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotConvertToGridFromColumnCount, columnCount));
+        }
+
+        [TestMethod]
+        public void WhenColumnCountIsNegative_Throw()
+        {
+            //Arrange
+            var collection = Fixture.CreateMany<int>().ToList();
+            var columnCount = -Fixture.Create<int>();
+
+            //Act
+            var action = () => collection.ToGrid(columnCount);
+
+            //Assert
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotConvertToGridFromColumnCount, columnCount));
+        }
+
+        [TestMethod]
+        public void Always_ConvertToGrid()
+        {
+            //Arrange
+            var collection = Fixture.CreateMany<int>(9).ToList();
+            var maxX = 2;
+
+            var expected = new Grid<int>
+            {
+                [0, 0] = collection[0],
+                [1, 0] = collection[1],
+                [2, 0] = collection[2],
+                [0, 1] = collection[3],
+                [1, 1] = collection[4],
+                [2, 1] = collection[5],
+                [0, 2] = collection[6],
+                [1, 2] = collection[7],
+                [2, 2] = collection[8]
+            };
+
+            //Act
+            var result = collection.ToGrid(maxX);
+
+            //Assert
             result.Should().BeEquivalentTo(expected);
         }
     }

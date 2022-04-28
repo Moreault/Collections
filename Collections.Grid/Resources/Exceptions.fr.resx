@@ -123,4 +123,7 @@
   <data name="CannotRemoveItemAtIndexBecauseThereIsNothingThere" xml:space="preserve">
     <value>Impossible de retirer l'item à l'index : Il n'y a rien à l'index {0} - Utiliser la méthode TryRemoveAt pour éviter de vérifier son existence au préalable</value>
   </data>
+  <data name="CannotConvertToGridFromColumnCount" xml:space="preserve">
+	  <value>Impossible de convertir la collection en Grid : columnCount doit être un nombre positif supérieur à zéro mais sa valeur était de {0}</value>
+  </data>
 </root>

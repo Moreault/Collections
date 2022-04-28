@@ -1,4 +1,6 @@
-﻿namespace ToolBX.Collections.Grid;
+﻿using ToolBX.Collections.Grid.Resources;
+
+namespace ToolBX.Collections.Grid;
 
 public static class GridExtensions
 {
@@ -24,6 +26,31 @@ public static class GridExtensions
     {
         if (collection == null) throw new ArgumentNullException(nameof(collection));
         return new Grid<T?>(collection)!;
+    }
+
+    public static IGrid<T> ToGrid<T>(this IEnumerable<T> collection, int columnCount)
+    {
+        if (collection == null) throw new ArgumentNullException(nameof(collection));
+        if (columnCount <= 0) throw new ArgumentException(string.Format(Exceptions.CannotConvertToGridFromColumnCount, columnCount));
+
+        var grid = new Grid<T>();
+
+        var x = 0;
+        var y = 0;
+
+        foreach (var item in collection)
+        {
+            grid[x, y] = item;
+            if (x >= columnCount)
+            {
+                x = 0;
+                y++;
+            }
+            else
+                x++;
+        }
+
+        return grid;
     }
 
     public static T?[,] To2dArray<T>(this IGrid<T> grid)

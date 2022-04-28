@@ -70,6 +70,15 @@ namespace ToolBX.Collections.Grid.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string CannotConvertToGridFromColumnCount {
+            get {
+                return ResourceManager.GetString("CannotConvertToGridFromColumnCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t remove item at index : There is nothing at {0} - Use the TryRemoveAt method instead if you don&apos;t want to check for nulls.
         /// </summary>
         internal static string CannotRemoveItemAtIndexBecauseThereIsNothingThere {
