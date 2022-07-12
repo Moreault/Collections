@@ -1,19 +1,3 @@
-using AutoFixture;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
-using ToolBX.Collections.Common;
-using ToolBX.Collections.ObservableList;
-using ToolBX.Eloquentest;
-using ToolBX.Eloquentest.Extensions;
-
 namespace Collections.ObservableList.Tests;
 
 [TestClass]
@@ -72,7 +56,7 @@ public class ObservableListTester
             var observableList = Fixture.CreateMany<string>().ToObservableList();
 
             //Act
-            var result = observableList.IsReadOnly;
+            var result = ((ICollection<string>)observableList).IsReadOnly;
 
             //Assert
             result.Should().BeFalse();
@@ -512,7 +496,7 @@ public class ObservableListTester
         }
 
         [TestMethod]
-        public void Always_TriggerCollectionChanged()
+        public void WhenContainsItems_TriggerCollectionChanged()
         {
             //Arrange
             var items = Fixture.CreateMany<string>(20).ToArray();
@@ -543,6 +527,40 @@ public class ObservableListTester
 
             //Assert
             Instance.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void WhenThereAreThreeItems_EventShouldOnlyHaveThreeItemsAndNotAFourthNullObject()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>(3).ToArray();
+            Instance.Add(items);
+
+            var eventArgs = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.Clear();
+
+            //Assert
+            eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<string>>
+            {
+                new() { OldValues = items }
+            });
+        }
+
+        [TestMethod]
+        public void WhenIsAlreadyEmpty_DoNotTriggerEvent()
+        {
+            //Arrange
+            var eventArgs = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.Clear();
+
+            //Assert
+            eventArgs.Should().BeEmpty();
         }
     }
 
@@ -872,7 +890,7 @@ public class ObservableListTester
             //Arrange
 
             //Act
-            var action = () => Instance.FirstIndexOf((Predicate<Dummy>)null!);
+            var action = () => Instance.FirstIndexOf((Func<Dummy, bool>)null!);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -971,7 +989,7 @@ public class ObservableListTester
             //Arrange
 
             //Act
-            var action = () => Instance.LastIndexOf((Predicate<Dummy>)null!);
+            var action = () => Instance.LastIndexOf((Func<Dummy, bool>)null!);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -1088,7 +1106,7 @@ public class ObservableListTester
             //Arrange
 
             //Act
-            var action = () => Instance.IndexesOf((Predicate<Dummy>)null!);
+            var action = () => Instance.IndexesOf((Func<Dummy, bool>)null!);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -1292,9 +1310,363 @@ public class ObservableListTester
     }
 
     [TestClass]
-    public class TrySwapIndexes : Tester<ObservableList<string>>
+    public class TrimStart : Tester<ObservableList<string>>
     {
-        //TODO Test
+        [TestMethod]
+        public void WhenMaxSizeIsNegative_Throw()
+        {
+            //Arrange
+            var maxSize = -Fixture.Create<int>();
+
+            //Act
+            var action = () => Instance.TrimStartDownTo(maxSize);
+
+            //Assert
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.TrimStartRequiresPositiveMaxSize, maxSize));
+        }
+
+        [TestMethod]
+        public void WhenTrimEmptyCollectionToZero_DoNotTriggerEvent()
+        {
+            //Arrange
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimStartDownTo(0);
+
+            //Assert
+            triggers.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsAndTrimToZero_RemoveEverything()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TrimStartDownTo(0);
+
+            //Assert
+            Instance.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsAndTrimToZero_TriggerEvent()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimStartDownTo(0);
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<string>>
+            {
+                new() { OldValues = items }
+            });
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsButTrimIsMoreThanCount_DoNotRemoveAnything()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TrimStartDownTo(items.Count + 1);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(items);
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsButTrimIsMoreThanCount_DoNotTrigger()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimStartDownTo(items.Count + 1);
+
+            //Assert
+            triggers.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsButTrimIsEqualToCount_DoNotRemoveAnything()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TrimStartDownTo(items.Count);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(items);
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsButTrimIsEqualToCount_DoNotTrigger()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimStartDownTo(items.Count);
+
+            //Assert
+            triggers.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsAndTrimToHalf_RemoveFirstHalfOfItems()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>(12).ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TrimStartDownTo(6);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(new List<string>
+            {
+                items[6],
+                items[7],
+                items[8],
+                items[9],
+                items[10],
+                items[11],
+            });
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsAndTrimToHalf_TriggerEvent()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>(12).ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimStartDownTo(6);
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<string>>
+            {
+                new()
+                {
+                    OldValues = new List<string>
+                    {
+                        items[0],
+                        items[1],
+                        items[2],
+                        items[3],
+                        items[4],
+                        items[5],
+                    }
+                }
+            });
+        }
+    }
+
+    [TestClass]
+    public class TrimEnd : Tester<ObservableList<string>>
+    {
+        [TestMethod]
+        public void WhenMaxSizeIsNegative_Throw()
+        {
+            //Arrange
+            var maxSize = -Fixture.Create<int>();
+
+            //Act
+            var action = () => Instance.TrimEndDownTo(maxSize);
+
+            //Assert
+            action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.TrimEndRequiresPositiveMaxSize, maxSize));
+        }
+
+        [TestMethod]
+        public void WhenTrimEmptyCollectionToZero_DoNotTriggerEvent()
+        {
+            //Arrange
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimEndDownTo(0);
+
+            //Assert
+            triggers.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsAndTrimToZero_RemoveEverything()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TrimEndDownTo(0);
+
+            //Assert
+            Instance.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsAndTrimToZero_TriggerEvent()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimEndDownTo(0);
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<string>>
+            {
+                new() { OldValues = items }
+            });
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsButTrimIsMoreThanCount_DoNotRemoveAnything()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TrimEndDownTo(items.Count + 1);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(items);
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsButTrimIsMoreThanCount_DoNotTrigger()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimEndDownTo(items.Count + 1);
+
+            //Assert
+            triggers.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsButTrimIsEqualToCount_DoNotRemoveAnything()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TrimEndDownTo(items.Count);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(items);
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsButTrimIsEqualToCount_DoNotTrigger()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>().ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimEndDownTo(items.Count);
+
+            //Assert
+            triggers.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsAndTrimToHalf_RemoveFirstHalfOfItems()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>(12).ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TrimEndDownTo(6);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(new List<string>
+            {
+                items[0],
+                items[1],
+                items[2],
+                items[3],
+                items[4],
+                items[5],
+            });
+        }
+
+        [TestMethod]
+        public void WhenContainsItemsAndTrimToHalf_TriggerEvent()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<string>(12).ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<string>>();
+            Instance.CollectionChanged += (_, args) => triggers.Add(args);
+
+            //Act
+            Instance.TrimEndDownTo(6);
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<string>>
+            {
+                new()
+                {
+                    OldValues = new List<string>
+                    {
+                        items[6],
+                        items[7],
+                        items[8],
+                        items[9],
+                        items[10],
+                        items[11],
+                    }
+                }
+            });
+        }
     }
 
     [TestClass]
@@ -1458,13 +1830,503 @@ public class ObservableListTester
     }
 
     [TestClass]
+    public class RemoveAll_Params : Tester<ObservableList<Dummy>>
+    {
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_Throw()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToArray();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            //Act
+            var action = () => Instance.RemoveAll(items);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>().WithMessage(string.Format(Exceptions.CannotRemoveItemsBecauseOneIsNotInCollection, "ObservableList<Dummy>"));
+        }
+
+        [TestMethod]
+        public void WhenNoneOfTheItemsAreInCollection_Throw()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToArray();
+
+            //Act
+            var action = () => Instance.RemoveAll(items);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>().WithMessage(string.Format(Exceptions.CannotRemoveItemsBecauseOneIsNotInCollection, "ObservableList<Dummy>"));
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_DoNotRemoveTheOthers()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.Concat(new[] { Fixture.Create<Dummy>() }).ToArray();
+
+            //Act
+            var action = () => Instance.RemoveAll(items);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>();
+            Instance.Should().BeEquivalentTo(content);
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_DoNotTriggerEvent()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.Concat(new[] { Fixture.Create<Dummy>() }).ToArray();
+
+            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+            //Act
+            var action = () => Instance.RemoveAll(items);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>();
+            triggers.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenAllItemsAreInCollection_RemoveAllOfThem()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>(3).ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToArray();
+            Instance.Add(items);
+
+            //Act
+            Instance.RemoveAll(items);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(content);
+        }
+
+        [TestMethod]
+        public void WhenAllItemsAreInCollection_TriggerEvent()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>(3).ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToArray();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+            //Act
+            Instance.RemoveAll(items);
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+            {
+                new(){OldValues = items}
+            });
+        }
+    }
+
+    [TestClass]
+    public class RemoveAll_Enumerable : Tester<ObservableList<Dummy>>
+    {
+        [TestMethod]
+        public void WhenItemsIsNull_Throw()
+        {
+            //Arrange
+            IEnumerable<Dummy> items = null!;
+
+            //Act
+            var action = () => Instance.RemoveAll(items);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_Throw()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            //Act
+            var action = () => Instance.RemoveAll(items);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>().WithMessage(string.Format(Exceptions.CannotRemoveItemsBecauseOneIsNotInCollection, "ObservableList<Dummy>"));
+        }
+
+        [TestMethod]
+        public void WhenNoneOfTheItemsAreInCollection_Throw()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToList();
+
+            //Act
+            var action = () => Instance.RemoveAll(items);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>().WithMessage(string.Format(Exceptions.CannotRemoveItemsBecauseOneIsNotInCollection, "ObservableList<Dummy>"));
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_DoNotRemoveTheOthers()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            //Act
+            var action = () => Instance.RemoveAll(items);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>();
+            Instance.Should().BeEquivalentTo(content);
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_DoNotTriggerEvent()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+            //Act
+            var action = () => Instance.RemoveAll(items);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>();
+            triggers.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenAllItemsAreInCollection_RemoveAllOfThem()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>(3).ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.RemoveAll(items);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(content);
+        }
+
+        [TestMethod]
+        public void WhenAllItemsAreInCollection_TriggerEvent()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>(3).ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+            //Act
+            Instance.RemoveAll(items);
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+            {
+                new(){OldValues = items}
+            });
+        }
+    }
+
+    [TestClass]
+    public class TryRemoveAll_Params : Tester<ObservableList<Dummy>>
+    {
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_DoNotThrow()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            //Act
+            var action = () => Instance.TryRemoveAll(items.ToArray());
+
+            //Assert
+            action.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void WhenNoneOfTheItemsAreInCollection_DoNotThrow()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToArray();
+
+            //Act
+            var action = () => Instance.TryRemoveAll(items);
+
+            //Assert
+            action.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_RemoveThose()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            //Act
+            Instance.TryRemoveAll(items.ToArray());
+
+            //Assert
+            Instance.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_TriggerEvent()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+            //Act
+            Instance.TryRemoveAll(items.ToArray());
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+            {
+                new(){OldValues = content}
+            });
+        }
+
+        [TestMethod]
+        public void WhenAllItemsAreInCollection_RemoveAllOfThem()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>(3).ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TryRemoveAll(items.ToArray());
+
+            //Assert
+            Instance.Should().BeEquivalentTo(content);
+        }
+
+        [TestMethod]
+        public void WhenAllItemsAreInCollection_TriggerEvent()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>(3).ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+            //Act
+            Instance.TryRemoveAll(items.ToArray());
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+            {
+                new(){OldValues = items}
+            });
+        }
+    }
+
+    [TestClass]
+    public class TryRemoveAll_Enumerable : Tester<ObservableList<Dummy>>
+    {
+        [TestMethod]
+        public void WhenItemsIsNull_Throw()
+        {
+            //Arrange
+            IEnumerable<Dummy> items = null!;
+
+            //Act
+            var action = () => Instance.TryRemoveAll(items);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_DoNotThrow()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            //Act
+            var action = () => Instance.TryRemoveAll(items);
+
+            //Assert
+            action.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void WhenNoneOfTheItemsAreInCollection_DoNotThrow()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToList();
+
+            //Act
+            var action = () => Instance.TryRemoveAll(items);
+
+            //Assert
+            action.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_RemoveThose()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            //Act
+            Instance.TryRemoveAll(items);
+
+            //Assert
+            Instance.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void WhenOneItemIsNotInCollection_TriggerEvent()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(content);
+
+            var items = content.ToList();
+            items.Add(Fixture.Create<Dummy>());
+
+            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+            //Act
+            Instance.TryRemoveAll(items);
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+            {
+                new(){OldValues = content}
+            });
+        }
+
+        [TestMethod]
+        public void WhenAllItemsAreInCollection_RemoveAllOfThem()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>(3).ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(items);
+
+            //Act
+            Instance.TryRemoveAll(items);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(content);
+        }
+
+        [TestMethod]
+        public void WhenAllItemsAreInCollection_TriggerEvent()
+        {
+            //Arrange
+            var content = Fixture.CreateMany<Dummy>(3).ToList();
+            Instance.Add(content);
+
+            var items = Fixture.CreateMany<Dummy>().ToList();
+            Instance.Add(items);
+
+            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+            //Act
+            Instance.TryRemoveAll(items);
+
+            //Assert
+            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+            {
+                new(){OldValues = items}
+            });
+        }
+    }
+
+    [TestClass]
     public class TryRemoveAll_Predicate : Tester<ObservableList<Dummy>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.TryRemoveAll(predicate);
@@ -1557,7 +2419,7 @@ public class ObservableListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.RemoveAll(predicate);
@@ -2649,7 +3511,7 @@ public class ObservableListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.TryRemoveFirst(predicate);
@@ -2780,7 +3642,7 @@ public class ObservableListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.RemoveFirst(predicate);
@@ -3087,7 +3949,7 @@ public class ObservableListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.TryRemoveLast(predicate);
@@ -3218,7 +4080,7 @@ public class ObservableListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.RemoveLast(predicate);
@@ -4487,7 +5349,7 @@ public class ObservableListTester
             var action = () =>
             {
                 foreach (var item in observableList)
-                    observableList.Remove(item);
+                    observableList.RemoveFirst(item);
             };
 
             //Assert

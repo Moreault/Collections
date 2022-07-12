@@ -166,4 +166,13 @@
   <data name="CannotSwapItemsBecauseDestinationIndexIsOutOfRange" xml:space="preserve">
     <value>Can't swap items : destination index is expected to be within the collection's boundaries of 0 and {1} but its value was {1}</value>
   </data>
+  <data name="TrimStartRequiresPositiveMaxSize" xml:space="preserve">
+	  <value>Can't use TrimStart : maxSize must be a positive number but its value was {0}</value>
+  </data>
+  <data name="TrimEndRequiresPositiveMaxSize" xml:space="preserve">
+	  <value>Can't use TrimEnd : maxSize must be a positive number but its value was {0}</value>
+  </data>
+  <data name="CannotRemoveItemsBecauseOneIsNotInCollection" xml:space="preserve">
+	  <value>Can't remove items from {0} : one or more item is not in collection</value>
+  </data>
 </root>

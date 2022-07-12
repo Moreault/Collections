@@ -1,12 +1,4 @@
-﻿using AutoFixture;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
-using ToolBX.Collections.ObservableList;
-using ToolBX.Eloquentest;
-
-namespace Collections.ObservableList.Tests;
+﻿namespace Collections.ObservableList.Tests;
 
 [TestClass]
 public class ObservableListExtensionsTester

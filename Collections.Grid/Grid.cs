@@ -22,8 +22,8 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
 
     Boundaries<int> Boundaries { get; }
 
-    IList<Coordinates> IndexesOf(T? item);
-    IList<Coordinates> IndexesOf(Func<T, bool> match);
+    IReadOnlyList<Coordinates> IndexesOf(T? item);
+    IReadOnlyList<Coordinates> IndexesOf(Func<T, bool> match);
 
     void Add(int x, int y, T? item);
     void TryAdd(int x, int y, T? item);
@@ -208,9 +208,9 @@ public class Grid<T> : IGrid<T>
         Left = _items.Keys.Min(x => x.X)
     } : new Boundaries<int>();
 
-    public IList<Coordinates> IndexesOf(T? item) => _items.Where(x => x.Value == null && item == null || x.Value != null && x.Value.Equals(item)).Select(x => x.Key).ToList();
+    public IReadOnlyList<Coordinates> IndexesOf(T? item) => _items.Where(x => x.Value == null && item == null || x.Value != null && x.Value.Equals(item)).Select(x => x.Key).ToList();
 
-    public IList<Coordinates> IndexesOf(Func<T, bool> match)
+    public IReadOnlyList<Coordinates> IndexesOf(Func<T, bool> match)
     {
         if (match == null) throw new ArgumentNullException(nameof(match));
         return _items.Where(x => match.Invoke(x.Value!)).Select(x => x.Key).ToList();

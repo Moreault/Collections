@@ -1153,7 +1153,7 @@ public class InventoryTableTester
         public void WhenQuantityIsNegative_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = -Fixture.Create<int>();
 
             //Act
@@ -1167,7 +1167,7 @@ public class InventoryTableTester
         public void WhenQuantityIsZero_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = 0;
 
             //Act
@@ -1181,7 +1181,7 @@ public class InventoryTableTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -1352,7 +1352,7 @@ public class InventoryTableTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -1366,7 +1366,7 @@ public class InventoryTableTester
         public void WhenQuantityIsNegative_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = -Fixture.Create<int>();
 
             //Act
@@ -1380,7 +1380,7 @@ public class InventoryTableTester
         public void WhenQuantityIsZero_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = 0;
 
             //Act
@@ -2177,7 +2177,7 @@ public class InventoryTableTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -2191,7 +2191,7 @@ public class InventoryTableTester
         public void WhenQuantityIsNegative_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = -Fixture.Create<int>();
 
             //Act
@@ -2205,7 +2205,7 @@ public class InventoryTableTester
         public void WhenQuantityIsZero_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = 0;
 
             //Act
@@ -2348,7 +2348,7 @@ public class InventoryTableTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -2362,7 +2362,7 @@ public class InventoryTableTester
         public void WhenQuantityIsNegative_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = -Fixture.Create<int>();
 
             //Act
@@ -2376,7 +2376,7 @@ public class InventoryTableTester
         public void WhenQuantityIsZero_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = 0;
 
             //Act
@@ -2724,7 +2724,7 @@ public class InventoryTableTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.Clear(predicate);
@@ -2737,7 +2737,7 @@ public class InventoryTableTester
         public void WhenInventoryIsEmpty_DoNotModify()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
 
             //Act
             Instance.Clear(predicate);
@@ -2750,7 +2750,7 @@ public class InventoryTableTester
         public void WhenInventoryIsEmpty_DoNotTriggerEvent()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
 
             var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -3022,7 +3022,7 @@ public class InventoryTableTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.QuantityOf(predicate);
@@ -3035,7 +3035,7 @@ public class InventoryTableTester
         public void WhenIsEmpty_ReturnZero()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
 
             //Act
             var result = Instance.QuantityOf(predicate);
@@ -3145,7 +3145,7 @@ public class InventoryTableTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.IndexesOf(predicate);
@@ -3158,7 +3158,7 @@ public class InventoryTableTester
         public void WhenInventoryIsEmpty_ReturnEmpty()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
 
             //Act
             var result = Instance.IndexesOf(predicate);

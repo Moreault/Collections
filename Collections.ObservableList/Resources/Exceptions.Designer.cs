@@ -178,6 +178,15 @@ namespace ToolBX.Collections.ObservableList.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t remove items from {0} : one or more item is not in collection.
+        /// </summary>
+        internal static string CannotRemoveItemsBecauseOneIsNotInCollection {
+            get {
+                return ResourceManager.GetString("CannotRemoveItemsBecauseOneIsNotInCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t set item : index is expected to be between {0} and {1} but its value was {2}
         ///.
         /// </summary>
@@ -202,6 +211,24 @@ namespace ToolBX.Collections.ObservableList.Resources {
         internal static string CannotSwapItemsBecauseDestinationIndexIsOutOfRange {
             get {
                 return ResourceManager.GetString("CannotSwapItemsBecauseDestinationIndexIsOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t use TrimEnd : maxSize must be a positive number but its value was {0}.
+        /// </summary>
+        internal static string TrimEndRequiresPositiveMaxSize {
+            get {
+                return ResourceManager.GetString("TrimEndRequiresPositiveMaxSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t use TrimStart : maxSize must be a positive number but its value was {0}.
+        /// </summary>
+        internal static string TrimStartRequiresPositiveMaxSize {
+            get {
+                return ResourceManager.GetString("TrimStartRequiresPositiveMaxSize", resourceCulture);
             }
         }
     }

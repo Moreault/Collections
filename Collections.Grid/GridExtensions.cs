@@ -4,31 +4,31 @@ namespace ToolBX.Collections.Grid;
 
 public static class GridExtensions
 {
-    public static IGrid<T> ToGrid<T>(this IEnumerable<Cell<T>> cells)
+    public static Grid<T> ToGrid<T>(this IEnumerable<Cell<T>> cells)
     {
         if (cells == null) throw new ArgumentNullException(nameof(cells));
         return new Grid<T>(cells);
     }
 
-    public static IGrid<T> ToGrid<T>(this IEnumerable<KeyValuePair<Coordinates, T>> collection)
+    public static Grid<T> ToGrid<T>(this IEnumerable<KeyValuePair<Coordinates, T>> collection)
     {
         if (collection == null) throw new ArgumentNullException(nameof(collection));
         return new Grid<T>(collection);
     }
 
-    public static IGrid<T> ToGrid<T>(this T[,] collection)
+    public static Grid<T> ToGrid<T>(this T[,] collection)
     {
         if (collection == null) throw new ArgumentNullException(nameof(collection));
         return new Grid<T?>(collection)!;
     }
 
-    public static IGrid<T> ToGrid<T>(this T[][] collection)
+    public static Grid<T> ToGrid<T>(this T[][] collection)
     {
         if (collection == null) throw new ArgumentNullException(nameof(collection));
         return new Grid<T?>(collection)!;
     }
 
-    public static IGrid<T> ToGrid<T>(this IEnumerable<T> collection, int columnCount)
+    public static Grid<T> ToGrid<T>(this IEnumerable<T> collection, int columnCount)
     {
         if (collection == null) throw new ArgumentNullException(nameof(collection));
         if (columnCount <= 0) throw new ArgumentException(string.Format(Exceptions.CannotConvertToGridFromColumnCount, columnCount));
@@ -80,7 +80,7 @@ public static class GridExtensions
         return array;
     }
 
-    public static IDictionary<Coordinates, T?> ToDictionary<T>(this IGrid<T> grid)
+    public static Dictionary<Coordinates, T?> ToDictionary<T>(this IGrid<T> grid)
     {
         if (grid == null) throw new ArgumentNullException(nameof(grid));
         return grid.ToDictionary(x => x.Index, x => x.Value);

@@ -21,25 +21,25 @@ public interface IInventory<T> : IObservableCollection<Entry<T>>, ICollection<En
     int StackSize { get; set; }
 
     void Add(T item, int quantity = 1);
-    void Add(Predicate<T> predicate, int quantity = 1);
+    void Add(Func<T, bool> predicate, int quantity = 1);
     int QuantityOf(T item);
-    int QuantityOf(Predicate<T> predicate);
-    IReadOnlyList<int> IndexesOf(Predicate<T> predicate);
+    int QuantityOf(Func<T, bool> predicate);
+    IReadOnlyList<int> IndexesOf(Func<T, bool> predicate);
     StockSearchResult<T> Search(T item);
-    StockSearchResult<T> Search(Predicate<T> predicate);
+    StockSearchResult<T> Search(Func<T, bool> predicate);
     void Remove(T item, int quantity = 1);
 
     /// <summary>
     /// Attempts to remove a quantity from all items that match the predicate without throwing if no matching item is in stock.
     /// </summary>
-    void Remove(Predicate<T> predicate, int quantity = 1);
+    void Remove(Func<T, bool> predicate, int quantity = 1);
 
     /// <summary>
     /// Attempts to remove a quantity of item without throwing if item is not in stock.
     /// </summary>
     TryRemoveResult TryRemove(T item, int quantity = 1);
 
-    TryRemoveResult TryRemove(Predicate<T> predicate, int quantity = 1);
+    TryRemoveResult TryRemove(Func<T, bool> predicate, int quantity = 1);
 
     /// <summary>
     /// Removes an entire stack of item.
@@ -49,7 +49,7 @@ public interface IInventory<T> : IObservableCollection<Entry<T>>, ICollection<En
     /// <summary>
     /// Removes an entire stack of item.
     /// </summary>
-    void Clear(Predicate<T> predicate);
+    void Clear(Func<T, bool> predicate);
 
     void Swap(int currentIndex, int destinationIndex);
     void RemoveAt(int index, int count = 1);
@@ -155,7 +155,7 @@ public abstract class Inventory<T> : IInventory<T>
         });
     }
 
-    public void Add(Predicate<T> predicate, int quantity = 1)
+    public void Add(Func<T, bool> predicate, int quantity = 1)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         if (quantity <= 0) throw new ArgumentException(string.Format(Exceptions.CannotAddItemUsingPredicateBecauseQuantityMustBeGreaterThanZero, quantity));
@@ -177,14 +177,14 @@ public abstract class Inventory<T> : IInventory<T>
 
     public int QuantityOf(T item) => Items.Where(x => Equals(x.Item, item)).Sum(x => x.Quantity);
 
-    public int QuantityOf(Predicate<T> predicate)
+    public int QuantityOf(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         var indexes = IndexesOf(predicate);
         return indexes.Sum(x => Items[x].Quantity);
     }
 
-    public IReadOnlyList<int> IndexesOf(Predicate<T> predicate)
+    public IReadOnlyList<int> IndexesOf(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         var items = Items.Select(x => x.Item).ToObservableList();
@@ -193,7 +193,7 @@ public abstract class Inventory<T> : IInventory<T>
 
     public StockSearchResult<T> Search(T item) => Search(x => Equals(x, item));
 
-    public StockSearchResult<T> Search(Predicate<T> predicate)
+    public StockSearchResult<T> Search(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
@@ -232,12 +232,12 @@ public abstract class Inventory<T> : IInventory<T>
         });
     }
 
-    public void Remove(Predicate<T> predicate, int quantity = 1)
+    public void Remove(Func<T, bool> predicate, int quantity = 1)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         if (quantity <= 0) throw new ArgumentException(string.Format(Exceptions.CannotRemoveItemUsingPredicateBecauseQuantityMustBeGreaterThanZero, quantity));
 
-        var items = Search(predicate).DistinctBy(x => x.Item).Select(x => x.Item).ToList();
+        var items = Search((Func<T, bool>)predicate).DistinctBy(x => x.Item).Select(x => x.Item).ToList();
         if (!items.Any()) throw new InvalidOperationException(string.Format(Exceptions.CannotRemoveItemUsingPredicateBecauseThereIsNoMatch, predicate));
 
         foreach (var item in items)
@@ -267,12 +267,12 @@ public abstract class Inventory<T> : IInventory<T>
         return removals;
     }
 
-    public TryRemoveResult TryRemove(Predicate<T> predicate, int quantity = 1)
+    public TryRemoveResult TryRemove(Func<T, bool> predicate, int quantity = 1)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         if (quantity <= 0) throw new ArgumentException(string.Format(Exceptions.CannotRemoveItemUsingPredicateBecauseQuantityMustBeGreaterThanZero, quantity));
 
-        var items = Search(predicate).DistinctBy(x => x.Item).Select(x => x.Item).ToList();
+        var items = Search((Func<T, bool>)predicate).DistinctBy(x => x.Item).Select(x => x.Item).ToList();
         if (!items.Any()) return new TryRemoveResult(0, quantity);
 
         IList<Entry<T>> itemsRemoved = CollectionChanged == null ? Array.Empty<Entry<T>>() : new List<Entry<T>>();
@@ -343,7 +343,7 @@ public abstract class Inventory<T> : IInventory<T>
         }
     }
 
-    public void Clear(Predicate<T> predicate)
+    public void Clear(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         var indexesOf = IndexesOf(predicate);

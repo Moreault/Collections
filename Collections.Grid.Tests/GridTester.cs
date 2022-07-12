@@ -3,7 +3,9 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using ToolBX.Collections.Grid;
 using ToolBX.Eloquentest;
 using ToolBX.Eloquentest.Extensions;
@@ -8608,4 +8610,40 @@ public class GridTester
             result.Should().BeFalse();
         }
     }
+
+    [TestClass]
+    public class Serialization : Tester<Grid<Dummy>>
+    {
+        //TODO Test
+        [TestMethod]
+        public void WhenSerializingXml_DeserializeEquivalentObject()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
+        }
+
+        [TestMethod]
+        public void WhenSerializingJsonUsingNewtonsoft_DeserializeEquivalentObject()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
+        }
+
+        [TestMethod]
+        public void WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
+        }
+    }
+
 }

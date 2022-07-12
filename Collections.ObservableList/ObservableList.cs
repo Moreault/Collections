@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using ToolBX.Collections.Common;
-using ToolBX.Collections.ObservableList.Resources;
-using ToolBX.Reflection4Humans.Extensions;
-
-namespace ToolBX.Collections.ObservableList;
+﻿namespace ToolBX.Collections.ObservableList;
 
 /// <summary>
 /// An observable, dynamic one-dimensional array.
@@ -15,18 +10,22 @@ public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCol
     int LastIndex { get; }
     void TryRemoveFirst(T item);
     void RemoveFirst(T item);
-    void TryRemoveFirst(Predicate<T> predicate);
-    void RemoveFirst(Predicate<T> predicate);
+    void TryRemoveFirst(Func<T, bool> predicate);
+    void RemoveFirst(Func<T, bool> predicate);
 
     void TryRemoveLast(T item);
     void RemoveLast(T item);
-    void TryRemoveLast(Predicate<T> predicate);
-    void RemoveLast(Predicate<T> predicate);
+    void TryRemoveLast(Func<T, bool> predicate);
+    void RemoveLast(Func<T, bool> predicate);
 
     void TryRemoveAll(T item);
     void RemoveAll(T item);
-    void TryRemoveAll(Predicate<T> predicate);
-    void RemoveAll(Predicate<T> predicate);
+    void RemoveAll(params T[] items);
+    void RemoveAll(IEnumerable<T> items);
+    void TryRemoveAll(params T[] items);
+    void TryRemoveAll(IEnumerable<T> items);
+    void TryRemoveAll(Func<T, bool> predicate);
+    void RemoveAll(Func<T, bool> predicate);
     void RemoveAt(int index, int count);
 
     void Add(params T[]? items);
@@ -45,15 +44,25 @@ public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCol
     void Insert(int index, params T[] items);
     void Insert(int index, IEnumerable<T> items);
 
-    IObservableList<T> Copy(int startingIndex = 0);
-    IObservableList<T> Copy(int startingIndex, int count);
+    ObservableList<T> Copy(int startingIndex = 0);
+    ObservableList<T> Copy(int startingIndex, int count);
     int FirstIndexOf(T item);
-    int FirstIndexOf(Predicate<T> predicate);
+    int FirstIndexOf(Func<T, bool> predicate);
     int LastIndexOf(T item);
-    int LastIndexOf(Predicate<T> predicate);
-    IObservableList<int> IndexesOf(T item);
-    IObservableList<int> IndexesOf(Predicate<T> predicate);
+    int LastIndexOf(Func<T, bool> predicate);
+    ObservableList<int> IndexesOf(T item);
+    ObservableList<int> IndexesOf(Func<T, bool> predicate);
     void Swap(int currentIndex, int destinationIndex);
+
+    /// <summary>
+    /// Sizes the collection down to maxSize by removing the first elements if needed.
+    /// </summary>
+    void TrimStartDownTo(int maxSize);
+
+    /// <summary>
+    /// Sizes the collection down to maxSize by removing the last elements if needed.
+    /// </summary>
+    void TrimEndDownTo(int maxSize);
 }
 
 /// <inheritdoc cref="IObservableList{T}"/>
@@ -163,7 +172,10 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public void Clear()
     {
-        var oldValues = _items.ToArray();
+        if (Count == 0) return;
+
+        var oldValues = CollectionChanged == null ? Array.Empty<T>() : _items.Take(Count).ToArray();
+
         Array.Clear(_items, 0, Count);
         Count = 0;
         _version++;
@@ -177,12 +189,12 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     void ICollection<T>.CopyTo(T[] array, int index) => Array.Copy(_items, 0, array, index, Count);
 
-    public IObservableList<T> Copy(int startingIndex = 0)
+    public ObservableList<T> Copy(int startingIndex = 0)
     {
         return Copy(startingIndex, Count - startingIndex);
     }
 
-    public IObservableList<T> Copy(int startingIndex, int count)
+    public ObservableList<T> Copy(int startingIndex, int count)
     {
         if (startingIndex < 0 || startingIndex > LastIndex) throw new ArgumentOutOfRangeException(nameof(startingIndex), string.Format(Exceptions.CannotCopyBecauseIndexIsOutOfRange, GetType().GetHumanReadableName(), 0, LastIndex, startingIndex));
         if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), string.Format(Exceptions.CannotCopyBecauseCountIsNegative, GetType().GetHumanReadableName(), count));
@@ -200,10 +212,10 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public int FirstIndexOf(T item) => Array.IndexOf(_items, item, 0, Count);
 
-    public int FirstIndexOf(Predicate<T> predicate)
+    public int FirstIndexOf(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        return Array.FindIndex(_items, 0, Count, predicate);
+        return Array.FindIndex(_items, 0, Count, new Predicate<T>(predicate));
     }
 
     public int LastIndexOf(T item)
@@ -215,7 +227,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         return -1;
     }
 
-    public int LastIndexOf(Predicate<T> predicate)
+    public int LastIndexOf(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         for (var i = LastIndex; i >= 0; i--)
@@ -225,7 +237,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         return -1;
     }
 
-    public IObservableList<int> IndexesOf(T item)
+    public ObservableList<int> IndexesOf(T item)
     {
         var indexes = new ObservableList<int>();
 
@@ -238,7 +250,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         return indexes;
     }
 
-    public IObservableList<int> IndexesOf(Predicate<T> predicate)
+    public ObservableList<int> IndexesOf(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
@@ -253,9 +265,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public void Swap(int currentIndex, int destinationIndex)
     {
-        //TODO Message saying you're a dumbass
         if (currentIndex < 0 || currentIndex > LastIndex) throw new ArgumentOutOfRangeException(string.Format(Exceptions.CannotSwapItemsBecauseCurrentIndexIsOutOfRange, LastIndex, currentIndex));
-        //TODO Message saying you're a dumbass
         if (destinationIndex < 0 || destinationIndex > LastIndex) throw new ArgumentOutOfRangeException(string.Format(Exceptions.CannotSwapItemsBecauseDestinationIndexIsOutOfRange, LastIndex, destinationIndex));
 
         if (currentIndex == destinationIndex) return;
@@ -265,6 +275,62 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
         _items[currentIndex] = secondItem;
         _items[destinationIndex] = firstItem;
+    }
+
+    public void TrimStartDownTo(int maxSize)
+    {
+        if (maxSize < 0) throw new ArgumentException(string.Format(Exceptions.TrimStartRequiresPositiveMaxSize, maxSize));
+        if (Count == 0) return;
+
+        if (maxSize == 0)
+        {
+            Clear();
+        }
+        else
+        {
+            IList<T> removed = CollectionChanged == null ? Array.Empty<T>() : new List<T>();
+
+            while (Count > maxSize)
+            {
+                if (CollectionChanged != null)
+                    removed.Add(this[0]);
+                RemoveAtInternal(0);
+            }
+
+            if (removed.Any())
+                CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
+                {
+                    OldValues = (IReadOnlyList<T>)removed
+                });
+        }
+    }
+
+    public void TrimEndDownTo(int maxSize)
+    {
+        if (maxSize < 0) throw new ArgumentException(string.Format(Exceptions.TrimEndRequiresPositiveMaxSize, maxSize));
+        if (Count == 0) return;
+
+        if (maxSize == 0)
+        {
+            Clear();
+        }
+        else
+        {
+            IList<T> removed = CollectionChanged == null ? Array.Empty<T>() : new List<T>();
+
+            while (Count > maxSize)
+            {
+                if (CollectionChanged != null)
+                    removed.Add(this[LastIndex]);
+                RemoveAtInternal(LastIndex);
+            }
+
+            if (removed.Any())
+                CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
+                {
+                    OldValues = (IReadOnlyList<T>)removed
+                });
+        }
     }
 
     public void TryRemoveAll(T item)
@@ -300,7 +366,29 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         TryRemoveAll(item);
     }
 
-    public void TryRemoveAll(Predicate<T> predicate)
+    public void RemoveAll(params T[] items) => RemoveAll(items as IEnumerable<T>);
+
+    public void RemoveAll(IEnumerable<T> items)
+    {
+        if (items == null) throw new ArgumentNullException(nameof(items));
+        var list = items.ToList();
+        var indexes = list.Select(IndexesOf).SelectMany(x => x).ToList();
+        if (indexes.Count != list.Count) throw new InvalidOperationException(string.Format(Exceptions.CannotRemoveItemsBecauseOneIsNotInCollection, GetType().GetHumanReadableName()));
+
+        foreach (var index in indexes.OrderByDescending(x => x))
+            RemoveAtInternal(index);
+
+        CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
+        {
+            OldValues = list
+        });
+    }
+
+    public void TryRemoveAll(params T[] items) => TryRemoveAll(items as IEnumerable<T>);
+
+    public void TryRemoveAll(IEnumerable<T> items) => RemoveAll(items.Where(x => _items.Contains(x)));
+
+    public void TryRemoveAll(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         var removedItems = new List<T>();
@@ -325,7 +413,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         }
     }
 
-    public void RemoveAll(Predicate<T> predicate)
+    public void RemoveAll(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         var firstIndex = FirstIndexOf(predicate);
@@ -426,7 +514,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         RemoveAt(index);
     }
 
-    public void TryRemoveFirst(Predicate<T> predicate)
+    public void TryRemoveFirst(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         var index = FirstIndexOf(predicate);
@@ -434,7 +522,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
             RemoveAt(index);
     }
 
-    public void RemoveFirst(Predicate<T> predicate)
+    public void RemoveFirst(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         var index = FirstIndexOf(predicate);
@@ -454,7 +542,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         RemoveAt(index);
     }
 
-    public void TryRemoveLast(Predicate<T> predicate)
+    public void TryRemoveLast(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         var index = LastIndexOf(predicate);
@@ -462,7 +550,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
             RemoveAt(index);
     }
 
-    public void RemoveLast(Predicate<T> predicate)
+    public void RemoveLast(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         var index = LastIndexOf(predicate);

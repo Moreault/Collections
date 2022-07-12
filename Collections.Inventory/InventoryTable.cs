@@ -79,7 +79,7 @@ public class InventoryTable<T> : Inventory<T>
     /// <summary>
     /// Attempts to add a quantity to all items that match the predicate without throwing if its stack if full.
     /// </summary>
-    public TryAddResult TryAdd(Predicate<T> predicate, int quantity = 1)
+    public TryAddResult TryAdd(Func<T, bool> predicate, int quantity = 1)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         if (quantity <= 0) throw new ArgumentException(string.Format(Exceptions.CannotAddItemUsingPredicateBecauseQuantityMustBeGreaterThanZero, quantity));

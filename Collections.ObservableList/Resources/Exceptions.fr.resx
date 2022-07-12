@@ -165,4 +165,13 @@
   <data name="CannotSwapItemsBecauseDestinationIndexIsOutOfRange" xml:space="preserve">
     <value>Impossible d'échanger les items : on s'attend à ce que destinationIndex soit entre 0 et {0} mais sa valeur était de {1}</value>
   </data>
+  <data name="TrimStartRequiresPositiveMaxSize" xml:space="preserve">
+	  <value>Impossible d'utiliser TrimStart : maxSize doit être un nombre positif mais sa valeur était {0}</value>
+  </data>
+  <data name="TrimEndRequiresPositiveMaxSize" xml:space="preserve">
+	  <value>Impossible d'utiliser TrimEnd : maxSize doit être un nombre positif mais sa valeur était {0}</value>
+  </data>
+  <data name="CannotRemoveItemsBecauseOneIsNotInCollection" xml:space="preserve">
+	  <value>Impossible de retirer les items de {0} : un ou plusieurs item n'est pas présent dans la collection</value>
+  </data>
 </root>

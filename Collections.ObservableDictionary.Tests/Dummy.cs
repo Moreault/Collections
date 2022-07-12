@@ -1,7 +1,4 @@
-﻿using System.Text;
-using System.Threading.Tasks;
-
-namespace Collections.ObservableList.Tests;
+﻿namespace Collections.ObservableDictionary.Tests;
 
 public record Dummy
 {

@@ -290,7 +290,7 @@ public class InventoryListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -304,7 +304,7 @@ public class InventoryListTester
         public void WhenQuantityIsNegative_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = x => x.Id == Fixture.Create<int>();
+            Func<Dummy, bool> predicate = x => x.Id == Fixture.Create<int>();
             var quantity = -Fixture.Create<int>();
 
             //Act
@@ -318,7 +318,7 @@ public class InventoryListTester
         public void WhenQuantityIsZero_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = x => x.Id == Fixture.Create<int>();
+            Func<Dummy, bool> predicate = x => x.Id == Fixture.Create<int>();
             const int quantity = 0;
 
             //Act
@@ -332,7 +332,7 @@ public class InventoryListTester
         public void WhenNoExistingEntryCorrespondsToPredicate_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = x => x.Id == Fixture.Create<int>();
+            Func<Dummy, bool> predicate = x => x.Id == Fixture.Create<int>();
             var quantity = Fixture.Create<int>();
 
             var entries = Fixture.CreateMany<Entry<Dummy>>().ToList();
@@ -360,7 +360,7 @@ public class InventoryListTester
             var existingEntry = entries[existingEntryIndex];
             var previousQuantity = existingEntry.Quantity;
 
-            Predicate<Dummy> predicate = x => x.Id == existingEntry.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == existingEntry.Item.Id;
 
             var expected = entries.ToList();
             expected[existingEntryIndex] = expected[existingEntryIndex] with { Quantity = previousQuantity + quantity };
@@ -388,7 +388,7 @@ public class InventoryListTester
             var existingEntryIndex = entries.GetRandomIndex();
             var existingEntry = entries[existingEntryIndex];
 
-            Predicate<Dummy> predicate = x => x.Id == existingEntry.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == existingEntry.Item.Id;
 
             var expected = entries.ToList();
             expected[existingEntryIndex] = expected[existingEntryIndex] with { Quantity = 99 };
@@ -423,7 +423,7 @@ public class InventoryListTester
             foreach (var entry in entries)
                 Instance.Add(entry.Item, entry.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Level == level;
+            Func<Dummy, bool> predicate = x => x.Level == level;
 
             var expected = entries.ToList();
             for (var i = 0; i < expected.Count; i++)
@@ -461,7 +461,7 @@ public class InventoryListTester
             foreach (var entry in entries)
                 Instance.Add(entry.Item, entry.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Level == level;
+            Func<Dummy, bool> predicate = x => x.Level == level;
 
             var expected = entries.ToList();
             for (var i = 0; i < expected.Count; i++)
@@ -493,7 +493,7 @@ public class InventoryListTester
             var existingEntry = entries[existingEntryIndex];
             var previousQuantity = existingEntry.Quantity;
 
-            Predicate<Dummy> predicate = x => x.Id == existingEntry.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == existingEntry.Item.Id;
 
             var expected = entries.ToList();
             expected[existingEntryIndex] = expected[existingEntryIndex] with { Quantity = previousQuantity + quantity };
@@ -1527,7 +1527,7 @@ public class InventoryListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -1541,7 +1541,7 @@ public class InventoryListTester
         public void WhenQuantityIsZero_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = 0;
 
             //Act
@@ -1555,7 +1555,7 @@ public class InventoryListTester
         public void WhenQuantityIsNegative_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = -Fixture.Create<int>();
 
             //Act
@@ -1573,7 +1573,7 @@ public class InventoryListTester
             foreach (var entry in entries)
                 Instance.Add(entry.Item, entry.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == Fixture.Create<int>();
+            Func<Dummy, bool> predicate = x => x.Id == Fixture.Create<int>();
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -1594,7 +1594,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 21;
 
             //Act
@@ -1618,7 +1618,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 21;
 
             var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
@@ -1648,7 +1648,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 221;
 
             //Act
@@ -1669,7 +1669,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 200;
 
             //Act
@@ -1692,7 +1692,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 21;
 
             //Act
@@ -1719,7 +1719,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 21;
 
             var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
@@ -1751,7 +1751,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 99);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 100;
 
             //Act
@@ -1774,7 +1774,7 @@ public class InventoryListTester
             foreach (var item in itemsWithSameLevel)
                 Instance.Add(item, 99);
 
-            Predicate<Dummy> predicate = x => x.Level == level;
+            Func<Dummy, bool> predicate = x => x.Level == level;
             var quantity = 99;
 
             //Act
@@ -1797,7 +1797,7 @@ public class InventoryListTester
             foreach (var item in itemsWithSameLevel)
                 Instance.Add(item, 99);
 
-            Predicate<Dummy> predicate = x => x.Level == level;
+            Func<Dummy, bool> predicate = x => x.Level == level;
             var quantity = 35;
 
             var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
@@ -1829,7 +1829,7 @@ public class InventoryListTester
             foreach (var item in itemsWithSameLevel)
                 Instance.Add(item, 99);
 
-            Predicate<Dummy> predicate = x => x.Level == level;
+            Func<Dummy, bool> predicate = x => x.Level == level;
             var quantity = 100;
 
             //Act
@@ -1848,7 +1848,7 @@ public class InventoryListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -1862,7 +1862,7 @@ public class InventoryListTester
         public void WhenQuantityIsZero_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = 0;
 
             //Act
@@ -1876,7 +1876,7 @@ public class InventoryListTester
         public void WhenQuantityIsNegative_Throw()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
             var quantity = -Fixture.Create<int>();
 
             //Act
@@ -1894,7 +1894,7 @@ public class InventoryListTester
             foreach (var entry in entries)
                 Instance.Add(entry.Item, entry.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == Fixture.Create<int>();
+            Func<Dummy, bool> predicate = x => x.Id == Fixture.Create<int>();
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -1912,7 +1912,7 @@ public class InventoryListTester
             foreach (var entry in entries)
                 Instance.Add(entry.Item, entry.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == Fixture.Create<int>();
+            Func<Dummy, bool> predicate = x => x.Id == Fixture.Create<int>();
             var quantity = Fixture.Create<int>();
 
             //Act
@@ -1930,7 +1930,7 @@ public class InventoryListTester
             foreach (var entry in entries)
                 Instance.Add(entry.Item, entry.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == Fixture.Create<int>();
+            Func<Dummy, bool> predicate = x => x.Id == Fixture.Create<int>();
             var quantity = Fixture.Create<int>();
 
             var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
@@ -1954,7 +1954,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 21;
 
             //Act
@@ -1978,7 +1978,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 21;
 
             //Act
@@ -1999,7 +1999,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 21;
 
             var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
@@ -2029,7 +2029,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 221;
 
             //Act
@@ -2050,7 +2050,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 221;
 
             //Act
@@ -2071,7 +2071,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 200;
 
             //Act
@@ -2094,7 +2094,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 21;
 
             //Act
@@ -2121,7 +2121,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 200);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 21;
 
             var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
@@ -2153,7 +2153,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 99);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 100;
 
             //Act
@@ -2176,7 +2176,7 @@ public class InventoryListTester
             var item = new Entry<Dummy>(Fixture.Create<Dummy>(), 99);
             Instance.Add(item.Item, item.Quantity);
 
-            Predicate<Dummy> predicate = x => x.Id == item.Item.Id;
+            Func<Dummy, bool> predicate = x => x.Id == item.Item.Id;
             var quantity = 100;
 
             //Act
@@ -2199,7 +2199,7 @@ public class InventoryListTester
             foreach (var item in itemsWithSameLevel)
                 Instance.Add(item, 99);
 
-            Predicate<Dummy> predicate = x => x.Level == level;
+            Func<Dummy, bool> predicate = x => x.Level == level;
             var quantity = 99;
 
             //Act
@@ -2222,7 +2222,7 @@ public class InventoryListTester
             foreach (var item in itemsWithSameLevel)
                 Instance.Add(item, 99);
 
-            Predicate<Dummy> predicate = x => x.Level == level;
+            Func<Dummy, bool> predicate = x => x.Level == level;
             var quantity = 35;
 
             var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
@@ -2254,7 +2254,7 @@ public class InventoryListTester
             foreach (var item in itemsWithSameLevel)
                 Instance.Add(item, 99);
 
-            Predicate<Dummy> predicate = x => x.Level == level;
+            Func<Dummy, bool> predicate = x => x.Level == level;
             var quantity = 100;
 
             //Act
@@ -2277,7 +2277,7 @@ public class InventoryListTester
             foreach (var item in itemsWithSameLevel)
                 Instance.Add(item, 99);
 
-            Predicate<Dummy> predicate = x => x.Level == level;
+            Func<Dummy, bool> predicate = x => x.Level == level;
             var quantity = 100;
 
             //Act
@@ -2452,7 +2452,7 @@ public class InventoryListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.Clear(predicate);
@@ -2465,7 +2465,7 @@ public class InventoryListTester
         public void WhenInventoryIsEmpty_DoNotModify()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
 
             //Act
             Instance.Clear(predicate);
@@ -2478,7 +2478,7 @@ public class InventoryListTester
         public void WhenInventoryIsEmpty_DoNotTriggerEvent()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
 
             var eventArgs = new List<CollectionChangeEventArgs<Entry<Dummy>>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -2774,7 +2774,7 @@ public class InventoryListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.QuantityOf(predicate);
@@ -2787,7 +2787,7 @@ public class InventoryListTester
         public void WhenIsEmpty_ReturnZero()
         {
             //Arrange
-            var predicate = Fixture.Create<Predicate<Dummy>>();
+            var predicate = Fixture.Create<Func<Dummy, bool>>();
 
             //Act
             var result = Instance.QuantityOf(predicate);
@@ -2934,7 +2934,7 @@ public class InventoryListTester
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Predicate<Dummy> predicate = null!;
+            Func<Dummy, bool> predicate = null!;
 
             //Act
             var action = () => Instance.Search(predicate);
