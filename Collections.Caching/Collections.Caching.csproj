@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
 		<PackageId>ToolBX.$(AssemblyName)</PackageId>
 		<Product>ToolBX.$(AssemblyName)</Product>
@@ -14,13 +14,14 @@
 		<PackageProjectUrl>https://github.com/Moreault/Collections</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Description>Collections that are limited to a specified size in order to be used as object caches.</Description>
-		<PackageIcon>ObservableList.png</PackageIcon>
+		<PackageIcon>caching.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Collections.ObservableDictionary\Collections.ObservableDictionary.csproj" />
 		<ProjectReference Include="..\Collections.ObservableList\Collections.ObservableList.csproj" />
+		<ProjectReference Include="..\Collections.ObservableStack\Collections.ObservableStack.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -30,7 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\ObservableList.png">
+	  <None Include="..\caching.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>

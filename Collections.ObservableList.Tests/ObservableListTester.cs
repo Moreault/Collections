@@ -1310,7 +1310,7 @@ public class ObservableListTester
     }
 
     [TestClass]
-    public class TrimStart : Tester<ObservableList<string>>
+    public class TrimStartDownTo : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenMaxSizeIsNegative_Throw()
@@ -1490,7 +1490,7 @@ public class ObservableListTester
     }
 
     [TestClass]
-    public class TrimEnd : Tester<ObservableList<string>>
+    public class TrimEndDownTo : Tester<ObservableList<string>>
     {
         [TestMethod]
         public void WhenMaxSizeIsNegative_Throw()

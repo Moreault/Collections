@@ -70,7 +70,25 @@ namespace ToolBX.Collections.Caching.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t use Peek : stack is empty.
+        /// </summary>
+        internal static string CannotPeekBecauseEmpty {
+            get {
+                return ResourceManager.GetString("CannotPeekBecauseEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string CannotUsePopBecauseEmpty {
+            get {
+                return ResourceManager.GetString("CannotUsePopBecauseEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t add items to collection : keys appeared more than once ({0}).
         /// </summary>
         internal static string ItemsContainDuplicateKeys {
             get {

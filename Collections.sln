@@ -17,13 +17,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.Inventory", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.Inventory.Tests", "Collections.Inventory.Tests\Collections.Inventory.Tests.csproj", "{559909CB-4277-46BA-885D-DAF722239D09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collections.ObservableDictionary", "Collections.ObservableDictionary\Collections.ObservableDictionary.csproj", "{3DE4CD90-DA81-4F63-9A2F-8612379F37FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.ObservableDictionary", "Collections.ObservableDictionary\Collections.ObservableDictionary.csproj", "{3DE4CD90-DA81-4F63-9A2F-8612379F37FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collections.ObservableDictionary.Tests", "Collections.ObservableDictionary.Tests\Collections.ObservableDictionary.Tests.csproj", "{51B4125D-58E6-4B10-8DCD-91EC94E830D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.ObservableDictionary.Tests", "Collections.ObservableDictionary.Tests\Collections.ObservableDictionary.Tests.csproj", "{51B4125D-58E6-4B10-8DCD-91EC94E830D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collections.Caching", "Collections.Caching\Collections.Caching.csproj", "{39B9394F-EB16-46AE-93E9-9D1388CBC861}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.Caching", "Collections.Caching\Collections.Caching.csproj", "{39B9394F-EB16-46AE-93E9-9D1388CBC861}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collections.Caching.Tests", "Collections.Caching.Tests\Collections.Caching.Tests.csproj", "{3D331097-C9DB-451A-B548-390FE994018E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.Caching.Tests", "Collections.Caching.Tests\Collections.Caching.Tests.csproj", "{3D331097-C9DB-451A-B548-390FE994018E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.ObservableStack", "Collections.ObservableStack\Collections.ObservableStack.csproj", "{FBD19C9D-5F26-4166-926B-5BE756184A6F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.ObservableStack.Tests", "Collections.ObservableStack.Tests\Collections.ObservableStack.Tests.csproj", "{C60A1D04-6E52-41C0-A135-7819A7A47507}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +79,14 @@ Global
 		{3D331097-C9DB-451A-B548-390FE994018E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D331097-C9DB-451A-B548-390FE994018E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D331097-C9DB-451A-B548-390FE994018E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBD19C9D-5F26-4166-926B-5BE756184A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD19C9D-5F26-4166-926B-5BE756184A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD19C9D-5F26-4166-926B-5BE756184A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD19C9D-5F26-4166-926B-5BE756184A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C60A1D04-6E52-41C0-A135-7819A7A47507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C60A1D04-6E52-41C0-A135-7819A7A47507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C60A1D04-6E52-41C0-A135-7819A7A47507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C60A1D04-6E52-41C0-A135-7819A7A47507}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

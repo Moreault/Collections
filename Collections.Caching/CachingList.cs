@@ -36,5 +36,5 @@ public class CachingList<T> : ObservableList<T>, ICachingList<T>
         CollectionChanged += OnCollectionChanged;
     }
 
-    private void OnCollectionChanged(object sender, CollectionChangeEventArgs<T> args) => TrimStartDownTo(Limit);
+    private void OnCollectionChanged(object sender, CollectionChangeEventArgs<T> args) => TrimStartDownTo(_limit);
 }

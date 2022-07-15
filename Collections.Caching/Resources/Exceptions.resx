@@ -116,4 +116,10 @@
 	<data name="ItemsContainDuplicateKeys" xml:space="preserve">
 		<value>Can't add items to collection : keys appeared more than once ({0})</value>
 	</data>
+	<data name="CannotPeekBecauseEmpty" xml:space="preserve">
+		<value>Can't use Peek : stack is empty</value>
+	</data>
+	<data name="CannotUsePopBecauseEmpty" xml:space="preserve">
+		<value>Can't use Pop : stack is empty</value>
+	</data>
 </root>

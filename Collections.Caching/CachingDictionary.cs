@@ -1,9 +1,4 @@
-﻿using System.Data.Common;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using ToolBX.Collections.Caching.Resources;
-
-namespace ToolBX.Collections.Caching;
+﻿namespace ToolBX.Collections.Caching;
 
 public interface ICachingDictionary<TKey, TValue> : IObservableDictionary<TKey, TValue> where TKey : notnull
 {

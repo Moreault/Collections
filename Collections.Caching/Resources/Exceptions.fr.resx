@@ -116,4 +116,10 @@
 	<data name="ItemsContainDuplicateKeys" xml:space="preserve">
 		<value>Impossible d'ajouter des items à la collection : vous tentez d'ajouter des clés dupliquées ({0})</value>
 	</data>
+	<data name="CannotPeekBecauseEmpty" xml:space="preserve">
+		<value>Impossible d'utiliser la méthode Peek : la pile est vide</value>
+	</data>
+	<data name="CannotUsePopBecauseEmpty" xml:space="preserve">
+		<value>Impossible d'utiliser la méthode Pop : la pile est vide</value>
+	</data>
 </root>

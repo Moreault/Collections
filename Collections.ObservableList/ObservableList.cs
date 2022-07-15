@@ -435,6 +435,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         //TODO Test LastIndex + 1 behaviour
         if (index < 0 || index > LastIndex + 1) throw new ArgumentOutOfRangeException(nameof(index), string.Format(Exceptions.CannotInsertItemsBecauseIndexIsOutOfRange, GetType().GetHumanReadableName(), 0, LastIndex, index));
         var copy = items.ToArray();
+        if (!copy.Any()) return;
 
         if (_items.Length <= Count + copy.Length)
             Grow(Count + copy.Length - _items.Length);
