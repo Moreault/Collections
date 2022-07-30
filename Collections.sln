@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.ObservableStack
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.ObservableStack.Tests", "Collections.ObservableStack.Tests\Collections.ObservableStack.Tests.csproj", "{C60A1D04-6E52-41C0-A135-7819A7A47507}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.ReadOnly", "Collections.ReadOnly\Collections.ReadOnly.csproj", "{0FA6F02F-9FCA-4A52-B5FC-6AD6372B428F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.ReadOnly.Tests", "Collections.ReadOnly.Tests\Collections.ReadOnly.Tests.csproj", "{0A3883E9-9D00-4BAD-9227-1842356330A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +91,14 @@ Global
 		{C60A1D04-6E52-41C0-A135-7819A7A47507}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C60A1D04-6E52-41C0-A135-7819A7A47507}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C60A1D04-6E52-41C0-A135-7819A7A47507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FA6F02F-9FCA-4A52-B5FC-6AD6372B428F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA6F02F-9FCA-4A52-B5FC-6AD6372B428F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA6F02F-9FCA-4A52-B5FC-6AD6372B428F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FA6F02F-9FCA-4A52-B5FC-6AD6372B428F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A3883E9-9D00-4BAD-9227-1842356330A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A3883E9-9D00-4BAD-9227-1842356330A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A3883E9-9D00-4BAD-9227-1842356330A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A3883E9-9D00-4BAD-9227-1842356330A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

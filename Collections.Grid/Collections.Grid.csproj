@@ -31,7 +31,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="ToolBX.EasyTypeParsing" Version="1.0.0" />
-		<PackageReference Include="ToolBX.Mathemancy" Version="1.0.6" />
+		<PackageReference Include="ToolBX.Mathemancy" Version="1.1.1" />
 		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="1.0.0" />
 	</ItemGroup>
 

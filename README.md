@@ -42,6 +42,14 @@ private void OnThingsChanged(object sender, CollectionChangeEventArgs<Thing> arg
 }
 ```
 
+### Breaking changes
+
+#### 1.0.X -> 1.1.X
+
+-Now uses a List internally instead of an array so it could break in places but signatures remain largely unchanged so do not expect compile errrors
+-IndexesOf overloads return IReadOnlyList<T> instead ObservableList<T>
+-The DLL now comes packaged with dependencies to the OPEX library and uses its extensions for many of its methods
+
 ![Grid](https://github.com/Moreault/Collections/blob/master/grid.png)
 ## Grid
 An observable, dynamic two-dimensional array.
@@ -253,3 +261,78 @@ The StackSize property has been changed
 
 Why these changes to StackSize?
 To accomodate JSON and (eventually) XML serialization.
+
+![ReadOnly](https://github.com/Moreault/Collections/blob/master/readonlylist.png)
+## ReadOnly
+
+Actual read-only collections with helper extension methods to make them less painful to use.
+
+### Why??
+Because, to the best of my knowledge, there exists no true read-only list-like collection in .NET that is available outside of Microsoft's internal libraries. The closest thing we have right out of the box is probably an array but even that is not truly read-only because you can still use the set accessor as you like.
+
+The ReadOnlyList merely implements the official IReadOnlyList and not much more. It cannot be modified in any way. You cannot cast it to an array, IList<T>, List<T> or anything else.
+
+Read-only collections are a super handy tools to protect your code against your ill-intentioned colleagues who see no harm in "returning" objects using a list that is passed to the method.
+
+Have you ever seen this awful anti-pattern?
+
+```c#
+public void SomeMethod(Thing thing)
+{
+    var errors = new List<Error>();
+    var isValid = ValidateThisThing(thing, errors)
+}
+
+//Not only do you "return" your errors in a list that is passed to it but you also need to instantiate it before you do! What CLEVERNESS!
+public bool ValidateThisThing(Thing thing, List<Error> errors)
+{
+    bool singleReturnBoolBecauseWhyNotAtThisPoint;
+    
+    //Double negative conditions! My favorites!
+    if (!string.IsNullOrWhiteSpace(thing.Name))
+    {
+        singleReturnBoolBecauseWhyNotAtThisPoint = true;
+    }
+    else
+    {
+        errors.Add(new Error("This thing has no name!"))
+        singleReturnBoolBecauseWhyNotAtThisPoint = false;
+    }
+
+    //I mean why not?
+    return singleReturnBoolBecauseWhyNotAtThisPoint;
+}
+```
+
+Oh I have seen it and read-only collections are my answers to it. 
+
+### Getting started
+
+```c#
+//Straightforward enough, right? You just fill it with anything you like
+var things = new ReadOnlyList<Thing> { ... };
+
+//Alternatively, you can also pass an existing collection to it
+var readOnlyThings = new ReadOnlyList<Thing>(things);
+
+//Or even better
+var readOnlyThings = things.ToReadOnlyList();
+
+//It also comes (like all other ToolBX collections for that matter) with overloaded equality operators for meaningful comparisons
+var areEqual = things == readOnlyThings; //This returns true, provided that both collections contain the same items in the same order
+```
+
+For me, the most interesting part of this package are the following extension methods : 
+
+```c#
+//Creates a new ReadOnlyList with the new elements at the end
+var newThings = things.With(new Thing("abc"), new Thing("def"));
+
+//Removes the specified things
+var newThings = things.Without(thing1, thing5, thing8);
+
+//You can even remove items using a predicate lambda
+var newThings = things.Without(x => x.Tag == "Something");
+```
+
+The best part of the above is that the extensions are on IReadOnlyList<T> and not on the concrete type so you can use them on all your existing IReadOnlyList<T> collections.

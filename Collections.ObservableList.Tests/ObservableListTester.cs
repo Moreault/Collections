@@ -5308,18 +5308,6 @@ public class ObservableListTester
     [TestClass]
     public class Enumerator : Tester
     {
-        [TestMethod]
-        public void WhenGettingNonGenericEnumerator_ReturnSameThingAsGeneric()
-        {
-            //Arrange
-            var observableList = Fixture.CreateMany<Dummy>().ToObservableList();
-
-            //Act
-            var result = ((IEnumerable)observableList).GetEnumerator();
-
-            //Assert
-            result.Should().BeEquivalentTo(observableList.GetEnumerator());
-        }
 
         [TestMethod]
         public void Always_CorrectlyEnumeratesEveryItem()

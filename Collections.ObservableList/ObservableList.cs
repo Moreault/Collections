@@ -50,8 +50,8 @@ public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCol
     int FirstIndexOf(Func<T, bool> predicate);
     int LastIndexOf(T item);
     int LastIndexOf(Func<T, bool> predicate);
-    ObservableList<int> IndexesOf(T item);
-    ObservableList<int> IndexesOf(Func<T, bool> predicate);
+    IReadOnlyList<int> IndexesOf(T item);
+    IReadOnlyList<int> IndexesOf(Func<T, bool> predicate);
     void Swap(int currentIndex, int destinationIndex);
 
     /// <summary>
@@ -63,35 +63,40 @@ public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCol
     /// Sizes the collection down to maxSize by removing the last elements if needed.
     /// </summary>
     void TrimEndDownTo(int maxSize);
+
+    /// <summary>
+    /// Returns a random element from the collection.
+    /// </summary>
+    T? GetRandom();
+
+    /// <summary>
+    /// Returns a random index from the collection.
+    /// </summary>
+    int GetRandomIndex();
+
+    /// <summary>
+    /// Randomly rearranges the collection's content order.
+    /// </summary>
+    void Shuffle();
 }
 
-/// <inheritdoc cref="IObservableList{T}"/>
 public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 {
-    private T[] _items;
+    private readonly List<T> _items;
 
-    private const int DefaultCapacity = 4;
-    private int _version;
+    public int Count => _items.Count;
 
-    public int Count { get; private set; }
+    bool ICollection<T>.IsReadOnly => ((ICollection<T>)_items).IsReadOnly;
 
-    bool ICollection<T>.IsReadOnly => false;
-
-    public int LastIndex => Count - 1;
+    public int LastIndex => _items.LastIndex();
 
     public T this[int index]
     {
-        get
-        {
-            if (index < 0 || index > LastIndex) throw new ArgumentOutOfRangeException(nameof(index), string.Format(Exceptions.CannotGetItemBecauseIndexIsOutOfRange, 0, LastIndex, index));
-            return _items[index];
-        }
+        get => _items[index];
         set
         {
-            if (index < 0 || index > LastIndex) throw new ArgumentOutOfRangeException(nameof(index), string.Format(Exceptions.CannotGetItemBecauseIndexIsOutOfRange, 0, LastIndex, index));
             var oldValue = _items[index];
             _items[index] = value;
-            _version++;
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
             {
                 NewValues = new[] { value },
@@ -104,7 +109,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public ObservableList()
     {
-        _items = Array.Empty<T>();
+        _items = new List<T>();
     }
 
     public ObservableList(params T[] items) : this(items as IEnumerable<T>)
@@ -114,13 +119,10 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public ObservableList(IEnumerable<T> collection)
     {
-        if (collection == null) throw new ArgumentNullException(nameof(collection));
-
-        _items = collection.ToArray();
-        Count = _items.Length;
+        _items = collection?.ToList() ?? throw new ArgumentNullException(nameof(collection));
     }
 
-    public IEnumerator<T> GetEnumerator() => new Enumerator(this);
+    public IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -138,47 +140,23 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
     public void Add(IEnumerable<T> items)
     {
         if (items == null) throw new ArgumentNullException(nameof(items));
+        var added = items.ToArray();
 
-        var copy = items.ToArray();
+        foreach (var item in added)
+            _items.Add(item);
 
-        Grow(copy.Length);
-
-        var oldCount = Count;
-        Count += copy.Length;
-
-        foreach (var item in copy)
-            _items[oldCount++] = item;
-
-        _version++;
         CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
         {
-            NewValues = copy
+            NewValues = added
         });
-    }
-
-    private void Grow(int value)
-    {
-        var newCapacity = _items.Length == 0 ? DefaultCapacity : 2 * _items.Length;
-        if ((uint)newCapacity > Array.MaxLength) newCapacity = Array.MaxLength;
-
-        var originalRequiredCapacity = _items.Length + value;
-        if (newCapacity < originalRequiredCapacity) newCapacity = originalRequiredCapacity;
-
-        var newItems = new T[newCapacity];
-        if (newCapacity > 0)
-            Array.Copy(_items, newItems, Count);
-        _items = newItems;
     }
 
     public void Clear()
     {
         if (Count == 0) return;
 
-        var oldValues = CollectionChanged == null ? Array.Empty<T>() : _items.Take(Count).ToArray();
-
-        Array.Clear(_items, 0, Count);
-        Count = 0;
-        _version++;
+        var oldValues = CollectionChanged == null ? Array.Empty<T>() : _items.ToArray();
+        _items.Clear();
         CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
         {
             OldValues = oldValues
@@ -187,12 +165,9 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     bool ICollection<T>.Contains(T item) => _items.Contains(item);
 
-    void ICollection<T>.CopyTo(T[] array, int index) => Array.Copy(_items, 0, array, index, Count);
+    void ICollection<T>.CopyTo(T[] array, int arrayIndex) => _items.CopyTo(array, arrayIndex);
 
-    public ObservableList<T> Copy(int startingIndex = 0)
-    {
-        return Copy(startingIndex, Count - startingIndex);
-    }
+    public ObservableList<T> Copy(int startingIndex = 0) => Copy(startingIndex, Count - startingIndex);
 
     public ObservableList<T> Copy(int startingIndex, int count)
     {
@@ -200,7 +175,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), string.Format(Exceptions.CannotCopyBecauseCountIsNegative, GetType().GetHumanReadableName(), count));
         if (Count - startingIndex < count) throw new ArgumentException(string.Format(Exceptions.CannotCopyBecauseRangeFallsOutsideBoundaries, GetType().GetHumanReadableName(), 0, LastIndex, startingIndex, count));
 
-        if (startingIndex == 0 && count == _items.Length) return new ObservableList<T>(this);
+        if (startingIndex == 0 && count == Count) return new ObservableList<T>(this);
 
         var copy = new ObservableList<T>();
         for (var i = startingIndex; i < startingIndex + count; i++)
@@ -210,77 +185,26 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     int IList<T>.IndexOf(T item) => FirstIndexOf(item);
 
-    public int FirstIndexOf(T item) => Array.IndexOf(_items, item, 0, Count);
+    public int FirstIndexOf(T item) => _items.FirstIndexOf(item);
 
-    public int FirstIndexOf(Func<T, bool> predicate)
-    {
-        if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        return Array.FindIndex(_items, 0, Count, new Predicate<T>(predicate));
-    }
+    public int FirstIndexOf(Func<T, bool> predicate) => _items.FirstIndexOf(predicate);
 
-    public int LastIndexOf(T item)
-    {
-        for (var i = LastIndex; i >= 0; i--)
-        {
-            if (item == null && _items[i] == null || _items[i] != null && _items[i]!.Equals(item)) return i;
-        }
-        return -1;
-    }
+    public int LastIndexOf(T item) => _items.LastIndexOf(item);
 
-    public int LastIndexOf(Func<T, bool> predicate)
-    {
-        if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        for (var i = LastIndex; i >= 0; i--)
-        {
-            if (predicate(_items[i])) return i;
-        }
-        return -1;
-    }
+    //TODO Fix ambiguity in OPEX
+    public int LastIndexOf(Func<T, bool> predicate) => ((IList<T>)_items).LastIndexOf(predicate);
 
-    public ObservableList<int> IndexesOf(T item)
-    {
-        var indexes = new ObservableList<int>();
+    public IReadOnlyList<int> IndexesOf(T item) => _items.IndexesOf(item);
 
-        for (var i = 0; i < Count; i++)
-        {
-            if (_items[i] is null && item is null || _items[i] != null && _items[i]!.Equals(item))
-                indexes.Add(i);
-        }
+    public IReadOnlyList<int> IndexesOf(Func<T, bool> predicate) => _items.IndexesOf(predicate);
 
-        return indexes;
-    }
-
-    public ObservableList<int> IndexesOf(Func<T, bool> predicate)
-    {
-        if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-
-        var indexes = new ObservableList<int>();
-        for (var i = 0; i < Count; i++)
-        {
-            if (predicate(_items[i]))
-                indexes.Add(i);
-        }
-        return indexes;
-    }
-
-    public void Swap(int currentIndex, int destinationIndex)
-    {
-        if (currentIndex < 0 || currentIndex > LastIndex) throw new ArgumentOutOfRangeException(string.Format(Exceptions.CannotSwapItemsBecauseCurrentIndexIsOutOfRange, LastIndex, currentIndex));
-        if (destinationIndex < 0 || destinationIndex > LastIndex) throw new ArgumentOutOfRangeException(string.Format(Exceptions.CannotSwapItemsBecauseDestinationIndexIsOutOfRange, LastIndex, destinationIndex));
-
-        if (currentIndex == destinationIndex) return;
-
-        var firstItem = _items[currentIndex];
-        var secondItem = _items[destinationIndex];
-
-        _items[currentIndex] = secondItem;
-        _items[destinationIndex] = firstItem;
-    }
+    public void Swap(int currentIndex, int destinationIndex) => _items.Swap(currentIndex, destinationIndex);
 
     public void TrimStartDownTo(int maxSize)
     {
         if (maxSize < 0) throw new ArgumentException(string.Format(Exceptions.TrimStartRequiresPositiveMaxSize, maxSize));
         if (Count == 0) return;
+
 
         if (maxSize == 0)
         {
@@ -294,7 +218,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
             {
                 if (CollectionChanged != null)
                     removed.Add(this[0]);
-                RemoveAtInternal(0);
+                _items.RemoveAt(0);
             }
 
             if (removed.Any())
@@ -322,7 +246,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
             {
                 if (CollectionChanged != null)
                     removed.Add(this[LastIndex]);
-                RemoveAtInternal(LastIndex);
+                _items.RemoveAt(LastIndex);
             }
 
             if (removed.Any())
@@ -333,26 +257,25 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         }
     }
 
+    public T? GetRandom() => _items.GetRandom();
+
+    public int GetRandomIndex() => _items.GetRandomIndex();
+
+    public void Shuffle() => _items.Shuffle();
+
     public void TryRemoveAll(T item)
     {
         var originalCount = Count;
-        while (true)
+        foreach (var index in IndexesOf(item).OrderByDescending(x => x))
+            _items.RemoveAt(index);
+
+        if (CollectionChanged != null && originalCount > Count)
         {
-            var index = FirstIndexOf(item);
-            if (index == -1) break;
-
-            RemoveAtInternal(index);
-        }
-
-        if (originalCount > Count)
-        {
-            _version++;
-
             var items = new List<T>();
             for (var i = 0; i < originalCount - Count; i++)
                 items.Add(item);
 
-            CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
+            CollectionChanged.Invoke(this, new CollectionChangeEventArgs<T>
             {
                 OldValues = items
             });
@@ -371,12 +294,13 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
     public void RemoveAll(IEnumerable<T> items)
     {
         if (items == null) throw new ArgumentNullException(nameof(items));
-        var list = items.ToList();
-        var indexes = list.Select(IndexesOf).SelectMany(x => x).ToList();
+        var list = items as IReadOnlyList<T> ?? items.ToList();
+
+        var indexes = list.Select(item => IndexesOf(item)).SelectMany(x => x).ToList();
         if (indexes.Count != list.Count) throw new InvalidOperationException(string.Format(Exceptions.CannotRemoveItemsBecauseOneIsNotInCollection, GetType().GetHumanReadableName()));
 
         foreach (var index in indexes.OrderByDescending(x => x))
-            RemoveAtInternal(index);
+            _items.RemoveAt(index);
 
         CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
         {
@@ -386,31 +310,30 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public void TryRemoveAll(params T[] items) => TryRemoveAll(items as IEnumerable<T>);
 
-    public void TryRemoveAll(IEnumerable<T> items) => RemoveAll(items.Where(x => _items.Contains(x)));
+    public void TryRemoveAll(IEnumerable<T> items)
+    {
+        if (items == null) throw new ArgumentNullException(nameof(items));
+        RemoveAll(_items.Join(items, x => x, y => y, (x, y) => x));
+    }
 
     public void TryRemoveAll(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        var removedItems = new List<T>();
+        IList<T> removedItems = CollectionChanged == null ? Array.Empty<T>() : new List<T>();
 
-        while (true)
+        var indexes = IndexesOf(predicate);
+        foreach (var index in indexes.OrderByDescending(x => x))
         {
-            var index = FirstIndexOf(predicate);
-            if (index == -1) break;
-
-            removedItems.Add(_items[index]);
-            RemoveAtInternal(index);
+            if (CollectionChanged != null)
+                removedItems.Add(_items[index]);
+            _items.RemoveAt(index);
         }
 
-        if (removedItems.Any())
-        {
-            _version++;
-
-            CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
+        if (CollectionChanged != null && removedItems.Any())
+            CollectionChanged.Invoke(this, new CollectionChangeEventArgs<T>
             {
-                OldValues = removedItems
+                OldValues = (IReadOnlyList<T>)removedItems
             });
-        }
     }
 
     public void RemoveAll(Func<T, bool> predicate)
@@ -423,37 +346,26 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     void IList<T>.Insert(int index, T item) => Insert(index, item);
 
-    public void Insert(params T[] items) => Insert(0, items);
+    public void Insert(int index, params T[] items) => Insert(index, items as IEnumerable<T>);
+
+    public void Insert(params T[] items) => Insert(items == null! ? new List<T> { default! } : items as IEnumerable<T>);
 
     public void Insert(IEnumerable<T> items) => Insert(0, items);
-
-    public void Insert(int index, params T[] items) => Insert(index, ReferenceEquals(items, null!) ? new T[] { default! } : (IEnumerable<T>)items);
 
     public void Insert(int index, IEnumerable<T> items)
     {
         if (items == null) throw new ArgumentNullException(nameof(items));
-        //TODO Test LastIndex + 1 behaviour
-        if (index < 0 || index > LastIndex + 1) throw new ArgumentOutOfRangeException(nameof(index), string.Format(Exceptions.CannotInsertItemsBecauseIndexIsOutOfRange, GetType().GetHumanReadableName(), 0, LastIndex, index));
-        var copy = items.ToArray();
-        if (!copy.Any()) return;
 
-        if (_items.Length <= Count + copy.Length)
-            Grow(Count + copy.Length - _items.Length);
+        var inserted = items.ToArray();
 
-        if (index < Count)
-        {
-            Array.Copy(_items, index, _items, index + copy.Length, Count - index);
-        }
+        foreach (var item in inserted)
+            _items.Insert(index++, item);
 
-        Count += copy.Length;
-        _version++;
-        foreach (var item in copy)
-            _items[index++] = item;
-
-        CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
-        {
-            NewValues = copy
-        });
+        if (inserted.Any())
+            CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
+            {
+                NewValues = inserted
+            });
     }
 
     bool ICollection<T>.Remove(T item)
@@ -463,43 +375,16 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         return wasInCollection;
     }
 
+    //TODO Isn't it LastIndex instead of Count?? And we don't check if it's negative??
     public void RemoveAt(int index)
     {
         if ((uint)index > (uint)Count) throw new ArgumentOutOfRangeException(nameof(index), string.Format(Exceptions.CannotRemoveItemBecauseIndexIsOutOfRange, GetType().GetHumanReadableName(), 0, LastIndex, index));
-
         var item = _items[index];
-        _version++;
-        RemoveAtInternal(index);
+        _items.RemoveAt(index);
         CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
         {
             OldValues = new[] { item }
         });
-    }
-
-    public void RemoveAt(int index, int count)
-    {
-        if (index < 0 || index > LastIndex) throw new ArgumentOutOfRangeException(nameof(index), string.Format(Exceptions.CannotRemoveItemBecauseIndexIsOutOfRange, GetType().GetHumanReadableName(), 0, LastIndex, index));
-        if (count <= 0) throw new ArgumentException(string.Format(Exceptions.CannotRemoveItemBecauseCountIsZero, GetType().GetHumanReadableName(), count), nameof(count));
-        if (Count - index < count) throw new ArgumentException(string.Format(Exceptions.CannotRemoveItemBecauseRangeFallsOutsideBoundaries, GetType().GetHumanReadableName(), 0, LastIndex, index, count));
-
-        var removedItems = Copy(index, count);
-
-        Count -= count;
-        if (index < Count)
-            Array.Copy(_items, index + count, _items, index, Count - index);
-
-        _version++;
-        Array.Clear(_items, Count, count);
-        CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
-        {
-            OldValues = removedItems
-        });
-    }
-
-    private void RemoveAtInternal(int index)
-    {
-        Count--;
-        Array.Copy(_items, index + 1, _items, index, Count - index);
     }
 
     public void TryRemoveFirst(T item)
@@ -558,7 +443,21 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         RemoveAt(index);
     }
 
-    public override string ToString() => Count == 0 ? $"Empty {GetType().GetHumanReadableName()}" : $"{GetType().GetHumanReadableName()} with {Count} items";
+    public void RemoveAt(int index, int count)
+    {
+        if (index < 0 || index > LastIndex) throw new ArgumentOutOfRangeException(nameof(index), string.Format(Exceptions.CannotRemoveItemBecauseIndexIsOutOfRange, GetType().GetHumanReadableName(), 0, LastIndex, index));
+        if (count <= 0) throw new ArgumentException(string.Format(Exceptions.CannotRemoveItemBecauseCountIsZero, GetType().GetHumanReadableName(), count), nameof(count));
+        if (Count - index < count) throw new ArgumentException(string.Format(Exceptions.CannotRemoveItemBecauseRangeFallsOutsideBoundaries, GetType().GetHumanReadableName(), 0, LastIndex, index, count));
+
+        var removedItems = Copy(index, count);
+        _items.RemoveRange(index, count);
+        CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
+        {
+            OldValues = removedItems
+        });
+    }
+
+    public override bool Equals(object? other) => Equals(other as IEnumerable<T>);
 
     public bool Equals(IEnumerable<T>? other)
     {
@@ -567,68 +466,11 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         return this.SequenceEqual(other);
     }
 
-    public override bool Equals(object? obj) => Equals(obj as IEnumerable<T>);
-
-    public static bool operator ==(ObservableList<T>? a, ObservableList<T>? b) => a is null && b is null || a is not null && a.Equals(b);
-
-    public static bool operator !=(ObservableList<T>? a, ObservableList<T>? b) => !(a == b);
-
     public static bool operator ==(ObservableList<T>? a, IEnumerable<T>? b) => a is null && b is null || a is not null && a.Equals(b);
 
     public static bool operator !=(ObservableList<T>? a, IEnumerable<T>? b) => !(a == b);
 
-    public static bool operator ==(ObservableList<T>? a, IList<T>? b) => a is null && b is null || a is not null && a.Equals(b);
-
-    public static bool operator !=(ObservableList<T>? a, IList<T>? b) => !(a == b);
-
-    public static bool operator ==(ObservableList<T>? a, ICollection<T>? b) => a is null && b is null || a is not null && a.Equals(b);
-
-    public static bool operator !=(ObservableList<T>? a, ICollection<T>? b) => !(a == b);
-
     public override int GetHashCode() => _items.GetHashCode();
 
-    public struct Enumerator : IEnumerator<T>
-    {
-        private readonly ObservableList<T> _observableList;
-        private int _index;
-        private readonly int _version;
-
-        public T Current { get; private set; }
-        object? IEnumerator.Current => Current;
-
-        internal Enumerator(ObservableList<T> observableList)
-        {
-            _observableList = observableList;
-            _version = observableList._version;
-            _index = 0;
-            Current = default!;
-        }
-
-        public bool MoveNext()
-        {
-            if (_version != _observableList._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
-
-            if ((uint)_index < (uint)_observableList.Count)
-            {
-                Current = _observableList[_index++];
-                return true;
-            }
-
-            _index = _observableList.Count + 1;
-            Current = default!;
-            return false;
-        }
-
-        public void Reset()
-        {
-            if (_version != _observableList._version) throw new InvalidOperationException(string.Format(Exceptions.CannotEnumerateBecauseModified, GetType().GetHumanReadableName()));
-            _index = 0;
-            Current = default!;
-        }
-
-        public void Dispose()
-        {
-
-        }
-    }
+    public override string ToString() => Count == 0 ? $"Empty {GetType().GetHumanReadableName()}" : $"{GetType().GetHumanReadableName()} with {Count} items";
 }
