@@ -18,6 +18,11 @@ public record ReadOnlyList<T> : IReadOnlyList<T>, IEquatable<IEnumerable<T>>
         _items = Array.Empty<T>();
     }
 
+    public ReadOnlyList(params T[] source) : this(source as IEnumerable<T>)
+    {
+
+    }
+
     public ReadOnlyList(IEnumerable<T> source)
     {
         _items = source?.ToArray() ?? throw new ArgumentNullException(nameof(source));
