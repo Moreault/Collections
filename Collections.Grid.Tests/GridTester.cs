@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using ToolBX.Collections.Grid;
 using ToolBX.Eloquentest;
 using ToolBX.Eloquentest.Extensions;
@@ -1503,6 +1502,253 @@ public class GridTester
 
             //Assert
             Instance[index].Should().Be(originalItem);
+        }
+    }
+
+    [TestClass]
+    public class Add_Cells_Params : Tester<Grid<Dummy>>
+    {
+        //TODO Test
+        [TestMethod]
+        public void WhenCellsIsEmpty_DoNotModify()
+        {
+            //Arrange
+            var cells = Array.Empty<Cell<Dummy>>();
+            var copy = Instance.Copy();
+
+            //Act
+            Instance.Add(cells);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(copy);
+        }
+
+        [TestMethod]
+        public void WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            Instance.Add(cells);
+
+            //Act
+            var action = () => Instance.Add(cells);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>();
+        }
+
+        [TestMethod]
+        public void WhenAddingToNewCoordinates_Add()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+
+            //Act
+            Instance.Add(cells);
+
+            //Assert
+            Instance.Should().Contain(cells);
+        }
+
+        [TestMethod]
+        public void WhenAddingToNewCoordinates_TriggerChange()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+
+            var triggered = new List<GridChangedEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+
+            //Act
+            Instance.Add(cells);
+
+            //Assert
+            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            {
+                new(){NewValues = cells}
+            });
+        }
+    }
+
+    [TestClass]
+    public class Add_Cells_Enumerable : Tester<Grid<Dummy>>
+    {
+        //TODO Test
+        [TestMethod]
+        public void WhenCellsIsNull_Throw()
+        {
+            //Arrange
+            IEnumerable<Cell<Dummy>> cells = null!;
+
+            //Act
+            var action = () => Instance.Add(cells);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(cells));
+        }
+
+        [TestMethod]
+        public void WhenCellsIsEmpty_DoNotModify()
+        {
+            //Arrange
+            var cells = new List<Cell<Dummy>>();
+            var copy = Instance.Copy();
+
+            //Act
+            Instance.Add(cells);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(copy);
+        }
+
+        [TestMethod]
+        public void WhenThereIsAlreadySomethingAtCoordinates_Throw()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            Instance.Add(cells);
+
+            //Act
+            var action = () => Instance.Add(cells);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>();
+        }
+
+        [TestMethod]
+        public void WhenAddingToNewCoordinates_Add()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+
+            //Act
+            Instance.Add(cells);
+
+            //Assert
+            Instance.Should().Contain(cells);
+        }
+
+        [TestMethod]
+        public void WhenAddingToNewCoordinates_TriggerChange()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+
+            var triggered = new List<GridChangedEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+
+            //Act
+            Instance.Add(cells);
+
+            //Assert
+            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            {
+                new(){NewValues = cells}
+            });
+        }
+    }
+
+    [TestClass]
+    public class TryAdd_Cells_Params : Tester<Grid<Dummy>>
+    {
+        //TODO Test
+    }
+
+    [TestClass]
+    public class TryAdd_Cells_Enumerable : Tester<Grid<Dummy>>
+    {
+        //TODO Test
+        [TestMethod]
+        public void WhenCellsIsNull_DoNotThrow()
+        {
+            //Arrange
+            IEnumerable<Cell<Dummy>> cells = null!;
+
+            //Act
+            var action = () => Instance.TryAdd(cells);
+
+            //Assert
+            action.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void WhenCellsIsEmpty_DoNotModify()
+        {
+            //Arrange
+            var cells = new List<Cell<Dummy>>();
+            var copy = Instance.Copy();
+
+            //Act
+            Instance.TryAdd(cells);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(copy);
+        }
+
+        [TestMethod]
+        public void WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
+        {
+            //Arrange
+            var alreadyThereCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            Instance.Add(alreadyThereCells);
+
+            var newCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = alreadyThereCells.Concat(newCells).ToList();
+
+            //Act
+            var action = () => Instance.TryAdd(cells);
+
+            //Assert
+            action.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void WhenThereIsAlreadySomethingAtCoordinates_StillAddThoseThatAreNotAlreadyIn()
+        {
+            //Arrange
+            var alreadyThereCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            Instance.Add(alreadyThereCells);
+
+            var newCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = alreadyThereCells.Concat(newCells).ToList();
+
+            //Act
+            Instance.TryAdd(cells);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(cells);
+        }
+
+        [TestMethod]
+        public void WhenAddingToNewCoordinates_Add()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+
+            //Act
+            Instance.TryAdd(cells);
+
+            //Assert
+            Instance.Should().Contain(cells);
+        }
+
+        [TestMethod]
+        public void WhenAddingToNewCoordinates_TriggerChange()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+
+            var triggered = new List<GridChangedEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+
+            //Act
+            Instance.TryAdd(cells);
+
+            //Assert
+            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            {
+                new(){NewValues = cells}
+            });
         }
     }
 

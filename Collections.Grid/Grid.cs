@@ -30,6 +30,12 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
     void Add(Coordinates index, T? item);
     void TryAdd(Coordinates index, T? item);
 
+    void Add(params Cell<T>[] cells);
+    void Add(IEnumerable<Cell<T>> cells);
+
+    void TryAdd(params Cell<T>[] cells);
+    void TryAdd(IEnumerable<Cell<T>> cells);
+
     void RemoveAt(int x, int y);
     void TryRemoveAt(int x, int y);
     void RemoveAt(Coordinates index);
@@ -237,6 +243,37 @@ public class Grid<T> : IGrid<T>
         {
             // ignored
         }
+    }
+
+    public void Add(params Cell<T>[] cells) => Add(cells as IEnumerable<Cell<T>>);
+
+    public void Add(IEnumerable<Cell<T>> cells)
+    {
+        if (cells == null) throw new ArgumentNullException(nameof(cells));
+
+        var cellsList = cells as IReadOnlyList<Cell<T>> ?? cells.ToList();
+
+        //TODO Message
+        if (cellsList.Any(x => Contains(x.Index)))
+            throw new InvalidOperationException();
+
+        foreach (var cell in cellsList)
+            _items[cell.Index] = cell.Value;
+
+        CollectionChanged?.Invoke(this, new GridChangedEventArgs<T>
+        {
+            NewValues = cellsList.ToList()
+        });
+    }
+
+    public void TryAdd(params Cell<T>[] cells) => TryAdd(cells as IEnumerable<Cell<T>>);
+
+    public void TryAdd(IEnumerable<Cell<T>> cells)
+    {
+        var cellsList = cells?.ToList() ?? new List<Cell<T>>();
+        cellsList = cellsList.Where(x => !Contains(x.Index)).ToList();
+        if (!cellsList.Any()) return;
+        Add(cellsList);
     }
 
     public void RemoveAt(int x, int y) => RemoveAt(new Coordinates(x, y));
