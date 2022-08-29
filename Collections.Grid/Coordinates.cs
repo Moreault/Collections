@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.Collections.Grid;
 
-[Obsolete("Version 1.1.0 forward will use Vector2<int> instead")]
+[Obsolete("Use Vector2<int>")]
 public readonly record struct Coordinates
 {
     public int X { get; init; }

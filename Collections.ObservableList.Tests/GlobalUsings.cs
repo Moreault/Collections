@@ -16,3 +16,4 @@ global using ToolBX.Collections.ObservableList;
 global using ToolBX.Collections.ObservableList.Resources;
 global using ToolBX.Eloquentest;
 global using ToolBX.Eloquentest.Extensions;
+global using ToolBX.OPEX;

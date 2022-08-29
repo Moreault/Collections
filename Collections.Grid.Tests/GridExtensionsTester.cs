@@ -7,6 +7,7 @@ using System.Linq;
 using ToolBX.Collections.Grid;
 using ToolBX.Collections.Grid.Resources;
 using ToolBX.Eloquentest;
+using ToolBX.Mathemancy;
 
 namespace Collections.Grid.Tests;
 
@@ -63,7 +64,7 @@ public class GridExtensionsTester
         public void WhenCellsAreNull_Throw()
         {
             //Arrange
-            IEnumerable<KeyValuePair<Coordinates, string>> keyValuePairs = null!;
+            IEnumerable<KeyValuePair<Vector2<int>, string>> keyValuePairs = null!;
 
             //Act
             var action = () => keyValuePairs.ToGrid();
@@ -76,7 +77,7 @@ public class GridExtensionsTester
         public void WhenCellsAreEmpty_ReturnEmptyGrid()
         {
             //Arrange
-            var dictionary = new Dictionary<Coordinates, string>();
+            var dictionary = new Dictionary<Vector2<int>, string>();
 
             //Act
             var result = dictionary.ToGrid();
@@ -89,7 +90,7 @@ public class GridExtensionsTester
         public void WhenCellsAreNotEmpty_ReturnGrid()
         {
             //Arrange
-            var keyValuePairs = Fixture.CreateMany<KeyValuePair<Coordinates, string>>().ToList();
+            var keyValuePairs = Fixture.CreateMany<KeyValuePair<Vector2<int>, string>>().ToList();
 
             //Act
             var result = keyValuePairs.ToGrid();

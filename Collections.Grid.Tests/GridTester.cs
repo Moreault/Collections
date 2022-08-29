@@ -9,6 +9,8 @@ using ToolBX.Collections.Grid;
 using ToolBX.Eloquentest;
 using ToolBX.Eloquentest.Extensions;
 using ToolBX.Mathemancy;
+using ToolBX.OPEX;
+
 
 namespace Collections.Grid.Tests;
 
@@ -630,7 +632,7 @@ public class GridTester
             //Arrange
 
             //Act
-            var result = Instance[new Coordinates(2, 3)];
+            var result = Instance[new Vector2<int>(2, 3)];
 
             //Assert
             result.Should().BeNull();
@@ -640,7 +642,7 @@ public class GridTester
         public void WhenThereIsValueAtIndex_ReturnValue()
         {
             //Arrange
-            var coordinates = Fixture.Create<Coordinates>();
+            var coordinates = Fixture.Create<Vector2<int>>();
             var value = Fixture.Create<string>();
             Instance[coordinates] = value;
 
@@ -655,7 +657,7 @@ public class GridTester
         public void WhenThereIsNothingAtGivenIndex_AddValueAtIndex()
         {
             //Arrange
-            var coordinates = Fixture.Create<Coordinates>();
+            var coordinates = Fixture.Create<Vector2<int>>();
             var value = Fixture.Create<string>();
 
             //Act
@@ -669,7 +671,7 @@ public class GridTester
         public void WhenThereIsNothingAtGivenIndex_TriggerOnChange()
         {
             //Arrange
-            var coordinates = Fixture.Create<Coordinates>();
+            var coordinates = Fixture.Create<Vector2<int>>();
             var value = Fixture.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -689,7 +691,7 @@ public class GridTester
         public void WhenThereIsSomethingAtGivenIndex_ReplaceExistingValueByNewValue()
         {
             //Arrange
-            var coordinates = Fixture.Create<Coordinates>();
+            var coordinates = Fixture.Create<Vector2<int>>();
             var oldValue = Fixture.Create<string>();
             Instance[coordinates] = oldValue;
             var newValue = Fixture.Create<string>();
@@ -706,7 +708,7 @@ public class GridTester
         public void WhenThereIsSomethingAtGivenIndex_TriggerOnChange()
         {
             //Arrange
-            var coordinates = Fixture.Create<Coordinates>();
+            var coordinates = Fixture.Create<Vector2<int>>();
             var oldValue = Fixture.Create<string>();
             Instance[coordinates] = oldValue;
             var newValue = Fixture.Create<string>();
@@ -767,14 +769,14 @@ public class GridTester
         {
             //Arrange
             var item = Fixture.Create<string>();
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance[index] = item;
 
             //Act
             var result = Instance.IndexesOf(item);
 
             //Assert
-            result.Should().BeEquivalentTo(new List<Coordinates> { index });
+            result.Should().BeEquivalentTo(new List<Vector2<int>> { index });
         }
 
         [TestMethod]
@@ -785,7 +787,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance.Add(cell.Index, cell.Value);
 
-            var indexes = Fixture.CreateMany<Coordinates>().ToList();
+            var indexes = Fixture.CreateMany<Vector2<int>>().ToList();
             var item = Fixture.Create<string>();
             foreach (var index in indexes)
                 Instance.Add(index, item);
@@ -816,7 +818,7 @@ public class GridTester
         public void WhenSeekingNullAndThereIsOnlyOneOccurence_ReturnListWithOnlyThatOneItem()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance[index] = null;
 
             var cells = Fixture.CreateMany<Cell<string>>();
@@ -827,7 +829,7 @@ public class GridTester
             var result = Instance.IndexesOf((string)null!);
 
             //Assert
-            result.Should().BeEquivalentTo(new List<Coordinates> { index });
+            result.Should().BeEquivalentTo(new List<Vector2<int>> { index });
         }
 
         [TestMethod]
@@ -838,7 +840,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance.Add(cell.Index, cell.Value);
 
-            var indexes = Fixture.CreateMany<Coordinates>().ToList();
+            var indexes = Fixture.CreateMany<Vector2<int>>().ToList();
             foreach (var index in indexes)
                 Instance.Add(index, null);
 
@@ -911,7 +913,7 @@ public class GridTester
             var result = Instance.IndexesOf(x => x == targetCell.Value);
 
             //Assert
-            result.Should().BeEquivalentTo(new List<Coordinates> { targetCell.Index });
+            result.Should().BeEquivalentTo(new List<Vector2<int>> { targetCell.Index });
         }
 
         [TestMethod]
@@ -938,7 +940,7 @@ public class GridTester
         public void WhenGridContainsNullValues_DoNotThrow()
         {
             //Arrange
-            var indexesOfNulls = Fixture.CreateMany<Coordinates>().ToList();
+            var indexesOfNulls = Fixture.CreateMany<Vector2<int>>().ToList();
             foreach (var index in indexesOfNulls)
                 Instance[index] = null;
 
@@ -952,14 +954,14 @@ public class GridTester
             var result = Instance.IndexesOf(x => x == targetCell.Value);
 
             //Assert
-            result.Should().BeEquivalentTo(new List<Coordinates> { targetCell.Index });
+            result.Should().BeEquivalentTo(new List<Vector2<int>> { targetCell.Index });
         }
 
         [TestMethod]
         public void WhenGridContainsNullValuesAndMatchIsNull_ReturnIndexesOfNullValues()
         {
             //Arrange
-            var indexesOfNulls = Fixture.CreateMany<Coordinates>().ToList();
+            var indexesOfNulls = Fixture.CreateMany<Vector2<int>>().ToList();
             foreach (var index in indexesOfNulls)
                 Instance[index] = null;
 
@@ -1064,7 +1066,7 @@ public class GridTester
         public void WhenCollectionIsNull_Throw()
         {
             //Arrange
-            IEnumerable<KeyValuePair<Coordinates, Dummy>> pairs = null!;
+            IEnumerable<KeyValuePair<Vector2<int>, Dummy>> pairs = null!;
 
             //Act
             var action = () => new Grid<Dummy>(pairs);
@@ -1077,7 +1079,7 @@ public class GridTester
         public void WhenCollectionIsEmpty_InstantiateEmptyGrid()
         {
             //Arrange
-            var pairs = Array.Empty<KeyValuePair<Coordinates, Dummy>>();
+            var pairs = Array.Empty<KeyValuePair<Vector2<int>, Dummy>>();
 
             //Act
             var result = new Grid<Dummy>(pairs);
@@ -1090,7 +1092,7 @@ public class GridTester
         public void WhenCollectionIsNotEmpty_InstantiateWithContents()
         {
             //Arrange
-            var pairs = Fixture.CreateMany<KeyValuePair<Coordinates, Dummy>>().ToList();
+            var pairs = Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
 
             //Act
             var result = new Grid<Dummy>(pairs);
@@ -1193,7 +1195,7 @@ public class GridTester
         public void WhenIndexIsNegative_AddAtIndex()
         {
             //Arrange
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
             var item = Fixture.Create<string>();
 
             //Act
@@ -1207,7 +1209,7 @@ public class GridTester
         public void WhenIndexIsNegative_TriggerEvent()
         {
             //Arrange
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
             var item = Fixture.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -1227,7 +1229,7 @@ public class GridTester
         public void WhenIndexIsPositive_AddAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             //Act
@@ -1241,7 +1243,7 @@ public class GridTester
         public void WhenIndexIsPositive_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -1261,7 +1263,7 @@ public class GridTester
         public void WhenItemIsNull_AddNullAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             Instance.Add(index.X, index.Y, null);
@@ -1274,7 +1276,7 @@ public class GridTester
         public void WhenItemIsNull_DoNotTriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1290,7 +1292,7 @@ public class GridTester
         public void WhenThereIsAlreadySomethingAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
             Instance.Add(index.X, index.Y, Fixture.Create<string>());
 
@@ -1305,7 +1307,7 @@ public class GridTester
         public void WhenAddingNullAtExistingIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance.Add(index.X, index.Y, Fixture.Create<string>());
 
             //Act
@@ -1323,7 +1325,7 @@ public class GridTester
         public void WhenIndexIsNegative_AddAtIndex()
         {
             //Arrange
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
             var item = Fixture.Create<string>();
 
             //Act
@@ -1337,7 +1339,7 @@ public class GridTester
         public void WhenIndexIsNegative_TriggerEvent()
         {
             //Arrange
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
             var item = Fixture.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -1357,7 +1359,7 @@ public class GridTester
         public void WhenIndexIsPositive_AddAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             //Act
@@ -1371,7 +1373,7 @@ public class GridTester
         public void WhenIndexIsPositive_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -1391,7 +1393,7 @@ public class GridTester
         public void WhenItemIsNull_AddNullAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             Instance.Add(index, null);
@@ -1404,7 +1406,7 @@ public class GridTester
         public void WhenItemIsNull_DoNotTriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1420,7 +1422,7 @@ public class GridTester
         public void WhenThereIsAlreadySomethingAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
             Instance.Add(index.X, index.Y, Fixture.Create<string>());
 
@@ -1435,7 +1437,7 @@ public class GridTester
         public void WhenAddingNullAtExistingIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance.Add(index.X, index.Y, Fixture.Create<string>());
 
             //Act
@@ -1453,7 +1455,7 @@ public class GridTester
         public void WhenIndexIsNegative_AddAtIndex()
         {
             //Arrange
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
             var item = Fixture.Create<string>();
 
             //Act
@@ -1467,7 +1469,7 @@ public class GridTester
         public void WhenIndexIsNegative_TriggerEvent()
         {
             //Arrange
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
             var item = Fixture.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -1487,7 +1489,7 @@ public class GridTester
         public void WhenIndexIsPositive_AddAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             //Act
@@ -1501,7 +1503,7 @@ public class GridTester
         public void WhenIndexIsPositive_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -1521,7 +1523,7 @@ public class GridTester
         public void WhenItemIsNull_AddNullAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             Instance.TryAdd(index.X, index.Y, null);
@@ -1534,7 +1536,7 @@ public class GridTester
         public void WhenItemIsNull_DoNotTriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1550,7 +1552,7 @@ public class GridTester
         public void WhenThereIsAlreadySomethingAtIndex_DoNotReplace()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             var originalItem = Fixture.Create<string>();
@@ -1567,7 +1569,7 @@ public class GridTester
         public void WhenThereIsAlreadySomethingAtIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
             Instance.Add(index.X, index.Y, Fixture.Create<string>());
 
@@ -1582,7 +1584,7 @@ public class GridTester
         public void WhenAddingNullAtExistingIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance.Add(index.X, index.Y, Fixture.Create<string>());
 
             //Act
@@ -1596,7 +1598,7 @@ public class GridTester
         public void WhenAddingNullAtExistingIndex_DoNotReplace()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var originalItem = Fixture.Create<string>();
             Instance.Add(index.X, index.Y, originalItem);
 
@@ -1615,7 +1617,7 @@ public class GridTester
         public void WhenIndexIsNegative_AddAtIndex()
         {
             //Arrange
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
             var item = Fixture.Create<string>();
 
             //Act
@@ -1629,7 +1631,7 @@ public class GridTester
         public void WhenIndexIsNegative_TriggerEvent()
         {
             //Arrange
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
             var item = Fixture.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -1649,7 +1651,7 @@ public class GridTester
         public void WhenIndexIsPositive_AddAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             //Act
@@ -1663,7 +1665,7 @@ public class GridTester
         public void WhenIndexIsPositive_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -1683,7 +1685,7 @@ public class GridTester
         public void WhenItemIsNull_AddNullAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             Instance.TryAdd(index, null);
@@ -1696,7 +1698,7 @@ public class GridTester
         public void WhenItemIsNull_DoNotTriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1712,7 +1714,7 @@ public class GridTester
         public void WhenThereIsAlreadySomethingAtIndex_DoNotReplace()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
 
             var originalItem = Fixture.Create<string>();
@@ -1729,7 +1731,7 @@ public class GridTester
         public void WhenThereIsAlreadySomethingAtIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
             Instance.Add(index.X, index.Y, Fixture.Create<string>());
 
@@ -1744,7 +1746,7 @@ public class GridTester
         public void WhenAddingNullAtExistingIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance.Add(index.X, index.Y, Fixture.Create<string>());
 
             //Act
@@ -1758,7 +1760,7 @@ public class GridTester
         public void WhenAddingNullAtExistingIndex_DoNotReplace()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var originalItem = Fixture.Create<string>();
             Instance.Add(index.X, index.Y, originalItem);
 
@@ -2024,7 +2026,7 @@ public class GridTester
         public void WhenThereIsNoItemAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.RemoveAt(index.X, index.Y);
@@ -2037,7 +2039,7 @@ public class GridTester
         public void WhenThereIsItemAtIndex_RemoveItem()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance[index] = Fixture.Create<string>();
 
             //Act
@@ -2051,7 +2053,7 @@ public class GridTester
         public void WhenThereIsItemAtIndex_TriggerChange()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
             Instance[index] = item;
 
@@ -2073,7 +2075,7 @@ public class GridTester
         public void WhenThereIsNoItemAtIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.TryRemoveAt(index.X, index.Y);
@@ -2086,7 +2088,7 @@ public class GridTester
         public void WhenThereIsItemAtIndex_RemoveItem()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance[index] = Fixture.Create<string>();
 
             //Act
@@ -2100,7 +2102,7 @@ public class GridTester
         public void WhenThereIsItemAtIndex_TriggerChange()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
             Instance[index] = item;
 
@@ -2122,7 +2124,7 @@ public class GridTester
         public void WhenThereIsNoItemAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.RemoveAt(index);
@@ -2135,7 +2137,7 @@ public class GridTester
         public void WhenThereIsItemAtIndex_RemoveItem()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance[index] = Fixture.Create<string>();
 
             //Act
@@ -2149,7 +2151,7 @@ public class GridTester
         public void WhenThereIsItemAtIndex_TriggerChange()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
             Instance[index] = item;
 
@@ -2171,7 +2173,7 @@ public class GridTester
         public void WhenThereIsNoItemAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.TryRemoveAt(index);
@@ -2184,7 +2186,7 @@ public class GridTester
         public void WhenThereIsItemAtIndex_RemoveItem()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance[index] = Fixture.Create<string>();
 
             //Act
@@ -2198,7 +2200,7 @@ public class GridTester
         public void WhenThereIsItemAtIndex_TriggerChange()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<string>();
             Instance[index] = item;
 
@@ -2220,7 +2222,7 @@ public class GridTester
         public void WhenItemIsNull_RemoveAllKeysThatPointToNullReferences()
         {
             //Arrange
-            var keys = Fixture.CreateMany<Coordinates>().ToList();
+            var keys = Fixture.CreateMany<Vector2<int>>().ToList();
             foreach (var key in keys)
                 Instance[key] = null;
 
@@ -2239,7 +2241,7 @@ public class GridTester
         public void WhenItemIsNull_DoNotRemoveNonNullReferences()
         {
             //Arrange
-            var keys = Fixture.CreateMany<Coordinates>().ToList();
+            var keys = Fixture.CreateMany<Vector2<int>>().ToList();
             foreach (var key in keys)
                 Instance[key] = null;
 
@@ -2258,7 +2260,7 @@ public class GridTester
         public void WhenItemIsNull_TriggerEvent()
         {
             //Arrange
-            var keys = Fixture.CreateMany<Coordinates>().ToList();
+            var keys = Fixture.CreateMany<Vector2<int>>().ToList();
             foreach (var key in keys)
                 Instance[key] = null;
 
@@ -2330,7 +2332,7 @@ public class GridTester
                 Instance[entry.Index] = entry.Value;
 
             var item = Fixture.Create<string>();
-            var keys = Fixture.CreateMany<Coordinates>();
+            var keys = Fixture.CreateMany<Vector2<int>>();
             foreach (var key in keys)
                 Instance[key] = item;
 
@@ -2350,7 +2352,7 @@ public class GridTester
                 Instance[entry.Index] = entry.Value;
 
             var item = Fixture.Create<string>();
-            var keys = Fixture.CreateMany<Coordinates>().ToList();
+            var keys = Fixture.CreateMany<Vector2<int>>().ToList();
             foreach (var key in keys)
                 Instance[key] = item;
 
@@ -2432,7 +2434,7 @@ public class GridTester
 
             var value = Fixture.Create<string>();
             var dummies = Fixture.Build<Dummy>().With(x => x.Value, value).CreateMany();
-            var items = dummies.Select(x => new Cell<Dummy>(Fixture.Create<Coordinates>(), x)).ToList();
+            var items = dummies.Select(x => new Cell<Dummy>(Fixture.Create<Vector2<int>>(), x)).ToList();
             foreach (var item in items)
                 Instance[item.Index] = item.Value;
 
@@ -2453,7 +2455,7 @@ public class GridTester
 
             var value = Fixture.Create<string>();
             var dummies = Fixture.Build<Dummy>().With(x => x.Value, value).CreateMany();
-            var items = dummies.Select(x => new Cell<Dummy>(Fixture.Create<Coordinates>(), x)).ToList();
+            var items = dummies.Select(x => new Cell<Dummy>(Fixture.Create<Vector2<int>>(), x)).ToList();
             foreach (var item in items)
                 Instance[item.Index] = item.Value;
 
@@ -2485,7 +2487,7 @@ public class GridTester
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<Dummy>();
             Instance[index] = item;
 
@@ -2504,7 +2506,7 @@ public class GridTester
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<Dummy>();
             Instance[index] = Fixture.Create<Dummy>();
 
@@ -2523,7 +2525,7 @@ public class GridTester
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = entries.GetRandom().Value;
 
             //Act
@@ -2541,7 +2543,7 @@ public class GridTester
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index, null);
@@ -2580,7 +2582,7 @@ public class GridTester
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<Dummy>();
             Instance[index] = item;
 
@@ -2599,7 +2601,7 @@ public class GridTester
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = Fixture.Create<Dummy>();
             Instance[index] = Fixture.Create<Dummy>();
 
@@ -2618,7 +2620,7 @@ public class GridTester
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             var item = entries.GetRandom().Value;
 
             //Act
@@ -2636,7 +2638,7 @@ public class GridTester
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index.X, index.Y, null);
@@ -2696,7 +2698,7 @@ public class GridTester
         public void WhenThereIsAtLeastOneNullValueSomewhereAndSeekingNull_ReturnTrue()
         {
             //Arrange
-            var indexes = Fixture.CreateMany<Coordinates>().ToList();
+            var indexes = Fixture.CreateMany<Vector2<int>>().ToList();
             foreach (var index in indexes)
                 Instance[index] = null;
 
@@ -2745,7 +2747,7 @@ public class GridTester
         public void WhenGridIsEmpty_ReturnFalse()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index.X, index.Y);
@@ -2788,7 +2790,7 @@ public class GridTester
         public void WhenThereIsNullAtIndex_ReturnTrue()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance[index] = null;
 
             //Act
@@ -2806,7 +2808,7 @@ public class GridTester
         public void WhenGridIsEmpty_ReturnFalse()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index);
@@ -2849,7 +2851,7 @@ public class GridTester
         public void WhenThereIsNullAtIndex_ReturnTrue()
         {
             //Arrange
-            var index = Fixture.Create<Coordinates>();
+            var index = Fixture.Create<Vector2<int>>();
             Instance[index] = null;
 
             //Act
@@ -2867,7 +2869,7 @@ public class GridTester
         public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
         {
             //Arrange
-            var index = new Coordinates(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
+            var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
             var newValue = Fixture.Create<string>();
 
             var cells = Fixture.CreateMany<Cell<string>>().ToList();
@@ -2888,7 +2890,7 @@ public class GridTester
         {
             //Arrange
             var boundaries = Fixture.Create<Boundaries<int>>();
-            var index = new Coordinates(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
+            var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
             var newValue = Fixture.Create<string>();
 
             var cells = Fixture.CreateMany<Cell<string>>().ToList();
@@ -3189,7 +3191,7 @@ public class GridTester
         public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
         {
             //Arrange
-            var index = new Coordinates(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
+            var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
             var newValue = Fixture.Create<string>();
 
             var cells = Fixture.CreateMany<Cell<string>>().ToList();
@@ -3210,7 +3212,7 @@ public class GridTester
         {
             //Arrange
             var boundaries = Fixture.Create<Boundaries<int>>();
-            var index = new Coordinates(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
+            var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
             var newValue = Fixture.Create<string>();
 
             var cells = Fixture.CreateMany<Cell<string>>().ToList();
@@ -3248,7 +3250,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             //Act
-            Instance.FloodFill(new Coordinates(4, 5), "A");
+            Instance.FloodFill(new Vector2<int>(4, 5), "A");
 
             //Assert
             Instance.Should().BeEquivalentTo(copy);
@@ -3276,7 +3278,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodFill(new Coordinates(4, 5), "A");
+            Instance.FloodFill(new Vector2<int>(4, 5), "A");
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -3297,7 +3299,7 @@ public class GridTester
             Instance[1, 2] = "A";
 
             //Act
-            Instance.FloodFill(new Coordinates(0, 1), "C");
+            Instance.FloodFill(new Vector2<int>(0, 1), "C");
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<string>
@@ -3332,7 +3334,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodFill(new Coordinates(0, 1), "C");
+            Instance.FloodFill(new Vector2<int>(0, 1), "C");
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
@@ -3351,7 +3353,7 @@ public class GridTester
             //Arrange
 
             //Act
-            Instance.FloodFill(new Coordinates(1, 2), "F");
+            Instance.FloodFill(new Vector2<int>(1, 2), "F");
 
             //Assert
             Instance.Should().BeEmpty();
@@ -3365,7 +3367,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodFill(new Coordinates(1, 2), "F");
+            Instance.FloodFill(new Vector2<int>(1, 2), "F");
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -3454,7 +3456,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodFill(new Coordinates(1, 2), "D");
+            Instance.FloodFill(new Vector2<int>(1, 2), "D");
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
@@ -3512,7 +3514,7 @@ public class GridTester
         {
             //Arrange
             var boundaries = Fixture.Create<Boundaries<int>>();
-            var index = new Coordinates(boundaries.Left - 1, boundaries.Bottom + 1);
+            var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
             var newValue = Fixture.Create<string>();
 
             var cells = Fixture.CreateMany<Cell<string>>().ToList();
@@ -3533,7 +3535,7 @@ public class GridTester
         {
             //Arrange
             var boundaries = Fixture.Create<Boundaries<int>>();
-            var index = new Coordinates(boundaries.Left - 1, boundaries.Bottom + 1);
+            var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
             var newValue = Fixture.Create<string>();
 
             var cells = Fixture.CreateMany<Cell<string>>().ToList();
@@ -3917,7 +3919,7 @@ public class GridTester
         {
             //Arrange
             var boundaries = Fixture.Create<Boundaries<int>>();
-            var index = new Coordinates(boundaries.Left - 1, boundaries.Bottom + 1);
+            var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
             var newValue = Fixture.Create<string>();
 
             var cells = Fixture.CreateMany<Cell<string>>().ToList();
@@ -3938,7 +3940,7 @@ public class GridTester
         {
             //Arrange
             var boundaries = Fixture.Create<Boundaries<int>>();
-            var index = new Coordinates(boundaries.Left - 1, boundaries.Bottom + 1);
+            var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
             var newValue = Fixture.Create<string>();
 
             var cells = Fixture.CreateMany<Cell<string>>().ToList();
@@ -3976,7 +3978,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             //Act
-            Instance.FloodFill(new Coordinates(4, 5), "A", Instance.Boundaries);
+            Instance.FloodFill(new Vector2<int>(4, 5), "A", Instance.Boundaries);
 
             //Assert
             Instance.Should().BeEquivalentTo(copy);
@@ -4004,7 +4006,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodFill(new Coordinates(4, 5), "A", Instance.Boundaries);
+            Instance.FloodFill(new Vector2<int>(4, 5), "A", Instance.Boundaries);
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -4025,7 +4027,7 @@ public class GridTester
             Instance[1, 2] = "A";
 
             //Act
-            Instance.FloodFill(new Coordinates(0, 1), "C", Instance.Boundaries);
+            Instance.FloodFill(new Vector2<int>(0, 1), "C", Instance.Boundaries);
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<string>
@@ -4060,7 +4062,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodFill(new Coordinates(0, 1), "C", Instance.Boundaries);
+            Instance.FloodFill(new Vector2<int>(0, 1), "C", Instance.Boundaries);
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
@@ -4079,7 +4081,7 @@ public class GridTester
             //Arrange
 
             //Act
-            Instance.FloodFill(new Coordinates(1, 2), "F", new Boundaries<int>(0, 2, 2, 0));
+            Instance.FloodFill(new Vector2<int>(1, 2), "F", new Boundaries<int>(0, 2, 2, 0));
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<string>
@@ -4104,7 +4106,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodFill(new Coordinates(1, 2), "F", new Boundaries<int>(0, 2, 2, 0));
+            Instance.FloodFill(new Vector2<int>(1, 2), "F", new Boundaries<int>(0, 2, 2, 0));
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
@@ -4210,7 +4212,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodFill(new Coordinates(1, 2), "D", Instance.Boundaries);
+            Instance.FloodFill(new Vector2<int>(1, 2), "D", Instance.Boundaries);
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
@@ -4285,7 +4287,7 @@ public class GridTester
             Instance[3, 4] = "C";
 
             //Act
-            Instance.FloodFill(new Coordinates(1, 2), "D", new Boundaries<int>(1, 2, 3, 0));
+            Instance.FloodFill(new Vector2<int>(1, 2), "D", new Boundaries<int>(1, 2, 3, 0));
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<string>
@@ -4516,7 +4518,7 @@ public class GridTester
             //Arrange
 
             //Act
-            Instance.FloodClear(Fixture.Create<Coordinates>());
+            Instance.FloodClear(Fixture.Create<Vector2<int>>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -4530,7 +4532,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(Fixture.Create<Coordinates>());
+            Instance.FloodClear(Fixture.Create<Vector2<int>>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -4546,7 +4548,7 @@ public class GridTester
 
             var copy = Instance.Copy();
 
-            var index = new Coordinates(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
+            var index = new Vector2<int>(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
 
             //Act
             Instance.FloodClear(index);
@@ -4566,7 +4568,7 @@ public class GridTester
             var eventArgs = new List<GridChangedEventArgs<int>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            var index = new Coordinates(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
+            var index = new Vector2<int>(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
 
             //Act
             Instance.FloodClear(index);
@@ -4590,7 +4592,7 @@ public class GridTester
             Instance[2, 2] = 1;
 
             //Act
-            Instance.FloodClear(new Coordinates(1, 1));
+            Instance.FloodClear(new Vector2<int>(1, 1));
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<int>
@@ -4624,7 +4626,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(new Coordinates(1, 1));
+            Instance.FloodClear(new Vector2<int>(1, 1));
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
@@ -4654,7 +4656,7 @@ public class GridTester
             Instance[2, 2] = 1;
 
             //Act
-            Instance.FloodClear(new Coordinates(0, 1));
+            Instance.FloodClear(new Vector2<int>(0, 1));
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<int>
@@ -4681,7 +4683,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(new Coordinates(1, 0));
+            Instance.FloodClear(new Vector2<int>(1, 0));
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
@@ -4933,7 +4935,7 @@ public class GridTester
             //Arrange
 
             //Act
-            Instance.FloodClear(Fixture.Create<Coordinates>(), Fixture.Create<Boundaries<int>>());
+            Instance.FloodClear(Fixture.Create<Vector2<int>>(), Fixture.Create<Boundaries<int>>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -4947,7 +4949,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(Fixture.Create<Coordinates>(), Fixture.Create<Boundaries<int>>());
+            Instance.FloodClear(Fixture.Create<Vector2<int>>(), Fixture.Create<Boundaries<int>>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -4963,7 +4965,7 @@ public class GridTester
 
             var copy = Instance.Copy();
 
-            var index = new Coordinates(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
+            var index = new Vector2<int>(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
 
             //Act
             Instance.FloodClear(index, Instance.Boundaries);
@@ -4983,7 +4985,7 @@ public class GridTester
             var eventArgs = new List<GridChangedEventArgs<int>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            var index = new Coordinates(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
+            var index = new Vector2<int>(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
 
             //Act
             Instance.FloodClear(index, Instance.Boundaries);
@@ -5007,7 +5009,7 @@ public class GridTester
             Instance[2, 2] = 1;
 
             //Act
-            Instance.FloodClear(new Coordinates(1, 1), Instance.Boundaries);
+            Instance.FloodClear(new Vector2<int>(1, 1), Instance.Boundaries);
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<int>
@@ -5041,7 +5043,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(new Coordinates(1, 1), Instance.Boundaries);
+            Instance.FloodClear(new Vector2<int>(1, 1), Instance.Boundaries);
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
@@ -5071,7 +5073,7 @@ public class GridTester
             Instance[2, 2] = 1;
 
             //Act
-            Instance.FloodClear(new Coordinates(0, 1), Instance.Boundaries);
+            Instance.FloodClear(new Vector2<int>(0, 1), Instance.Boundaries);
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<int>
@@ -5098,7 +5100,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(new Coordinates(1, 0), Instance.Boundaries);
+            Instance.FloodClear(new Vector2<int>(1, 0), Instance.Boundaries);
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
@@ -5135,7 +5137,7 @@ public class GridTester
             Instance[2, 2] = 1;
 
             //Act
-            Instance.FloodClear(new Coordinates(0, 1), new Boundaries<int> { Bottom = 1, Right = 2 });
+            Instance.FloodClear(new Vector2<int>(0, 1), new Boundaries<int> { Bottom = 1, Right = 2 });
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<int>
@@ -5420,7 +5422,7 @@ public class GridTester
 
             var x = -Fixture.Create<int>();
             var y = 0;
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             //Act
             Instance.TranslateAll(x, y);
@@ -5439,7 +5441,7 @@ public class GridTester
 
             var x = -Fixture.Create<int>();
             var y = 0;
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5468,7 +5470,7 @@ public class GridTester
 
             var x = 0;
             var y = -Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             //Act
             Instance.TranslateAll(x, y);
@@ -5487,7 +5489,7 @@ public class GridTester
 
             var x = 0;
             var y = -Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5516,7 +5518,7 @@ public class GridTester
 
             var x = Fixture.Create<int>();
             var y = 0;
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             //Act
             Instance.TranslateAll(x, y);
@@ -5535,7 +5537,7 @@ public class GridTester
 
             var x = Fixture.Create<int>();
             var y = 0;
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5564,7 +5566,7 @@ public class GridTester
 
             var x = 0;
             var y = Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             //Act
             Instance.TranslateAll(x, y);
@@ -5583,7 +5585,7 @@ public class GridTester
 
             var x = 0;
             var y = Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5612,7 +5614,7 @@ public class GridTester
 
             var x = -Fixture.Create<int>();
             var y = -Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             //Act
             Instance.TranslateAll(x, y);
@@ -5631,7 +5633,7 @@ public class GridTester
 
             var x = -Fixture.Create<int>();
             var y = -Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5660,7 +5662,7 @@ public class GridTester
 
             var x = Fixture.Create<int>();
             var y = -Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             //Act
             Instance.TranslateAll(x, y);
@@ -5679,7 +5681,7 @@ public class GridTester
 
             var x = Fixture.Create<int>();
             var y = -Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5708,7 +5710,7 @@ public class GridTester
 
             var x = -Fixture.Create<int>();
             var y = Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             //Act
             Instance.TranslateAll(x, y);
@@ -5727,7 +5729,7 @@ public class GridTester
 
             var x = -Fixture.Create<int>();
             var y = Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5756,7 +5758,7 @@ public class GridTester
 
             var x = Fixture.Create<int>();
             var y = Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             //Act
             Instance.TranslateAll(x, y);
@@ -5775,7 +5777,7 @@ public class GridTester
 
             var x = Fixture.Create<int>();
             var y = Fixture.Create<int>();
-            var index = new Coordinates(x, y);
+            var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5804,7 +5806,7 @@ public class GridTester
             //Arrange
 
             //Act
-            Instance.TranslateAll(Fixture.Create<Coordinates>());
+            Instance.TranslateAll(Fixture.Create<Vector2<int>>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -5818,7 +5820,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.TranslateAll(Fixture.Create<Coordinates>());
+            Instance.TranslateAll(Fixture.Create<Vector2<int>>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -5835,7 +5837,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             //Act
-            Instance.TranslateAll(new Coordinates(0, 0));
+            Instance.TranslateAll(new Vector2<int>(0, 0));
 
             //Assert
             Instance.Should().BeEquivalentTo(copy);
@@ -5853,7 +5855,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.TranslateAll(new Coordinates(0, 0));
+            Instance.TranslateAll(new Vector2<int>(0, 0));
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -5867,7 +5869,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(-Fixture.Create<int>(), 0);
+            var index = new Vector2<int>(-Fixture.Create<int>(), 0);
 
             //Act
             Instance.TranslateAll(index);
@@ -5884,7 +5886,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(-Fixture.Create<int>(), 0);
+            var index = new Vector2<int>(-Fixture.Create<int>(), 0);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5911,7 +5913,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(0, -Fixture.Create<int>());
+            var index = new Vector2<int>(0, -Fixture.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -5928,7 +5930,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(0, -Fixture.Create<int>());
+            var index = new Vector2<int>(0, -Fixture.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5955,7 +5957,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(Fixture.Create<int>(), 0);
+            var index = new Vector2<int>(Fixture.Create<int>(), 0);
 
             //Act
             Instance.TranslateAll(index);
@@ -5972,7 +5974,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(Fixture.Create<int>(), 0);
+            var index = new Vector2<int>(Fixture.Create<int>(), 0);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -5999,7 +6001,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(0, Fixture.Create<int>());
+            var index = new Vector2<int>(0, Fixture.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6016,7 +6018,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(0, Fixture.Create<int>());
+            var index = new Vector2<int>(0, Fixture.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6043,7 +6045,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6060,7 +6062,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6087,7 +6089,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(Fixture.Create<int>(), -Fixture.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6104,7 +6106,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(Fixture.Create<int>(), -Fixture.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6131,7 +6133,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(-Fixture.Create<int>(), Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), Fixture.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6148,7 +6150,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(-Fixture.Create<int>(), Fixture.Create<int>());
+            var index = new Vector2<int>(-Fixture.Create<int>(), Fixture.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6175,7 +6177,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(Fixture.Create<int>(), Fixture.Create<int>());
+            var index = new Vector2<int>(Fixture.Create<int>(), Fixture.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6192,7 +6194,7 @@ public class GridTester
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Coordinates(Fixture.Create<int>(), Fixture.Create<int>());
+            var index = new Vector2<int>(Fixture.Create<int>(), Fixture.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6259,7 +6261,7 @@ public class GridTester
         {
             //Arrange
             var range = Fixture.Create<Rectangle<int>>();
-            var translation = Fixture.Create<Coordinates>();
+            var translation = Fixture.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(range, translation);
@@ -6453,7 +6455,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             var range = new Rectangle<int>(Fixture.Create<Vector2<int>>(), 0, 0);
-            var translation = Fixture.Create<Coordinates>();
+            var translation = Fixture.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(range, translation);
@@ -6471,7 +6473,7 @@ public class GridTester
                 Instance[index] = value;
 
             var range = new Rectangle<int>(Fixture.Create<Vector2<int>>(), 0, 0);
-            var translation = Fixture.Create<Coordinates>();
+            var translation = Fixture.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<Dummy>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6488,7 +6490,7 @@ public class GridTester
         {
             //Arrange
             var range = Fixture.Create<Rectangle<int>>();
-            var translation = Fixture.Create<Coordinates>();
+            var translation = Fixture.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(range, translation);
@@ -6502,7 +6504,7 @@ public class GridTester
         {
             //Arrange
             var range = Fixture.Create<Rectangle<int>>();
-            var translation = Fixture.Create<Coordinates>();
+            var translation = Fixture.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<Dummy>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6531,7 +6533,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Coordinates(1, 0));
+            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(1, 0));
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<Dummy>
@@ -6565,7 +6567,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Coordinates(1, 0));
+            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(1, 0));
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
@@ -6608,7 +6610,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Coordinates(3, 0));
+            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(3, 0));
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<Dummy>
@@ -6645,7 +6647,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Coordinates(3, 0));
+            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(3, 0));
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
@@ -6909,7 +6911,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             var boundaries = new Boundaries<int>(0, 0, 0, 0);
-            var translation = Fixture.Create<Coordinates>();
+            var translation = Fixture.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(boundaries, translation);
@@ -6927,7 +6929,7 @@ public class GridTester
                 Instance[index] = value;
 
             var boundaries = new Boundaries<int>(0, 0, 0, 0);
-            var translation = Fixture.Create<Coordinates>();
+            var translation = Fixture.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<Dummy>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6944,7 +6946,7 @@ public class GridTester
         {
             //Arrange
             var boundaries = Fixture.Create<Boundaries<int>>();
-            var translation = Fixture.Create<Coordinates>();
+            var translation = Fixture.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(boundaries, translation);
@@ -6958,7 +6960,7 @@ public class GridTester
         {
             //Arrange
             var boundaries = Fixture.Create<Boundaries<int>>();
-            var translation = Fixture.Create<Coordinates>();
+            var translation = Fixture.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<Dummy>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6987,7 +6989,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Coordinates(1, 0));
+            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(1, 0));
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<Dummy>
@@ -7021,7 +7023,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Coordinates(1, 0));
+            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(1, 0));
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
@@ -7064,7 +7066,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Coordinates(3, 0));
+            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(3, 0));
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<Dummy>
@@ -7101,7 +7103,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Coordinates(3, 0));
+            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(3, 0));
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
@@ -7245,7 +7247,7 @@ public class GridTester
             var copy = Instance.Copy();
 
             //Act
-            Instance.Swap(new Coordinates(1, 0), new Coordinates(1, 0));
+            Instance.Swap(new Vector2<int>(1, 0), new Vector2<int>(1, 0));
 
             //Assert
             Instance.Should().BeEquivalentTo(copy);
@@ -7269,7 +7271,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Swap(new Coordinates(1, 0), new Coordinates(1, 0));
+            Instance.Swap(new Vector2<int>(1, 0), new Vector2<int>(1, 0));
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -7293,7 +7295,7 @@ public class GridTester
             var secondItem = Instance[1, 2];
 
             //Act
-            Instance.Swap(new Coordinates(2, 0), new Coordinates(1, 2));
+            Instance.Swap(new Vector2<int>(2, 0), new Vector2<int>(1, 2));
 
             //Assert
             Instance.Should().BeEquivalentTo(new Grid<Dummy>
@@ -7331,7 +7333,7 @@ public class GridTester
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Swap(new Coordinates(2, 0), new Coordinates(1, 2));
+            Instance.Swap(new Vector2<int>(2, 0), new Vector2<int>(1, 2));
 
             //Assert
             eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
@@ -7538,7 +7540,7 @@ public class GridTester
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Fixture.Create<Dictionary<Coordinates, Dummy>>();
+            var other = Fixture.Create<Dictionary<Vector2<int>, Dummy>>();
 
             //Act
             var result = Instance.Equals((object)other);
@@ -8193,7 +8195,7 @@ public class GridTester
         public void WhenKeyValuePairsIsNull_ReturnFalse()
         {
             //Arrange
-            IEnumerable<KeyValuePair<Coordinates, Dummy>> other = null!;
+            IEnumerable<KeyValuePair<Vector2<int>, Dummy>> other = null!;
 
             //Act
             var result = Instance.Equals(other);
@@ -8206,7 +8208,7 @@ public class GridTester
         public void WhenKeyValuePairsIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.CreateMany<KeyValuePair<Coordinates, Dummy>>().ToList();
+            var other = Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
 
             var cells = Fixture.CreateMany<Cell<Dummy>>();
             foreach (var (index, value) in cells)
@@ -8247,7 +8249,7 @@ public class GridTester
 
             var other = Instance.ToDictionary();
             foreach (var ((x, y), _) in Instance)
-                other[new Coordinates(x, y)] = Fixture.Create<Dummy>();
+                other[new Vector2<int>(x, y)] = Fixture.Create<Dummy>();
 
             //Act
             var result = Instance.Equals(other!);
@@ -8283,7 +8285,7 @@ public class GridTester
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == (IEnumerable<KeyValuePair<Coordinates, Dummy>>)null!;
+            var result = (Grid<Dummy>)null! == (IEnumerable<KeyValuePair<Vector2<int>, Dummy>>)null!;
 
             //Assert
             result.Should().BeTrue();
@@ -8295,7 +8297,7 @@ public class GridTester
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == Fixture.CreateMany<KeyValuePair<Coordinates, Dummy>>().ToList();
+            var result = (Grid<Dummy>)null! == Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
 
             //Assert
             result.Should().BeFalse();
@@ -8305,7 +8307,7 @@ public class GridTester
         public void WhenKeyValuePairsIsNull_ReturnFalse()
         {
             //Arrange
-            IEnumerable<KeyValuePair<Coordinates, Dummy>> other = null!;
+            IEnumerable<KeyValuePair<Vector2<int>, Dummy>> other = null!;
 
             //Act
             var result = Instance == other;
@@ -8318,7 +8320,7 @@ public class GridTester
         public void WhenKeyValuePairsIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.CreateMany<KeyValuePair<Coordinates, Dummy>>().ToList();
+            var other = Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
 
             var cells = Fixture.CreateMany<Cell<Dummy>>();
             foreach (var (index, value) in cells)
@@ -8359,7 +8361,7 @@ public class GridTester
 
             var other = Instance.ToDictionary();
             foreach (var ((x, y), _) in Instance)
-                other[new Coordinates(x, y)] = Fixture.Create<Dummy>();
+                other[new Vector2<int>(x, y)] = Fixture.Create<Dummy>();
 
             //Act
             var result = Instance == other!;
@@ -8395,7 +8397,7 @@ public class GridTester
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != (IEnumerable<KeyValuePair<Coordinates, Dummy>>)null!;
+            var result = (Grid<Dummy>)null! != (IEnumerable<KeyValuePair<Vector2<int>, Dummy>>)null!;
 
             //Assert
             result.Should().BeFalse();
@@ -8407,7 +8409,7 @@ public class GridTester
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != Fixture.CreateMany<KeyValuePair<Coordinates, Dummy>>().ToList();
+            var result = (Grid<Dummy>)null! != Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
 
             //Assert
             result.Should().BeTrue();
@@ -8417,7 +8419,7 @@ public class GridTester
         public void WhenKeyValuePairsIsNull_ReturnTrue()
         {
             //Arrange
-            IEnumerable<KeyValuePair<Coordinates, Dummy>> other = null!;
+            IEnumerable<KeyValuePair<Vector2<int>, Dummy>> other = null!;
 
             //Act
             var result = Instance != other;
@@ -8430,7 +8432,7 @@ public class GridTester
         public void WhenKeyValuePairsIsDifferent_ReturnTrue()
         {
             //Arrange
-            var other = Fixture.CreateMany<KeyValuePair<Coordinates, Dummy>>().ToList();
+            var other = Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
 
             var cells = Fixture.CreateMany<Cell<Dummy>>();
             foreach (var (index, value) in cells)
@@ -8471,7 +8473,7 @@ public class GridTester
 
             var other = Instance.ToDictionary();
             foreach (var ((x, y), _) in Instance)
-                other[new Coordinates(x, y)] = Fixture.Create<Dummy>();
+                other[new Vector2<int>(x, y)] = Fixture.Create<Dummy>();
 
             //Act
             var result = Instance != other!;

@@ -3,7 +3,7 @@
 /// <summary>
 /// An observable, dynamic two-dimensional array.
 /// </summary>
-public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatable<T[,]>, IEquatable<IEnumerable<KeyValuePair<Coordinates, T>>>, IEquatable<T[][]>, IEquatable<IEnumerable<Cell<T>>>
+public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatable<T[,]>, IEquatable<IEnumerable<KeyValuePair<Vector2<int>, T>>>, IEquatable<T[][]>, IEquatable<IEnumerable<Cell<T>>>
 {
     int ColumnCount { get; }
     int RowCount { get; }
@@ -19,17 +19,17 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
     /// </summary>
     int Count { get; }
     T? this[int columnIndex, int rowIndex] { get; set; }
-    T? this[Coordinates index] { get; set; }
+    T? this[Vector2<int> index] { get; set; }
 
     Boundaries<int> Boundaries { get; }
 
-    IReadOnlyList<Coordinates> IndexesOf(T? item);
-    IReadOnlyList<Coordinates> IndexesOf(Func<T, bool> match);
+    IReadOnlyList<Vector2<int>> IndexesOf(T? item);
+    IReadOnlyList<Vector2<int>> IndexesOf(Func<T, bool> match);
 
     void Add(int x, int y, T? item);
     void TryAdd(int x, int y, T? item);
-    void Add(Coordinates index, T? item);
-    void TryAdd(Coordinates index, T? item);
+    void Add(Vector2<int> index, T? item);
+    void TryAdd(Vector2<int> index, T? item);
 
     void Add(params Cell<T>[] cells);
     void Add(IEnumerable<Cell<T>> cells);
@@ -39,26 +39,26 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
 
     void RemoveAt(int x, int y);
     void TryRemoveAt(int x, int y);
-    void RemoveAt(Coordinates index);
-    void TryRemoveAt(Coordinates index);
+    void RemoveAt(Vector2<int> index);
+    void TryRemoveAt(Vector2<int> index);
     void RemoveAll(T? item);
     void RemoveAll(Func<T, bool> match);
 
-    bool Contains(Coordinates index, T? item);
+    bool Contains(Vector2<int> index, T? item);
     bool Contains(int x, int y, T? item);
     bool Contains(T? item);
     bool Contains(int x, int y);
-    bool Contains(Coordinates index);
+    bool Contains(Vector2<int> index);
 
     void FloodFill(int x, int y, T? newValue);
     void FloodFill(int x, int y, T? newValue, Boundaries<int> boundaries);
-    void FloodFill(Coordinates index, T? newValue);
-    void FloodFill(Coordinates index, T? newValue, Boundaries<int> boundaries);
+    void FloodFill(Vector2<int> index, T? newValue);
+    void FloodFill(Vector2<int> index, T? newValue, Boundaries<int> boundaries);
 
     void FloodClear(int x, int y);
     void FloodClear(int x, int y, Boundaries<int> boundaries);
-    void FloodClear(Coordinates index);
-    void FloodClear(Coordinates index, Boundaries<int> boundaries);
+    void FloodClear(Vector2<int> index);
+    void FloodClear(Vector2<int> index, Boundaries<int> boundaries);
 
     void Resize(Boundaries<int> boundaries);
 
@@ -70,7 +70,7 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
     /// <summary>
     /// Translates the entire grid in the specified direction.
     /// </summary>
-    void TranslateAll(Coordinates translation);
+    void TranslateAll(Vector2<int> translation);
 
     /// <summary>
     /// Translates part of the grid in the specified direction.
@@ -80,7 +80,7 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
     /// <summary>
     /// Translates part of the grid in the specified direction.
     /// </summary>
-    void Translate(Rectangle<int> range, Coordinates translation);
+    void Translate(Rectangle<int> range, Vector2<int> translation);
 
     /// <summary>
     /// Translates part of the grid in the specified direction.
@@ -90,7 +90,7 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
     /// <summary>
     /// Translates part of the grid in the specified direction.
     /// </summary>
-    void Translate(Boundaries<int> boundaries, Coordinates translation);
+    void Translate(Boundaries<int> boundaries, Vector2<int> translation);
 
     /// <summary>
     /// Returns an exact copy of the Grid.
@@ -102,7 +102,7 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
     /// </summary>
     IGrid<T> Copy(Boundaries<int> boundaries);
 
-    void Swap(Coordinates current, Coordinates destination);
+    void Swap(Vector2<int> current, Vector2<int> destination);
 
     event GridChangedEvent<T> CollectionChanged;
 }
@@ -110,15 +110,15 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
 /// <inheritdoc cref="IGrid{T}"/>
 public class Grid<T> : IGrid<T>
 {
-    private readonly IDictionary<Coordinates, T?> _items = new Dictionary<Coordinates, T?>();
+    private readonly IDictionary<Vector2<int>, T?> _items = new Dictionary<Vector2<int>, T?>();
 
     public T? this[int columnIndex, int rowIndex]
     {
-        get => this[new Coordinates(columnIndex, rowIndex)];
-        set => this[new Coordinates(columnIndex, rowIndex)] = value;
+        get => this[new Vector2<int>(columnIndex, rowIndex)];
+        set => this[new Vector2<int>(columnIndex, rowIndex)] = value;
     }
 
-    public T? this[Coordinates index]
+    public T? this[Vector2<int> index]
     {
         get
         {
@@ -165,7 +165,7 @@ public class Grid<T> : IGrid<T>
             this[index] = value;
     }
 
-    public Grid(IEnumerable<KeyValuePair<Coordinates, T>> collection) : this()
+    public Grid(IEnumerable<KeyValuePair<Vector2<int>, T>> collection) : this()
     {
         if (collection == null) throw new ArgumentNullException(nameof(collection));
         foreach (var (key, value) in collection)
@@ -180,7 +180,7 @@ public class Grid<T> : IGrid<T>
         {
             for (var y = 0; y < collection.GetLength(1); y++)
             {
-                this[new Coordinates(x, y)] = collection[x, y];
+                this[new Vector2<int>(x, y)] = collection[x, y];
             }
         }
 
@@ -193,7 +193,7 @@ public class Grid<T> : IGrid<T>
         {
             for (var x = 0; x < collection[y].Length; x++)
             {
-                this[new Coordinates(x, y)] = collection[x][y];
+                this[new Vector2<int>(x, y)] = collection[x][y];
             }
         }
     }
@@ -234,26 +234,26 @@ public class Grid<T> : IGrid<T>
         Left = _items.Keys.Min(x => x.X)
     } : new Boundaries<int>();
 
-    public IReadOnlyList<Coordinates> IndexesOf(T? item) => _items.Where(x => x.Value == null && item == null || x.Value != null && x.Value.Equals(item)).Select(x => x.Key).ToList();
+    public IReadOnlyList<Vector2<int>> IndexesOf(T? item) => _items.Where(x => x.Value == null && item == null || x.Value != null && x.Value.Equals(item)).Select(x => x.Key).ToList();
 
-    public IReadOnlyList<Coordinates> IndexesOf(Func<T, bool> match)
+    public IReadOnlyList<Vector2<int>> IndexesOf(Func<T, bool> match)
     {
         if (match == null) throw new ArgumentNullException(nameof(match));
         return _items.Where(x => match.Invoke(x.Value!)).Select(x => x.Key).ToList();
     }
 
-    public void Add(int x, int y, T? item) => Add(new Coordinates(x, y), item);
+    public void Add(int x, int y, T? item) => Add(new Vector2<int>(x, y), item);
 
-    public void TryAdd(int x, int y, T? item) => TryAdd(new Coordinates(x, y), item);
+    public void TryAdd(int x, int y, T? item) => TryAdd(new Vector2<int>(x, y), item);
 
-    public void Add(Coordinates index, T? item)
+    public void Add(Vector2<int> index, T? item)
     {
         if (_items.ContainsKey(index))
             throw new InvalidOperationException(string.Format(Exceptions.CannotAddItemAtIndexBecauseItIsTaken, index));
         this[index] = item;
     }
 
-    public void TryAdd(Coordinates index, T? item)
+    public void TryAdd(Vector2<int> index, T? item)
     {
         try
         {
@@ -296,11 +296,11 @@ public class Grid<T> : IGrid<T>
         Add(cellsList);
     }
 
-    public void RemoveAt(int x, int y) => RemoveAt(new Coordinates(x, y));
+    public void RemoveAt(int x, int y) => RemoveAt(new Vector2<int>(x, y));
 
-    public void TryRemoveAt(int x, int y) => TryRemoveAt(new Coordinates(x, y));
+    public void TryRemoveAt(int x, int y) => TryRemoveAt(new Vector2<int>(x, y));
 
-    public void RemoveAt(Coordinates index)
+    public void RemoveAt(Vector2<int> index)
     {
         var isIndexFound = _items.TryGetValue(index, out var item);
         if (!isIndexFound) throw new ArgumentOutOfRangeException(string.Format(Exceptions.CannotRemoveItemAtIndexBecauseThereIsNothingThere, index));
@@ -311,7 +311,7 @@ public class Grid<T> : IGrid<T>
         });
     }
 
-    public void TryRemoveAt(Coordinates index)
+    public void TryRemoveAt(Vector2<int> index)
     {
         try
         {
@@ -354,28 +354,28 @@ public class Grid<T> : IGrid<T>
             });
     }
 
-    public bool Contains(Coordinates index, T? item)
+    public bool Contains(Vector2<int> index, T? item)
     {
         var itemAtIndex = this[index];
         return itemAtIndex == null && item == null || itemAtIndex != null && itemAtIndex.Equals(item);
     }
 
-    public bool Contains(int x, int y, T? item) => Contains(new Coordinates(x, y), item);
+    public bool Contains(int x, int y, T? item) => Contains(new Vector2<int>(x, y), item);
 
     public bool Contains(T? item) => _items.Values.Any(x => x is null && item is null || x != null && x.Equals(item));
 
-    public bool Contains(int x, int y) => Contains(new Coordinates(x, y));
+    public bool Contains(int x, int y) => Contains(new Vector2<int>(x, y));
 
-    public bool Contains(Coordinates index) => _items.ContainsKey(index);
+    public bool Contains(Vector2<int> index) => _items.ContainsKey(index);
 
-    public void FloodFill(int x, int y, T? newValue) => FloodFill(new Coordinates(x, y), newValue);
+    public void FloodFill(int x, int y, T? newValue) => FloodFill(new Vector2<int>(x, y), newValue);
 
-    public void FloodFill(int x, int y, T? newValue, Boundaries<int> boundaries) => FloodFill(new Coordinates(x, y), newValue, boundaries);
+    public void FloodFill(int x, int y, T? newValue, Boundaries<int> boundaries) => FloodFill(new Vector2<int>(x, y), newValue, boundaries);
 
-    public void FloodFill(Coordinates index, T? newValue) => FloodFill(index, newValue, Boundaries);
+    public void FloodFill(Vector2<int> index, T? newValue) => FloodFill(index, newValue, Boundaries);
 
     //TODO Throw if they try to flood outside boundaries? Add TryFloodFill to remain consistent?
-    public void FloodFill(Coordinates index, T? newValue, Boundaries<int> boundaries)
+    public void FloodFill(Vector2<int> index, T? newValue, Boundaries<int> boundaries)
     {
         var before = CollectionChanged == null ? null : _items.ToDictionary(x => x.Key, x => x.Value);
         FloodFill(index, this[index], newValue, boundaries);
@@ -407,26 +407,26 @@ public class Grid<T> : IGrid<T>
         }
     }
 
-    private void FloodFill(Coordinates index, T? replacedValue, T? newValue, Boundaries<int> boundaries)
+    private void FloodFill(Vector2<int> index, T? replacedValue, T? newValue, Boundaries<int> boundaries)
     {
         if (index.X < boundaries.Left || index.Y < boundaries.Top ||
             index.X > boundaries.Right || index.Y > boundaries.Bottom || Equals(this[index], newValue) || !Equals(this[index], replacedValue)) return;
 
         _items[index] = newValue;
 
-        FloodFill(new Coordinates(index.X + 1, index.Y), replacedValue, newValue, boundaries);
-        FloodFill(new Coordinates(index.X - 1, index.Y), replacedValue, newValue, boundaries);
-        FloodFill(new Coordinates(index.X, index.Y + 1), replacedValue, newValue, boundaries);
-        FloodFill(new Coordinates(index.X, index.Y - 1), replacedValue, newValue, boundaries);
+        FloodFill(new Vector2<int>(index.X + 1, index.Y), replacedValue, newValue, boundaries);
+        FloodFill(new Vector2<int>(index.X - 1, index.Y), replacedValue, newValue, boundaries);
+        FloodFill(new Vector2<int>(index.X, index.Y + 1), replacedValue, newValue, boundaries);
+        FloodFill(new Vector2<int>(index.X, index.Y - 1), replacedValue, newValue, boundaries);
     }
 
-    public void FloodClear(int x, int y) => FloodClear(new Coordinates(x, y));
+    public void FloodClear(int x, int y) => FloodClear(new Vector2<int>(x, y));
 
-    public void FloodClear(Coordinates index) => FloodClear(index, Boundaries);
+    public void FloodClear(Vector2<int> index) => FloodClear(index, Boundaries);
 
-    public void FloodClear(int x, int y, Boundaries<int> boundaries) => FloodClear(new Coordinates(x, y), boundaries);
+    public void FloodClear(int x, int y, Boundaries<int> boundaries) => FloodClear(new Vector2<int>(x, y), boundaries);
 
-    public void FloodClear(Coordinates index, Boundaries<int> boundaries)
+    public void FloodClear(Vector2<int> index, Boundaries<int> boundaries)
     {
         var before = CollectionChanged == null ? null : _items.ToDictionary(x => x.Key, x => x.Value);
         if (Contains(index))
@@ -452,17 +452,17 @@ public class Grid<T> : IGrid<T>
         }
     }
 
-    private void FloodClear(Coordinates index, T? deletedValue, Boundaries<int> boundaries)
+    private void FloodClear(Vector2<int> index, T? deletedValue, Boundaries<int> boundaries)
     {
         if (index.X < boundaries.Left || index.Y < boundaries.Top ||
             index.X > boundaries.Right || index.Y > boundaries.Bottom || !Equals(this[index], deletedValue)) return;
 
         _items.Remove(index);
 
-        FloodClear(new Coordinates(index.X + 1, index.Y), deletedValue, boundaries);
-        FloodClear(new Coordinates(index.X - 1, index.Y), deletedValue, boundaries);
-        FloodClear(new Coordinates(index.X, index.Y + 1), deletedValue, boundaries);
-        FloodClear(new Coordinates(index.X, index.Y - 1), deletedValue, boundaries);
+        FloodClear(new Vector2<int>(index.X + 1, index.Y), deletedValue, boundaries);
+        FloodClear(new Vector2<int>(index.X - 1, index.Y), deletedValue, boundaries);
+        FloodClear(new Vector2<int>(index.X, index.Y + 1), deletedValue, boundaries);
+        FloodClear(new Vector2<int>(index.X, index.Y - 1), deletedValue, boundaries);
     }
 
     public void Resize(Boundaries<int> boundaries)
@@ -488,12 +488,12 @@ public class Grid<T> : IGrid<T>
         }
     }
 
-    public void TranslateAll(int x, int y) => TranslateAll(new Coordinates(x, y));
+    public void TranslateAll(int x, int y) => TranslateAll(new Vector2<int>(x, y));
 
 
-    public void TranslateAll(Coordinates translation)
+    public void TranslateAll(Vector2<int> translation)
     {
-        if (translation == new Coordinates(0, 0) || !_items.Any()) return;
+        if (translation == new Vector2<int>(0, 0) || !_items.Any()) return;
         var originalItems = _items.ToDictionary(x => x.Key, x => x.Value);
 
         _items.Clear();
@@ -511,15 +511,15 @@ public class Grid<T> : IGrid<T>
             CollectionChanged?.Invoke(this, new GridChangedEventArgs<T> { OldValues = oldItems, NewValues = newItems });
     }
 
-    public void Translate(Rectangle<int> range, int x, int y) => Translate(range, new Coordinates(x, y));
+    public void Translate(Rectangle<int> range, int x, int y) => Translate(range, new Vector2<int>(x, y));
 
-    public void Translate(Rectangle<int> range, Coordinates translation) => Translate(new Boundaries<int>(range.Top, range.Right, range.Bottom, range.Left), translation);
+    public void Translate(Rectangle<int> range, Vector2<int> translation) => Translate(new Boundaries<int>(range.Top, range.Right, range.Bottom, range.Left), translation);
 
-    public void Translate(Boundaries<int> boundaries, int x, int y) => Translate(boundaries, new Coordinates(x, y));
+    public void Translate(Boundaries<int> boundaries, int x, int y) => Translate(boundaries, new Vector2<int>(x, y));
 
-    public void Translate(Boundaries<int> boundaries, Coordinates translation)
+    public void Translate(Boundaries<int> boundaries, Vector2<int> translation)
     {
-        if (boundaries.Left == boundaries.Right || boundaries.Top == boundaries.Bottom || translation == new Coordinates(0, 0)) return;
+        if (boundaries.Left == boundaries.Right || boundaries.Top == boundaries.Bottom || translation == new Vector2<int>(0, 0)) return;
         var originalItems = _items.ToDictionary(x => x.Key, x => x.Value);
 
         var oldItems = new List<Cell<T>>();
@@ -558,7 +558,7 @@ public class Grid<T> : IGrid<T>
         return copy;
     }
 
-    public void Swap(Coordinates current, Coordinates destination)
+    public void Swap(Vector2<int> current, Vector2<int> destination)
     {
         if (current == destination) return;
 
@@ -583,7 +583,7 @@ public class Grid<T> : IGrid<T>
 
     private struct Enumerator : IEnumerator<Cell<T>>
     {
-        private readonly IEnumerator<KeyValuePair<Coordinates, T>> _parentEnumerator;
+        private readonly IEnumerator<KeyValuePair<Vector2<int>, T>> _parentEnumerator;
 
         public Cell<T> Current
         {
@@ -624,9 +624,9 @@ public class Grid<T> : IGrid<T>
 
     public static bool operator !=(Grid<T>? a, IEnumerable<Cell<T>>? b) => !(a == b);
 
-    public static bool operator ==(Grid<T>? a, IEnumerable<KeyValuePair<Coordinates, T>>? b) => a is null && b is null || a is not null && a.Equals(b);
+    public static bool operator ==(Grid<T>? a, IEnumerable<KeyValuePair<Vector2<int>, T>>? b) => a is null && b is null || a is not null && a.Equals(b);
 
-    public static bool operator !=(Grid<T>? a, IEnumerable<KeyValuePair<Coordinates, T>>? b) => !(a == b);
+    public static bool operator !=(Grid<T>? a, IEnumerable<KeyValuePair<Vector2<int>, T>>? b) => !(a == b);
 
     public override bool Equals(object? obj)
     {
@@ -634,7 +634,7 @@ public class Grid<T> : IGrid<T>
         if (obj is T[,] array) return Equals(array);
         if (obj is T[][] jagged) return Equals(jagged);
         if (obj is IEnumerable<Cell<T>> cells) return Equals(cells);
-        if (obj is IEnumerable<KeyValuePair<Coordinates, T>> keyValuePairs) return Equals(keyValuePairs);
+        if (obj is IEnumerable<KeyValuePair<Vector2<int>, T>> keyValuePairs) return Equals(keyValuePairs);
         return false;
     }
 
@@ -717,7 +717,7 @@ public class Grid<T> : IGrid<T>
         return true;
     }
 
-    public bool Equals(IEnumerable<KeyValuePair<Coordinates, T>>? other)
+    public bool Equals(IEnumerable<KeyValuePair<Vector2<int>, T>>? other)
     {
         if (ReferenceEquals(other, null)) return false;
         return this.SequenceEqual(other.Select(x => new Cell<T>(x.Key, x.Value)));

@@ -1,4 +1,6 @@
-﻿namespace Collections.Caching.Tests;
+﻿using ToolBX.OPEX;
+
+namespace Collections.Caching.Tests;
 
 [TestClass]
 public class CachingDictionaryTester

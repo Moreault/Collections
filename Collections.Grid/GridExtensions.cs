@@ -8,7 +8,7 @@ public static class GridExtensions
         return new Grid<T>(cells);
     }
 
-    public static Grid<T> ToGrid<T>(this IEnumerable<KeyValuePair<Coordinates, T>> collection)
+    public static Grid<T> ToGrid<T>(this IEnumerable<KeyValuePair<Vector2<int>, T>> collection)
     {
         if (collection == null) throw new ArgumentNullException(nameof(collection));
         return new Grid<T>(collection);
@@ -78,7 +78,7 @@ public static class GridExtensions
         return array;
     }
 
-    public static Dictionary<Coordinates, T?> ToDictionary<T>(this IGrid<T> grid)
+    public static Dictionary<Vector2<int>, T?> ToDictionary<T>(this IGrid<T> grid)
     {
         if (grid == null) throw new ArgumentNullException(nameof(grid));
         return grid.ToDictionary(x => x.Index, x => x.Value);
