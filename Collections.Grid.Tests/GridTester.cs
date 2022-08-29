@@ -186,6 +186,271 @@ public class GridTester
     }
 
     [TestClass]
+    public class FirstColumn : Tester<Grid<Dummy>>
+    {
+        [TestMethod]
+        public void WhenIsEmpty_ReturnZero()
+        {
+            //Arrange
+
+            //Act
+            var result = Instance.FirstColumn;
+
+            //Assert
+            result.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void WhenOnlyContainsItemsAtColumnZero_ReturnZero()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[0, Fixture.Create<int>()] = item;
+
+            //Act
+            var result = Instance.FirstColumn;
+
+            //Assert
+            result.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void WhenContainsSomethingInTheNegatives_ReturnThatIndex()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[Fixture.Create<int>(), Fixture.Create<int>()] = item;
+
+            var negativeIndex = -Fixture.Create<int>();
+            Instance[negativeIndex, Fixture.Create<int>()] = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.FirstColumn;
+
+            //Assert
+            result.Should().Be(negativeIndex);
+        }
+
+        [TestMethod]
+        public void WhenContainsSomethingGreaterThanZero_ReturnThatIndex()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[Fixture.CreateBetween(10, 30), Fixture.Create<int>()] = item;
+
+            Instance[5, Fixture.Create<int>()] = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.FirstColumn;
+
+            //Assert
+            result.Should().Be(5);
+        }
+    }
+
+    [TestClass]
+    public class LastColumn : Tester<Grid<Dummy>>
+    {
+        [TestMethod]
+        public void WhenIsEmpty_ReturnZero()
+        {
+            //Arrange
+
+            //Act
+            var result = Instance.LastColumn;
+
+            //Assert
+            result.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void WhenOnlyContainsItemsAtColumnZero_ReturnZero()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[0, Fixture.Create<int>()] = item;
+
+            //Act
+            var result = Instance.LastColumn;
+
+            //Assert
+            result.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void WhenHighestIsSomethingInTheNegatives_ReturnThatIndex()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[-20, Fixture.Create<int>()] = item;
+
+            var negativeIndex = -5;
+            Instance[negativeIndex, Fixture.Create<int>()] = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.LastColumn;
+
+            //Assert
+            result.Should().Be(negativeIndex);
+        }
+
+        [TestMethod]
+        public void WhenHighestIsSomethingGreaterThanZero_ReturnThatIndex()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[Fixture.CreateBetween(0, 20), Fixture.Create<int>()] = item;
+
+            Instance[35, Fixture.Create<int>()] = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.LastColumn;
+
+            //Assert
+            result.Should().Be(35);
+        }
+    }
+
+    [TestClass]
+    public class FirstRow : Tester<Grid<Dummy>>
+    {
+        [TestMethod]
+        public void WhenIsEmpty_ReturnZero()
+        {
+            //Arrange
+
+            //Act
+            var result = Instance.FirstRow;
+
+            //Assert
+            result.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void WhenOnlyContainsItemsAtRowZero_ReturnZero()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[Fixture.Create<int>(), 0] = item;
+
+            //Act
+            var result = Instance.FirstRow;
+
+            //Assert
+            result.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void WhenContainsSomethingInTheNegatives_ReturnThatIndex()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[Fixture.Create<int>(), Fixture.Create<int>()] = item;
+
+            var negativeIndex = -Fixture.Create<int>();
+            Instance[Fixture.Create<int>(), negativeIndex] = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.FirstRow;
+
+            //Assert
+            result.Should().Be(negativeIndex);
+        }
+
+        [TestMethod]
+        public void WhenContainsSomethingGreaterThanZero_ReturnThatIndex()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[Fixture.CreateBetween(10, 30), Fixture.Create<int>()] = item;
+
+            Instance[Fixture.Create<int>(), 5] = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.FirstRow;
+
+            //Assert
+            result.Should().Be(5);
+        }
+    }
+
+    [TestClass]
+    public class LastRow : Tester<Grid<Dummy>>
+    {
+        //TODO Test
+        [TestMethod]
+        public void WhenIsEmpty_ReturnZero()
+        {
+            //Arrange
+
+            //Act
+            var result = Instance.LastRow;
+
+            //Assert
+            result.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void WhenOnlyContainsItemsAtRowZero_ReturnZero()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[Fixture.Create<int>(), 0] = item;
+
+            //Act
+            var result = Instance.LastRow;
+
+            //Assert
+            result.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void WhenHighestIsSomethingInTheNegatives_ReturnThatIndex()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[Fixture.Create<int>(), -15] = item;
+
+            var negativeIndex = -2;
+            Instance[Fixture.Create<int>(), negativeIndex] = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.LastRow;
+
+            //Assert
+            result.Should().Be(negativeIndex);
+        }
+
+        [TestMethod]
+        public void WhenHighestIsSomethingGreaterThanZero_ReturnThatIndex()
+        {
+            //Arrange
+            var items = Fixture.CreateMany<Dummy>();
+            foreach (var item in items)
+                Instance[Fixture.Create<int>(), Fixture.CreateBetween(10, 30)] = item;
+
+            Instance[Fixture.Create<int>(), 35] = Fixture.Create<Dummy>();
+
+            //Act
+            var result = Instance.LastRow;
+
+            //Assert
+            result.Should().Be(35);
+        }
+    }
+
+    [TestClass]
     public class Count : Tester<Grid<string>>
     {
         [TestMethod]

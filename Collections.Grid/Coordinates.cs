@@ -1,5 +1,6 @@
 ﻿namespace ToolBX.Collections.Grid;
 
+[Obsolete("Version 1.1.0 forward will use Vector2<int> instead")]
 public readonly record struct Coordinates
 {
     public int X { get; init; }
@@ -21,4 +22,8 @@ public readonly record struct Coordinates
         x = X;
         y = Y;
     }
+
+    public static implicit operator Vector2<int>(Coordinates value) => new(value.X, value.Y);
+
+    public static implicit operator Coordinates(Vector2<int> value) => new(value.X, value.Y);
 }

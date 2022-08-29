@@ -1,6 +1,4 @@
-﻿using ToolBX.Collections.Grid.Resources;
-
-namespace ToolBX.Collections.Grid;
+﻿namespace ToolBX.Collections.Grid;
 
 public static class GridExtensions
 {

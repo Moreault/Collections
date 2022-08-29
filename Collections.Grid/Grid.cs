@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using ToolBX.Collections.Grid.Resources;
-using ToolBX.Mathemancy;
-using ToolBX.Reflection4Humans.Extensions;
-
-namespace ToolBX.Collections.Grid;
+﻿namespace ToolBX.Collections.Grid;
 
 /// <summary>
 /// An observable, dynamic two-dimensional array.
@@ -12,6 +7,12 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
 {
     int ColumnCount { get; }
     int RowCount { get; }
+
+    int FirstColumn { get; }
+    int LastColumn { get; }
+
+    int FirstRow { get; }
+    int LastRow { get; }
 
     /// <summary>
     /// Total number of cells in use.
@@ -142,6 +143,14 @@ public class Grid<T> : IGrid<T>
 
     public int RowCount { get; private set; }
 
+    public int FirstColumn { get; private set; }
+
+    public int LastColumn { get; private set; }
+
+    public int FirstRow { get; private set; }
+
+    public int LastRow { get; private set; }
+
     public int Count => _items.Count;
 
     public Grid()
@@ -198,11 +207,22 @@ public class Grid<T> : IGrid<T>
 
             RowCount = (_items.Keys.Any(x => x.Y < 0) ? Math.Abs(_items.Keys.Min(x => x.Y)) : 0) +
                        (_items.Keys.Any(x => x.Y > 0) ? _items.Keys.Max(x => x.Y) : 0) + 1;
+
+            FirstColumn = _items.Keys.Min(x => x.X);
+            LastColumn = _items.Keys.Max(x => x.X);
+
+            FirstRow = _items.Keys.Min(x => x.Y);
+            LastRow = _items.Keys.Max(x => x.Y);
         }
         else
         {
             ColumnCount = 0;
             RowCount = 0;
+
+            FirstColumn = 0;
+            LastColumn = 0;
+            FirstRow = 0;
+            LastRow = 0;
         }
     }
 

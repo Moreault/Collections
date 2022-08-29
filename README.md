@@ -119,6 +119,13 @@ var jagged = grid.ToJaggedArray();
 grid = jagged.ToGrid();
 ```
 
+### Breaking changes
+
+#### 1.0.X -> 1.1.X
+
+-Now uses Vector2<int> instead of Coordinates
+-Coordinates still exist and now have implicit operators to give you time to move to Vector2
+
 ![Inventory](https://github.com/Moreault/Collections/blob/master/inventory.png)
 ## Inventory
 
