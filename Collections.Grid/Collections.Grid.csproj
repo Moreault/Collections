@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>1.1.0-beta1</Version>
+		<Version>1.1.0</Version>
 		<RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
 		<PackageId>ToolBX.$(AssemblyName)</PackageId>
 		<Product>ToolBX.$(AssemblyName)</Product>
@@ -31,7 +31,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="ToolBX.EasyTypeParsing" Version="1.0.0" />
-		<PackageReference Include="ToolBX.Mathemancy" Version="1.1.1" />
+		<PackageReference Include="ToolBX.Mathemancy" Version="1.1.2" />
 		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="1.0.0" />
 	</ItemGroup>
 
