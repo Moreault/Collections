@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -16,7 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ToolBX.Eloquentest" Version="1.1.0" />
+    <PackageReference Include="ToolBX.Eloquentest" Version="1.1.1" />
     <PackageReference Include="ToolBX.OPEX" Version="1.0.4" />
   </ItemGroup>
 

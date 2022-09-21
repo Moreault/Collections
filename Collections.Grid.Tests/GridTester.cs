@@ -388,7 +388,6 @@ public class GridTester
     [TestClass]
     public class LastRow : Tester<Grid<Dummy>>
     {
-        //TODO Test
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
         {
@@ -7658,6 +7657,50 @@ public class GridTester
                 Instance[index] = value;
 
             var other = Instance.Copy();
+
+            //Act
+            var result = Instance.Equals(other);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void WhenOtherIsGridButOrderedDifferently_ReturnTrue()
+        {
+            //Arrange
+            Instance[0, 0] = Fixture.Create<Dummy>();
+            Instance[1, 0] = Fixture.Create<Dummy>();
+            Instance[2, 0] = Fixture.Create<Dummy>();
+
+            var other = new Grid<Dummy>
+            {
+                { 1,0, Instance[1,0] },
+                { 0,0, Instance[0,0] },
+                { 2,0, Instance[2,0] },
+            };
+
+            //Act
+            var result = Instance.Equals(other);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void WhenOtherIsCellsButOrderedDifferently_ReturnTrue()
+        {
+            //Arrange
+            Instance[0, 0] = Fixture.Create<Dummy>();
+            Instance[1, 0] = Fixture.Create<Dummy>();
+            Instance[2, 0] = Fixture.Create<Dummy>();
+
+            var other = new List<Cell<Dummy>>
+            {
+                new(1, 0, Instance[1, 0]),
+                new(0, 0, Instance[0, 0]),
+                new(2, 0, Instance[2, 0]),
+            };
 
             //Act
             var result = Instance.Equals(other);

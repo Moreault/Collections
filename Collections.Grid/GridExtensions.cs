@@ -83,4 +83,25 @@ public static class GridExtensions
         if (grid == null) throw new ArgumentNullException(nameof(grid));
         return grid.ToDictionary(x => x.Index, x => x.Value);
     }
+
+    public static bool SequenceEqual<TSource>(this IGrid<TSource> first, IEnumerable<Cell<TSource>> second, IEqualityComparer<TSource>? comparer = default)
+    {
+        if (first is null) throw new ArgumentNullException(nameof(first));
+        if (second is null) throw new ArgumentNullException(nameof(second));
+        if (ReferenceEquals(first, second)) return true;
+
+        var secondAsGrid = second as IGrid<TSource> ?? second.ToGrid();
+        if (first.Count != secondAsGrid.Count) return false;
+
+        comparer ??= EqualityComparer<TSource>.Default;
+
+        foreach (var cell in first)
+        {
+            if (!comparer.Equals(cell.Value, secondAsGrid[cell.Index]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

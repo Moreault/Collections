@@ -8,6 +8,7 @@ using ToolBX.Collections.Grid;
 using ToolBX.Collections.Grid.Resources;
 using ToolBX.Eloquentest;
 using ToolBX.Mathemancy;
+using ToolBX.Reflection4Humans.Extensions.Resources;
 
 namespace Collections.Grid.Tests;
 
@@ -409,6 +410,133 @@ public class GridExtensionsTester
 
             //Assert
             result.Should().BeEquivalentTo(grid.ToDictionary(x => x.Index, x => x.Value));
+        }
+    }
+
+    [TestClass]
+    public class SequenceEqual : Tester
+    {
+        [TestMethod]
+        public void WhenFirstIsNull_Throw()
+        {
+            //Arrange
+            IGrid<Dummy> first = null!;
+            var second = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+
+            //Act
+            var action = () => first.SequenceEqual(second);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(first));
+        }
+
+        [TestMethod]
+        public void WhenSecondIsNull_Throw()
+        {
+            //Arrange
+            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            IGrid<Dummy> second = null!;
+
+            //Act
+            var action = () => first.SequenceEqual(second);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(second));
+        }
+
+        [TestMethod]
+        public void WhenFirstIsEmptyAndSecondIsNot_ReturnFalse()
+        {
+            //Arrange
+            var first = new Grid<Dummy>();
+            var second = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+
+            //Act
+            var result = first.SequenceEqual(second);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void WhenSecondIsEmptyAndFirstIsNot_ReturnFalse()
+        {
+            //Arrange
+            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var second = new Grid<Dummy>();
+
+            //Act
+            var result = first.SequenceEqual(second);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void WhenFirstAndSecondDoNotHaveTheSameNumberOfItems_ReturnFalse()
+        {
+            //Arrange
+            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var second = first.Concat(new List<Cell<Dummy>> { Fixture.Create<Cell<Dummy>>() }).ToGrid();
+
+            //Act
+            var result = first.SequenceEqual(second);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+
+        [TestMethod]
+        public void WhenBothGridsAreSameReference_ReturnTrue()
+        {
+            //Arrange
+            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var second = first;
+
+            //Act
+            var result = first.SequenceEqual(second);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void WhenBothGridsAreEqual_ReturnTrue()
+        {
+            //Arrange
+            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var second = first.ToGrid();
+
+            //Act
+            var result = first.SequenceEqual(second);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void WhenBothGridsAreEqualButSecondIsScrambled_ReturnTrue()
+        {
+            //Arrange
+            var first = new Grid<Dummy>
+            {
+                { 0, 0, Fixture.Create<Dummy>() },
+                { 1, 0, Fixture.Create<Dummy>() },
+                { 2, 0, Fixture.Create<Dummy>() },
+            };
+            var second = new Grid<Dummy>
+            {
+                { 1, 0, first[1, 0] },
+                { 0, 0, first[0, 0] },
+                { 2, 0, first[2, 0] },
+            };
+
+            //Act
+            var result = first.SequenceEqual(second);
+
+            //Assert
+            result.Should().BeTrue();
         }
     }
 }
