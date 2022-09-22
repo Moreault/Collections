@@ -1,6 +1,4 @@
-﻿using ToolBX.Collections.ObservableDictionary.Resources;
-
-namespace ToolBX.Collections.ObservableDictionary
+﻿namespace ToolBX.Collections.ObservableDictionary
 {
     public interface IObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IObservableCollection<KeyValuePair<TKey, TValue>>, IEquatable<IObservableDictionary<TKey, TValue>> where TKey : notnull
     {

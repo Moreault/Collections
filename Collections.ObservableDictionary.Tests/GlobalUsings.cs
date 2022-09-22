@@ -13,3 +13,4 @@ global using ToolBX.EasyTypeParsing;
 global using ToolBX.Eloquentest;
 global using ToolBX.Eloquentest.Extensions;
 global using ToolBX.OPEX;
+global using ToolBX.OutWarden;

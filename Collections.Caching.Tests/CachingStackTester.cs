@@ -1,6 +1,4 @@
-﻿using ToolBX.OPEX;
-
-namespace Collections.Caching.Tests;
+﻿namespace Collections.Caching.Tests;
 
 [TestClass]
 public class CachingStackTester

@@ -91,10 +91,10 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
         foreach (var item in list)
             _items.Push(item);
         if (CollectionChanged != null && list.Any())
-        CollectionChanged.Invoke(this, new CollectionChangeEventArgs<T>
-        {
-            NewValues = list
-        });
+            CollectionChanged.Invoke(this, new CollectionChangeEventArgs<T>
+            {
+                NewValues = list
+            });
     }
 
     public IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
