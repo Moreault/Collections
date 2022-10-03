@@ -9,7 +9,6 @@ global using Microsoft.VisualStudio.TestTools.UnitTesting;
 global using ToolBX.Collections.Caching;
 global using ToolBX.Collections.Common;
 global using ToolBX.Collections.ObservableDictionary;
-global using ToolBX.EasyTypeParsing;
 global using ToolBX.Eloquentest;
 global using ToolBX.Eloquentest.Extensions;
 global using ToolBX.OPEX;

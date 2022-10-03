@@ -8,7 +8,6 @@ global using FluentAssertions;
 global using Microsoft.VisualStudio.TestTools.UnitTesting;
 global using ToolBX.Collections.Common;
 global using ToolBX.Collections.ObservableStack;
-global using ToolBX.EasyTypeParsing;
 global using ToolBX.Eloquentest;
 global using ToolBX.Eloquentest.Extensions;
 global using ToolBX.OPEX;

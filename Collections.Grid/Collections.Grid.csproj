@@ -30,8 +30,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.EasyTypeParsing" Version="2.0.0-beta1" />
 		<PackageReference Include="ToolBX.Mathemancy" Version="2.0.0-beta1" />
+		<PackageReference Include="ToolBX.OutWarden" Version="2.0.0-beta1" />
 		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.0.0-beta1" />
 	</ItemGroup>
 
