@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>2.0.0-beta2</Version>
+		<Version>1.0.2</Version>
 		<RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
 		<PackageId>ToolBX.$(AssemblyName)</PackageId>
 		<Product>ToolBX.$(AssemblyName)</Product>
@@ -19,8 +19,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.OutWarden" Version="2.0.0-beta1" />
-		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.0.0-beta1" />
+		<PackageReference Include="ToolBX.OutWarden" Version="1.0.0" />
+		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
