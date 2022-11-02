@@ -490,7 +490,6 @@ public class Grid<T> : IGrid<T>
 
     public void TranslateAll(int x, int y) => TranslateAll(new Vector2<int>(x, y));
 
-
     public void TranslateAll(Vector2<int> translation)
     {
         if (translation == new Vector2<int>(0, 0) || !_items.Any()) return;
@@ -545,7 +544,7 @@ public class Grid<T> : IGrid<T>
         if (oldItems.Any() || newItems.Any())
             CollectionChanged?.Invoke(this, new GridChangedEventArgs<T> { OldValues = oldItems, NewValues = newItems });
     }
-
+    //TODO Return Grid<T>
     public IGrid<T> Copy() => Copy(Boundaries);
 
     public IGrid<T> Copy(Boundaries<int> boundaries)
@@ -581,7 +580,7 @@ public class Grid<T> : IGrid<T>
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    private struct Enumerator : IEnumerator<Cell<T>>
+    private readonly struct Enumerator : IEnumerator<Cell<T>>
     {
         private readonly IEnumerator<KeyValuePair<Vector2<int>, T>> _parentEnumerator;
 

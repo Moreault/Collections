@@ -126,6 +126,10 @@ grid = jagged.ToGrid();
 -Now uses Vector2<int> instead of Coordinates
 -Coordinates still exist and now have implicit operators to give you time to move to Vector2
 
+#### 1.1.X -> 1.2.X
+
+-Column and Row counts are now based on actual index values rather than starting from zero (use FirstColumn, LastColumn, FirstRow and LastRow for boundaries instead)
+
 ![Inventory](https://github.com/Moreault/Collections/blob/master/inventory.png)
 ## Inventory
 

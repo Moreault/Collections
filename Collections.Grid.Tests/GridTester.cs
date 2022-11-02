@@ -1,12 +1,9 @@
 using AutoFixture;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ToolBX.Collections.Grid;
-using ToolBX.Eloquentest;
 using ToolBX.Eloquentest.Extensions;
 using ToolBX.Mathemancy;
 using ToolBX.OPEX;

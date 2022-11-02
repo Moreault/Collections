@@ -5,6 +5,9 @@ public readonly record struct Cell<T>
     public Vector2<int> Index { get; init; }
     public T? Value { get; init; }
 
+    public int X => Index.X;
+    public int Y => Index.Y;
+
     public Cell(int x, int y, T? value) : this(new Vector2<int>(x, y), value)
     {
 
