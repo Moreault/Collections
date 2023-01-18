@@ -1,4 +1,6 @@
-﻿namespace ToolBX.Collections.Grid;
+﻿using System;
+
+namespace ToolBX.Collections.Grid;
 
 /// <summary>
 /// An observable, dynamic two-dimensional array.
@@ -273,9 +275,9 @@ public class Grid<T> : IGrid<T>
 
         var cellsList = cells as IReadOnlyList<Cell<T>> ?? cells.ToList();
 
-        //TODO Message
-        if (cellsList.Any(x => Contains(x.Index)))
-            throw new InvalidOperationException();
+        foreach (var cell in cellsList)
+            if (Contains(cell.Index))
+                throw new InvalidOperationException(string.Format(Exceptions.CannotAddItemAtIndexBecauseItIsTaken, cell.Index));
 
         foreach (var cell in cellsList)
             _items[cell.Index] = cell.Value;
