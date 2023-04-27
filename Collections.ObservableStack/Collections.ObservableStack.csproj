@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.0.0" />
+		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.0.2" />
 		<PackageReference Include="ToolBX.OutWarden" Version="2.0.0" />
 	</ItemGroup>
 
