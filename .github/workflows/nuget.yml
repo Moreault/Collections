@@ -1,0 +1,42 @@
+name: Publish to NuGet
+
+on:
+  push:
+    branches:
+      - master
+      
+env:
+  NuGetDirectory: ${{ github.workspace}}/nuget
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.100
+      
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build project
+      run: dotnet build --configuration Release
+      
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
+      
+    - name: Pack projects
+      run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
+      
+    - name: Publish to NuGet.org
+      run: | 
+        nuget push ${{ env.NuGetDirectory }}/ToolBX.Collections.Grid.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
+        nuget push ${{ env.NuGetDirectory }}/ToolBX.Collections.Inventory.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
+        nuget push ${{ env.NuGetDirectory }}/ToolBX.Collections.ObservableDictionary.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
+        nuget push ${{ env.NuGetDirectory }}/ToolBX.Collections.ObservableList.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
+        nuget push ${{ env.NuGetDirectory }}/ToolBX.Collections.ObservableStack.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
+        nuget push ${{ env.NuGetDirectory }}/ToolBX.Collections.ReadOnly.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
