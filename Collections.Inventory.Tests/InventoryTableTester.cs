@@ -3868,7 +3868,7 @@ public class InventoryTableTester
             var json = JsonConvert.SerializeObject(Instance);
 
             //Act
-            var result = JsonConvert.DeserializeObject<InventoryTable<Dummy>>(json);
+            var result = JsonConvert.DeserializeObject<InventoryTable<Dummy>>(json)!;
 
             //Assert
             result.StackSize.Should().Be(Instance.StackSize);
