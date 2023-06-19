@@ -2,7 +2,7 @@
 
 public static class ReadOnlyListExtensions
 {
-    public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source) => new ReadOnlyList<T>(source);
+    public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source) => new(source);
 
     /// <summary>
     /// Returns a new read-only list with the specified elements.

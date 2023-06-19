@@ -1,9 +1,8 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
-using ToolBX.Collections.ReadOnly;
 using ToolBX.Eloquentest;
 
 namespace Collections.ReadOnly.Tests;
@@ -1234,6 +1233,30 @@ public class ReadOnlyListTester
                 source[1],
                 source[0]
             });
+        }
+    }
+
+    [TestClass]
+    public class Serialization : Tester
+    {
+        [TestMethod]
+        public void WhenUsingSystemText_DeserializeReadOnlyList()
+        {
+            //Arrange
+            var instance = new DummyWithListInside
+            {
+                Id = Fixture.Create<Guid>(),
+                Name = Fixture.Create<string>(),
+                Stuff = Fixture.CreateMany<Dummy>().ToReadOnlyList()
+            };
+
+            var json = System.Text.Json.JsonSerializer.Serialize(instance);
+
+            //Act
+            var result = System.Text.Json.JsonSerializer.Deserialize<DummyWithListInside>(json);
+
+            //Assert
+            result.Should().BeEquivalentTo(instance);
         }
     }
 }

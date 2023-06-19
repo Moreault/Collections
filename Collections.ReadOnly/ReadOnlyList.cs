@@ -5,7 +5,7 @@
 /// </summary>
 public record ReadOnlyList<T> : IReadOnlyList<T>, IEquatable<IEnumerable<T>>
 {
-    public static readonly IReadOnlyList<T> Empty = new ReadOnlyList<T>();
+    public static readonly ReadOnlyList<T> Empty = new();
 
     public T this[int index] => _items[index];
 
