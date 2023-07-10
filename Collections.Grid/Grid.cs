@@ -129,14 +129,15 @@ public class Grid<T> : IGrid<T>
         }
         set
         {
+            var hadValueBefore = Contains(index);
             var oldItem = this[index];
             _items[index] = value;
 
-            if (!Equals(oldItem, value))
+            if (!hadValueBefore || !Equals(oldItem, value))
                 CollectionChanged?.Invoke(this, new GridChangedEventArgs<T>
                 {
-                    OldValues = oldItem == null ? Array.Empty<Cell<T>>() : new Cell<T>[] { new() { Index = index, Value = oldItem } },
-                    NewValues = value == null ? Array.Empty<Cell<T>>() : new Cell<T>[] { new() { Index = index, Value = value } },
+                    OldValues = hadValueBefore ? new Cell<T>[] { new() { Index = index, Value = oldItem } } : Array.Empty<Cell<T>>(),
+                    NewValues = new Cell<T>[] { new() { Index = index, Value = value } },
                 });
         }
     }
