@@ -1281,7 +1281,14 @@ public class GridTester
             Instance.Add(index.X, index.Y, null);
 
             //Assert
-            eventArgs.Should().BeEmpty();
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+            {
+                new()
+                {
+                    OldValues = Array.Empty<Cell<string>>(),
+                    NewValues = new List<Cell<string>> { new(index, null) }
+                }
+            });
         }
 
         [TestMethod]
@@ -1312,6 +1319,8 @@ public class GridTester
             //Assert
             action.Should().Throw<InvalidOperationException>();
         }
+
+
     }
 
     [TestClass]
@@ -1399,7 +1408,7 @@ public class GridTester
         }
 
         [TestMethod]
-        public void WhenItemIsNull_DoNotTriggerEvent()
+        public void WhenItemIsNullButInNewCell_TriggerEvent()
         {
             //Arrange
             var index = Fixture.Create<Vector2<int>>();
@@ -1411,7 +1420,14 @@ public class GridTester
             Instance.Add(index, null);
 
             //Assert
-            eventArgs.Should().BeEmpty();
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+            {
+                new()
+                {
+                    OldValues = Array.Empty<Cell<string>>(),
+                    NewValues = new List<Cell<string>> { new(index, null) }
+                }
+            });
         }
 
         [TestMethod]
@@ -1441,6 +1457,155 @@ public class GridTester
 
             //Assert
             action.Should().Throw<InvalidOperationException>();
+        }
+    }
+
+    [TestClass]
+    public class Add_ValueType : Tester<Grid<bool>>
+    {
+        [TestMethod]
+        public void WhenIndexIsNegative_AddAtIndex()
+        {
+            //Arrange
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var item = Fixture.Create<bool>();
+
+            //Act
+            Instance.Add(index.X, index.Y, item);
+
+            //Assert
+            Instance[index].Should().Be(item);
+        }
+
+        [TestMethod]
+        public void WhenIndexIsNegative_TriggerEvent()
+        {
+            //Arrange
+            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var item = Fixture.Create<bool>();
+
+            var eventArgs = new List<GridChangedEventArgs<bool>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.Add(index.X, index.Y, item);
+
+            //Assert
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<bool>>
+            {
+                new() { NewValues = new List<Cell<bool>> { new(index, item) } }
+            });
+        }
+
+        [TestMethod]
+        public void WhenIndexIsPositive_AddAtIndex()
+        {
+            //Arrange
+            var index = Fixture.Create<Vector2<int>>();
+            var item = Fixture.Create<bool>();
+
+            //Act
+            Instance.Add(index.X, index.Y, item);
+
+            //Assert
+            Instance[index].Should().Be(item);
+        }
+
+        [TestMethod]
+        public void WhenIndexIsPositive_TriggerEvent()
+        {
+            //Arrange
+            var index = Fixture.Create<Vector2<int>>();
+            var item = Fixture.Create<bool>();
+
+            var eventArgs = new List<GridChangedEventArgs<bool>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.Add(index.X, index.Y, item);
+
+            //Assert
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<bool>>
+            {
+                new() { NewValues = new List<Cell<bool>> { new(index, item) } }
+            });
+        }
+
+        [TestMethod]
+        public void WhenItemIsDefaultValue_AddDefaultValueAtIndex()
+        {
+            //Arrange
+            var index = Fixture.Create<Vector2<int>>();
+
+            //Act
+            Instance.Add(index.X, index.Y, default);
+
+            //Assert
+            Instance[index].Should().Be(default);
+        }
+
+        [TestMethod]
+        public void WhenItemIsDefaultValue_TriggerEvent()
+        {
+            //Arrange
+            var index = Fixture.Create<Vector2<int>>();
+
+            var eventArgs = new List<GridChangedEventArgs<bool>>();
+            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+            //Act
+            Instance.Add(index.X, index.Y, default);
+
+            //Assert
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<bool>>
+            {
+                new()
+                {
+                    OldValues = Array.Empty<Cell<bool>>(),
+                    NewValues = new List<Cell<bool>> { new(index, default) }
+                }
+            });
+        }
+
+        [TestMethod]
+        public void WhenThereIsAlreadySomethingAtIndex_Throw()
+        {
+            //Arrange
+            var index = Fixture.Create<Vector2<int>>();
+            var item = Fixture.Create<bool>();
+            Instance.Add(index.X, index.Y, Fixture.Create<bool>());
+
+            //Act
+            var action = () => Instance.Add(index.X, index.Y, item);
+
+            //Assert
+            action.Should().Throw<InvalidOperationException>();
+        }
+
+        [TestMethod]
+        public void WhenAddingNegativeIndexWithDefaultValue_UpdateFirstRow()
+        {
+            //Arrange
+            var index = -Fixture.Create<Vector2<int>>();
+
+            //Act
+            Instance.Add(index, default);
+
+            //Assert
+            Instance.FirstRow.Should().Be(index.Y);
+        }
+
+        [TestMethod]
+        public void WhenAddingNegativeIndexWithDefaultValue_UpdateFirstColumn()
+        {
+            //Arrange
+            var index = -Fixture.Create<Vector2<int>>();
+
+            //Act
+            Instance.Add(index, default);
+
+            //Assert
+            Instance.FirstColumn.Should().Be(index.X);
         }
     }
 
@@ -1529,7 +1694,7 @@ public class GridTester
         }
 
         [TestMethod]
-        public void WhenItemIsNull_DoNotTriggerEvent()
+        public void WhenItemIsNull_TriggerEvent()
         {
             //Arrange
             var index = Fixture.Create<Vector2<int>>();
@@ -1541,7 +1706,14 @@ public class GridTester
             Instance.TryAdd(index.X, index.Y, null);
 
             //Assert
-            eventArgs.Should().BeEmpty();
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+            {
+                new()
+                {
+                    OldValues = Array.Empty<Cell<string>>(),
+                    NewValues = new List<Cell<string>> { new(index, null) }
+                }
+            });
         }
 
         [TestMethod]
@@ -1691,7 +1863,7 @@ public class GridTester
         }
 
         [TestMethod]
-        public void WhenItemIsNull_DoNotTriggerEvent()
+        public void WhenItemIsNull_TriggerEvent()
         {
             //Arrange
             var index = Fixture.Create<Vector2<int>>();
@@ -1703,7 +1875,14 @@ public class GridTester
             Instance.TryAdd(index, null);
 
             //Assert
-            eventArgs.Should().BeEmpty();
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+            {
+                new()
+                {
+                    OldValues = Array.Empty<Cell<string>>(),
+                    NewValues = new List<Cell<string>> { new(index, null) }
+                }
+            });
         }
 
         [TestMethod]
