@@ -5,6 +5,7 @@ namespace ToolBX.Collections.Grid;
 /// <summary>
 /// An observable, dynamic two-dimensional array.
 /// </summary>
+//TODO Make this obsolete, use Grid<T> instead
 public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatable<T[,]>, IEquatable<IEnumerable<KeyValuePair<Vector2<int>, T>>>, IEquatable<T[][]>, IEquatable<IEnumerable<Cell<T>>>
 {
     int ColumnCount { get; }
@@ -112,6 +113,7 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
 /// <inheritdoc cref="IGrid{T}"/>
 public class Grid<T> : IGrid<T>
 {
+    //TODO Make into a List<Cell<T>> instead of a Dictionary<Vector2<int>, T?> for performance reasons
     private readonly IDictionary<Vector2<int>, T?> _items = new Dictionary<Vector2<int>, T?>();
 
     public T? this[int columnIndex, int rowIndex]
@@ -203,6 +205,7 @@ public class Grid<T> : IGrid<T>
 
     private void OnCollectionChanged(object sender, GridChangedEventArgs<T> args)
     {
+        //TODO Apply same logic as OverlapGrid<T> for this
         if (_items.Any())
         {
             ColumnCount = (_items.Keys.Any(x => x.X < 0) ? Math.Abs(_items.Keys.Min(x => x.X)) : 0) +

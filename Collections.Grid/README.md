@@ -157,6 +157,27 @@ It works just like `FloodFill` except that it removes by flooding. It is also no
 grid.FloodClear(12, 14);
 ```
 
+# Serialization
+
+`Grid<T>` can be serialized using both Newtonsoft.Json and System.Text.Json. By default, `OverlapGrid<T>` can only be serialized using Newtonsoft.Json. Use the `WithGridConverters` extension method to add support for System.Text.Json.
+
+```c#
+//Grid<T> with Newtonsoft.Json
+var json = JsonConvert.SerializeObject(grid);
+var grid = JsonConvert.DeserializeObject<Grid<string>>(json);
+
+//Grid<T> with System.Text.Json
+var json = JsonSerializer.Serialize(grid);
+var grid = JsonSerializer.Deserialize<Grid<string>>(json);
+
+//OverlapGrid<T> with Newtonsoft.Json
+var json = JsonConvert.SerializeObject(overlapGrid);
+var overlapGrid = JsonConvert.DeserializeObject<OverlapGrid<string>>(json);
+
+//OverlapGrid<T> with System.Text.Json
+var json = JsonSerializer.Serialize(overlapGrid, new JsonSerializerOptions().WithGridConverters());
+var overlapGrid = JsonSerializer.Deserialize<OverlapGrid<string>>(json, new JsonSerializerOptions().WithGridConverters());
+```
 
 # Breaking changes
 
