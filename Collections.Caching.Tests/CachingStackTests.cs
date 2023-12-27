@@ -1,7 +1,7 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public class CachingStackTester
+public class CachingStackTests
 {
     [TestClass]
     public class Limit : Tester<CachingStack<Dummy>>
@@ -618,6 +618,7 @@ public class CachingStackTester
             var result = Instance.Count;
 
             //Assert
+            result.Should().Be(0);
         }
 
         [TestMethod]
@@ -779,7 +780,7 @@ public class CachingStackTester
             var result = Instance.TryPeek();
 
             //Assert
-            result.Should().Be(TryGetResult<Dummy>.Failure);
+            result.Should().Be(Result<Dummy>.Failure());
         }
 
         [TestMethod]
@@ -793,7 +794,7 @@ public class CachingStackTester
             var result = Instance.TryPeek();
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, item));
+            result.Should().Be(Result<Dummy>.Success(item));
         }
 
         [TestMethod]
@@ -806,7 +807,7 @@ public class CachingStackTester
             var result = Instance.TryPeek();
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, items.Last()));
+            result.Should().Be(Result<Dummy>.Success(items.Last()));
         }
     }
 
@@ -939,7 +940,7 @@ public class CachingStackTester
             var result = Instance.TryPop();
 
             //Assert
-            result.Should().Be(TryGetResult<Dummy>.Failure);
+            result.Should().Be(Result<Dummy>.Failure());
         }
 
         [TestMethod]
@@ -953,7 +954,7 @@ public class CachingStackTester
             var result = Instance.TryPop();
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, item));
+            result.Should().Be(Result<Dummy>.Success(item));
         }
 
         [TestMethod]
@@ -1003,7 +1004,7 @@ public class CachingStackTester
             var result = Instance.TryPop();
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, items.Last()));
+            result.Should().Be(Result<Dummy>.Success(items.Last()));
         }
 
         [TestMethod]

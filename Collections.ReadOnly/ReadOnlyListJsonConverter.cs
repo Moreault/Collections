@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace ToolBX.Collections.ReadOnly;
 
-//TODO .NET 8 : Might not be required anymore ()
+[Obsolete("Use ImmutableList<T> instead which doesn't require a custom JsonConverter. Will be removed in 3.0.0")]
 public class ReadOnlyListJsonConverter<T> : JsonConverter<ReadOnlyList<T>>
 {
     public override ReadOnlyList<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

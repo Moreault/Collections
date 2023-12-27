@@ -136,10 +136,10 @@ public class CachingDictionary<TKey, TValue> : ICachingDictionary<TKey, TValue> 
 
     public ObservableDictionary<TKey, TValue> Copy() => new(this);
 
-    public TryGetResult<TValue> TryGetValue(TKey key)
+    public Result<TValue> TryGetValue(TKey key)
     {
         var index = _items.FirstIndexOf(x => Equals(x.Key, key));
-        return index < 0 ? TryGetResult<TValue>.Failure : new TryGetResult<TValue>(true, _items[index].Value);
+        return index < 0 ? Result<TValue>.Failure() : Result<TValue>.Success(_items[index].Value);
     }
 
     public void Add(params KeyValuePair<TKey, TValue>[] items) => Add(items as IEnumerable<KeyValuePair<TKey, TValue>>);

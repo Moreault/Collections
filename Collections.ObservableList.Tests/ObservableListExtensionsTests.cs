@@ -1,7 +1,7 @@
 ﻿namespace Collections.ObservableList.Tests;
 
 [TestClass]
-public class ObservableListExtensionsTester
+public class ObservableListExtensionsTests
 {
     [TestClass]
     public class ToObservableList : Tester

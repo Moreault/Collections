@@ -65,9 +65,9 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
         return _items.First();
     }
 
-    public TryGetResult<T> TryPeek()
+    public Result<T> TryPeek()
     {
-        return Count == 0 ? TryGetResult<T>.Failure : new TryGetResult<T>(true, _items.First());
+        return Count == 0 ? Result<T>.Failure() : Result<T>.Success(_items.First());
     }
 
     public T Pop()
@@ -78,9 +78,9 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
         return item;
     }
 
-    public TryGetResult<T> TryPop()
+    public Result<T> TryPop()
     {
-        return Count == 0 ? TryGetResult<T>.Failure : new TryGetResult<T>(true, Pop());
+        return Count == 0 ? Result<T>.Failure() : Result<T>.Success(Pop());
     }
 
     public void Push(params T[] items) => Push(items as IEnumerable<T>);

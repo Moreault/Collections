@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.Collections.Inventory;
 
-public record StockSearchResult<T> : IReadOnlyList<IndexedEntry<T>>, IEquatable<IEnumerable<IndexedEntry<T>>>
+public sealed record StockSearchResult<T> : IReadOnlyList<IndexedEntry<T>>, IEquatable<IEnumerable<IndexedEntry<T>>>
 {
     private readonly IReadOnlyList<IndexedEntry<T>> _items;
 
@@ -18,9 +18,9 @@ public record StockSearchResult<T> : IReadOnlyList<IndexedEntry<T>>, IEquatable<
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    public virtual bool Equals(StockSearchResult<T>? other) => Equals(other as IEnumerable<IndexedEntry<T>>);
+    public bool Equals(StockSearchResult<T>? other) => Equals(other as IEnumerable<IndexedEntry<T>>);
 
-    public virtual bool Equals(IEnumerable<IndexedEntry<T>>? other)
+    public bool Equals(IEnumerable<IndexedEntry<T>>? other)
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;

@@ -13,24 +13,17 @@
 		<RepositoryUrl>https://github.com/Moreault/Collections</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Moreault/Collections</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>Actual read-only collections with helper extension methods to make them less painful to use.</Description>
-		<PackageIcon>readonlylist.png</PackageIcon>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<Description>Tester classes and extensions to help with unit testing ToolBX.Collections.</Description>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <None Include="..\README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Include="..\readonlylist.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="ToolBX.Eloquentest" Version="2.2.0-beta11" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.2.0-beta7" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Collections.Grid\Collections.Grid.csproj" />
+    <ProjectReference Include="..\Collections.ObservableList\Collections.ObservableList.csproj" />
+  </ItemGroup>
 
 </Project>

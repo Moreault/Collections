@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoFixture;
-using FluentAssertions;
-
-namespace Collections.Grid.Tests;
+﻿namespace Collections.Grid.Tests;
 
 [TestClass]
-public class OverlapGridExtensionsTester
+public class OverlapGridExtensionsTests
 {
     [TestClass]
     public class ToOverlapGrid : Tester

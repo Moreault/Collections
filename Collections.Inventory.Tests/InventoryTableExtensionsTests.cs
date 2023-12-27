@@ -1,7 +1,7 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public class InventoryTableExtensionsTester
+public class InventoryTableExtensionsTests
 {
     [TestClass]
     public class ToInventory_EnumerableOfDummy : Tester

@@ -3,6 +3,7 @@
 /// <summary>
 /// A read-only collection of elements that can be accessed via indexer.
 /// </summary>
+[Obsolete("Use ImmutableList<T> instead. Will be removed in 3.0.0")]
 public record ReadOnlyList<T> : IReadOnlyList<T>, IEquatable<IEnumerable<T>>
 {
     public static readonly ReadOnlyList<T> Empty = new();

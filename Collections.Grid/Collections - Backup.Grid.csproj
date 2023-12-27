@@ -13,50 +13,55 @@
 		<RepositoryUrl>https://github.com/Moreault/Collections</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Moreault/Collections</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>A dictionary that triggers an event when its content is changed.</Description>
-		<PackageIcon>observabledictionary.png</PackageIcon>
+		<Description>An observable, dynamic two-dimensional array.</Description>
+		<PackageIcon>grid.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Include="..\grid.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ToolBX.Mathemancy" Version="2.2.0-beta2" />
+		<PackageReference Include="ToolBX.OPEX" Version="2.2.0-beta2" />
 		<PackageReference Include="ToolBX.OutWarden" Version="2.2.0-beta2" />
 		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.2.0-beta7" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Collections.Common\Collections.Common.csproj" />
+		<Compile Update="Resources\Exceptions.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Exceptions.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Resources\Exceptions.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Exceptions.resx</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Update="Resources\Exceptions.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Resources\Exceptions.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>Collections.ObservableDictionary.Tests</_Parameter1>
+			<_Parameter1>Collections.Grid.Tests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\observabledictionary.png">
+	  <None Update="README.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
-	  <None Include="..\README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="NewFolder\" />
 	</ItemGroup>
 
 </Project>

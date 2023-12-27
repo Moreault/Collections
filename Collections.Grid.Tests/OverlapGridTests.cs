@@ -1,18 +1,7 @@
-﻿using AutoFixture;
-using FluentAssertions;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Serialization;
-using ToolBX.Collections.Grid.Resources;
-using ToolBX.Mathemancy;
-using ToolBX.OPEX;
-
-namespace Collections.Grid.Tests;
+﻿namespace Collections.Grid.Tests;
 
 [TestClass]
-public class OverlapGridTester
+public class OverlapGridTests
 {
     [TestClass]
     public class Indexer_XY : Tester<OverlapGrid<Dummy>>
@@ -1077,6 +1066,19 @@ public class OverlapGridTester
     [TestClass]
     public class Add_Enumerable_Cells : Tester<OverlapGrid<Dummy>>
     {
+        [TestMethod]
+        public void WhenCellsAreNull_Throw()
+        {
+            //Arrange
+            IEnumerable<Cell<Dummy>> cells = null!;
+
+            //Act
+            var action = () => Instance.Add(cells);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(cells));
+        }
+
         [TestMethod]
         public void Always_AddItemsAtPosition()
         {
@@ -4787,194 +4789,33 @@ public class OverlapGridTester
     }
 
     [TestClass]
-    public class Equals_OverlapGrid : Tester<OverlapGrid<Dummy>>
+    public class Equality : Tester<OverlapGrid<Dummy>>
     {
-        [TestMethod]
-        public void WhenOtherIsNull_ReturnFalse()
+        protected override void InitializeTest()
         {
-            //Arrange
-            OverlapGrid<Dummy> other = null!;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
+            base.InitializeTest();
+            Fixture.Customizations.Add(new OverlapGridSpecimenBuilder());
         }
 
         [TestMethod]
-        public void WhenOtherIsSameReference_ReturnTrue()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>();
-            Instance.Add(items);
-
-            var other = Instance;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentReferenceButEquivalent_ReturnTrue()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            Instance.Add(items);
-
-            var other = items.ToOverlapGrid();
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsNotEquivalent_ReturnFalse()
-        {
-            //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
-
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToOverlapGrid();
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
+        public void Always_EnsureValueEquality() => Ensure.ValueEquality<OverlapGrid<Dummy>>(Fixture);
     }
 
     [TestClass]
-    public class Equals_Enumerable : Tester<OverlapGrid<Dummy>>
+    public class HashCode : Tester<OverlapGrid<Dummy>>
     {
         [TestMethod]
-        public void WhenOtherIsNull_ReturnFalse()
-        {
-            //Arrange
-            IEnumerable<Cell<Dummy>> other = null!;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSameReference_ReturnTrue()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>();
-            Instance.Add(items);
-
-            IEnumerable<Cell<Dummy>> other = Instance;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentReferenceButEquivalent_ReturnTrue()
+        public void Always_ReturnInternalListHashCode()
         {
             //Arrange
             var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
             Instance.Add(items);
 
-            var other = items;
-
             //Act
-            var result = Instance.Equals(other);
+            var result = Instance.GetHashCode();
 
             //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsNotEquivalent_ReturnFalse()
-        {
-            //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
-
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToList();
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-    }
-
-    [TestClass]
-    public class Equals_Object : Tester<OverlapGrid<Dummy>>
-    {
-        [TestMethod]
-        public void WhenOtherIsNull_ReturnFalse()
-        {
-            //Arrange
-            object other = null!;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSameReference_ReturnTrue()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>();
-            Instance.Add(items);
-
-            object other = Instance;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentReferenceButEquivalent_ReturnTrue()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            Instance.Add(items);
-
-            object other = items;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsNotEquivalent_ReturnFalse()
-        {
-            //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
-
-            object other = Fixture.CreateMany<Cell<Dummy>>().ToList();
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
+            result.Should().Be(GetFieldValue<List<Cell<Dummy>>>("_items")!.GetHashCode());
         }
     }
 
@@ -4996,18 +4837,21 @@ public class OverlapGridTester
             //Assert
             result.Should().BeEquivalentTo(Instance);
         }
-        //TODO Fix
-        [TestMethod, Ignore("Cries that it's not supported")]
+
+        //TODO Fix : System.Text is going to be more important than Newtonsoft moving forward
+        [TestMethod]
         public void WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
         {
             //Arrange
             var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
             Instance.Add(items);
 
-            var json = System.Text.Json.JsonSerializer.Serialize(Instance);
+            var options = new JsonSerializerOptions().WithGridConverters();
+
+            var json = System.Text.Json.JsonSerializer.Serialize(Instance, options);
 
             //Act
-            var result = System.Text.Json.JsonSerializer.Deserialize<OverlapGrid<Dummy>>(json);
+            var result = System.Text.Json.JsonSerializer.Deserialize<OverlapGrid<Dummy>>(json, options);
 
             //Assert
             result.Should().BeEquivalentTo(Instance);

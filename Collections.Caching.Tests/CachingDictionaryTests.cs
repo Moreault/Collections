@@ -1,7 +1,7 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public class CachingDictionaryTester
+public class CachingDictionaryTests
 {
     [TestClass]
     public class Limit : Tester<CachingDictionary<int, Dummy>>
@@ -578,7 +578,7 @@ public class CachingDictionaryTester
             var result = Instance.TryGetValue(Fixture.Create<int>());
 
             //Assert
-            result.Should().Be(TryGetResult<Dummy>.Failure);
+            result.Should().Be(Result<Dummy>.Failure());
         }
 
         [TestMethod]
@@ -595,7 +595,7 @@ public class CachingDictionaryTester
             var result = Instance.TryGetValue(key);
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, null));
+            result.Should().Be(Result<Dummy>.Success(null!));
         }
 
         [TestMethod]
@@ -611,7 +611,7 @@ public class CachingDictionaryTester
             var result = Instance.TryGetValue(item.Key);
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, item.Value));
+            result.Should().Be(Result<Dummy>.Success(item.Value));
         }
     }
 

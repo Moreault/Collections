@@ -1,7 +1,7 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public class StockSearchResultTester
+public class StockSearchResultTests
 {
     //TODO Test
     [TestClass]

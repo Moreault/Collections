@@ -388,7 +388,7 @@ public abstract class Inventory<T> : IInventory<T>
 
     public bool Equals(Inventory<T>? other)
     {
-        if (ReferenceEquals(other, null)) return false;
+        if (other is null) return false;
         if (ReferenceEquals(other, this)) return true;
         return StackSize == other.StackSize && Items.SequenceEqual(other.Items);
     }

@@ -2,7 +2,7 @@
 {
     public interface IObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IObservableCollection<KeyValuePair<TKey, TValue>>, IEquatable<IObservableDictionary<TKey, TValue>> where TKey : notnull
     {
-        TryGetResult<TValue> TryGetValue(TKey key);
+        Result<TValue> TryGetValue(TKey key);
         void Add(params KeyValuePair<TKey, TValue>[] items);
         void Add(IEnumerable<KeyValuePair<TKey, TValue>> items);
         void Remove(params KeyValuePair<TKey, TValue>[] items);
@@ -101,10 +101,10 @@
             _items = new Dictionary<TKey, TValue>(collection, comparer);
         }
 
-        public TryGetResult<TValue> TryGetValue(TKey key)
+        public Result<TValue> TryGetValue(TKey key)
         {
             var isSuccess = _items.TryGetValue(key, out var value);
-            return new TryGetResult<TValue>(isSuccess, value);
+            return isSuccess ? Result<TValue>.Success(value!) : Result<TValue>.Failure();
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _items.GetEnumerator();

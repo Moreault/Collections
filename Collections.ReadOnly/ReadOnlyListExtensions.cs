@@ -2,16 +2,19 @@
 
 public static class ReadOnlyListExtensions
 {
+    [Obsolete("Use ToImmutableList() instead. Will be removed in 3.0.0")]
     public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source) => new(source);
 
     /// <summary>
     /// Returns a new read-only list with the specified elements.
     /// </summary>
+    [Obsolete("Use OPEX's With() extension method instead. Will be removed in 3.0.0")]
     public static IReadOnlyList<T> With<T>(this IReadOnlyList<T> source, params T[] items) => source.With(items as IEnumerable<T>);
 
     /// <summary>
     /// Returns a new read-only list with the specified elements.
     /// </summary>
+    [Obsolete("Use OPEX's With() extension method instead. Will be removed in 3.0.0")]
     public static IReadOnlyList<T> With<T>(this IReadOnlyList<T> source, IEnumerable<T> items)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
@@ -22,6 +25,7 @@ public static class ReadOnlyListExtensions
     /// <summary>
     /// Returns a new read-only list without the specified elements.
     /// </summary>
+    [Obsolete("Use OPEX's Without() extension method instead. Will be removed in 3.0.0")]
     public static IReadOnlyList<T> Without<T>(this IReadOnlyList<T> source, Func<T, bool> predicate)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
@@ -32,11 +36,13 @@ public static class ReadOnlyListExtensions
     /// <summary>
     /// Returns a new read-only list without the specified elements.
     /// </summary>
+    [Obsolete("Use OPEX's Without() extension method instead. Will be removed in 3.0.0")]
     public static IReadOnlyList<T> Without<T>(this IReadOnlyList<T> source, params T[] items) => source.Without(items as IEnumerable<T>);
 
     /// <summary>
     /// Returns a new read-only list without the specified elements.
     /// </summary>
+    [Obsolete("Use OPEX's Without() extension method instead. Will be removed in 3.0.0")]
     public static IReadOnlyList<T> Without<T>(this IReadOnlyList<T> source, IEnumerable<T> items)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
@@ -47,11 +53,13 @@ public static class ReadOnlyListExtensions
     /// <summary>
     /// Returns a new read-only list with the specified elements inserted at index.
     /// </summary>
+    [Obsolete("Use OPEX's WithAt() extension method instead. Will be removed in 3.0.0")]
     public static IReadOnlyList<T> WithAt<T>(this IReadOnlyList<T> source, int index, params T[] items) => source.WithAt(index, items as IEnumerable<T>);
 
     /// <summary>
     /// Returns a new read-only list with the specified elements inserted at index.
     /// </summary>
+    [Obsolete("Use OPEX's WithAt() extension method instead. Will be removed in 3.0.0")]
     public static IReadOnlyList<T> WithAt<T>(this IReadOnlyList<T> source, int index, IEnumerable<T> items)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
@@ -64,6 +72,7 @@ public static class ReadOnlyListExtensions
     /// <summary>
     /// Returns a new read-only list without the element at the specified index.
     /// </summary>
+    [Obsolete("Use OPEX's WithoutAt() extension method instead. Will be removed in 3.0.0")]
     public static IReadOnlyList<T> WithoutAt<T>(this IReadOnlyList<T> source, int index)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
@@ -75,6 +84,7 @@ public static class ReadOnlyListExtensions
     /// <summary>
     /// Returns a new read-only with the elements at the specified index swapped.
     /// </summary>
+    [Obsolete("Use OPEX's WithSwapped() extension method instead. Will be removed in 3.0.0")]
     public static IReadOnlyList<T> WithSwapped<T>(this IReadOnlyList<T> source, int current, int destination)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));

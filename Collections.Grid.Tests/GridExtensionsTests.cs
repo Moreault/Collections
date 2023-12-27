@@ -1,16 +1,7 @@
-﻿using AutoFixture;
-using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using ToolBX.Collections.Grid.Resources;
-using ToolBX.Mathemancy;
-using ToolBX.Reflection4Humans.Extensions.Resources;
-
-namespace Collections.Grid.Tests;
+﻿namespace Collections.Grid.Tests;
 
 [TestClass]
-public class GridExtensionsTester
+public class GridExtensionsTests
 {
     [TestClass]
     public class ToGrid_Cells : Tester

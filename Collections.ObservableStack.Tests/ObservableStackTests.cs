@@ -1,7 +1,7 @@
 namespace Collections.ObservableStack.Tests;
 
 [TestClass]
-public class ObservableStackTester
+public class ObservableStackTests
 {
     [TestClass]
     public class Count : Tester<ObservableStack<Dummy>>
@@ -15,6 +15,7 @@ public class ObservableStackTester
             var result = Instance.Count;
 
             //Assert
+            result.Should().Be(0);
         }
 
         [TestMethod]
@@ -175,7 +176,7 @@ public class ObservableStackTester
             var result = Instance.TryPeek();
 
             //Assert
-            result.Should().Be(TryGetResult<Dummy>.Failure);
+            result.Should().Be(Result<Dummy>.Failure());
         }
 
         [TestMethod]
@@ -189,7 +190,7 @@ public class ObservableStackTester
             var result = Instance.TryPeek();
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, item));
+            result.Should().Be(Result<Dummy>.Success(item));
         }
 
         [TestMethod]
@@ -198,11 +199,12 @@ public class ObservableStackTester
             //Arrange
             var items = Fixture.CreateMany<Dummy>().ToList();
             Instance.Push(items);
+
             //Act
             var result = Instance.TryPeek();
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, items.Last()));
+            result.Should().Be(Result<Dummy>.Success(items.Last()));
         }
     }
 
@@ -335,7 +337,7 @@ public class ObservableStackTester
             var result = Instance.TryPop();
 
             //Assert
-            result.Should().Be(TryGetResult<Dummy>.Failure);
+            result.Should().Be(Result<Dummy>.Failure());
         }
 
         [TestMethod]
@@ -349,7 +351,7 @@ public class ObservableStackTester
             var result = Instance.TryPop();
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, item));
+            result.Should().Be(Result<Dummy>.Success(item));
         }
 
         [TestMethod]
@@ -399,7 +401,7 @@ public class ObservableStackTester
             var result = Instance.TryPop();
 
             //Assert
-            result.Should().Be(new TryGetResult<Dummy>(true, items.Last()));
+            result.Should().Be(Result<Dummy>.Success(items.Last()));
         }
 
         [TestMethod]

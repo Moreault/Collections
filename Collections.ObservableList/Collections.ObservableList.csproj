@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>2.0.4</Version>
+		<Version>2.2.0-beta1</Version>
 		<RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
 		<PackageId>ToolBX.$(AssemblyName)</PackageId>
 		<Authors>Mathieu Moreault</Authors>
@@ -19,8 +19,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.OPEX" Version="2.0.3" />
-		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.0.3" />
+		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.2.0-beta7" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -41,6 +40,9 @@
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>Collections.ObservableList.Tests</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>Collections.UnitTesting</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 

@@ -5,9 +5,17 @@
 /// </summary>
 public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCollection<T>
 {
+    /// <summary>
+    /// Number of elements contained in the collection.
+    /// </summary>
     new int Count { get; }
     new T this[int index] { get; set; }
+
+    /// <summary>
+    /// Index of the last element in the collection.
+    /// </summary>
     int LastIndex { get; }
+
     void TryRemoveFirst(T item);
     void RemoveFirst(T item);
     void TryRemoveFirst(Func<T, bool> predicate);
@@ -46,38 +54,48 @@ public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCol
 
     ObservableList<T> Copy(int startingIndex = 0);
     ObservableList<T> Copy(int startingIndex, int count);
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     int FirstIndexOf(T item);
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     int FirstIndexOf(Func<T, bool> predicate);
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     int LastIndexOf(T item);
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     int LastIndexOf(Func<T, bool> predicate);
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     IReadOnlyList<int> IndexesOf(T item);
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     IReadOnlyList<int> IndexesOf(Func<T, bool> predicate);
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     void Swap(int currentIndex, int destinationIndex);
 
     /// <summary>
-    /// Sizes the collection down to maxSize by removing the first elements if needed.
+    /// Resizes the collection down to <see cref="maxSize"/> by prioritizing keeping the last elements.
     /// </summary>
     void TrimStartDownTo(int maxSize);
 
     /// <summary>
-    /// Sizes the collection down to maxSize by removing the last elements if needed.
+    /// Resizes the collection down to <see cref="maxSize"/> by prioritizing keeping the first elements.
     /// </summary>
     void TrimEndDownTo(int maxSize);
 
     /// <summary>
     /// Returns a random element from the collection.
     /// </summary>
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     T? GetRandom();
 
     /// <summary>
     /// Returns a random index from the collection.
     /// </summary>
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     int GetRandomIndex();
 
     /// <summary>
     /// Randomly rearranges the collection's content order.
     /// </summary>
-    void Shuffle();
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
+    IObservableList<T> Shuffle();
 }
 
 public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
@@ -183,21 +201,29 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         return copy;
     }
 
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     int IList<T>.IndexOf(T item) => FirstIndexOf(item);
 
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     public int FirstIndexOf(T item) => _items.FirstIndexOf(item);
 
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     public int FirstIndexOf(Func<T, bool> predicate) => _items.FirstIndexOf(predicate);
 
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     public int LastIndexOf(T item) => _items.LastIndexOf(item);
 
-    //TODO Fix ambiguity in OPEX
-    public int LastIndexOf(Func<T, bool> predicate) => ((IList<T>)_items).LastIndexOf(predicate);
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
+    public int LastIndexOf(Func<T, bool> predicate) => _items.LastIndexOf(predicate);
 
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     public IReadOnlyList<int> IndexesOf(T item) => _items.IndexesOf(item);
 
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     public IReadOnlyList<int> IndexesOf(Func<T, bool> predicate) => _items.IndexesOf(predicate);
 
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
+    //TODO Maybe keep Swap to ensure that CollectionChanged only gets called once instead of twice? (also, add an event trigger here if I do this!)
     public void Swap(int currentIndex, int destinationIndex) => _items.Swap(currentIndex, destinationIndex);
 
     public void TrimStartDownTo(int maxSize)
@@ -257,11 +283,18 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         }
     }
 
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     public T? GetRandom() => _items.GetRandom();
 
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     public int GetRandomIndex() => _items.GetRandomIndex();
 
-    public void Shuffle() => _items.Shuffle();
+    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
+    public IObservableList<T> Shuffle()
+    {
+        _items.Shuffle();
+        return this;
+    }
 
     public void TryRemoveAll(T item)
     {

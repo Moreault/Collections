@@ -1,14 +1,13 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using ToolBX.Eloquentest;
 
 namespace Collections.ReadOnly.Tests;
 
 [TestClass]
-public class ReadOnlyListTester
+public class ReadOnlyListTests
 {
     [TestClass]
     public class Empty : Tester

@@ -1,7 +1,7 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public class InventoryListTester
+public class InventoryListTests
 {
     [TestClass]
     public class Add_Item : Tester<InventoryList<string>>

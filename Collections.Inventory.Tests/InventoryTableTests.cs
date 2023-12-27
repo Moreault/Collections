@@ -1,7 +1,7 @@
 namespace Collections.Inventory.Tests;
 
 [TestClass]
-public class InventoryTableTester
+public class InventoryTableTests
 {
     [TestClass]
     public class LastIndex : Tester<InventoryTable<Dummy>>
