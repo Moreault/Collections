@@ -159,7 +159,7 @@ grid.FloodClear(12, 14);
 
 # Serialization
 
-`Grid<T>` can be serialized using both Newtonsoft.Json and System.Text.Json. By default, `OverlapGrid<T>` can only be serialized using Newtonsoft.Json. Use the `WithGridConverters` extension method to add support for System.Text.Json.
+Both `Grid<T>` and `OverlapGrid<T>` can be serialized and deserialized using Newtonsoft.Json or System.Text.Json. The latter requires you to add the `WithGridConverters()` extension method to your `JsonSerializerOptions` object.
 
 ```c#
 //Grid<T> with Newtonsoft.Json
@@ -167,8 +167,8 @@ var json = JsonConvert.SerializeObject(grid);
 var grid = JsonConvert.DeserializeObject<Grid<string>>(json);
 
 //Grid<T> with System.Text.Json
-var json = JsonSerializer.Serialize(grid);
-var grid = JsonSerializer.Deserialize<Grid<string>>(json);
+var json = JsonSerializer.Serialize(grid, new JsonSerializerOptions().WithGridConverters());
+var grid = JsonSerializer.Deserialize<Grid<string>>(json, new JsonSerializerOptions().WithGridConverters());
 
 //OverlapGrid<T> with Newtonsoft.Json
 var json = JsonConvert.SerializeObject(overlapGrid);

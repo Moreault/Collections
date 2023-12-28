@@ -37,8 +37,6 @@ public sealed class OverlapGridJsonConverter<T> : JsonConverter<OverlapGrid<T>>
 
             var cell = JsonSerializer.Deserialize<Cell<T>>(ref reader, options);
             cells.Add(cell);
-
-            // Removed the extra reader.Read() call and EndObject token check
         }
 
         return new OverlapGrid<T>(cells);
@@ -50,7 +48,7 @@ public sealed class OverlapGridJsonConverter<T> : JsonConverter<OverlapGrid<T>>
 
         foreach (var cell in value)
         {
-            JsonSerializer.Serialize(writer, cell, options); // Serialize cell directly without extra object wrapping
+            JsonSerializer.Serialize(writer, cell, options);
         }
 
         writer.WriteEndArray();

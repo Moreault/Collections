@@ -9338,33 +9338,37 @@ public class GridTests
     {
         //TODO Test
         [TestMethod]
-        public void WhenSerializingXml_DeserializeEquivalentObject()
-        {
-            //Arrange
-
-            //Act
-
-            //Assert
-        }
-
-        [TestMethod]
         public void WhenSerializingJsonUsingNewtonsoft_DeserializeEquivalentObject()
         {
             //Arrange
+            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            Instance.Add(items);
+
+            var json = JsonConvert.SerializeObject(Instance);
 
             //Act
+            var result = JsonConvert.DeserializeObject<Grid<Dummy>>(json);
 
             //Assert
+            result.Should().BeEquivalentTo(Instance);
         }
 
         [TestMethod]
         public void WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
         {
             //Arrange
+            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            Instance.Add(items);
+
+            var options = new JsonSerializerOptions().WithGridConverters();
+
+            var json = System.Text.Json.JsonSerializer.Serialize(Instance, options);
 
             //Act
+            var result = System.Text.Json.JsonSerializer.Deserialize<Grid<Dummy>>(json, options);
 
             //Assert
+            result.Should().BeEquivalentTo(Instance);
         }
     }
 

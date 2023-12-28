@@ -2,7 +2,7 @@
 
 public static class JsonConverterExtensions
 {
-    private static readonly Lazy<IReadOnlyList<JsonConverter>> All = new(() => ImmutableList.Create<JsonConverter>(new OverlapGridJsonConverterFactory()));
+    private static readonly Lazy<IReadOnlyList<JsonConverter>> All = new(() => ImmutableList.Create<JsonConverter>(new OverlapGridJsonConverterFactory(), new GridJsonConverterFactory()));
 
     /// <summary>
     /// Returns a <see cref="JsonSerializerOptions"/> loaded with all <see cref="JsonConverter"/>s from ToolBX.Collections.Grid.
