@@ -16,7 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ToolBX.Eloquentest" Version="2.2.0-beta11" />
+    <PackageReference Include="ToolBX.Eloquentest" Version="2.2.0-alpha.1" />
   </ItemGroup>
 
   <ItemGroup>

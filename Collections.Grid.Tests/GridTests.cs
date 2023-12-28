@@ -9334,9 +9334,21 @@ public class GridTests
     }
 
     [TestClass]
+    public class Equality : Tester<OverlapGrid<Dummy>>
+    {
+        protected override void InitializeTest()
+        {
+            base.InitializeTest();
+            Fixture.Customizations.Add(new GridSpecimenBuilder());
+        }
+
+        [TestMethod]
+        public void Always_EnsureValueEquality() => Ensure.ValueEquality<Grid<Dummy>>(Fixture);
+    }
+
+    [TestClass]
     public class Serialization : Tester<Grid<Dummy>>
     {
-        //TODO Test
         [TestMethod]
         public void WhenSerializingJsonUsingNewtonsoft_DeserializeEquivalentObject()
         {

@@ -5,7 +5,6 @@ namespace ToolBX.Collections.Grid;
 /// <summary>
 /// An observable, dynamic two-dimensional array.
 /// </summary>
-//TODO Make this obsolete, use Grid<T> instead
 public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatable<T[,]>, IEquatable<IEnumerable<KeyValuePair<Vector2<int>, T>>>, IEquatable<T[][]>, IEquatable<IEnumerable<Cell<T>>>
 {
     int ColumnCount { get; }

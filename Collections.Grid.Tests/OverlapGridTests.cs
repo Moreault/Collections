@@ -4838,7 +4838,6 @@ public class OverlapGridTests
             result.Should().BeEquivalentTo(Instance);
         }
 
-        //TODO Fix : System.Text is going to be more important than Newtonsoft moving forward
         [TestMethod]
         public void WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
         {
