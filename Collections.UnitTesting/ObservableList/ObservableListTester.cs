@@ -1,11 +1,20 @@
 ﻿using System.Collections;
+using System.Text.Json;
 using System.Xml;
 using System.Xml.Serialization;
+using ToolBX.Collections.ObservableList.Json;
+using ToolBX.Collections.UnitTesting.Extensions;
 
 namespace ToolBX.Collections.UnitTesting.ObservableList;
 
 public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
 {
+    protected override void InitializeTest()
+    {
+        base.InitializeTest();
+        Fixture.WithCollectionCustomizations();
+    }
+
     [TestMethod]
     public void LastIndex_WhenCollectionIsEmpty_ReturnMinusOdne()
     {
@@ -4065,7 +4074,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
 
         using var enumerator = ((IEnumerable)observableList).GetEnumerator() as IEnumerator<T>;
         observableList.RemoveAt(observableList.GetRandomIndex());
-        
+
         //Act
         var action = () => enumerator.Reset();
 
@@ -4168,9 +4177,8 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     //TODO GetEnumerator()
 
     [TestMethod]
-    public void Always_HasValueEquals() => Ensure.ValueEquality<ObservableList<T>>();
+    public void Always_EnsureValueEquality() => Ensure.ValueEquality<ObservableList<T>>(Fixture, new JsonSerializerOptions().WithObservableList());
 
     [TestMethod]
-    [Ignore("Doesn't seem to work with collections")]
-    public void Always_SystemTextSerializable() => Ensure.IsJsonSerializable<ObservableList<T>>();
+    public void Always_SystemTextSerializable() => Ensure.IsJsonSerializable<ObservableList<T>>(Fixture, new JsonSerializerOptions().WithObservableList());
 }

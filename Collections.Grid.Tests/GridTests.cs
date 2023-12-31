@@ -2083,13 +2083,103 @@ public class GridTests
     [TestClass]
     public class TryAdd_Cells_Params : Tester<Grid<Dummy>>
     {
-        //TODO Test
+        [TestMethod]
+        public void WhenCellsIsNull_DoNotThrow()
+        {
+            //Arrange
+            Cell<Dummy>[] cells = null!;
+
+            //Act
+            var action = () => Instance.TryAdd(cells);
+
+            //Assert
+            action.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void WhenCellsIsEmpty_DoNotModify()
+        {
+            //Arrange
+            var cells = Array.Empty<Cell<Dummy>>();
+            var copy = Instance.Copy();
+
+            //Act
+            Instance.TryAdd(cells);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(copy);
+        }
+
+        [TestMethod]
+        public void WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
+        {
+            //Arrange
+            var alreadyThereCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            Instance.Add(alreadyThereCells);
+
+            var newCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = alreadyThereCells.Concat(newCells).ToArray();
+
+            //Act
+            var action = () => Instance.TryAdd(cells);
+
+            //Assert
+            action.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void WhenThereIsAlreadySomethingAtCoordinates_StillAddThoseThatAreNotAlreadyIn()
+        {
+            //Arrange
+            var alreadyThereCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            Instance.Add(alreadyThereCells);
+
+            var newCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = alreadyThereCells.Concat(newCells).ToArray();
+
+            //Act
+            Instance.TryAdd(cells);
+
+            //Assert
+            Instance.Should().BeEquivalentTo(cells);
+        }
+
+        [TestMethod]
+        public void WhenAddingToNewCoordinates_Add()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+
+            //Act
+            Instance.TryAdd(cells);
+
+            //Assert
+            Instance.Should().Contain(cells);
+        }
+
+        [TestMethod]
+        public void WhenAddingToNewCoordinates_TriggerChange()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+
+            var triggered = new List<GridChangedEventArgs<Dummy>>();
+            Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+
+            //Act
+            Instance.TryAdd(cells);
+
+            //Assert
+            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            {
+                new(){NewValues = cells}
+            });
+        }
     }
 
     [TestClass]
     public class TryAdd_Cells_Enumerable : Tester<Grid<Dummy>>
     {
-        //TODO Test
         [TestMethod]
         public void WhenCellsIsNull_DoNotThrow()
         {
@@ -8719,10 +8809,153 @@ public class GridTests
             Dummy[,] other = null!;
 
             //Act
-            var result = Instance.Equals(other);
-
             //Assert
-            result.Should().BeFalse();
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenBothAreEmpty_ReturnTrue()
+        {
+            //Arrange
+            var other = new Dummy[0, 0];
+
+            //Act
+            //Assert
+            Ensure.Equality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridIsEmptyButArrayIsNot_ReturnFalse()
+        {
+            //Arrange
+            var other = Fixture.Create<Dummy[,]>();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+
+        }
+
+        [TestMethod]
+        public void WhenGridContainsItemsButArrayIsEmpty_ReturnFalse()
+        {
+            //Arrange
+            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+
+            var other = new Dummy[0, 0];
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridAndArrayContainNullValuesAtCorrespondingPositions_ReturnTrue()
+        {
+            // Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = null;
+
+            var other = Instance.To2dArray();
+
+            // Act
+            // Assert
+            Ensure.Equality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenArrayHasAnExtraRow_ReturnFalse()
+        {
+            // Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = Fixture.Create<Dummy>();
+
+            var otherGrid = Instance.ToGrid();
+            for (var x = 0; x < 3; x++)
+                otherGrid[x, 3] = Fixture.Create<Dummy>();
+
+            var other = otherGrid.To2dArray();
+
+            // Act
+            // Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridHasAnExtraRow_ReturnFalse()
+        {
+            // Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = Fixture.Create<Dummy>();
+
+            var otherGrid = Instance.ToGrid();
+            otherGrid.RemoveAt(0, 2);
+            otherGrid.RemoveAt(1, 2);
+            otherGrid.RemoveAt(2, 2);
+
+            var other = otherGrid.To2dArray();
+
+            // Act
+            // Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenArrayHasAnExtraColumn_ReturnFalse()
+        {
+            //Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = Fixture.Create<Dummy>();
+
+            var otherGrid = Instance.ToGrid();
+            for (var y = 0; y < 3; y++)
+                otherGrid[3, y] = Fixture.Create<Dummy>();
+
+            var other = otherGrid.To2dArray();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridHasAnExtraColumn_ReturnFalse()
+        {
+            //Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = Fixture.Create<Dummy>();
+
+            var otherGrid = Instance.ToGrid();
+            otherGrid.RemoveAt(2, 0);
+            otherGrid.RemoveAt(2, 1);
+            otherGrid.RemoveAt(2, 2);
+
+            var other = otherGrid.To2dArray();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+
+        [TestMethod]
+        public void WhenGridHasMoreColumnsThanArray_ReturnFalse()
+        {
+            //Arrange
+            Instance[0, 0] = Fixture.Create<Dummy>();
+            Instance[1, 3] = Fixture.Create<Dummy>();
+            Instance[2, 4] = Fixture.Create<Dummy>();
+
+            var other = new Dummy[2, 0];
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
         }
 
         [TestMethod]
@@ -8736,10 +8969,8 @@ public class GridTests
                 Instance[index] = value;
 
             //Act
-            var result = Instance.Equals(other);
-
             //Assert
-            result.Should().BeFalse();
+            Ensure.Inequality(Instance, other);
         }
 
         [TestMethod]
@@ -8754,10 +8985,8 @@ public class GridTests
             var other = new Grid<Dummy>(differentCells).To2dArray();
 
             //Act
-            var result = Instance.Equals(other!);
-
             //Assert
-            result.Should().BeFalse();
+            Ensure.Inequality(Instance, other);
         }
 
         [TestMethod]
@@ -8773,10 +9002,8 @@ public class GridTests
                 other[x, y] = Fixture.Create<Dummy>();
 
             //Act
-            var result = Instance.Equals(other!);
-
             //Assert
-            result.Should().BeFalse();
+            Ensure.Inequality(Instance, other);
         }
 
         [TestMethod]
@@ -8790,10 +9017,42 @@ public class GridTests
             var other = Instance.To2dArray();
 
             //Act
-            var result = Instance.Equals(other!);
-
             //Assert
-            result.Should().BeTrue();
+            Ensure.Equality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridHasANegativeX_ReturnFalse()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            foreach (var (index, value) in cells)
+                Instance[index] = value;
+
+            var other = Instance.To2dArray();
+
+            Instance[-Fixture.Create<int>(), Fixture.Create<int>()] = Fixture.Create<Dummy>();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridHasANegativeY_ReturnFalse()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            foreach (var (index, value) in cells)
+                Instance[index] = value;
+
+            var other = Instance.To2dArray();
+
+            Instance[Fixture.Create<int>(), -Fixture.Create<int>()] = Fixture.Create<Dummy>();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
         }
     }
 
@@ -8836,77 +9095,6 @@ public class GridTests
             //Assert
             result.Should().BeFalse();
         }
-
-        [TestMethod]
-        public void WhenArrayIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Fixture.Create<Dummy[,]>();
-
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Dummy>(differentCells).To2dArray();
-
-            //Act
-            var result = Instance == other!;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.To2dArray();
-            foreach (var ((x, y), _) in Instance)
-                other[x, y] = Fixture.Create<Dummy>();
-
-            //Act
-            var result = Instance == other!;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.To2dArray();
-
-            //Act
-            var result = Instance == other!;
-
-            //Assert
-            result.Should().BeTrue();
-        }
     }
 
     [TestClass]
@@ -8948,77 +9136,6 @@ public class GridTests
             //Assert
             result.Should().BeTrue();
         }
-
-        [TestMethod]
-        public void WhenArrayIsDifferent_ReturnTrue()
-        {
-            //Arrange
-            var other = Fixture.Create<Dummy[,]>();
-
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Dummy>(differentCells).To2dArray();
-
-            //Act
-            var result = Instance != other!;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.To2dArray();
-            foreach (var ((x, y), _) in Instance)
-                other[x, y] = Fixture.Create<Dummy>();
-
-            //Act
-            var result = Instance != other!;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.To2dArray();
-
-            //Act
-            var result = Instance != other!;
-
-            //Assert
-            result.Should().BeFalse();
-        }
     }
 
     [TestClass]
@@ -9031,10 +9148,152 @@ public class GridTests
             Dummy[][] other = null!;
 
             //Act
-            var result = Instance.Equals(other);
-
             //Assert
-            result.Should().BeFalse();
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenBothAreEmpty_ReturnTrue()
+        {
+            //Arrange
+            var other = Array.Empty<Dummy[]>();
+
+            //Act
+            //Assert
+            Ensure.Equality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridIsEmptyButArrayIsNot_ReturnFalse()
+        {
+            //Arrange
+            var other = Fixture.Create<Dummy[][]>();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+
+        }
+
+        [TestMethod]
+        public void WhenGridContainsItemsButArrayIsEmpty_ReturnFalse()
+        {
+            //Arrange
+            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+
+            var other = Array.Empty<Dummy[]>();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridAndArrayContainNullValuesAtCorrespondingPositions_ReturnTrue()
+        {
+            // Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = null;
+
+            var other = Instance.ToJaggedArray();
+
+            // Act
+            // Assert
+            Ensure.Equality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenArrayHasAnExtraRow_ReturnFalse()
+        {
+            // Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = Fixture.Create<Dummy>();
+
+            var otherGrid = Instance.ToGrid();
+            for (var x = 0; x < 3; x++)
+                otherGrid[x, 3] = Fixture.Create<Dummy>();
+
+            var other = otherGrid.ToJaggedArray();
+
+            // Act
+            // Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridHasAnExtraRow_ReturnFalse()
+        {
+            // Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = Fixture.Create<Dummy>();
+
+            var otherGrid = Instance.ToGrid();
+            otherGrid.RemoveAt(0, 2);
+            otherGrid.RemoveAt(1, 2);
+            otherGrid.RemoveAt(2, 2);
+
+            var other = otherGrid.ToJaggedArray();
+
+            // Act
+            // Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenArrayHasAnExtraColumn_ReturnFalse()
+        {
+            //Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = Fixture.Create<Dummy>();
+
+            var otherGrid = Instance.ToGrid();
+            for (var y = 0; y < 3; y++)
+                otherGrid[3, y] = Fixture.Create<Dummy>();
+
+            var other = otherGrid.ToJaggedArray();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridHasAnExtraColumn_ReturnFalse()
+        {
+            //Arrange
+            for (var x = 0; x < 3; x++)
+                for (var y = 0; y < 3; y++)
+                    Instance[x, y] = Fixture.Create<Dummy>();
+
+            var otherGrid = Instance.ToGrid();
+            otherGrid.RemoveAt(2, 0);
+            otherGrid.RemoveAt(2, 1);
+            otherGrid.RemoveAt(2, 2);
+
+            var other = otherGrid.ToJaggedArray();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridHasMoreColumnsThanArray_ReturnFalse()
+        {
+            //Arrange
+            Instance[0, 0] = Fixture.Create<Dummy>();
+            Instance[1, 3] = Fixture.Create<Dummy>();
+            Instance[2, 4] = Fixture.Create<Dummy>();
+
+            var other = new Dummy[2][];
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
         }
 
         [TestMethod]
@@ -9048,10 +9307,8 @@ public class GridTests
                 Instance[index] = value;
 
             //Act
-            var result = Instance.Equals(other);
-
             //Assert
-            result.Should().BeFalse();
+            Ensure.Inequality(Instance, other);
         }
 
         [TestMethod]
@@ -9066,10 +9323,8 @@ public class GridTests
             var other = new Grid<Dummy>(differentCells).ToJaggedArray();
 
             //Act
-            var result = Instance.Equals(other);
-
             //Assert
-            result.Should().BeFalse();
+            Ensure.Inequality(Instance, other);
         }
 
         [TestMethod]
@@ -9085,10 +9340,8 @@ public class GridTests
                 other[x][y] = Fixture.Create<Dummy>();
 
             //Act
-            var result = Instance.Equals(other);
-
             //Assert
-            result.Should().BeFalse();
+            Ensure.Inequality(Instance, other);
         }
 
         [TestMethod]
@@ -9102,10 +9355,42 @@ public class GridTests
             var other = Instance.ToJaggedArray();
 
             //Act
-            var result = Instance.Equals(other);
-
             //Assert
-            result.Should().BeTrue();
+            Ensure.Equality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridHasANegativeX_ReturnFalse()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            foreach (var (index, value) in cells)
+                Instance[index] = value;
+
+            var other = Instance.ToJaggedArray();
+
+            Instance[-Fixture.Create<int>(), Fixture.Create<int>()] = Fixture.Create<Dummy>();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
+        }
+
+        [TestMethod]
+        public void WhenGridHasANegativeY_ReturnFalse()
+        {
+            //Arrange
+            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            foreach (var (index, value) in cells)
+                Instance[index] = value;
+
+            var other = Instance.ToJaggedArray();
+
+            Instance[Fixture.Create<int>(), -Fixture.Create<int>()] = Fixture.Create<Dummy>();
+
+            //Act
+            //Assert
+            Ensure.Inequality(Instance, other);
         }
     }
 
@@ -9148,77 +9433,6 @@ public class GridTests
             //Assert
             result.Should().BeFalse();
         }
-
-        [TestMethod]
-        public void WhenArrayIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Fixture.Create<Dummy[][]>();
-
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Dummy>(differentCells).ToJaggedArray();
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToJaggedArray();
-            foreach (var ((x, y), _) in Instance)
-                other[x][y] = Fixture.Create<Dummy>();
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToJaggedArray();
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
     }
 
     [TestClass]
@@ -9260,81 +9474,70 @@ public class GridTests
             //Assert
             result.Should().BeTrue();
         }
+    }
 
+    [TestClass]
+    public class Enumerator : Tester<Grid<Dummy>>
+    {
         [TestMethod]
-        public void WhenArrayIsDifferent_ReturnTrue()
+        public void Always_Enumerates()
         {
             //Arrange
-            var other = Fixture.Create<Dummy[][]>();
+            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+            var enumeratedItems = new List<Cell<Dummy>>();
 
             //Act
-            var result = Instance != other;
+            foreach (var item in Instance)
+                enumeratedItems.Add(item);
 
             //Assert
-            result.Should().BeTrue();
+            enumeratedItems.Should().NotBeEmpty();
+            enumeratedItems.Should().BeEquivalentTo(Instance);
+            enumeratedItems.Should().HaveCount(Instance.Count);
         }
 
         [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
+        public void Enumerator_WhenUsingResetAfterCollectionChanged_Throw()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
 
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Dummy>(differentCells).ToJaggedArray();
+            using var enumerator = Instance.GetEnumerator();
 
             //Act
-            var result = Instance != other;
+            var action = () =>
+            {
+                while (enumerator.MoveNext())
+                {
+                    Instance.Add(Fixture.Create<Cell<Dummy>>());
+                    enumerator.Reset();
+                }
+            };
 
             //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToJaggedArray();
-            foreach (var ((x, y), _) in Instance)
-                other[x][y] = Fixture.Create<Dummy>();
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToJaggedArray();
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeFalse();
+            action.Should().Throw<InvalidOperationException>();
         }
     }
 
     [TestClass]
-    public class Equality : Tester<OverlapGrid<Dummy>>
+    public class HashCode : Tester<Grid<Dummy>>
+    {
+        [TestMethod]
+        public void Always_ReturnInternalCollectionHashCode()
+        {
+            //Arrange
+
+            //Act
+            var result = Instance.GetHashCode();
+
+            //Assert
+            result.Should().Be(GetFieldValue<Dictionary<Vector2<int>, Dummy>>("_items")!.GetHashCode());
+        }
+    }
+
+    [TestClass]
+    public class Equality : Tester
     {
         protected override void InitializeTest()
         {

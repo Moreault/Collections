@@ -150,4 +150,7 @@
   <data name="CannotRemoveItemUsingPredicateBecauseThereIsNoMatch" xml:space="preserve">
     <value>Can't remove item using predicate : there is no match in the collection for '{0}'</value>
   </data>
+  <data name="QuantityMustBeAtLeastOne" xml:space="preserve">
+	  <value>Quantity must be at least 1</value>
+  </data>
 </root>

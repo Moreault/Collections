@@ -1,935 +1,716 @@
-﻿using AutoFixture;
-using FluentAssertions;
-using System.Collections.Generic;
-using System.Linq;
-using ToolBX.Eloquentest;
+﻿using Newtonsoft.Json;
 
 namespace Collections.ReadOnly.Tests;
 
 [TestClass]
-public class ReadOnlyListTests
+public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
 {
-    [TestClass]
-    public class Empty : Tester
+    [TestMethod]
+    public void Empty_Always_ReturnsEmptyReadOnlyList()
     {
-        [TestMethod]
-        public void Always_ReturnsEmptyReadOnlyList()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = ReadOnlyList<Dummy>.Empty;
+        //Act
+        var result = ReadOnlyList<Dummy>.Empty;
 
-            //Assert
-            result.Should().BeOfType<ReadOnlyList<Dummy>>();
-            result.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void Always_ReturnSameReference()
-        {
-            //Arrange
-
-            //Act
-            var result1 = ReadOnlyList<Dummy>.Empty;
-            var result2 = ReadOnlyList<Dummy>.Empty;
-
-            //Assert
-            result1.Should().BeSameAs(result2);
-        }
+        //Assert
+        result.Should().BeOfType<ReadOnlyList<Dummy>>();
+        result.Should().BeEmpty();
     }
 
-    [TestClass]
-    public class Indexer : Tester
+    [TestMethod]
+    public void Empty_Always_ReturnSameReference()
     {
-        [TestMethod]
-        public void WhenIndexIsNegative_Throw()
-        {
-            //Arrange
-            var instance = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        //Arrange
 
-            var index = -Fixture.Create<int>();
+        //Act
+        var result1 = ReadOnlyList<Dummy>.Empty;
+        var result2 = ReadOnlyList<Dummy>.Empty;
 
-            //Act
-            var action = () => instance[index];
-
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
-
-        [TestMethod]
-        public void WhenIndexIsOutOfRange_Throw()
-        {
-            //Arrange
-            var instance = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            var index = instance.Count;
-
-            //Act
-            var action = () => instance[index];
-
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
-
-        [TestMethod]
-        public void WhenIndexIsWithinRange_ReturnItem()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToArray();
-            var instance = items.ToReadOnlyList();
-            var index = 1;
-
-            //Act
-            var result = instance[index];
-
-            //Assert
-            result.Should().Be(items[index]);
-        }
+        //Assert
+        result1.Should().BeSameAs(result2);
     }
 
-    [TestClass]
-    public class Count : Tester
+    [TestMethod]
+    public void Indexer_WhenIndexIsNegative_Throw()
     {
-        [TestMethod]
-        public void WhenEmpty_ReturnZero()
-        {
-            //Arrange
+        //Arrange
+        var instance = Fixture.CreateMany<Dummy>().ToReadOnlyList();
 
-            //Act
-            var result = new ReadOnlyList<Dummy>().Count;
+        var index = -Fixture.Create<int>();
 
-            //Assert
-            result.Should().Be(0);
-        }
+        //Act
+        var action = () => instance[index];
 
-        [TestMethod]
-        public void WhenContainsItems_ReturnAmount()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToArray();
-            var instance = items.ToReadOnlyList();
-
-            //Act
-            var result = instance.Count;
-
-            //Assert
-            result.Should().Be(items.Length);
-        }
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
     }
 
-    [TestClass]
-    public class Constructors : Tester
+    [TestMethod]
+    public void Indexer_WhenIndexIsOutOfRange_Throw()
     {
-        [TestMethod]
-        public void WhenUsingDefault_CreateEmpty()
-        {
-            //Arrange
+        //Arrange
+        var instance = Fixture.CreateMany<Dummy>().ToReadOnlyList();
 
-            //Act
-            var result = new ReadOnlyList<Dummy>();
+        var index = instance.Count;
 
-            //Assert
-            result.Should().BeEmpty();
-        }
+        //Act
+        var action = () => instance[index];
 
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
-        {
-            //Arrange
-            IEnumerable<Dummy> source = null!;
-
-            //Act
-            var action = () => new ReadOnlyList<Dummy>(source);
-
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
-
-        [TestMethod]
-        public void WhenSourceIsNotNull_CopySource()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToList();
-
-            //Act
-            var result = new ReadOnlyList<Dummy>(source);
-
-            //Assert
-            result.Should().BeEquivalentTo(source);
-        }
-
-        [TestMethod]
-        public void WhenSourceIsNotNullAndOriginalIsModified_ReadOnlyListIsUnaffected()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToList();
-            var instance = new ReadOnlyList<Dummy>(source);
-
-            //Act
-            source.Add(Fixture.Create<Dummy>());
-
-            //Assert
-            instance.Should().NotBeEquivalentTo(source);
-        }
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
     }
 
-    [TestClass]
-    public class Equality : Tester
+    [TestMethod]
+    public void Indexer_WhenIndexIsWithinRange_ReturnItem()
     {
-        [TestMethod]
-        public void WhenOtherIsNull_ReturnFalse()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            ReadOnlyList<Dummy> other = null!;
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var instance = items.ToReadOnlyList();
+        var index = 1;
 
-            //Act
-            var result = instance.Equals(other);
+        //Act
+        var result = instance[index];
 
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsNullWithOperators_ReturnFalse()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            ReadOnlyList<Dummy> other = null!;
-
-            //Act
-            var result = instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSameReference_ReturnTrue()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-
-            //Act
-            var result = instance.Equals(instance);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSameReferenceWithOperators_ReturnTrue()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            var other = instance;
-
-            //Act
-            var result = instance == other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            var other = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-
-            //Act
-            var result = instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentWithOperators_ReturnFalse()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            var other = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-
-            //Act
-            var result = instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentAndDifferentType_ReturnFalse()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            var other = Fixture.CreateMany<Dummy>().ToList();
-
-            //Act
-            var result = instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentAndDifferentTypeWithOperators_ReturnFalse()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            var other = Fixture.CreateMany<Dummy>().ToList();
-
-            //Act
-            var result = instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsNotSameInstanceButSameContent_ReturnTrue()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            var other = new ReadOnlyList<Dummy>(instance);
-
-            //Act
-            var result = instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsNotSameInstanceButSameContentWithOperators_ReturnTrue()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            var other = new ReadOnlyList<Dummy>(instance);
-
-            //Act
-            var result = instance == other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsNotSameTypeButSameContent_ReturnTrue()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            var other = instance.ToList();
-
-            //Act
-            var result = instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsNotSameTypeButSameContentWithOperators_ReturnTrue()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>());
-            var other = instance.ToList();
-
-            //Act
-            var result = instance == other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().Be(items[index]);
     }
 
-    [TestClass]
-    public class ToStringMethod : Tester
+    [TestMethod]
+    public void Count_WhenEmpty_ReturnZero()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnEmptyMessage()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>();
+        //Arrange
 
-            //Act
-            var result = instance.ToString();
+        //Act
+        var result = new ReadOnlyList<Dummy>().Count;
 
-            //Assert
-            result.Should().Be("Empty ReadOnlyList<Dummy>");
-        }
-
-        [TestMethod]
-        public void WhenIsNotEmpty_ReturnCount()
-        {
-            //Arrange
-            var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>(3));
-
-            //Act
-            var result = instance.ToString();
-
-            //Assert
-            result.Should().Be("ReadOnlyList<Dummy> with 3 elements");
-        }
+        //Assert
+        result.Should().Be(0);
     }
 
-    [TestClass]
-    public class ToReadOnlyList : Tester
+    [TestMethod]
+    public void Count_WhenContainsItems_ReturnAmount()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
-        {
-            //Arrange
-            IEnumerable<Dummy> source = null!;
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var instance = items.ToReadOnlyList();
 
-            //Act
-            var action = () => source.ToReadOnlyList();
+        //Act
+        var result = instance.Count;
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
-
-        [TestMethod]
-        public void WhenSourceIsNotNull_Copy()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToList();
-
-            //Act
-            var result = source.ToReadOnlyList();
-
-            //Assert
-            result.Should().BeEquivalentTo(source);
-        }
+        //Assert
+        result.Should().Be(items.Length);
     }
 
-    [TestClass]
-    public class With_Params : Tester
+    [TestMethod]
+    public void Constructors_WhenUsingDefault_CreateEmpty()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
-        {
-            //Arrange
-            IReadOnlyList<Dummy> source = null!;
-            var items = Fixture.CreateMany<Dummy>().ToArray();
+        //Arrange
 
-            //Act
-            var action = () => source.With(items);
+        //Act
+        var result = new ReadOnlyList<Dummy>();
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
-
-        [TestMethod]
-        public void WhenItemsIsEmpty_ReturnCopy()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            //Act
-            var result = source.With();
-
-            //Assert
-            result.Should().BeEquivalentTo(source);
-        }
-
-        [TestMethod]
-        public void WhenOneItem_AddItAtTheEnd()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            var item = Fixture.Create<Dummy>();
-
-            //Act
-            var result = source.With(item);
-
-            //Assert
-            result.Should().BeEquivalentTo(source.Concat(new[] { item }));
-        }
-
-        [TestMethod]
-        public void WhenOneItem_InstanceIsUnchanged()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            var item = Fixture.Create<Dummy>();
-
-            //Act
-            source.With(item);
-
-            //Assert
-            source.Should().NotContain(item);
-        }
-
-        [TestMethod]
-        public void WhenMultipleItems_AddThemAtTheEnd()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            var item1 = Fixture.Create<Dummy>();
-            var item2 = Fixture.Create<Dummy>();
-            var item3 = Fixture.Create<Dummy>();
-
-            //Act
-            var result = source.With(item1, item2, item3);
-
-            //Assert
-            result.Should().BeEquivalentTo(source.Concat(new[] { item1, item2, item3 }));
-        }
-
-        [TestMethod]
-        public void WhenMultipleItems_InstanceIsUnchanged()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            var item1 = Fixture.Create<Dummy>();
-            var item2 = Fixture.Create<Dummy>();
-            var item3 = Fixture.Create<Dummy>();
-
-            //Act
-            source.With(item1, item2, item3);
-
-            //Assert
-            source.Should().NotContain(item1);
-            source.Should().NotContain(item2);
-            source.Should().NotContain(item3);
-        }
+        //Assert
+        result.Should().BeEmpty();
     }
 
-    [TestClass]
-    public class With_Enumerable : Tester
+    [TestMethod]
+    public void Constructors_WhenSourceIsNull_Throw()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
-        {
-            //Arrange
-            IReadOnlyList<Dummy> source = null!;
-            var items = Fixture.CreateMany<Dummy>().ToList();
+        //Arrange
+        IEnumerable<Dummy> source = null!;
 
-            //Act
-            var action = () => source.With(items);
+        //Act
+        var action = () => new ReadOnlyList<Dummy>(source);
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
-
-        [TestMethod]
-        public void WhenItemsIsNull_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            IEnumerable<Dummy> items = null!;
-
-            //Act
-            var action = () => source.With(items);
-
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(items));
-        }
-
-        [TestMethod]
-        public void WhenItemsIsEmpty_ReturnCopy()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            //Act
-            var result = source.With();
-
-            //Assert
-            result.Should().BeEquivalentTo(source);
-        }
-
-        [TestMethod]
-        public void WhenOneItem_AddItAtTheEnd()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            var item = Fixture.Create<Dummy>();
-
-            //Act
-            var result = source.With(new List<Dummy> { item });
-
-            //Assert
-            result.Should().BeEquivalentTo(source.Concat(new[] { item }));
-        }
-
-        [TestMethod]
-        public void WhenOneItem_InstanceIsUnchanged()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            var item = Fixture.Create<Dummy>();
-
-            //Act
-            source.With(new List<Dummy> { item });
-
-            //Assert
-            source.Should().NotContain(item);
-        }
-
-        [TestMethod]
-        public void WhenMultipleItems_AddThemAtTheEnd()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            var items = Fixture.CreateMany<Dummy>().ToList();
-
-            //Act
-            var result = source.With(items);
-
-            //Assert
-            result.Should().BeEquivalentTo(source.Concat(items));
-        }
-
-        [TestMethod]
-        public void WhenMultipleItems_InstanceIsUnchanged()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var items = Fixture.CreateMany<Dummy>().ToList();
-
-            //Act
-            source.With(items);
-
-            //Assert
-            source.Should().NotContain(items);
-        }
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
     }
 
-    [TestClass]
-    public class Without_Predicate : Tester
+    [TestMethod]
+    public void Constructors_WhenSourceIsNotNull_CopySource()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
-        {
-            //Arrange
-            IReadOnlyList<Dummy> source = null!;
-            var predicate = Fixture.Create<Func<Dummy, bool>>();
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToList();
 
-            //Act
-            var action = () => source.Without(predicate);
+        //Act
+        var result = new ReadOnlyList<Dummy>(source);
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
+        //Assert
+        result.Should().BeEquivalentTo(source);
+    }
 
-        [TestMethod]
-        public void WhenPredicateIsNull_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            Func<Dummy, bool> predicate = null!;
+    [TestMethod]
+    public void Constructors_WhenSourceIsNotNullAndOriginalIsModified_ReadOnlyListIsUnaffected()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToList();
+        var instance = new ReadOnlyList<Dummy>(source);
 
-            //Act
-            var action = () => source.Without(predicate);
+        //Act
+        source.Add(Fixture.Create<Dummy>());
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(predicate));
-        }
+        //Assert
+        instance.Should().NotBeEquivalentTo(source);
+    }
 
-        [TestMethod]
-        public void WhenPredicateDoesNotCorrespondToAnything_DoNotChangeCollection()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+    [TestMethod]
+    public void Always_EnsureConsistentHashCode() => Ensure.ConsistentHashCode<ReadOnlyList<Dummy>>(Fixture, new JsonSerializerOptions().WithReadOnlyConverters());
 
-            //Act
-            var result = source.Without(x => x.Id < 0);
+    [TestMethod]
+    public void ToString_WhenIsEmpty_ReturnEmptyMessage()
+    {
+        //Arrange
+        var instance = new ReadOnlyList<Dummy>();
 
-            //Assert
-            result.Should().BeEquivalentTo(source);
-        }
+        //Act
+        var result = instance.ToString();
 
-        [TestMethod]
-        public void WhenPredicateIsEqualToEverything_RemoveEverything()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        //Assert
+        result.Should().Be("Empty ReadOnlyList<Dummy>");
+    }
 
-            //Act
-            var result = source.Without(x => x.Id >= 0);
+    [TestMethod]
+    public void ToString_WhenIsNotEmpty_ReturnCount()
+    {
+        //Arrange
+        var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>(3));
 
-            //Assert
-            result.Should().BeEmpty();
-        }
+        //Act
+        var result = instance.ToString();
 
-        [TestMethod]
-        public void WhenPredicateIsEqualToEverything_DoNotAffectSource()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var original = source.ToReadOnlyList();
+        //Assert
+        result.Should().Be("ReadOnlyList<Dummy> with 3 elements");
+    }
 
-            //Act
-            source.Without(x => x.Id >= 0);
+    [TestMethod]
+    public void ToReadOnlyList_WhenSourceIsNull_Throw()
+    {
+        //Arrange
+        IEnumerable<Dummy> source = null!;
 
-            //Assert
-            source.Should().BeEquivalentTo(original);
-        }
+        //Act
+        var action = () => source.ToReadOnlyList();
 
-        [TestMethod]
-        public void WhenPredicateIsOnlyEqualToSomeStuff_OnlyRemoveThat()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
+    }
 
-            //Act
-            var result = source.Without(x => x.Id == source[1].Id);
+    [TestMethod]
+    public void ToReadOnlyList_WhenSourceIsNotNull_Copy()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToList();
 
-            //Assert
-            result.Should().BeEquivalentTo(new List<Dummy>
+        //Act
+        var result = source.ToReadOnlyList();
+
+        //Assert
+        result.Should().BeEquivalentTo(source);
+    }
+
+    [TestMethod]
+    public void WithParams_WhenSourceIsNull_Throw()
+    {
+        //Arrange
+        IReadOnlyList<Dummy> source = null!;
+        var items = Fixture.CreateMany<Dummy>().ToArray();
+
+        //Act
+        var action = () => source.With(items);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
+    }
+
+    [TestMethod]
+    public void WithParams_WhenItemsIsEmpty_ReturnCopy()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        //Act
+        var result = source.With();
+
+        //Assert
+        result.Should().BeEquivalentTo(source);
+    }
+
+    [TestMethod]
+    public void WithParams_WhenOneItem_AddItAtTheEnd()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        var item = Fixture.Create<Dummy>();
+
+        //Act
+        var result = source.With(item);
+
+        //Assert
+        result.Should().BeEquivalentTo(source.Concat(new[] { item }));
+    }
+
+    [TestMethod]
+    public void WithParams_WhenOneItem_InstanceIsUnchanged()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        var item = Fixture.Create<Dummy>();
+
+        //Act
+        source.With(item);
+
+        //Assert
+        source.Should().NotContain(item);
+    }
+
+    [TestMethod]
+    public void WithParams_WhenMultipleItems_AddThemAtTheEnd()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        var item1 = Fixture.Create<Dummy>();
+        var item2 = Fixture.Create<Dummy>();
+        var item3 = Fixture.Create<Dummy>();
+
+        //Act
+        var result = source.With(item1, item2, item3);
+
+        //Assert
+        result.Should().BeEquivalentTo(source.Concat(new[] { item1, item2, item3 }));
+    }
+
+    [TestMethod]
+    public void WithParams_WhenMultipleItems_InstanceIsUnchanged()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        var item1 = Fixture.Create<Dummy>();
+        var item2 = Fixture.Create<Dummy>();
+        var item3 = Fixture.Create<Dummy>();
+
+        //Act
+        source.With(item1, item2, item3);
+
+        //Assert
+        source.Should().NotContain(item1);
+        source.Should().NotContain(item2);
+        source.Should().NotContain(item3);
+    }
+
+    [TestMethod]
+    public void WithEnumerable_WhenSourceIsNull_Throw()
+    {
+        //Arrange
+        IReadOnlyList<Dummy> source = null!;
+        var items = Fixture.CreateMany<Dummy>().ToList();
+
+        //Act
+        var action = () => source.With(items);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
+    }
+
+    [TestMethod]
+    public void WithEnumerable_WhenItemsIsNull_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        IEnumerable<Dummy> items = null!;
+
+        //Act
+        var action = () => source.With(items);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(items));
+    }
+
+    [TestMethod]
+    public void WithEnumerable_WhenItemsIsEmpty_ReturnCopy()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        //Act
+        var result = source.With();
+
+        //Assert
+        result.Should().BeEquivalentTo(source);
+    }
+
+    [TestMethod]
+    public void WithEnumerable_WhenOneItem_AddItAtTheEnd()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        var item = Fixture.Create<Dummy>();
+
+        //Act
+        var result = source.With(new List<Dummy> { item });
+
+        //Assert
+        result.Should().BeEquivalentTo(source.Concat(new[] { item }));
+    }
+
+    [TestMethod]
+    public void WithEnumerable_WhenOneItem_InstanceIsUnchanged()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        var item = Fixture.Create<Dummy>();
+
+        //Act
+        source.With(new List<Dummy> { item });
+
+        //Assert
+        source.Should().NotContain(item);
+    }
+
+    [TestMethod]
+    public void WithEnumerable_WhenMultipleItems_AddThemAtTheEnd()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        var items = Fixture.CreateMany<Dummy>().ToList();
+
+        //Act
+        var result = source.With(items);
+
+        //Assert
+        result.Should().BeEquivalentTo(source.Concat(items));
+    }
+
+    [TestMethod]
+    public void WithEnumerable_WhenMultipleItems_InstanceIsUnchanged()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var items = Fixture.CreateMany<Dummy>().ToList();
+
+        //Act
+        source.With(items);
+
+        //Assert
+        source.Should().NotContain(items);
+    }
+
+    [TestMethod]
+    public void WithoutPredicate_WhenSourceIsNull_Throw()
+    {
+        //Arrange
+        IReadOnlyList<Dummy> source = null!;
+        var predicate = Fixture.Create<Func<Dummy, bool>>();
+
+        //Act
+        var action = () => source.Without(predicate);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
+    }
+
+    [TestMethod]
+    public void WithoutPredicate_WhenPredicateIsNull_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        Func<Dummy, bool> predicate = null!;
+
+        //Act
+        var action = () => source.Without(predicate);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(predicate));
+    }
+
+    [TestMethod]
+    public void WithoutPredicate_WhenPredicateDoesNotCorrespondToAnything_DoNotChangeCollection()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        //Act
+        var result = source.Without(x => x.Id < 0);
+
+        //Assert
+        result.Should().BeEquivalentTo(source);
+    }
+
+    [TestMethod]
+    public void WithoutPredicate_WhenPredicateIsEqualToEverything_RemoveEverything()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        //Act
+        var result = source.Without(x => x.Id >= 0);
+
+        //Assert
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void WithoutPredicate_WhenPredicateIsEqualToEverything_DoNotAffectSource()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var original = source.ToReadOnlyList();
+
+        //Act
+        source.Without(x => x.Id >= 0);
+
+        //Assert
+        source.Should().BeEquivalentTo(original);
+    }
+
+    [TestMethod]
+    public void WithoutPredicate_WhenPredicateIsOnlyEqualToSomeStuff_OnlyRemoveThat()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+
+        //Act
+        var result = source.Without(x => x.Id == source[1].Id);
+
+        //Assert
+        result.Should().BeEquivalentTo(new List<Dummy>
             {
                 source[0],
                 source[2],
             });
-        }
     }
 
-    [TestClass]
-    public class Without_Params : Tester
+    [TestMethod]
+    public void WithoutParams_WhenSourceIsNull_Throw()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
-        {
-            //Arrange
-            IReadOnlyList<Dummy> source = null!;
-            var items = Fixture.CreateMany<Dummy>().ToArray();
+        //Arrange
+        IReadOnlyList<Dummy> source = null!;
+        var items = Fixture.CreateMany<Dummy>().ToArray();
 
-            //Act
-            var action = () => source.Without(items);
+        //Act
+        var action = () => source.Without(items);
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
-
-        [TestMethod]
-        public void WhenItemsEmpty_ReturnSameThing()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-
-            //Act
-            var result = source.Without();
-
-            //Assert
-            result.Should().BeEquivalentTo(source);
-        }
-
-        [TestMethod]
-        public void WhenItemsIsNotEmptyButAlsoNotInCollection_ReturnSameThing()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var items = Fixture.CreateMany<Dummy>().ToArray();
-
-            //Act
-            var result = source.Without(items);
-
-            //Assert
-            result.Should().BeEquivalentTo(source);
-        }
-
-        [TestMethod]
-        public void WhenItemsContainsItemsThatAreInSource_RemoveThem()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var item = source[2];
-
-            //Act
-            var result = source.Without(item);
-
-            //Assert
-            result.Should().BeEquivalentTo(new List<Dummy>
-            {
-                source[0],
-                source[1]
-            });
-        }
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
     }
 
-    [TestClass]
-    public class Without_Enumerable : Tester
+    [TestMethod]
+    public void WithoutParams_WhenItemsEmpty_ReturnSameThing()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
-        {
-            //Arrange
-            IReadOnlyList<Dummy> source = null!;
-            var items = Fixture.CreateMany<Dummy>().ToArray();
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
 
-            //Act
-            var action = () => source.Without(items);
+        //Act
+        var result = source.Without();
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
-
-        [TestMethod]
-        public void WhenItemsEmpty_ReturnSameThing()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            IEnumerable<Dummy> items = null!;
-
-            //Act
-            var action = () => source.Without(items);
-
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(items));
-        }
-
-        [TestMethod]
-        public void WhenItemsIsNotEmptyButAlsoNotInCollection_ReturnSameThing()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var items = Fixture.CreateMany<Dummy>().ToList();
-
-            //Act
-            var result = source.Without(items);
-
-            //Assert
-            result.Should().BeEquivalentTo(source);
-        }
-
-        [TestMethod]
-        public void WhenItemsContainsItemsThatAreInSource_RemoveThem()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var items = new List<Dummy>
-            {
-                source[1],
-                source[0]
-            };
-
-            //Act
-            var result = source.Without(items);
-
-            //Assert
-            result.Should().BeEquivalentTo(new List<Dummy>
-            {
-                source[2]
-            });
-        }
+        //Assert
+        result.Should().BeEquivalentTo(source);
     }
 
-    [TestClass]
-    public class WithAt_Params : Tester
+    [TestMethod]
+    public void WithoutParams_WhenItemsIsNotEmptyButAlsoNotInCollection_ReturnSameThing()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var items = Fixture.CreateMany<Dummy>().ToArray();
+
+        //Act
+        var result = source.Without(items);
+
+        //Assert
+        result.Should().BeEquivalentTo(source);
+    }
+
+    [TestMethod]
+    public void WithoutParams_WhenItemsContainsItemsThatAreInSource_RemoveThem()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var item = source[2];
+
+        //Act
+        var result = source.Without(item);
+
+        //Assert
+        result.Should().BeEquivalentTo(new List<Dummy>
         {
-            //Arrange
-            IReadOnlyList<Dummy> source = null!;
-            var index = Fixture.Create<int>();
-            var items = Fixture.CreateMany<Dummy>().ToArray();
+            source[0],
+            source[1]
+        });
+    }
 
-            //Act
-            var action = () => source.WithAt(index, items);
+    [TestMethod]
+    public void WithoutEnumerable_WhenSourceIsNull_Throw()
+    {
+        //Arrange
+        IReadOnlyList<Dummy> source = null!;
+        var items = Fixture.CreateMany<Dummy>().ToArray();
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
+        //Act
+        var action = () => source.Without(items);
 
-        [TestMethod]
-        public void WhenItemsIsEmptyButIndexIsWithinRange_DoNotAddAnything()
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
+    }
+
+    [TestMethod]
+    public void WithoutEnumerable_WhenItemsEmpty_ReturnSameThing()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        IEnumerable<Dummy> items = null!;
+
+        //Act
+        var action = () => source.Without(items);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(items));
+    }
+
+    [TestMethod]
+    public void WithoutEnumerable_WhenItemsIsNotEmptyButAlsoNotInCollection_ReturnSameThing()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var items = Fixture.CreateMany<Dummy>().ToList();
+
+        //Act
+        var result = source.Without(items);
+
+        //Assert
+        result.Should().BeEquivalentTo(source);
+    }
+
+    [TestMethod]
+    public void WithoutEnumerable_WhenItemsContainsItemsThatAreInSource_RemoveThem()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var items = new List<Dummy>
         {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = 1;
+            source[1],
+            source[0]
+        };
 
-            //Act
-            var result = source.WithAt(index);
+        //Act
+        var result = source.Without(items);
 
-            //Assert
-            result.Should().BeEquivalentTo(source);
-        }
-
-        [TestMethod]
-        public void WhenIndexIsNegative_Throw()
+        //Assert
+        result.Should().BeEquivalentTo(new List<Dummy>
         {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = -Fixture.Create<int>();
-            var items = Fixture.CreateMany<Dummy>().ToArray();
+            source[2]
+        });
+    }
 
-            //Act
-            var action = () => source.WithAt(index, items);
+    [TestMethod]
+    public void WithAtParams_WhenSourceIsNull_Throw()
+    {
+        //Arrange
+        IReadOnlyList<Dummy> source = null!;
+        var index = Fixture.Create<int>();
+        var items = Fixture.CreateMany<Dummy>().ToArray();
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
+        //Act
+        var action = () => source.WithAt(index, items);
 
-        [TestMethod]
-        public void WhenIndexIsOutOfRange_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = source.Count + 1;
-            var items = Fixture.CreateMany<Dummy>().ToArray();
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
+    }
 
-            //Act
-            var action = () => source.WithAt(index, items);
+    [TestMethod]
+    public void WithAtParams_WhenItemsIsEmptyButIndexIsWithinRange_DoNotAddAnything()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = 1;
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
+        //Act
+        var result = source.WithAt(index);
 
-        [TestMethod]
-        public void WhenIndexIsEqualToCount_AddAtTheEnd()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = source.Count;
-            var items = Fixture.CreateMany<Dummy>().ToArray();
+        //Assert
+        result.Should().BeEquivalentTo(source);
+    }
 
-            //Act
-            var result = source.WithAt(index, items);
+    [TestMethod]
+    public void WithAtParams_WhenIndexIsNegative_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = -Fixture.Create<int>();
+        var items = Fixture.CreateMany<Dummy>().ToArray();
 
-            //Assert
-            result.Should().ContainInOrder(source.Concat(items));
-        }
+        //Act
+        var action = () => source.WithAt(index, items);
 
-        [TestMethod]
-        public void WhenIndexIsZero_AddAtTheStart()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = 0;
-            var items = Fixture.CreateMany<Dummy>().ToArray();
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
 
-            //Act
-            var result = source.WithAt(index, items);
+    [TestMethod]
+    public void WithAtParams_WhenIndexIsOutOfRange_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = source.Count + 1;
+        var items = Fixture.CreateMany<Dummy>().ToArray();
 
-            //Assert
-            result.Should().ContainInOrder(items.Concat(source));
-        }
+        //Act
+        var action = () => source.WithAt(index, items);
 
-        [TestMethod]
-        public void WhenIndexIsOne_AddBetween()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>(3).ToReadOnlyList();
-            var index = 1;
-            var items = Fixture.CreateMany<Dummy>(3).ToArray();
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
 
-            //Act
-            var result = source.WithAt(index, items);
+    [TestMethod]
+    public void WithAtParams_WhenIndexIsEqualToCount_AddAtTheEnd()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = source.Count;
+        var items = Fixture.CreateMany<Dummy>().ToArray();
 
-            //Assert
-            result.Should().ContainInOrder(new List<Dummy>
+        //Act
+        var result = source.WithAt(index, items);
+
+        //Assert
+        result.Should().ContainInOrder(source.Concat(items));
+    }
+
+    [TestMethod]
+    public void WithAtParams_WhenIndexIsZero_AddAtTheStart()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = 0;
+        var items = Fixture.CreateMany<Dummy>().ToArray();
+
+        //Act
+        var result = source.WithAt(index, items);
+
+        //Assert
+        result.Should().ContainInOrder(items.Concat(source));
+    }
+
+    [TestMethod]
+    public void WithAtParams_WhenIndexIsOne_AddBetween()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>(3).ToReadOnlyList();
+        var index = 1;
+        var items = Fixture.CreateMany<Dummy>(3).ToArray();
+
+        //Act
+        var result = source.WithAt(index, items);
+
+        //Assert
+        result.Should().ContainInOrder(new List<Dummy>
             {
                 source[0],
                 items[0],
@@ -938,115 +719,111 @@ public class ReadOnlyListTests
                 source[1],
                 source[2],
             });
-        }
     }
 
-    [TestClass]
-    public class WithAt_Enumerable : Tester
+    [TestMethod]
+    public void WithAtEnumerable_WhenSourceIsNull_Throw()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
-        {
-            //Arrange
-            IReadOnlyList<Dummy> source = null!;
-            var index = Fixture.Create<int>();
-            var items = Fixture.CreateMany<Dummy>().ToList();
+        //Arrange
+        IReadOnlyList<Dummy> source = null!;
+        var index = Fixture.Create<int>();
+        var items = Fixture.CreateMany<Dummy>().ToList();
 
-            //Act
-            var action = () => source.WithAt(index, items);
+        //Act
+        var action = () => source.WithAt(index, items);
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
+    }
 
-        [TestMethod]
-        public void WhenItemsIsNullButIndexIsWithinRange_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = 1;
-            IEnumerable<Dummy> items = null!;
+    [TestMethod]
+    public void WithAtEnumerable_WhenItemsIsNullButIndexIsWithinRange_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = 1;
+        IEnumerable<Dummy> items = null!;
 
-            //Act
-            var action = () => source.WithAt(index, items);
+        //Act
+        var action = () => source.WithAt(index, items);
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(items));
-        }
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(items));
+    }
 
-        [TestMethod]
-        public void WhenIndexIsNegative_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = -Fixture.Create<int>();
-            var items = Fixture.CreateMany<Dummy>().ToList();
+    [TestMethod]
+    public void WithAtEnumerable_WhenIndexIsNegative_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = -Fixture.Create<int>();
+        var items = Fixture.CreateMany<Dummy>().ToList();
 
-            //Act
-            var action = () => source.WithAt(index, items);
+        //Act
+        var action = () => source.WithAt(index, items);
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
 
-        [TestMethod]
-        public void WhenIndexIsOutOfRange_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = source.Count + 1;
-            var items = Fixture.CreateMany<Dummy>().ToList();
+    [TestMethod]
+    public void WithAtEnumerable_WhenIndexIsOutOfRange_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = source.Count + 1;
+        var items = Fixture.CreateMany<Dummy>().ToList();
 
-            //Act
-            var action = () => source.WithAt(index, items);
+        //Act
+        var action = () => source.WithAt(index, items);
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
 
-        [TestMethod]
-        public void WhenIndexIsEqualToCount_AddAtTheEnd()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = source.Count;
-            var items = Fixture.CreateMany<Dummy>().ToList();
+    [TestMethod]
+    public void WithAtEnumerable_WhenIndexIsEqualToCount_AddAtTheEnd()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = source.Count;
+        var items = Fixture.CreateMany<Dummy>().ToList();
 
-            //Act
-            var result = source.WithAt(index, items);
+        //Act
+        var result = source.WithAt(index, items);
 
-            //Assert
-            result.Should().ContainInOrder(source.Concat(items));
-        }
+        //Assert
+        result.Should().ContainInOrder(source.Concat(items));
+    }
 
-        [TestMethod]
-        public void WhenIndexIsZero_AddAtTheStart()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = 0;
-            var items = Fixture.CreateMany<Dummy>().ToList();
+    [TestMethod]
+    public void WithAtEnumerable_WhenIndexIsZero_AddAtTheStart()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = 0;
+        var items = Fixture.CreateMany<Dummy>().ToList();
 
-            //Act
-            var result = source.WithAt(index, items);
+        //Act
+        var result = source.WithAt(index, items);
 
-            //Assert
-            result.Should().ContainInOrder(items.Concat(source));
-        }
+        //Assert
+        result.Should().ContainInOrder(items.Concat(source));
+    }
 
-        [TestMethod]
-        public void WhenIndexIsOne_AddBetween()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>(3).ToReadOnlyList();
-            var index = 1;
-            var items = Fixture.CreateMany<Dummy>(3).ToList();
+    [TestMethod]
+    public void WithAtEnumerable_WhenIndexIsOne_AddBetween()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>(3).ToReadOnlyList();
+        var index = 1;
+        var items = Fixture.CreateMany<Dummy>(3).ToList();
 
-            //Act
-            var result = source.WithAt(index, items);
+        //Act
+        var result = source.WithAt(index, items);
 
-            //Assert
-            result.Should().ContainInOrder(new List<Dummy>
+        //Assert
+        result.Should().ContainInOrder(new List<Dummy>
             {
                 source[0],
                 items[0],
@@ -1055,207 +832,219 @@ public class ReadOnlyListTests
                 source[1],
                 source[2],
             });
-        }
     }
 
-    [TestClass]
-    public class WithoutAt : Tester
+    [TestMethod]
+    public void WithoutAt_WhenSourceIsNull_Throw()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
-        {
-            //Arrange
-            IReadOnlyList<Dummy> source = null!;
-            var index = Fixture.Create<int>();
+        //Arrange
+        IReadOnlyList<Dummy> source = null!;
+        var index = Fixture.Create<int>();
 
-            //Act
-            var action = () => source.WithoutAt(index);
+        //Act
+        var action = () => source.WithoutAt(index);
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
-
-        [TestMethod]
-        public void WhenIndexIsNegative_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = -Fixture.Create<int>();
-
-            //Act
-            var action = () => source.WithoutAt(index);
-
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
-
-        [TestMethod]
-        public void WhenIndexIsOutOfRange_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = source.Count;
-
-            //Act
-            var action = () => source.WithoutAt(index);
-
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
-
-        [TestMethod]
-        public void WhenIndexIsWithinRange_Remove()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var index = 1;
-
-            //Act
-            var result = source.WithoutAt(index);
-
-            //Assert
-            result.Should().BeEquivalentTo(new List<Dummy>
-            {
-                source[0], source[2]
-            });
-        }
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
     }
 
-    [TestClass]
-    public class WithSwapped : Tester
+    [TestMethod]
+    public void WithoutAt_WhenIndexIsNegative_Throw()
     {
-        [TestMethod]
-        public void WhenSourceIsNull_Throw()
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = -Fixture.Create<int>();
+
+        //Act
+        var action = () => source.WithoutAt(index);
+
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [TestMethod]
+    public void WithoutAt_WhenIndexIsOutOfRange_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = source.Count;
+
+        //Act
+        var action = () => source.WithoutAt(index);
+
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [TestMethod]
+    public void WithoutAt_WhenIndexIsWithinRange_Remove()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var index = 1;
+
+        //Act
+        var result = source.WithoutAt(index);
+
+        //Assert
+        result.Should().BeEquivalentTo(new List<Dummy>
         {
-            //Arrange
-            IReadOnlyList<Dummy> source = null!;
-            var current = Fixture.Create<int>();
-            var destination = Fixture.Create<int>();
+            source[0], source[2]
+        });
+    }
 
-            //Act
-            var action = () => source.WithSwapped(current, destination);
+    [TestMethod]
+    public void WithSwapped_WhenSourceIsNull_Throw()
+    {
+        //Arrange
+        IReadOnlyList<Dummy> source = null!;
+        var current = Fixture.Create<int>();
+        var destination = Fixture.Create<int>();
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
-        }
+        //Act
+        var action = () => source.WithSwapped(current, destination);
 
-        [TestMethod]
-        public void WhenCurrentIsNegative_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var current = -Fixture.Create<int>();
-            var destination = 0;
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
+    }
 
-            //Act
-            var action = () => source.WithSwapped(current, destination);
+    [TestMethod]
+    public void WithSwapped_WhenCurrentIsNegative_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var current = -Fixture.Create<int>();
+        var destination = 0;
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
+        //Act
+        var action = () => source.WithSwapped(current, destination);
 
-        [TestMethod]
-        public void WhenCurrentIsOutOfRange_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var current = source.Count;
-            var destination = 1;
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
 
-            //Act
-            var action = () => source.WithSwapped(current, destination);
+    [TestMethod]
+    public void WithSwapped_WhenCurrentIsOutOfRange_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var current = source.Count;
+        var destination = 1;
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
+        //Act
+        var action = () => source.WithSwapped(current, destination);
 
-        [TestMethod]
-        public void WhenDestinationIsNegative_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var current = 2;
-            var destination = -Fixture.Create<int>();
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
 
-            //Act
-            var action = () => source.WithSwapped(current, destination);
+    [TestMethod]
+    public void WithSwapped_WhenDestinationIsNegative_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var current = 2;
+        var destination = -Fixture.Create<int>();
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
+        //Act
+        var action = () => source.WithSwapped(current, destination);
 
-        [TestMethod]
-        public void WhenDestinationIsOutOfRange_Throw()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var current = 1;
-            var destination = source.Count;
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
 
-            //Act
-            var action = () => source.WithSwapped(current, destination);
+    [TestMethod]
+    public void WithSwapped_WhenDestinationIsOutOfRange_Throw()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var current = 1;
+        var destination = source.Count;
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
+        //Act
+        var action = () => source.WithSwapped(current, destination);
 
-        [TestMethod]
-        public void WhenBothCurrentAndDestinationAreTheSame_ChangeNothing()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var current = 1;
-            var destination = 1;
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
 
-            //Act
-            var result = source.WithSwapped(current, destination);
+    [TestMethod]
+    public void WithSwapped_WhenBothCurrentAndDestinationAreTheSame_ChangeNothing()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var current = 1;
+        var destination = 1;
 
-            //Assert
-            result.Should().ContainInOrder(source);
-        }
+        //Act
+        var result = source.WithSwapped(current, destination);
 
-        [TestMethod]
-        public void WhenBothCurrentAndDestinationAreDifferentAndWithinRange_Swap()
-        {
-            //Arrange
-            var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-            var current = 2;
-            var destination = 0;
+        //Assert
+        result.Should().ContainInOrder(source);
+    }
 
-            //Act
-            var result = source.WithSwapped(current, destination);
+    [TestMethod]
+    public void WithSwapped_WhenBothCurrentAndDestinationAreDifferentAndWithinRange_Swap()
+    {
+        //Arrange
+        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var current = 2;
+        var destination = 0;
 
-            //Assert
-            result.Should().ContainInOrder(new List<Dummy>
+        //Act
+        var result = source.WithSwapped(current, destination);
+
+        //Assert
+        result.Should().ContainInOrder(new List<Dummy>
             {
                 source[2],
                 source[1],
                 source[0]
             });
-        }
     }
 
-    [TestClass]
-    public class Serialization : Tester
+    [TestMethod]
+    public void CreateParams_Always_ReturnNewReadOnlyList()
     {
-        [TestMethod]
-        public void WhenUsingSystemText_DeserializeReadOnlyList()
-        {
-            //Arrange
-            var instance = new DummyWithListInside
-            {
-                Id = Fixture.Create<Guid>(),
-                Name = Fixture.Create<string>(),
-                Stuff = Fixture.CreateMany<Dummy>().ToReadOnlyList()
-            };
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToArray();
 
-            var json = System.Text.Json.JsonSerializer.Serialize(instance);
+        //Act
+        var result = ReadOnlyList.Create(items);
 
-            //Act
-            var result = System.Text.Json.JsonSerializer.Deserialize<DummyWithListInside>(json);
+        //Assert
+        result.Should().BeEquivalentTo(items);
+    }
 
-            //Assert
-            result.Should().BeEquivalentTo(instance);
-        }
+    [TestMethod]
+    public void CreateEnumerable_Always_ReturnNewReadOnlyList()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+
+        //Act
+        var result = ReadOnlyList.Create((IEnumerable<Dummy>)items);
+
+        //Assert
+        result.Should().BeEquivalentTo(items);
+    }
+
+    [TestMethod]
+    public void Serialization_WhenUsingSystemText_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<DummyWithListInside>(Fixture, new JsonSerializerOptions().WithReadOnlyConverters());
+
+    [TestMethod]
+    public void Serialization_WhenUsingSystemTextOnListItself_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<ReadOnlyList<Dummy>>(Fixture, new JsonSerializerOptions().WithReadOnlyConverters());
+
+    [TestMethod]
+    public void Serialization_WhenUsingNewtonsoftJson_SerializeAndDeserializeBack()
+    {
+        //Arrange
+        var instance = Fixture.Create<DummyWithListInside>();
+
+        //Act
+        var result = JsonConvert.DeserializeObject<DummyWithListInside>(JsonConvert.SerializeObject(instance));
+
+        //Assert
+        result.Should().BeEquivalentTo(instance);
     }
 }

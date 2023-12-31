@@ -1,6 +1,5 @@
 ﻿namespace ToolBX.Collections.UnitTesting.Customizations;
 
-[AutoCustomization]
 public class GridSpecimenBuilder : ISpecimenBuilder
 {
     public object Create(object request, ISpecimenContext context)

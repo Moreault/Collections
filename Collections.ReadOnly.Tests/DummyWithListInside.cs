@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Collections.ReadOnly.Tests;
+﻿namespace Collections.ReadOnly.Tests;
 
 public sealed record DummyWithListInside
 {
@@ -8,6 +6,5 @@ public sealed record DummyWithListInside
 
     public string Name { get; init; } = string.Empty;
 
-    [JsonConverter(typeof(ReadOnlyListJsonConverter<Dummy>))]
-    public ReadOnlyList<Dummy> Stuff { get; init; } = ReadOnlyList<Dummy>.Empty;
+    public ReadOnlyList<Dummy> Stuff { get; init; } = [];
 }

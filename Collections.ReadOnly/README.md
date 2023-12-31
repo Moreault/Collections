@@ -2,7 +2,12 @@
 
 A read-only collection of elements that can be accessed via indexer.
 
-:warning: This package is deprecated in ToolBX 2.2.0 and will not be updated further. Use .NET's official `ImmutableList<T>` which does the exact same thing. The extension methods (`With`, `WithAt`, `Without`, `WithoutAt`, `WithSwapped`) are still available in [ToolBX.OPEX](https://github.com/Moreault/OPEX/). `Collections.ReadOnly` will be removed from the repo starting with 3.0.0.
+# ReadOnlyList vs ImmutableList
+
+.NET already has excellent read-only (or immutable) collections in the `System.Collections.Immutable` namespace. Here are the pros and cons of both.
+
+* ReadOnlyList<T>
+
 
 # Why use this?
 The following example is a common (bad) pattern that I have seen over the years. Because the method returns a boolean, the developer has to pass a list of errors to it rather than returning a result object that contain both the boolean and the list of errors. Objects passed to methods should _never_ be modified by the method itself. This is a bad practice that leads to hard to maintain code. Not only that, but expecting the caller to pass a list of errors to the method is also a bad practice. The method should be responsible for creating the list of errors and returning it to the caller.

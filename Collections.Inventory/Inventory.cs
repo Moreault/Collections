@@ -1,4 +1,6 @@
-﻿namespace ToolBX.Collections.Inventory;
+﻿using System.Text.Json.Serialization;
+
+namespace ToolBX.Collections.Inventory;
 
 public interface IInventory<T> : IObservableCollection<Entry<T>>, ICollection<Entry<T>>, IEquatable<IInventory<T>>, IReadOnlyInventory<T>
 {

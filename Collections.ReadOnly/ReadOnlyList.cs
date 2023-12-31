@@ -3,7 +3,6 @@
 /// <summary>
 /// A read-only collection of elements that can be accessed via indexer.
 /// </summary>
-[Obsolete("Use ImmutableList<T> instead. Will be removed in 3.0.0")]
 public record ReadOnlyList<T> : IReadOnlyList<T>, IEquatable<IEnumerable<T>>
 {
     public static readonly ReadOnlyList<T> Empty = new();
@@ -12,11 +11,14 @@ public record ReadOnlyList<T> : IReadOnlyList<T>, IEquatable<IEnumerable<T>>
 
     public int Count => _items.Count;
 
-    private readonly IList<T> _items;
+    private readonly IReadOnlyList<T> _items;
+
+    private readonly Lazy<int> _hashcode;
 
     public ReadOnlyList()
     {
         _items = Array.Empty<T>();
+        _hashcode = InitializeHashCode();
     }
 
     public ReadOnlyList(params T[] source) : this(source as IEnumerable<T>)
@@ -27,7 +29,16 @@ public record ReadOnlyList<T> : IReadOnlyList<T>, IEquatable<IEnumerable<T>>
     public ReadOnlyList(IEnumerable<T> source)
     {
         _items = source?.ToArray() ?? throw new ArgumentNullException(nameof(source));
+        _hashcode = InitializeHashCode();
     }
+
+    private Lazy<int> InitializeHashCode() => new(() =>
+    {
+        unchecked
+        {
+            return _items.Aggregate(17, (current, item) => current * 31 + (item?.GetHashCode() ?? 0));
+        }
+    });
 
     public IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
 
@@ -46,7 +57,13 @@ public record ReadOnlyList<T> : IReadOnlyList<T>, IEquatable<IEnumerable<T>>
 
     public static bool operator !=(ReadOnlyList<T>? a, IEnumerable<T>? b) => !(a == b);
 
-    public override int GetHashCode() => _items.GetHashCode();
+    public override int GetHashCode() => _hashcode.Value;
 
     public override string ToString() => Count == 0 ? $"Empty {GetType().GetHumanReadableName()}" : $"{GetType().GetHumanReadableName()} with {Count} elements";
+}
+
+public static class ReadOnlyList
+{
+    public static ReadOnlyList<T> Create<T>(params T[] items) => new(items);
+    public static ReadOnlyList<T> Create<T>(IEnumerable<T> items) => new(items);
 }
