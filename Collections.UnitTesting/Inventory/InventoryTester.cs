@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Collections;
+using System.Text.Json;
 using ToolBX.Collections.Inventory.Json;
 using ToolBX.Eloquentest.Extensions;
 using Exceptions = ToolBX.Collections.Inventory.Resources.Exceptions;
@@ -1385,6 +1387,198 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
     }
 
     [TestMethod]
+    public void RemoveEntry_WhenItemIsNull_Throw()
+    {
+        //Arrange
+        Entry<DummyItem> item = null!;
+
+        //Act
+        var action = () => ((ICollection<Entry<DummyItem>>)Instance).Remove(item);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(item));
+    }
+
+    [TestMethod]
+    public void RemoveEntry_WhenItemIsNotInCollection_DoNotThrow()
+    {
+        //Arrange
+        var item = Fixture.Create<Entry<DummyItem>>();
+
+        foreach (var (dummy, quantity) in Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, Random.Shared.Next(1, 5)).CreateMany())
+            Instance.Add(dummy, quantity);
+
+        //Act
+        var action = () => ((ICollection<Entry<DummyItem>>)Instance).Remove(item);
+
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void RemoveEntry_WhenItemIsNotInCollection_ReturnFalse()
+    {
+        //Arrange
+        var item = Fixture.Create<Entry<DummyItem>>();
+
+        foreach (var (dummy, quantity) in Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, Random.Shared.Next(1, 5)).CreateMany())
+            Instance.Add(dummy, quantity);
+
+        //Act
+        var result = ((ICollection<Entry<DummyItem>>)Instance).Remove(item);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void RemoveEntry_WhenItemIsInCollection_ReturnTrue()
+    {
+        //Arrange
+        var item = Fixture.Create<Entry<DummyItem>>();
+        Instance.Add(item.Item, item.Quantity);
+
+        foreach (var (dummy, quantity) in Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, Random.Shared.Next(1, 5)).CreateMany())
+            Instance.Add(dummy, quantity);
+
+        //Act
+        var result = ((ICollection<Entry<DummyItem>>)Instance).Remove(item);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void RemoveEntry_WhenItemIsInCollection_RemoveFromCollection()
+    {
+        //Arrange
+        var item = Fixture.Create<Entry<DummyItem>>();
+        Instance.Add(item.Item, item.Quantity);
+
+        foreach (var (dummy, quantity) in Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, Random.Shared.Next(1, 5)).CreateMany())
+            Instance.Add(dummy, quantity);
+
+        //Act
+        ((ICollection<Entry<DummyItem>>)Instance).Remove(item);
+
+        //Assert
+        Instance.Should().NotContain(item);
+    }
+
+    //TODO Test RemoveAt
+    [TestMethod]
+    public void RemoveAt_WhenIndexIsNegative_Throw()
+    {
+        //Arrange
+        foreach (var (dummy, quantity) in Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, Random.Shared.Next(1, 5)).CreateMany())
+            Instance.Add(dummy, quantity);
+
+        var index = -Fixture.Create<int>();
+        var count = Fixture.Create<int>();
+
+        //Act
+        var action = () => Instance.RemoveAt(index, count);
+
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>().WithParameterName(nameof(index));
+    }
+
+    [TestMethod]
+    public void RemoveAt_WhenIndexIsHigherThanLastIndex_Throw()
+    {
+        //Arrange
+        foreach (var (dummy, quantity) in Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, Random.Shared.Next(1, 5)).CreateMany())
+            Instance.Add(dummy, quantity);
+
+        var index = Instance.LastIndex + 1;
+        var count = Fixture.Create<int>();
+
+        //Act
+        var action = () => Instance.RemoveAt(index, count);
+
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>().WithParameterName(nameof(index));
+    }
+
+    [TestMethod]
+    [DataRow(-1)]
+    [DataRow(0)]
+    public void RemoveAt_WhenCountIsZeroOrNegative_Throw(int count)
+    {
+        //Arrange
+        foreach (var (dummy, quantity) in Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, Random.Shared.Next(1, 5)).CreateMany())
+            Instance.Add(dummy, quantity);
+
+        var index = Instance.GetRandomIndex();
+
+        //Act
+        var action = () => Instance.RemoveAt(index, count);
+
+        //Assert
+        action.Should().Throw<ArgumentException>().WithParameterName(nameof(count));
+    }
+
+    [TestMethod]
+    public void RemoveAt_WhenIndexPlusCountIsOutsideRangeOfInventory_Throw()
+    {
+        //Arrange
+        foreach (var (dummy, quantity) in Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, Random.Shared.Next(1, 5)).CreateMany())
+            Instance.Add(dummy, quantity);
+
+        var index = Instance.GetRandomIndex();
+        var count = Instance.Count() + 1;
+
+        //Act
+        var action = () => Instance.RemoveAt(index, count);
+
+        //Assert
+        action.Should().Throw<ArgumentException>().WithMessage(string.Format(Collections.ObservableList.Resources.Exceptions.CannotRemoveItemBecauseRangeFallsOutsideBoundaries, "ObservableList<Entry<DummyItem>>", 0, Instance.LastIndex, index, count) + " (Parameter 'count')").WithParameterName(nameof(count));
+    }
+
+    [TestMethod]
+    public void RemoveAt_WhenIndexAndCountAreWithinBoundaries_RemoveItemsAtIndexPlusCount()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var (dummy, quantity) in entries)
+            Instance.Add(dummy, quantity);
+        var index = Instance.GetRandomIndex();
+        var count = Math.Clamp(Instance.LastIndex - index, 1, int.MaxValue);
+
+        //Act
+        Instance.RemoveAt(index, count);
+
+        //Assert
+        Instance.Should().BeEquivalentTo(entries.Take(index).Concat(entries.Skip(index + count)));
+    }
+
+    [TestMethod]
+    public void RemoveAt_WhenIndexAndCountAreWithinBoundaries_TriggerEvent()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var (dummy, quantity) in entries)
+            Instance.Add(dummy, quantity);
+        var index = Instance.GetRandomIndex();
+        var count = Math.Clamp(Instance.LastIndex - index, 1, int.MaxValue);
+
+        var eventArgs = new List<CollectionChangeEventArgs<Entry<DummyItem>>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance.RemoveAt(index, count);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<DummyItem>>>
+        {
+                new()
+                {
+                    OldValues = entries.Skip(index).Take(count).ToList()
+                }
+            });
+    }
+
+    [TestMethod]
     public void ClearItem_WhenItemIsNullAndThereIsNoOccurenceOfNullInStock_DoNotTriggerChange()
     {
         //Arrange
@@ -1916,6 +2110,44 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
 
         //Assert
         result.Should().Be(entries.Sum(x => x.Quantity));
+    }
+
+    [TestMethod]
+    public void SearchItem_WhenThereIsNoOccurence_ReturnEmpty()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var entry in entries)
+            Instance.Add(entry.Item, entry.Quantity);
+
+        var item = Fixture.Create<DummyItem>();
+
+        //Act
+        var result = Instance.Search(item);
+
+        //Assert
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void SearchItem_WhenThereIsAnOccurence_ReturnOccurence()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var entry in entries)
+            Instance.Add(entry.Item, entry.Quantity);
+
+        var randomIndex = entries.GetRandomIndex();
+        var random = entries[randomIndex];
+
+        //Act
+        var result = Instance.Search(random.Item);
+
+        //Assert
+        result.Should().BeEquivalentTo(new List<IndexedEntry<DummyItem>>
+        {
+            new(random.Item, random.Quantity, randomIndex)
+        });
     }
 
     [TestMethod]
@@ -3474,6 +3706,142 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
 
         //Act
         var result = instance != other;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void GetHashCode_Always_ReturnInternalCollectionHashCode()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var (item, quantity) in entries)
+            Instance.Add(item, quantity);
+
+        var expected = GetFieldValue<ObservableList<Entry<DummyItem>>>("Items")!;
+
+        //Act
+        var result = Instance.GetHashCode();
+
+        //Assert
+        result.Should().Be(expected.GetHashCode());
+    }
+
+    [TestMethod]
+    public void Enumerator_Always_CorrectlyEnumeratesEveryItem()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var (item, quantity) in entries)
+            Instance.Add(item, quantity);
+
+        var enumeratedItems = new List<Entry<DummyItem>>();
+
+        //Act
+        foreach (var item in Instance)
+            enumeratedItems.Add(item);
+
+        //Assert
+        enumeratedItems.Should().NotBeEmpty();
+        enumeratedItems.Should().BeEquivalentTo(Instance);
+        enumeratedItems.Should().HaveCount(Instance.Count());
+    }
+
+    [TestMethod]
+    public void Enumerator_WhenCollectionIsModifiedDuringEnumeration_Throw()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var (item, quantity) in entries)
+            Instance.Add(item, quantity);
+
+        //Act
+        var action = () =>
+        {
+            foreach (var item in Instance)
+                Instance.Remove(item.Item, item.Quantity);
+        };
+
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [TestMethod]
+    public void Enumerator_WhenUsingResetAfterCollectionChanged_Throw()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var (item, quantity) in entries)
+            Instance.Add(item, quantity);
+
+        using var enumerator = Instance.GetEnumerator();
+        Instance.RemoveAt(Instance.GetRandomIndex());
+
+        //Act
+        var action = () => enumerator.Reset();
+
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [TestMethod]
+    public void Enumerator_WhenUsingResetWhileCollectionIsStillUnchanged_SetCurrentToDefault()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var (item, quantity) in entries)
+            Instance.Add(item, quantity);
+        using var enumerator = Instance.GetEnumerator();
+
+        //Act
+        enumerator.Reset();
+
+        //Assert
+        enumerator.Current.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void InterfaceEnumerator_WhenUsingResetAfterCollectionChanged_Throw()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var (item, quantity) in entries)
+            Instance.Add(item, quantity);
+
+        using var enumerator = ((IEnumerable)Instance).GetEnumerator() as IEnumerator<Entry<DummyItem>>;
+        Instance.RemoveAt(Instance.GetRandomIndex());
+
+        //Act
+        var action = () => enumerator.Reset();
+
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [TestMethod]
+    public void InterfaceEnumerator_WhenUsingResetWhileCollectionIsStillUnchanged_SetCurrentToDefault()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        foreach (var (item, quantity) in entries)
+            Instance.Add(item, quantity);
+        using var enumerator = ((IEnumerable)Instance).GetEnumerator() as IEnumerator<Entry<DummyItem>>;
+
+        //Act
+        enumerator.Reset();
+
+        //Assert
+        enumerator.Current.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void IsReadOnly_Always_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = ((ICollection<Entry<DummyItem>>)Instance).IsReadOnly;
 
         //Assert
         result.Should().BeFalse();

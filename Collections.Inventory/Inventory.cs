@@ -397,7 +397,7 @@ public abstract class Inventory<T> : IInventory<T>
 
     public override bool Equals(object? obj) => Equals(obj as Inventory<T>);
 
-    public override int GetHashCode() => HashCode.Combine(Items, StackSize);
+    public override int GetHashCode() => Items.GetHashCode();
 
     public static bool operator ==(Inventory<T>? a, Inventory<T>? b) => a is null && b is null || a is not null && a.Equals(b);
 

@@ -6,7 +6,7 @@ public delegate void GridChangedEvent<T>(object sender, GridChangedEventArgs<T> 
 
 public sealed record GridChangedEventArgs<T>
 {
-    //TODO 3.0.0 : ImmutableList<T>
+    //TODO 3.0.0 : IReadOnlyList<Cell<T>>
     public IList<Cell<T>> OldValues
     {
         get => _oldValues;
@@ -14,7 +14,7 @@ public sealed record GridChangedEventArgs<T>
     }
     private readonly IList<Cell<T>> _oldValues = Array.Empty<Cell<T>>();
 
-    //TODO 3.0.0 : ImmutableList<T>
+    //TODO 3.0.0 : IReadOnlyList<Cell<T>>
     public IList<Cell<T>> NewValues
     {
         get => _newValues;
