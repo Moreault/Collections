@@ -11,7 +11,7 @@ public sealed record StockSearchResult<T> : IReadOnlyList<IndexedEntry<T>>, IEqu
     public StockSearchResult(IEnumerable<IndexedEntry<T>> items)
     {
         if (items == null) throw new ArgumentNullException(nameof(items));
-        _items = items as IReadOnlyList<IndexedEntry<T>> ?? items.ToList();
+        _items = items.ToImmutableList();
     }
 
     public IEnumerator<IndexedEntry<T>> GetEnumerator() => _items.GetEnumerator();
@@ -27,23 +27,20 @@ public sealed record StockSearchResult<T> : IReadOnlyList<IndexedEntry<T>>, IEqu
         return this.SequenceEqual(other);
     }
 
-    public override int GetHashCode()
-    {
-        return _items.GetHashCode();
-    }
+    public override int GetHashCode() => _items.GetValueHashCode();
 
     public IReadOnlyList<GroupedEntry<T>> Group()
     {
         if (Count == 0) return Array.Empty<GroupedEntry<T>>();
 
-        var items = this.DistinctBy(x => x.Item);
+        var distinctEntries = this.DistinctBy(x => x.Item);
         var group = new List<GroupedEntry<T>>();
-        foreach (var item in items)
+        foreach (var entry in distinctEntries)
         {
-            var entries = this.Where(x => Equals(x.Item, item)).ToList();
-            var quantity = entries.Sum(x => x.Quantity);
-            var indexes = entries.Select(x => x.Index);
-            group.Add(new GroupedEntry<T>(item.Item, quantity, indexes));
+            var duplicateEntries = _items.Where(x => Equals(x.Item, entry.Item)).ToList();
+            var quantity = duplicateEntries.Sum(x => x.Quantity);
+            var indexes = duplicateEntries.Select(x => x.Index);
+            group.Add(new GroupedEntry<T>(entry.Item, quantity, indexes));
         }
         return group;
     }

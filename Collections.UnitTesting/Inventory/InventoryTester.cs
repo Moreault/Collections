@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Text.Json;
-using ToolBX.Collections.Inventory.Json;
-using ToolBX.Eloquentest.Extensions;
-using Exceptions = ToolBX.Collections.Inventory.Resources.Exceptions;
+﻿using Exceptions = ToolBX.Collections.Inventory.Resources.Exceptions;
 
 namespace ToolBX.Collections.UnitTesting.Inventory;
 
 public abstract class InventoryTester<TInventory> : Tester<TInventory> where TInventory : Inventory<DummyItem>
 {
+    protected override void InitializeTest()
+    {
+        base.InitializeTest();
+        Fixture.WithCollectionCustomizations();
+    }
+
     [TestMethod]
     public void AddItem_WhenItemIsNull_AddStackOfNull()
     {

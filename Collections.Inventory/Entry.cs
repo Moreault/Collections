@@ -1,28 +1,18 @@
 ﻿namespace ToolBX.Collections.Inventory;
 
-public record Entry<T>
+public sealed record Entry<T> : EntryBase<T>
 {
-    public T Item { get; init; } = default!;
-    public int Quantity { get; init; }
-
     public Entry()
     {
 
     }
 
-    public Entry(T item, int quantity = 1)
+    public Entry(T item, int quantity = 1) : base(item, quantity)
     {
-        Item = item;
-        Quantity = quantity;
+
     }
 
-    public void Deconstruct(out T item, out int quantity)
-    {
-        item = Item;
-        quantity = Quantity;
-    }
-
-    public override string ToString() => $"{(Item is null ? "NULL" : Item.ToString())} x{Quantity}";
+    public override string ToString() => base.ToString();
 }
 
 //TODO 3.0.0 : Replace current Entry<T> with his one

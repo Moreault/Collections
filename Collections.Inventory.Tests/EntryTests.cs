@@ -1,22 +1,8 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public sealed class EntryTests : RecordTester<Entry<DummyItem>>
+public sealed class EntryTests : EntryTester<Entry<DummyItem>>
 {
-    [TestMethod]
-    public void Deconstructor_Always_Deconstruct()
-    {
-        //Arrange
-        var instance = Fixture.Create<Entry<DummyItem>>();
-
-        //Act
-        var (item, quantity) = instance;
-
-        //Assert
-        item.Should().Be(instance.Item);
-        quantity.Should().Be(instance.Quantity);
-    }
-
     [TestMethod]
     public void ToString_WhenItemIsNull_ReturnNull()
     {

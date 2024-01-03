@@ -4,6 +4,63 @@
 public class InventoryListTests : InventoryTester<InventoryList<DummyItem>>
 {
     [TestMethod]
+    public void ParameterlessConstructor_Always_CreateEmptyWithMaxStackSize()
+    {
+        //Arrange
+
+        //Act
+        var result = new InventoryList<DummyItem>();
+
+        //Assert
+        result.Should().BeEmpty();
+        result.StackSize.Should().Be(int.MaxValue);
+    }
+
+    [TestMethod]
+    public void StackSizeConstructor_Always_CreateEmptyWithSpecifiedStackSize()
+    {
+        //Arrange
+        var stackSize = Fixture.Create<int>();
+
+        //Act
+        var result = new InventoryList<DummyItem>(stackSize);
+
+        //Assert
+        result.Should().BeEmpty();
+        result.StackSize.Should().Be(stackSize);
+    }
+
+    [TestMethod]
+    public void ItemTypeConstructor_Always_CreateWithEntriesOfItemsWithQuantityOfOnePlusStackSize()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<DummyItem>().ToList();
+        var stackSize = Fixture.Create<int>();
+
+        //Act
+        var result = new InventoryList<DummyItem>(items, stackSize);
+
+        //Assert
+        result.Should().BeEquivalentTo(items.Select(x => new Entry<DummyItem>(x, 1)));
+        result.StackSize.Should().Be(stackSize);
+    }
+
+    [TestMethod]
+    public void EntriesConstructor_Always_CreateWithEntriesAndStackSize()
+    {
+        //Arrange
+        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        var stackSize = entries.Max(x => x.Quantity) + Fixture.Create<int>();
+
+        //Act
+        var result = new InventoryList<DummyItem>(entries, stackSize);
+
+        //Assert
+        result.Should().BeEquivalentTo(entries);
+        result.StackSize.Should().Be(stackSize);
+    }
+
+    [TestMethod]
     public void AddItem_WhenDoesNotContainAnyEntryOfThisItemAndQuantityIsEqualToStackSize_AddOneStackOfItemOfStackSize()
     {
         //Arrange

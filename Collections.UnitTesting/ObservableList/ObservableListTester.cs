@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Text.Json;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Serialization;
 using ToolBX.Collections.ObservableList.Json;
-using ToolBX.Collections.UnitTesting.Extensions;
 
 namespace ToolBX.Collections.UnitTesting.ObservableList;
 

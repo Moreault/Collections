@@ -112,6 +112,7 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
 
     public override int GetHashCode()
     {
+        //TODO Remove limit : it's mutable
         return HashCode.Combine(_items, Limit);
     }
 
