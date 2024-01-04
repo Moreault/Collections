@@ -329,6 +329,9 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         if (items == null) throw new ArgumentNullException(nameof(items));
         var list = items as IReadOnlyList<T> ?? items.ToList();
 
+        if (!list.Any())
+            throw new ArgumentException($"{nameof(items)} should not be empty");
+
         var indexes = list.Select(item => IndexesOf(item)).SelectMany(x => x).ToList();
         if (indexes.Count != list.Count) throw new InvalidOperationException(string.Format(Exceptions.CannotRemoveItemsBecauseOneIsNotInCollection, GetType().GetHumanReadableName()));
 
@@ -346,7 +349,9 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
     public void TryRemoveAll(IEnumerable<T> items)
     {
         if (items == null) throw new ArgumentNullException(nameof(items));
-        RemoveAll(_items.Join(items, x => x, y => y, (x, y) => x));
+        var list = _items.Join(items, x => x, y => y, (x, y) => x).ToList();
+        if (list.Any())
+            RemoveAll(list);
     }
 
     public void TryRemoveAll(Func<T, bool> predicate)

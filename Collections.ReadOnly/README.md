@@ -6,8 +6,13 @@ A read-only collection of elements that can be accessed via indexer.
 
 .NET already has excellent read-only (or immutable) collections in the `System.Collections.Immutable` namespace. Here are the pros and cons of both.
 
-* ReadOnlyList<T>
-
+* ReadOnlyList<T> uses value equality for both its `Equals` and `GetHashCode` methods including all its equality operators
+* ImmutableList<T> uses reference equality for its `Equals` and `GetHashCode` methods
+* Both are immutable
+* Both are thread-safe
+* ImmutableList<T> can be serialized using System.Text.Json by default
+* ReadOnlyList<T> can only be serialized using System.Text.Json by using the `ReadOnlyListJsonConverter` class
+* Both are serializable using Newtonsoft.Json without requiring custom converters
 
 # Why use this?
 The following example is a common (bad) pattern that I have seen over the years. Because the method returns a boolean, the developer has to pass a list of errors to it rather than returning a result object that contain both the boolean and the list of errors. Objects passed to methods should _never_ be modified by the method itself. This is a bad practice that leads to hard to maintain code. Not only that, but expecting the caller to pass a list of errors to the method is also a bad practice. The method should be responsible for creating the list of errors and returning it to the caller.
@@ -59,4 +64,23 @@ var newThings = things.Without(thing1, thing5, thing8);
 
 //You can even remove items using a predicate lambda
 var newThings = things.Without(x => x.Tag == "Something");
+```
+
+# System.Text.Json
+By default, `ReadOnlyList<T>` does not work with System.Text.Json but you can make it work by using the `ReadOnlyListJsonConverterFactory` class. Here is an example of how to use it.
+
+```c#
+
+//First, you need to create an instance of JsonSerializerOptions
+var options = new JsonSerializerOptions();
+
+//Then, you need to add the converter to the options
+options.Converters.Add(new ReadOnlyListJsonConverterFactory());
+
+//Alternatively, you can use this extension method which does the same thing
+options.WithReadOnlyConverters();
+
+//Finally, you can serialize and deserialize your read-only collections
+var json = JsonSerializer.Serialize(things, options);
+var newThings = JsonSerializer.Deserialize<ReadOnlyList<Thing>>(json, options);
 ```

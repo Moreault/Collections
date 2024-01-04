@@ -1,10 +1,9 @@
 ﻿using System.Xml;
 using System.Xml.Serialization;
-using ToolBX.Collections.ObservableList.Json;
 
 namespace ToolBX.Collections.UnitTesting.ObservableList;
 
-public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
+public abstract class ObservableListTester<TList, TItem> : Tester<TList> where TList : ObservableList<TItem>, new()
 {
     protected override void InitializeTest()
     {
@@ -16,7 +15,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void LastIndex_WhenCollectionIsEmpty_ReturnMinusOdne()
     {
         //Arrange
-        var observableList = new ObservableList<T>();
+        var observableList = new TList();
 
         //Act
         var result = observableList.LastIndex;
@@ -29,7 +28,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void LastIndex_WhenCollectionContainsOneItem_ReturnZero()
     {
         //Arrange
-        var observableList = new ObservableList<T> { Fixture.Create<T>() };
+        var observableList = new TList { Fixture.Create<TItem>() };
 
         //Act
         var result = observableList.LastIndex;
@@ -42,7 +41,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void LastIndex_WhenCollectionContainsABunchOfItems_ReturnLastIndex()
     {
         //Arrange
-        var observableList = Fixture.Create<ObservableList<T>>();
+        var observableList = Fixture.Create<TList>();
 
         //Act
         var result = observableList.LastIndex;
@@ -55,10 +54,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IsReadOnly_Always_ReturnFalse()
     {
         //Arrange
-        var observableList = Fixture.Create<ObservableList<T>>();
+        var observableList = Fixture.Create<TList>();
 
         //Act
-        var result = ((ICollection<T>)observableList).IsReadOnly;
+        var result = ((ICollection<TItem>)observableList).IsReadOnly;
 
         //Assert
         result.Should().BeFalse();
@@ -68,7 +67,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexerGet_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
         var index = -1;
 
         //Act
@@ -82,7 +81,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexerGet_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
         var index = observableList.LastIndex + 1;
 
         //Act
@@ -96,7 +95,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexerGet_WhenIndexIsZero_ReturnFirstItem()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
         var index = 0;
 
         //Act
@@ -110,7 +109,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexerGet_WhenIndexIsLastIndex_ReturnLastItem()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
         var index = observableList.LastIndex;
 
         //Act
@@ -124,8 +123,8 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexerGet_WhenIndexIsWhatever_ReturnWhatever()
     {
         //Arrange
-        var list = Fixture.CreateMany<T>().ToList();
-        var observableList = list.ToObservableList();
+        var observableList = Fixture.Create<TList>();
+        var list = observableList.ToList();
         var index = observableList.GetRandomIndex();
 
         //Act
@@ -139,9 +138,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexerSet_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
         var index = -1;
-        var value = Fixture.Create<T>();
+        var value = Fixture.Create<TItem>();
 
         //Act
         var action = () => observableList[index] = value;
@@ -154,9 +153,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexerSet_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
         var index = observableList.LastIndex + 1;
-        var value = Fixture.Create<T>();
+        var value = Fixture.Create<TItem>();
 
         //Act
         var action = () => observableList[index] = value;
@@ -169,9 +168,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexerSet_WhenIndexIsWithinBounds_ReplaceItemAtIndex()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
         var index = observableList.GetRandomIndex();
-        var value = Fixture.Create<T>();
+        var value = Fixture.Create<TItem>();
 
         //Act
         observableList[index] = value;
@@ -184,20 +183,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexerSet_WhenIndexIsWithinBounds_TriggerCollectionChanged()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
         var index = observableList.GetRandomIndex();
-        var value = Fixture.Create<T>();
+        var value = Fixture.Create<TItem>();
 
         var oldItem = observableList[index];
 
-        var eventArgs = new List<CollectionChangeEventArgs<T>>();
+        var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         observableList.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         observableList[index] = value;
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new()
                 {
@@ -208,78 +207,13 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     }
 
     [TestMethod]
-    public void Constructor_WhenUsingDefaultConstructor_InitializeWithEmptyArray()
-    {
-        //Arrange
-
-        //Act
-        var result = new ObservableList<T>();
-
-        //Assert
-        result.Should().BeEmpty();
-    }
-
-    [TestMethod]
-    public void Constructor_WhenUsingParams_InitializeWithThoseItems()
-    {
-        //Arrange
-        var items = Fixture.Create<T[]>();
-
-        //Act
-        var result = new ObservableList<T>(items);
-
-        //Assert
-        result.Should().BeEquivalentTo(items);
-    }
-
-    [TestMethod]
-    public void Constructor_WhenPassingNull_Throw()
-    {
-        //Arrange
-
-        //Act
-        var action = () => new ObservableList<T>(null!);
-
-        //Assert
-        action.Should().Throw<ArgumentNullException>();
-    }
-
-    [TestMethod]
-    public void Constructor_WhenPassingList_InitializeWithListItems()
-    {
-        //Arrange
-        var items = Fixture.Create<List<T>>();
-
-        //Act
-        var result = new ObservableList<T>(items);
-
-        //Assert
-        result.Should().BeEquivalentTo(items);
-    }
-
-    [TestMethod]
-    public void Constructor_WhenUsingInitializer_AddThoseItemsToObservableList()
-    {
-        //Arrange
-        var item1 = Fixture.Create<T>();
-        var item2 = Fixture.Create<T>();
-        var item3 = Fixture.Create<T>();
-
-        //Act
-        var result = new ObservableList<T> { item1, item2, item3 };
-
-        //Assert
-        result.Should().BeEquivalentTo(new List<T> { item1, item2, item3 });
-    }
-
-    [TestMethod]
     public void Add_WhenUsingTheICollectionOverload_AddToObservableList()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
-        ((ICollection<T>)Instance).Add(item);
+        ((ICollection<TItem>)Instance).Add(item);
 
         //Assert
         Instance.Should().Contain(item);
@@ -289,10 +223,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Add_WhenUsingTheICollectionOverload_SetCountToOne()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
-        ((ICollection<T>)Instance).Add(item);
+        ((ICollection<TItem>)Instance).Add(item);
 
         //Assert
         Instance.Count.Should().Be(1);
@@ -302,7 +236,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Add_WhenAddingSingleItem_ItemIsAdded()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
         Instance.Add(item);
@@ -315,15 +249,15 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Add_WhenAddingSingleItem_TriggerChange()
     {
         //Arrange
-        var item = Fixture.Create<T>();
-        var eventArgs = new List<CollectionChangeEventArgs<T>>();
+        var item = Fixture.Create<TItem>();
+        var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         Instance.Add(item);
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new() { NewValues = new[] { item } }
             });
@@ -333,7 +267,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Add_WhenAddingSingleItem_SetCountToOne()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
         Instance.Add(item);
@@ -346,7 +280,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Add_WhenAddingABunchOfItems_AddAllOfThem()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(20).ToArray();
+        var items = Fixture.CreateMany<TItem>(20).ToArray();
 
         //Act
         Instance.Add(items);
@@ -359,7 +293,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Add_WhenAddingABunchOfItems_TriggerChangeOnlyOnce()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(20).ToArray();
+        var items = Fixture.CreateMany<TItem>(20).ToArray();
         var triggered = 0;
         Instance.CollectionChanged += (_, _) => triggered++;
 
@@ -374,15 +308,15 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Add_WhenAddingABunchOfItems_TriggerChangeWithAllNewItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(20).ToArray();
-        var eventArgs = new List<CollectionChangeEventArgs<T>>();
+        var items = Fixture.CreateMany<TItem>(20).ToArray();
+        var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         Instance.Add(items);
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new() { NewValues = items }
             });
@@ -392,8 +326,8 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Add_WhenAddingABunchOfItems_SetCountToTwenty()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(20).ToArray();
-        var eventArgs = new List<CollectionChangeEventArgs<T>>();
+        var items = Fixture.CreateMany<TItem>(20).ToArray();
+        var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
@@ -409,7 +343,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
 
         //Act
-        var action = () => Instance.Add((IEnumerable<T>)null!);
+        var action = () => Instance.Add((IEnumerable<TItem>)null!);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -436,7 +370,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         Instance.Add(null!);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T> { (T)(object)null! });
+        Instance.Should().BeEquivalentTo(new List<TItem> { (TItem)(object)null! });
     }
 
     [TestMethod]
@@ -445,7 +379,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
 
         //Act
-        var action = () => Instance.Add(new List<T> { (T)(object)null!, (T)(object)null!, (T)(object)null! });
+        var action = () => Instance.Add(new List<TItem> { (TItem)(object)null!, (TItem)(object)null!, (TItem)(object)null! });
 
         //Assert
         action.Should().NotThrow();
@@ -457,17 +391,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
 
         //Act
-        Instance.Add((T)(object)null!, (T)(object)null!, (T)(object)null!);
+        Instance.Add((TItem)(object)null!, (TItem)(object)null!, (TItem)(object)null!);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T> { (T)(object)null!, (T)(object)null!, (T)(object)null! });
+        Instance.Should().BeEquivalentTo(new List<TItem> { (TItem)(object)null!, (TItem)(object)null!, (TItem)(object)null! });
     }
 
     [TestMethod]
     public void Clear_Always_RemoveAllItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(20).ToArray();
+        var items = Fixture.CreateMany<TItem>(20).ToArray();
         Instance.Add(items);
 
         //Act
@@ -481,17 +415,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Clear_WhenContainsItems_TriggerCollectionChanged()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(20).ToArray();
+        var items = Fixture.CreateMany<TItem>(20).ToArray();
         Instance.Add(items);
 
-        var eventArgs = new List<CollectionChangeEventArgs<T>>();
+        var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         Instance.Clear();
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new() { OldValues = items }
             });
@@ -501,7 +435,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Clear_Always_SetCountToZero()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(20).ToArray();
+        var items = Fixture.CreateMany<TItem>(20).ToArray();
         Instance.Add(items);
 
         //Act
@@ -515,17 +449,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Clear_WhenThereAreThreeItems_EventShouldOnlyHaveThreeItemsAndNotAFourthNullObject()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToArray();
+        var items = Fixture.CreateMany<TItem>(3).ToArray();
         Instance.Add(items);
 
-        var eventArgs = new List<CollectionChangeEventArgs<T>>();
+        var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         Instance.Clear();
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new() { OldValues = items }
             });
@@ -535,7 +469,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Clear_WhenIsAlreadyEmpty_DoNotTriggerEvent()
     {
         //Arrange
-        var eventArgs = new List<CollectionChangeEventArgs<T>>();
+        var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
@@ -549,11 +483,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Contains_WhenItemIsInObservableList_ReturnTrue()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item);
 
         //Act
-        var result = ((ICollection<T>)Instance).Contains(item);
+        var result = ((ICollection<TItem>)Instance).Contains(item);
 
         //Assert
         result.Should().BeTrue();
@@ -563,10 +497,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Contains_WhenItemIsNotInObservableList_ReturnFalse()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
-        var result = ((ICollection<T>)Instance).Contains(item);
+        var result = ((ICollection<TItem>)Instance).Contains(item);
 
         //Assert
         result.Should().BeFalse();
@@ -576,11 +510,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void CopyTo_Always_CopyToArray()
     {
         //Arrange
-        var array = new T[3];
-        Instance.Add(Fixture.CreateMany<T>(3));
+        var array = new TItem[3];
+        Instance.Add(Fixture.CreateMany<TItem>(3));
 
         //Act
-        ((ICollection<T>)Instance).CopyTo(array, 0);
+        ((ICollection<TItem>)Instance).CopyTo(array, 0);
 
         //Assert
         array.Should().BeEquivalentTo(Instance);
@@ -590,7 +524,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Copy_WhenIndexIsZero_ReturnAnExactCopy()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -604,7 +538,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Copy_WhenIndexIsZero_ShouldNotBeSameReference()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -631,7 +565,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Copy_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var startingIndex = Instance.LastIndex + 1;
@@ -647,7 +581,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Copy_WhenStartingIndexIsLastIndex_ReturnObservableListWithOnlyTheLastItemInIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var startingIndex = Instance.LastIndex;
@@ -656,14 +590,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         var result = Instance.Copy(startingIndex);
 
         //Assert
-        result.Should().BeEquivalentTo(new List<T> { Instance.Last() });
+        result.Should().BeEquivalentTo(new List<TItem> { Instance.Last() });
     }
 
     [TestMethod]
     public void Copy_WhenIndexIsGreaterThanZero_CopyObservableListStartingFromIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(6).ToList();
+        var items = Fixture.CreateMany<TItem>(6).ToList();
         var startingIndex = 3;
         Instance.Add(items);
 
@@ -671,7 +605,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         var result = Instance.Copy(startingIndex);
 
         //Assert
-        result.Should().BeEquivalentTo(new ObservableList<T>
+        result.Should().BeEquivalentTo(new List<TItem>
             {
                 items[3], items[4], items[5]
             });
@@ -695,7 +629,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void CopyWithCount_WhenStartingIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>(3));
+        Instance.Add(Fixture.CreateMany<TItem>(3));
 
         var index = 3;
         var count = Fixture.Create<int>();
@@ -711,7 +645,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void CopyWithCount_WhenCountIsNegative_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>(3));
+        Instance.Add(Fixture.CreateMany<TItem>(3));
         var index = Instance.GetRandomIndex();
         var count = -Fixture.Create<int>();
 
@@ -726,7 +660,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void CopyWithCount_WhenStartingIndexPlusCountIsGreaterThanCollectionSize_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>(3));
+        Instance.Add(Fixture.CreateMany<TItem>(3));
         var index = 0;
         var count = 4;
 
@@ -741,7 +675,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void CopyWithCount_WhenStartingIndexPlusCountIsWithinBounds_ReturnACopyOfThat()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(8).ToList();
+        var items = Fixture.CreateMany<TItem>(8).ToList();
         Instance.Add(items);
 
         var index = 3;
@@ -751,7 +685,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         var result = Instance.Copy(index, count);
 
         //Assert
-        result.Should().BeEquivalentTo(new List<T>
+        result.Should().BeEquivalentTo(new List<TItem>
             {
                 items[3], items[4]
             });
@@ -761,7 +695,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void CopyWithCount_WhenStartingIndexIsZeroAndCountIsTheSameAsCollection_ReturnCopyOfObservableList()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(8).ToList();
+        var items = Fixture.CreateMany<TItem>(8).ToList();
         Instance.Add(items);
 
         var index = 0;
@@ -778,13 +712,13 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexOfIList_WhenItemIsInObservableList_ReturnItsIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var expectedIndex = items.GetRandomIndex();
 
         //Act
-        var result = ((IList<T>)Instance).IndexOf(items[expectedIndex]);
+        var result = ((IList<TItem>)Instance).IndexOf(items[expectedIndex]);
 
         //Assert
         result.Should().Be(expectedIndex);
@@ -794,13 +728,13 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexOfIList_WhenItemIsNotInObservableList_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
-        var result = ((IList<T>)Instance).IndexOf(item);
+        var result = ((IList<TItem>)Instance).IndexOf(item);
 
         //Assert
         result.Should().Be(-1);
@@ -810,7 +744,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void FirstIndexOfItem_WhenItemIsInObservableList_ReturnItsIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var expectedIndex = items.GetRandomIndex();
@@ -826,10 +760,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void FirstIndexOfItem_WhenItemIsNotInObservableList_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
         var result = Instance.FirstIndexOf(item);
@@ -844,7 +778,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
 
         //Act
-        var action = () => Instance.FirstIndexOf((Func<T, bool>)null!);
+        var action = () => Instance.FirstIndexOf(null!);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -854,7 +788,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void FirstIndexOfPredicate_WhenContainsDummyThatFitsConditions_ReturnIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var index = items.GetRandomIndex();
@@ -871,9 +805,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void FirstIndexOfPredicate_WhenThereAreMultipleDummiesThatFitConditions_ReturnOnlyTheFirst()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         var item = items.GetRandom();
-        var identicalItems = new List<T> { item, item, item };
+        var identicalItems = new List<TItem> { item, item, item };
 
         Instance.Add(identicalItems);
         Instance.Add(items);
@@ -889,10 +823,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void FirstIndexOfPredicate_WhenNoDummiesFitConditions_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
 
         //Act
-        var result = Instance.FirstIndexOf(x => x!.Equals(Fixture.Create<T>()));
+        var result = Instance.FirstIndexOf(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         result.Should().Be(-1);
@@ -902,7 +836,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void LastIndexOfItem_WhenItemIsInObservableList_ReturnItsIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var expectedIndex = items.GetRandomIndex();
@@ -918,10 +852,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void LastIndexOfItem_WhenItemIsNotInObservableList_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
         var result = Instance.LastIndexOf(item);
@@ -936,7 +870,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
 
         //Act
-        var action = () => Instance.LastIndexOf((Func<T, bool>)null!);
+        var action = () => Instance.LastIndexOf(null!);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -946,7 +880,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void LastIndexOfPredicate_WhenContainsDummyThatFitsConditions_ReturnIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var index = items.GetRandomIndex();
@@ -965,11 +899,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
         var id = Fixture.Create<int>();
 
-        var items = Fixture.CreateMany<T>(3).ToObservableList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
 
-        var itemOfInterest = Fixture.Create<T>();
-        items.Add(itemOfInterest, itemOfInterest, itemOfInterest);
-        items.Add(Fixture.Create<T>());
+        var itemOfInterest = Fixture.Create<TItem>();
+        items.AddRange(itemOfInterest, itemOfInterest, itemOfInterest);
+        items.Add(Fixture.Create<TItem>());
 
         Instance.Add(items);
 
@@ -984,10 +918,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void LastIndexOfPredicate_WhenNoDummiesFitConditions_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
+        Instance.Add(items);
 
         //Act
-        var result = Instance.LastIndexOf(x => x!.Equals(Fixture.Create<T>()));
+        var result = Instance.LastIndexOf(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         result.Should().Be(-1);
@@ -997,9 +932,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexesOfItem_WhenThereAreNoOccurences_ReturnEmpty()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1013,8 +948,8 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexesOfItem_WhenThereIsOnlyOneOccurence_ReturnItsIndexInAObservableList()
     {
         //Arrange
-        var item = Fixture.Create<T>();
-        var items = Fixture.CreateMany<T>().ToList();
+        var item = Fixture.Create<TItem>();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
         Instance.Add(item);
 
@@ -1029,8 +964,8 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexesOfItem_WhenThereAreMultipleOccurences_ReturnThemAll()
     {
         //Arrange
-        var item = Fixture.Create<T>();
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var item = Fixture.Create<TItem>();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(item);
         Instance.Add(items);
         Instance.Add(item);
@@ -1049,7 +984,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
 
         //Act
-        var action = () => Instance.IndexesOf((Func<T, bool>)null!);
+        var action = () => Instance.IndexesOf(null!);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -1059,11 +994,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexesOfPrecidate_WhenThereAreNoCorrespondingItems_ReturnEmpty()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
-        var result = Instance.IndexesOf(x => x!.Equals(Fixture.Create<T>()));
+        var result = Instance.IndexesOf(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         result.Should().BeEmpty();
@@ -1073,9 +1008,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexesOfPrecidate_WhenThereIsOneCorrespondingItem_ReturnIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(items);
         Instance.Add(item);
 
@@ -1090,11 +1025,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void IndexesOfPrecidate_WhenThereAreMultipleCorrespondingItems_ReturnThoseIndexes()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         var id = Fixture.Create<int>();
-        var itemsOfInterest = Fixture.CreateMany<T>(3).ToList();
+        var itemsOfInterest = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(itemsOfInterest);
 
         //Act
@@ -1108,7 +1043,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Swap_WhenCurrentIndexIsNegative_Throw()
     {
         //Arrange
-        var entries = Fixture.CreateMany<T>().ToList();
+        var entries = Fixture.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1126,7 +1061,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Swap_WhenCurrentIndexIsOutOfRange_Throw()
     {
         //Arrange
-        var entries = Fixture.CreateMany<T>().ToList();
+        var entries = Fixture.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1144,7 +1079,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Swap_WhenDestinationIndexIsNegative_Throw()
     {
         //Arrange
-        var entries = Fixture.CreateMany<T>().ToList();
+        var entries = Fixture.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1162,7 +1097,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Swap_WhenDestinationIndexIsOutOfRange_Throw()
     {
         //Arrange
-        var entries = Fixture.CreateMany<T>().ToList();
+        var entries = Fixture.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1180,7 +1115,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Swap_WhenCurrentAndDestinationIndexesAreEqual_DoNotModifyCollection()
     {
         //Arrange
-        var entries = Fixture.CreateMany<T>().ToList();
+        var entries = Fixture.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1200,7 +1135,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Swap_WhenCurrentAndDestinationAreBothInTheMiddleOfCollection_SwapThemTogether()
     {
         //Arrange
-        var entries = Fixture.CreateMany<T>(4).ToList();
+        var entries = Fixture.CreateMany<TItem>(4).ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1211,7 +1146,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         Instance.Swap(currentIndex, destinationIndex);
 
         //Assert
-        Instance.Should().ContainInOrder(new List<T>
+        Instance.Should().ContainInOrder(new List<TItem>
         {
             entries[0],
             entries[2],
@@ -1224,7 +1159,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Swap_WhenSwappingFirstWithLastIndex_Swap()
     {
         //Arrange
-        var entries = Fixture.CreateMany<T>(4).ToList();
+        var entries = Fixture.CreateMany<TItem>(4).ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1235,7 +1170,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         Instance.Swap(currentIndex, destinationIndex);
 
         //Assert
-        Instance.Should().ContainInOrder(new List<T>
+        Instance.Should().ContainInOrder(new List<TItem>
         {
             entries[3],
             entries[1],
@@ -1261,7 +1196,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimStartDownTo_WhenTrimEmptyCollectionToZero_DoNotTriggerEvent()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -1275,7 +1210,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimStartDownTo_WhenContainsItemsAndTrimToZero_RemoveEverything()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1289,17 +1224,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimStartDownTo_WhenContainsItemsAndTrimToZero_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TrimStartDownTo(0);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new() { OldValues = items }
             });
@@ -1309,7 +1244,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimStartDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1323,10 +1258,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimStartDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -1340,7 +1275,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimStartDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1354,10 +1289,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimStartDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -1371,14 +1306,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimStartDownTo_WhenContainsItemsAndTrimToHalf_RemoveFirstHalfOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(12).ToList();
+        var items = Fixture.CreateMany<TItem>(12).ToList();
         Instance.Add(items);
 
         //Act
         Instance.TrimStartDownTo(6);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
         {
             items[6],
             items[7],
@@ -1393,21 +1328,21 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimStartDownTo_WhenContainsItemsAndTrimToHalf_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(12).ToList();
+        var items = Fixture.CreateMany<TItem>(12).ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TrimStartDownTo(6);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
         {
             new()
             {
-                OldValues = new List<T>
+                OldValues = new List<TItem>
                 {
                     items[0],
                     items[1],
@@ -1437,7 +1372,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimEndDownTo_WhenTrimEmptyCollectionToZero_DoNotTriggerEvent()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -1451,7 +1386,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimEndDownTo_WhenContainsItemsAndTrimToZero_RemoveEverything()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1465,17 +1400,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimEndDownTo_WhenContainsItemsAndTrimToZero_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TrimEndDownTo(0);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new() { OldValues = items }
             });
@@ -1485,7 +1420,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimEndDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1499,10 +1434,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimEndDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -1516,7 +1451,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimEndDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1530,10 +1465,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimEndDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -1547,14 +1482,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimEndDownTo_WhenContainsItemsAndTrimToHalf_RemoveFirstHalfOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(12).ToList();
+        var items = Fixture.CreateMany<TItem>(12).ToList();
         Instance.Add(items);
 
         //Act
         Instance.TrimEndDownTo(6);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 items[0],
                 items[1],
@@ -1569,21 +1504,21 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TrimEndDownTo_WhenContainsItemsAndTrimToHalf_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(12).ToList();
+        var items = Fixture.CreateMany<TItem>(12).ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TrimEndDownTo(6);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new()
                 {
-                    OldValues = new List<T>
+                    OldValues = new List<TItem>
                     {
                         items[6],
                         items[7],
@@ -1600,12 +1535,12 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllItem_WhenContainsItem_RemoveAllOfThem()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1619,9 +1554,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllItem_WhenDoesNotContainItem_DoNotThrow()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1635,12 +1570,12 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllItem_WhenContainsItem_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1654,34 +1589,34 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllItem_WhenContainsItem_TriggerEventOnce()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveAll(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>> { new() { OldValues = new List<T> { item, item, item } } });
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = new List<TItem> { item, item, item } } });
     }
 
     [TestMethod]
     public void RemoveAllItem_WhenContainsItem_RemoveAllOfThem()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1695,9 +1630,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllItem_WhenDoesNotContainItem_Throw()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1711,12 +1646,12 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllItem_WhenContainsItem_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1730,33 +1665,33 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllItem_WhenContainsItem_TriggerEventOnce()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveAll(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>> { new() { OldValues = new List<T> { item, item, item } } });
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = new List<TItem> { item, item, item } } });
     }
 
     [TestMethod]
     public void RemoveAllParams_WhenOneItemIsNotInCollection_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToArray();
+        var content = Fixture.CreateMany<TItem>().ToArray();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1766,13 +1701,26 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     }
 
     [TestMethod]
+    public void RemoveAllParams_WhenItemsIsEmpty_Throw()
+    {
+        //Arrange
+        var items = Array.Empty<TItem>();
+
+        //Act
+        var action = () => Instance.RemoveAll(items);
+
+        //Assert
+        action.Should().Throw<ArgumentException>().WithMessage("items should not be empty");
+    }
+
+    [TestMethod]
     public void RemoveAllParams_WhenNoneOfTheItemsAreInCollection_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToArray();
+        var items = Fixture.CreateMany<TItem>().ToArray();
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1785,10 +1733,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllParams_WhenOneItemIsNotInCollection_DoNotRemoveTheOthers()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = content.Concat(new[] { Fixture.Create<T>() }).ToArray();
+        var items = content.Concat(Fixture.Create<TItem>()).ToArray();
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1802,12 +1750,12 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllParams_WhenOneItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = content.Concat(new[] { Fixture.Create<T>() }).ToArray();
+        var items = content.Concat(Fixture.Create<TItem>()).ToArray();
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -1822,10 +1770,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllParams_WhenAllItemsAreInCollection_RemoveAllOfThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>(3).ToList();
+        var content = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToArray();
+        var items = Fixture.CreateMany<TItem>().ToArray();
         Instance.Add(items);
 
         //Act
@@ -1839,20 +1787,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllParams_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>(3).ToList();
+        var content = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToArray();
+        var items = Fixture.CreateMany<TItem>().ToArray();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveAll(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = items}
             });
@@ -1862,7 +1810,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllEnumerable_WhenItemsIsNull_Throw()
     {
         //Arrange
-        IEnumerable<T> items = null!;
+        IEnumerable<TItem> items = null!;
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1872,14 +1820,27 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     }
 
     [TestMethod]
+    public void RemoveAllEnumerable_WhenItemsIsEmpty_Throw()
+    {
+        //Arrange
+        var items = new List<TItem>();
+
+        //Act
+        var action = () => Instance.RemoveAll(items);
+
+        //Assert
+        action.Should().Throw<ArgumentException>().WithMessage("items should not be empty");
+    }
+
+    [TestMethod]
     public void RemoveAllEnumerable_WhenOneItemIsNotInCollection_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1892,10 +1853,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllEnumerable_WhenNoneOfTheItemsAreInCollection_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1908,11 +1869,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllEnumerable_WhenOneItemIsNotInCollection_DoNotRemoveTheOthers()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1926,13 +1887,13 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllEnumerable_WhenOneItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -1947,10 +1908,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllEnumerable_WhenAllItemsAreInCollection_RemoveAllOfThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>(3).ToList();
+        var content = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1964,20 +1925,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllEnumerable_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>(3).ToList();
+        var content = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveAll(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = items}
             });
@@ -1987,11 +1948,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllParams_WhenOneItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
         //Act
         var action = () => Instance.TryRemoveAll(items.ToArray());
@@ -2001,13 +1962,44 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     }
 
     [TestMethod]
+    public void TryRemoveAllParams_WhenItemsIsEmpty_DoNotThrow()
+    {
+        //Arrange
+        var content = Fixture.CreateMany<TItem>().ToList();
+        Instance.Add(content);
+
+        //Act
+        var action = () => Instance.TryRemoveAll(Array.Empty<TItem>());
+
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void TryRemoveAllParams_WhenItemsIsEmpty_DoNotTriggerChange()
+    {
+        //Arrange
+        var content = Fixture.CreateMany<TItem>().ToList();
+        Instance.Add(content);
+
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        //Act
+        Instance.TryRemoveAll(Array.Empty<TItem>());
+
+        //Assert
+        triggers.Should().BeEmpty();
+    }
+
+    [TestMethod]
     public void TryRemoveAllParams_WhenNoneOfTheItemsAreInCollection_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToArray();
+        var items = Fixture.CreateMany<TItem>().ToArray();
 
         //Act
         var action = () => Instance.TryRemoveAll(items);
@@ -2020,11 +2012,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllParams_WhenOneItemIsNotInCollection_RemoveThose()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
         //Act
         Instance.TryRemoveAll(items.ToArray());
@@ -2037,20 +2029,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllParams_WhenOneItemIsNotInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveAll(items.ToArray());
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = content}
             });
@@ -2060,10 +2052,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllParams_WhenAllItemsAreInCollection_RemoveAllOfThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>(3).ToList();
+        var content = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -2077,20 +2069,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllParams_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>(3).ToList();
+        var content = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveAll(items.ToArray());
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = items}
             });
@@ -2100,7 +2092,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllEnumerable_WhenItemsIsNull_Throw()
     {
         //Arrange
-        IEnumerable<T> items = null!;
+        IEnumerable<TItem> items = null!;
 
         //Act
         var action = () => Instance.TryRemoveAll(items);
@@ -2110,14 +2102,45 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     }
 
     [TestMethod]
+    public void TryRemoveAllEnumerable_WhenItemsIsEmpty_DoNotThrow()
+    {
+        //Arrange
+        var content = Fixture.CreateMany<TItem>().ToList();
+        Instance.Add(content);
+
+        //Act
+        var action = () => Instance.TryRemoveAll(new List<TItem>());
+
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void TryRemoveAllEnumerable_WhenItemsIsEmpty_DoNotTriggerChange()
+    {
+        //Arrange
+        var content = Fixture.CreateMany<TItem>().ToList();
+        Instance.Add(content);
+
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        //Act
+        Instance.TryRemoveAll(new List<TItem>());
+
+        //Assert
+        triggers.Should().BeEmpty();
+    }
+
+    [TestMethod]
     public void TryRemoveAllEnumerable_WhenOneItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
         //Act
         var action = () => Instance.TryRemoveAll(items);
@@ -2130,10 +2153,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllEnumerable_WhenNoneOfTheItemsAreInCollection_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
 
         //Act
         var action = () => Instance.TryRemoveAll(items);
@@ -2146,11 +2169,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllEnumerable_WhenOneItemIsNotInCollection_RemoveThose()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
         //Act
         Instance.TryRemoveAll(items);
@@ -2163,20 +2186,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllEnumerable_WhenOneItemIsNotInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>().ToList();
+        var content = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<T>());
+        items.Add(Fixture.Create<TItem>());
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveAll(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = content}
             });
@@ -2186,10 +2209,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllEnumerable_WhenAllItemsAreInCollection_RemoveAllOfThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>(3).ToList();
+        var content = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -2203,20 +2226,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllEnumerable_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<T>(3).ToList();
+        var content = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveAll(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = items}
             });
@@ -2226,7 +2249,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllPredicate_WhenPredicateIsNull_Throw()
     {
         //Arrange
-        Func<T, bool> predicate = null!;
+        Func<TItem, bool> predicate = null!;
 
         //Act
         var action = () => Instance.TryRemoveAll(predicate);
@@ -2239,11 +2262,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllPredicate_WhenContainsNoItemCorrespondingToPredicate_DoNotThrow()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
-        var action = () => Instance.TryRemoveAll(x => x!.Equals(Fixture.Create<T>()));
+        var action = () => Instance.TryRemoveAll(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         action.Should().NotThrow();
@@ -2253,10 +2276,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllPredicate_WhenContainsItemsThatCorrespondToPredicate_RemoveThem()
     {
         //Arrange
-        var toRemove = Fixture.Create<T>();
+        var toRemove = Fixture.Create<TItem>();
         Instance.Add(toRemove, toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         Instance.Shuffle();
@@ -2272,10 +2295,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllPredicate_WhenContainsItem_DecreaseCount()
     {
         //Arrange
-        var toRemove = Fixture.Create<T>();
+        var toRemove = Fixture.Create<TItem>();
         Instance.Add(toRemove, toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         Instance.Shuffle();
@@ -2291,29 +2314,29 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveAllPredicate_WhenContainsItem_TriggerEventOnce()
     {
         //Arrange
-        var toRemove = Fixture.Create<T>();
+        var toRemove = Fixture.Create<TItem>();
         Instance.Add(toRemove, toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         Instance.Shuffle();
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveAll(x => x!.Equals(toRemove));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>> { new() { OldValues = new List<T> { toRemove, toRemove, toRemove } } });
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = new List<TItem> { toRemove, toRemove, toRemove } } });
     }
 
     [TestMethod]
     public void RemoveAllPredicate_WhenPredicateIsNull_Throw()
     {
         //Arrange
-        Func<T, bool> predicate = null!;
+        Func<TItem, bool> predicate = null!;
 
         //Act
         var action = () => Instance.RemoveAll(predicate);
@@ -2326,11 +2349,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllPredicate_WhenContainsNoItemCorrespondingToPredicate_Throw()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
-        var action = () => Instance.RemoveAll(x => x!.Equals(Fixture.Create<T>()));
+        var action = () => Instance.RemoveAll(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         action.Should().Throw<InvalidOperationException>();
@@ -2340,10 +2363,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllPredicate_WhenContainsItemsThatCorrespondToPredicate_RemoveThem()
     {
         //Arrange
-        var toRemove = Fixture.Create<T>();
+        var toRemove = Fixture.Create<TItem>();
         Instance.Add(toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2357,10 +2380,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllPredicate_WhenContainsItemsThatCorrespondToPredicate_DecreaseCount()
     {
         //Arrange
-        var toRemove = Fixture.Create<T>();
+        var toRemove = Fixture.Create<TItem>();
         Instance.Add(toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2374,36 +2397,36 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAllPredicate_WhenContainsItem_TriggerEventOnce()
     {
         //Arrange
-        var toRemove = Fixture.Create<T>();
+        var toRemove = Fixture.Create<TItem>();
         Instance.Add(toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<T>().ToList();
+        var otherItems = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveAll(x => x!.Equals(toRemove));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>> { new() { OldValues = new List<T> { toRemove, toRemove } } });
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = new List<TItem> { toRemove, toRemove } } });
     }
 
     [TestMethod]
     public void InsertIList_Always_Insert()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
-        ((IList<T>)Instance).Insert(1, item);
+        ((IList<TItem>)Instance).Insert(1, item);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 otherItems[0],
                 item,
@@ -2416,13 +2439,13 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertIList_Always_IncrementCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
-        ((IList<T>)Instance).Insert(1, item);
+        ((IList<TItem>)Instance).Insert(1, item);
 
         //Assert
         Instance.Should().HaveCount(4);
@@ -2432,19 +2455,19 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertIList_Always_TriggerEventOnce()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((IList<T>)Instance).Insert(1, item);
+        ((IList<TItem>)Instance).Insert(1, item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new()
                 {
@@ -2458,10 +2481,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     {
         //Arrange
         var index = -Fixture.Create<int>();
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
-        var action = () => ((IList<T>)Instance).Insert(index, item);
+        var action = () => ((IList<TItem>)Instance).Insert(index, item);
 
         //Assert
         action.Should().Throw<ArgumentOutOfRangeException>();
@@ -2471,16 +2494,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertIList_WhenItemIsNull_InsertNullValue()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
-        ((IList<T>)Instance).Insert(1, (T)(object)null!);
+        ((IList<TItem>)Instance).Insert(1, (TItem)(object)null!);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
-                otherItems[0], (T)(object)null!, otherItems[1], otherItems[2]
+                otherItems[0], (TItem)(object)null!, otherItems[1], otherItems[2]
             });
     }
 
@@ -2490,7 +2513,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
 
         //Act
-        var action = () => Instance.Insert((IEnumerable<T>)null!);
+        var action = () => Instance.Insert((IEnumerable<TItem>)null!);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -2500,16 +2523,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertEnumerableNoIndex_Always_InsertAtTheBegining()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
         Instance.Insert(items);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 items[0],
                 items[1],
@@ -2524,9 +2547,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertEnumerableNoIndex_Always_IncrementCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2540,19 +2563,19 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertEnumerableNoIndex_Always_TriggerEventOnce()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Insert(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
         {
             new()
             {
@@ -2565,16 +2588,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertParamsNoIndex_WhenPassingSingleNull_InsertNullValue()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
         Instance.Insert(null!);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
-                (T)(object)null!, otherItems[0], otherItems[1], otherItems[2]
+                (TItem)(object)null!, otherItems[0], otherItems[1], otherItems[2]
             });
     }
 
@@ -2582,16 +2605,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertParamsNoIndex_Always_InsertAtTheBegining()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToArray();
+        var items = Fixture.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
         Instance.Insert(items);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 items[0],
                 items[1],
@@ -2606,9 +2629,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertParamsNoIndex_Always_IncrementCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToArray();
+        var items = Fixture.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2622,19 +2645,19 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertParamsNoIndex_Always_TriggerEventOnce()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToArray();
+        var items = Fixture.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Insert(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new()
                 {
@@ -2648,7 +2671,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     {
         //Arrange
         var index = -Fixture.Create<int>();
-        var items = Fixture.CreateMany<T>();
+        var items = Fixture.CreateMany<TItem>();
 
         //Act
         var action = () => Instance.Insert(index, items);
@@ -2664,7 +2687,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         var index = Fixture.Create<int>();
 
         //Act
-        var action = () => Instance.Insert(index, (IEnumerable<T>)null!);
+        var action = () => Instance.Insert(index, (IEnumerable<TItem>)null!);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -2675,16 +2698,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     {
         //Arrange
         var index = 0;
-        var items = Fixture.CreateMany<T>(3).ToArray();
+        var items = Fixture.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
         Instance.Insert(index, items);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 items[0],
                 items[1],
@@ -2699,9 +2722,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InsertEnumerableWithIndex_WhenIndexIsLastIndex_InsertAtTheEndOfObservableListSameAsAddWould()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToArray();
+        var items = Fixture.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
         var index = Instance.LastIndex;
 
@@ -2710,7 +2733,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         Instance.Insert(index, items);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 otherItems[0],
                 otherItems[1],
@@ -2726,16 +2749,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     {
         //Arrange
         var index = 2;
-        var items = Fixture.CreateMany<T>(3).ToArray();
+        var items = Fixture.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
         Instance.Insert(index, items);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 otherItems[0],
                 otherItems[1],
@@ -2752,14 +2775,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
         var index = 1;
 
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         //Act
         Instance.Insert(index, Instance);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 items[0],
                 items[0],
@@ -2776,7 +2799,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
         var index = 1;
 
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         //Act
@@ -2792,17 +2815,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         //Arrange
         var index = 1;
 
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Insert(index, Instance);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new()
                 {
@@ -2815,13 +2838,13 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveICollection_WhenItemIsInCollection_ReturnTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
 
         //Act
-        var result = ((ICollection<T>)Instance).Remove(toRemove);
+        var result = ((ICollection<TItem>)Instance).Remove(toRemove);
 
         //Assert
         result.Should().BeTrue();
@@ -2831,13 +2854,13 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveICollection_WhenItemIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
         //Act
-        var result = ((ICollection<T>)Instance).Remove(item);
+        var result = ((ICollection<TItem>)Instance).Remove(item);
 
         //Assert
         result.Should().BeFalse();
@@ -2847,19 +2870,19 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveICollection_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((ICollection<T>)Instance).Remove(toRemove);
+        ((ICollection<TItem>)Instance).Remove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new()
                 {
@@ -2872,16 +2895,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveICollection_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((ICollection<T>)Instance).Remove(item);
+        ((ICollection<TItem>)Instance).Remove(item);
 
         //Assert
         triggers.Should().BeEmpty();
@@ -2891,7 +2914,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveICollection_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
@@ -2899,7 +2922,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         var originalCount = Instance.Count;
 
         //Act
-        ((ICollection<T>)Instance).Remove(toRemove);
+        ((ICollection<TItem>)Instance).Remove(toRemove);
 
         //Assert
         Instance.Should().HaveCount(originalCount - 1);
@@ -2909,14 +2932,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveICollection_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         var originalCount = Instance.Count;
 
         //Act
-        ((ICollection<T>)Instance).Remove(item);
+        ((ICollection<TItem>)Instance).Remove(item);
 
         //Assert
         Instance.Should().HaveCount(originalCount);
@@ -2939,7 +2962,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAt_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>());
+        Instance.Add(Fixture.CreateMany<TItem>());
 
         var index = Instance.LastIndex + 1;
 
@@ -2954,7 +2977,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAt_WhenItemIsRemoved_DecreaseCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
         var index = items.GetRandomIndex();
         var originalCount = Instance.Count;
@@ -2970,7 +2993,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAt_WhenItemIsRemoved_MoveSubsequentItemsToTheLeft()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
         var index = 1;
         var originalCount = Instance.Count;
@@ -2979,7 +3002,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         Instance.RemoveAt(index);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 items[0], items[2]
             });
@@ -2989,18 +3012,18 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAt_WhenItemIsRemoved_TriggerCollectionChanged()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
         var index = items.GetRandomIndex();
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveAt(index);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = new []{items[index]}}
             });
@@ -3010,7 +3033,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAtRange_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>());
+        Instance.Add(Fixture.CreateMany<TItem>());
 
         var index = -Fixture.Create<int>();
         var count = Fixture.Create<int>();
@@ -3026,7 +3049,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAtRange_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>());
+        Instance.Add(Fixture.CreateMany<TItem>());
 
         var index = Instance.LastIndex + 1;
         var count = Fixture.Create<int>();
@@ -3042,7 +3065,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAtRange_WhenCountIsNegative_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>());
+        Instance.Add(Fixture.CreateMany<TItem>());
 
         var index = Instance.GetRandomIndex();
         var count = -Fixture.Create<int>();
@@ -3058,7 +3081,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAtRange_WhenIndexPlusCountWouldFallOutsideRange_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>(3));
+        Instance.Add(Fixture.CreateMany<TItem>(3));
 
         var index = 1;
         var count = 3;
@@ -3074,7 +3097,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAtRange_WhenCountIsZero_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>());
+        Instance.Add(Fixture.CreateMany<TItem>());
 
         var index = Instance.GetRandomIndex();
         var count = 0;
@@ -3090,7 +3113,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAtRange_WhenIndexAndCountAreWithinBounds_RemoveItemsWithinThoseBounds()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(6).ToList();
+        var items = Fixture.CreateMany<TItem>(6).ToList();
         Instance.Add(items);
 
         var index = 3;
@@ -3100,7 +3123,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         Instance.RemoveAt(index, count);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 items[0], items[1], items[2], items[5]
             });
@@ -3110,20 +3133,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAtRange_WhenIndexAndCountAreWithinBounds_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(6).ToList();
+        var items = Fixture.CreateMany<TItem>(6).ToList();
         Instance.Add(items);
 
         var index = 3;
         var count = 2;
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveAt(index, count);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new() { OldValues = new[] { items[3], items[4] } }
             });
@@ -3133,7 +3156,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveAtRange_WhenIndexAndCountAreWithinBounds_AdjustCollectionCountAccordingly()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(6).ToList();
+        var items = Fixture.CreateMany<TItem>(6).ToList();
         Instance.Add(items);
 
         var index = 3;
@@ -3150,14 +3173,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstItem_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
         Instance.TryRemoveFirst(item);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 item, item
             });
@@ -3167,16 +3190,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstItem_WhenItemIsInCollection_RemoveActualFirstAndNotSomeOtherOccurence()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var buffer = Fixture.Create<T>();
+        var buffer = Fixture.Create<TItem>();
         Instance.Add(item, buffer, item, item);
 
         //Act
         Instance.TryRemoveFirst(item);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 buffer, item, item
             });
@@ -3186,7 +3209,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstItem_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3200,17 +3223,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstItem_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveFirst(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = new []{item}}
             });
@@ -3220,10 +3243,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstItem_WhenItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<T>();
+        var someOtherItem = Fixture.Create<TItem>();
 
         //Act
         var action = () => Instance.TryRemoveFirst(someOtherItem);
@@ -3236,10 +3259,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstItem_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<T>();
+        var someOtherItem = Fixture.Create<TItem>();
 
         //Act
         Instance.TryRemoveFirst(someOtherItem);
@@ -3252,13 +3275,13 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstItem_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
-        var someOtherItem = Fixture.Create<T>();
+        var someOtherItem = Fixture.Create<TItem>();
 
         //Act
         Instance.TryRemoveFirst(someOtherItem);
@@ -3271,14 +3294,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstItem_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
         Instance.RemoveFirst(item);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 item, item
             });
@@ -3288,16 +3311,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstItem_WhenItemIsInCollection_RemoveActualFirstAndNotSomeOtherOccurence()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var buffer = Fixture.Create<T>();
+        var buffer = Fixture.Create<TItem>();
         Instance.Add(item, buffer, item, item);
 
         //Act
         Instance.RemoveFirst(item);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 buffer, item, item
             });
@@ -3307,7 +3330,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstItem_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3321,17 +3344,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstItem_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveFirst(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = new []{item}}
             });
@@ -3341,10 +3364,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstItem_WhenItemIsNotInCollection_Throw()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<T>();
+        var someOtherItem = Fixture.Create<TItem>();
 
         //Act
         var action = () => Instance.RemoveFirst(someOtherItem);
@@ -3357,7 +3380,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstPredicate_WhenPredicateIsNull_Throw()
     {
         //Arrange
-        Func<T, bool> predicate = null!;
+        Func<TItem, bool> predicate = null!;
 
         //Act
         var action = () => Instance.TryRemoveFirst(predicate);
@@ -3370,8 +3393,8 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstPredicate_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<T>();
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var item = Fixture.Create<TItem>();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
 
         Instance.Add(otherItems);
         Instance.Add(item, item, item);
@@ -3380,7 +3403,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         Instance.TryRemoveFirst(x => x!.Equals(item));
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
         {
             otherItems[0], otherItems[1], otherItems[2], item, item
         });
@@ -3390,8 +3413,8 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstPredicate_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var item = Fixture.Create<TItem>();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
 
         Instance.Add(otherItems);
         Instance.Add(item, item, item);
@@ -3407,20 +3430,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstPredicate_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<T>();
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var item = Fixture.Create<TItem>();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
 
         Instance.Add(otherItems);
         Instance.Add(item, item, item);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveFirst(x => x!.Equals(item));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
         {
             new() { OldValues = new [] { item } }
         });
@@ -3430,11 +3453,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstPredicate_WhenItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
-        var action = () => Instance.TryRemoveFirst(x => x!.Equals(Fixture.Create<T>()));
+        var action = () => Instance.TryRemoveFirst(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         action.Should().NotThrow();
@@ -3444,11 +3467,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstPredicate_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         //Act
-        Instance.TryRemoveFirst(x => x!.Equals(Fixture.Create<T>()));
+        Instance.TryRemoveFirst(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         Instance.Should().HaveCount(3);
@@ -3458,14 +3481,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveFirstPredicate_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>(3).ToList();
+        var items = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        Instance.TryRemoveFirst(x => x!.Equals(Fixture.Create<T>()));
+        Instance.TryRemoveFirst(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         triggers.Should().BeEmpty();
@@ -3475,7 +3498,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstPredicate_WhenPredicateIsNull_Throw()
     {
         //Arrange
-        Func<T, bool> predicate = null!;
+        Func<TItem, bool> predicate = null!;
 
         //Act
         var action = () => Instance.RemoveFirst(predicate);
@@ -3488,17 +3511,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstPredicate_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
         Instance.RemoveFirst(x => x!.Equals(item));
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
         {
             otherItems[0], otherItems[1], otherItems[2], item, item
         });
@@ -3508,10 +3531,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstPredicate_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3525,20 +3548,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstPredicate_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<T>(3).ToList();
+        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveFirst(x => x!.Equals(item));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
         {
             new(){OldValues = new []{item}}
         });
@@ -3548,11 +3571,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveFirstPredicate_WhenItemIsNotInCollection_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>();
+        var items = Fixture.CreateMany<TItem>();
         Instance.Add(items);
 
         //Act
-        var action = () => Instance.RemoveFirst(x => x!.Equals(Fixture.Create<T>()));
+        var action = () => Instance.RemoveFirst(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         action.Should().Throw<ArgumentOutOfRangeException>();
@@ -3562,14 +3585,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastItem_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
         Instance.TryRemoveLast(item);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 item, item
             });
@@ -3579,16 +3602,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastItem_WhenItemIsInCollection_RemoveActualFirstAndNotSomeOtherOccurence()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var buffer = Fixture.Create<T>();
+        var buffer = Fixture.Create<TItem>();
         Instance.Add(item, item, buffer, item);
 
         //Act
         Instance.TryRemoveLast(item);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 item, item, buffer
             });
@@ -3598,7 +3621,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastItem_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3612,17 +3635,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastItem_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveLast(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = new []{item}}
             });
@@ -3632,10 +3655,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastItem_WhenItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<T>();
+        var someOtherItem = Fixture.Create<TItem>();
 
         //Act
         var action = () => Instance.TryRemoveLast(someOtherItem);
@@ -3648,10 +3671,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastItem_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<T>();
+        var someOtherItem = Fixture.Create<TItem>();
 
         //Act
         Instance.TryRemoveLast(someOtherItem);
@@ -3664,13 +3687,13 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastItem_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
-        var someOtherItem = Fixture.Create<T>();
+        var someOtherItem = Fixture.Create<TItem>();
 
         //Act
         Instance.TryRemoveLast(someOtherItem);
@@ -3683,14 +3706,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastItem_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
         Instance.RemoveLast(item);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 item, item
             });
@@ -3700,16 +3723,16 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastItem_WhenItemIsInCollection_RemoveActualFirstAndNotSomeOtherOccurence()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
 
-        var buffer = Fixture.Create<T>();
+        var buffer = Fixture.Create<TItem>();
         Instance.Add(item, item, buffer, item);
 
         //Act
         Instance.RemoveLast(item);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 item, item, buffer
             });
@@ -3719,7 +3742,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastItem_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3733,17 +3756,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastItem_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveLast(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
             {
                 new(){OldValues = new []{item}}
             });
@@ -3753,10 +3776,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastItem_WhenItemIsNotInCollection_Throw()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<T>();
+        var someOtherItem = Fixture.Create<TItem>();
 
         //Act
         var action = () => Instance.RemoveLast(someOtherItem);
@@ -3769,7 +3792,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastPredicate_WhenPredicateIsNull_Throw()
     {
         //Arrange
-        Func<T, bool> predicate = null!;
+        Func<TItem, bool> predicate = null!;
 
         //Act
         var action = () => Instance.TryRemoveLast(predicate);
@@ -3782,17 +3805,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastPredicate_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<T>(3).ToList();
+        var buffer = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
         Instance.TryRemoveLast(x => x!.Equals(item));
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
         {
             item, item, buffer[0], buffer[1], buffer[2]
         });
@@ -3802,10 +3825,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastPredicate_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<T>(3).ToList();
+        var buffer = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
@@ -3819,20 +3842,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastPredicate_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<T>(3).ToList();
+        var buffer = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemoveLast(x => x!.Equals(item));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
         {
             new() { OldValues = new [] { item } }
         });
@@ -3842,11 +3865,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastPredicate_WhenItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
-        var action = () => Instance.TryRemoveLast(x => x!.Equals(Fixture.Create<T>()));
+        var action = () => Instance.TryRemoveLast(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         action.Should().NotThrow();
@@ -3856,11 +3879,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastPredicate_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
-        Instance.TryRemoveLast(x => x!.Equals(Fixture.Create<T>()));
+        Instance.TryRemoveLast(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         Instance.Should().HaveCount(3);
@@ -3870,14 +3893,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void TryRemoveLastPredicate_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        Instance.TryRemoveLast(x => x!.Equals(Fixture.Create<T>()));
+        Instance.TryRemoveLast(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         triggers.Should().BeEmpty();
@@ -3887,7 +3910,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastPredicate_WhenPredicateIsNull_Throw()
     {
         //Arrange
-        Func<T, bool> predicate = null!;
+        Func<TItem, bool> predicate = null!;
 
         //Act
         var action = () => Instance.RemoveLast(predicate);
@@ -3900,17 +3923,17 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastPredicate_WhenItemIsInCollection_RemoveLastOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<T>(3).ToList();
+        var buffer = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
         Instance.RemoveLast(x => x!.Equals(item));
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<T>
+        Instance.Should().BeEquivalentTo(new List<TItem>
             {
                 item, item, buffer[0], buffer[1], buffer[2]
             });
@@ -3920,10 +3943,10 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastPredicate_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<T>(3).ToList();
+        var buffer = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
@@ -3937,20 +3960,20 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastPredicate_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<T>(3).ToList();
+        var buffer = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
-        var triggers = new List<CollectionChangeEventArgs<T>>();
+        var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.RemoveLast(x => x!.Equals(item));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<T>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>>
         {
             new() { OldValues = new [] { item } }
         });
@@ -3960,14 +3983,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void RemoveLastPredicate_WhenItemIsNotInCollection_Throw()
     {
         //Arrange
-        var item = Fixture.Create<T>();
+        var item = Fixture.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<T>(3).ToList();
+        var buffer = Fixture.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
-        var action = () => Instance.RemoveLast(x => x!.Equals(Fixture.Create<T>()));
+        var action = () => Instance.RemoveLast(x => x!.Equals(Fixture.Create<TItem>()));
 
         //Assert
         action.Should().Throw<ArgumentOutOfRangeException>();
@@ -3989,7 +4012,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void ToString_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<T>(3));
+        Instance.Add(Fixture.CreateMany<TItem>(3));
 
         //Act
         var result = Instance.ToString();
@@ -4002,9 +4025,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Enumerator_Always_CorrectlyEnumeratesEveryItem()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
 
-        var enumeratedItems = new List<T>();
+        var enumeratedItems = new List<TItem>();
 
         //Act
         foreach (var item in observableList)
@@ -4020,7 +4043,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Enumerator_WhenCollectionIsModifiedDuringEnumeration_Throw()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
 
         //Act
         var action = () =>
@@ -4037,7 +4060,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Enumerator_WhenUsingResetAfterCollectionChanged_Throw()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
 
         using var enumerator = observableList.GetEnumerator();
         observableList.RemoveAt(observableList.GetRandomIndex());
@@ -4053,7 +4076,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void Enumerator_WhenUsingResetWhileCollectionIsStillUnchanged_SetCurrentToDefault()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
         using var enumerator = observableList.GetEnumerator();
 
         //Act
@@ -4067,9 +4090,9 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InterfaceEnumerator_WhenUsingResetAfterCollectionChanged_Throw()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
+        var observableList = Fixture.Create<TList>();
 
-        using var enumerator = ((IEnumerable)observableList).GetEnumerator() as IEnumerator<T>;
+        using var enumerator = ((IEnumerable)observableList).GetEnumerator() as IEnumerator<TItem>;
         observableList.RemoveAt(observableList.GetRandomIndex());
 
         //Act
@@ -4083,8 +4106,8 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void InterfaceEnumerator_WhenUsingResetWhileCollectionIsStillUnchanged_SetCurrentToDefault()
     {
         //Arrange
-        var observableList = Fixture.CreateMany<T>().ToObservableList();
-        using var enumerator = ((IEnumerable)observableList).GetEnumerator() as IEnumerator<T>;
+        var observableList = Fixture.Create<TList>();
+        using var enumerator = ((IEnumerable)observableList).GetEnumerator() as IEnumerator<TItem>;
 
         //Act
         enumerator.Reset();
@@ -4097,11 +4120,11 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void XmlSerialization_Always_DeserializeEquivalentObject()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>();
+        var items = Fixture.CreateMany<TItem>();
         foreach (var item in items)
             Instance.Add(item);
 
-        var serializer = new XmlSerializer(typeof(ObservableList<T>));
+        var serializer = new XmlSerializer(typeof(TList));
         var stringWriter = new StringWriter();
         using var xmlWriter = XmlWriter.Create(stringWriter);
         serializer.Serialize(xmlWriter, Instance);
@@ -4109,7 +4132,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
 
         //Act
         var stringReader = new StringReader(xml);
-        var result = (ObservableList<T>)serializer.Deserialize(stringReader)!;
+        var result = (TList)serializer.Deserialize(stringReader)!;
 
         //Assert
         Instance.Should().BeEquivalentTo(result);
@@ -4119,14 +4142,14 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void SystemTextSerialization_Always_DeserializeEquivalentObject()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>();
+        var items = Fixture.CreateMany<TItem>();
         foreach (var item in items)
             Instance.Add(item);
 
-        var json = System.Text.Json.JsonSerializer.Serialize(Instance);
+        var json = JsonSerializer.Serialize(Instance);
 
         //Act
-        var result = System.Text.Json.JsonSerializer.Deserialize<ObservableList<T>>(json);
+        var result = JsonSerializer.Deserialize<TList>(json);
 
         //Assert
         result.Should().BeEquivalentTo(Instance);
@@ -4136,7 +4159,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void GetHashCode_Always_ReturnInternalListHashCode()
     {
         //Arrange
-        var internalList = GetFieldValue<List<T>>("_items")!;
+        var internalList = GetFieldValue<List<TItem>>("_items")!;
 
         //Act
         var result = Instance.GetHashCode();
@@ -4149,7 +4172,7 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
     public void GetRandom_WhenContainsItems_ReturnAnyItemInCollection()
     {
         //Arrange
-        var items = Fixture.CreateMany<T>().ToList();
+        var items = Fixture.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -4171,11 +4194,12 @@ public abstract class ObservableListTester<T> : Tester<ObservableList<T>>
         result.Should().Be(default);
     }
 
-    //TODO GetEnumerator()
+    [TestMethod]
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<TList>(Fixture, JsonSerializerOptions.WithObservableListConverters());
 
     [TestMethod]
-    public void Always_EnsureValueEquality() => Ensure.ValueEquality<ObservableList<T>>(Fixture, new JsonSerializerOptions().WithObservableList());
+    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<TList>(Fixture, JsonSerializerOptions.WithObservableListConverters());
 
     [TestMethod]
-    public void Always_SystemTextSerializable() => Ensure.IsJsonSerializable<ObservableList<T>>(Fixture, new JsonSerializerOptions().WithObservableList());
+    public void Ensure_EnumeratesAllItems() => Ensure.EnumeratesAllItems<TList, TItem>(Fixture);
 }

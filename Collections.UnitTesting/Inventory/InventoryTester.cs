@@ -1466,7 +1466,6 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
         Instance.Should().NotContain(item);
     }
 
-    //TODO Test RemoveAt
     [TestMethod]
     public void RemoveAt_WhenIndexIsNegative_Throw()
     {
@@ -3849,9 +3848,9 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
     }
 
     [TestMethod]
-    public void Always_EnsureValueEquality() => Ensure.ValueEquality<TInventory>(Fixture, new JsonSerializerOptions().WithInventoryConverters());
+    public void Always_EnsureValueEquality() => Ensure.ValueEquality<TInventory>(Fixture, JsonSerializerOptions.WithInventoryConverters());
 
     [TestMethod]
-    public void Always_IsJsonSerializable() => Ensure.IsJsonSerializable<TInventory>(Fixture, new JsonSerializerOptions().WithInventoryConverters());
+    public void Always_IsJsonSerializable() => Ensure.IsJsonSerializable<TInventory>(Fixture, JsonSerializerOptions.WithInventoryConverters());
 
 }

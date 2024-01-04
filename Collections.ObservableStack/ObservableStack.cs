@@ -34,6 +34,7 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
 
     public ObservableStack(IEnumerable<T> collection)
     {
+        if (collection is null) throw new ArgumentNullException(nameof(collection));
         _items = new Stack<T>(collection);
     }
 
@@ -118,10 +119,7 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
 
     public static bool operator !=(ObservableStack<T>? a, ObservableStack<T>? b) => !(a == b);
 
-    public override int GetHashCode()
-    {
-        return _items.GetHashCode();
-    }
+    public override int GetHashCode() => _items.GetHashCode();
 
     public override string ToString() => Count == 0 ? $"Empty {GetType().GetHumanReadableName()}" : $"{GetType().GetHumanReadableName()} with {Count} items";
 }

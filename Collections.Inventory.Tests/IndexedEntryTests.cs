@@ -3,7 +3,6 @@
 [TestClass]
 public sealed class IndexedEntryTests : EntryTester<IndexedEntry<DummyItem>>
 {
-    //TODO
     [TestMethod]
     public void ToString_WhenItemIsNull_ReturnNull()
     {

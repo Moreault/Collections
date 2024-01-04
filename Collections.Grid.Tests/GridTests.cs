@@ -1940,7 +1940,6 @@ public class GridTests
     [TestClass]
     public class Add_Cells_Params : Tester<Grid<Dummy>>
     {
-        //TODO Test
         [TestMethod]
         public void WhenCellsIsEmpty_DoNotModify()
         {
@@ -2005,7 +2004,6 @@ public class GridTests
     [TestClass]
     public class Add_Cells_Enumerable : Tester<Grid<Dummy>>
     {
-        //TODO Test
         [TestMethod]
         public void WhenCellsIsNull_Throw()
         {
@@ -9575,12 +9573,12 @@ public class GridTests
             var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
             Instance.Add(items);
 
-            var options = new JsonSerializerOptions().WithGridConverters();
+            JsonSerializerOptions.WithGridConverters();
 
-            var json = System.Text.Json.JsonSerializer.Serialize(Instance, options);
+            var json = System.Text.Json.JsonSerializer.Serialize(Instance, JsonSerializerOptions);
 
             //Act
-            var result = System.Text.Json.JsonSerializer.Deserialize<Grid<Dummy>>(json, options);
+            var result = System.Text.Json.JsonSerializer.Deserialize<Grid<Dummy>>(json, JsonSerializerOptions);
 
             //Assert
             result.Should().BeEquivalentTo(Instance);

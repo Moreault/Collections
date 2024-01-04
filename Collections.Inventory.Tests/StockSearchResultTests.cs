@@ -152,5 +152,5 @@ public class StockSearchResultTests : RecordTester<StockSearchResult<DummyItem>>
     }
 
     [TestMethod]
-    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<StockSearchResult<IndexedEntry<DummyItem>>>(Fixture, new JsonSerializerOptions().WithInventoryConverters());
+    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<StockSearchResult<IndexedEntry<DummyItem>>>(Fixture, JsonSerializerOptions.WithInventoryConverters());
 }

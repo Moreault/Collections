@@ -1,669 +1,697 @@
+using System.Collections;
+using ToolBX.Collections.ObservableStack.Json;
+using ToolBX.Collections.UnitTesting.Extensions;
+
 namespace Collections.ObservableStack.Tests;
 
 [TestClass]
-public class ObservableStackTests
+public class ObservableStackTests : Tester<ObservableStack<Dummy>>
 {
-    [TestClass]
-    public class Count : Tester<ObservableStack<Dummy>>
+    protected override void InitializeTest()
     {
-        [TestMethod]
-        public void WhenEmpty_ReturnZero()
-        {
-            //Arrange
-
-            //Act
-            var result = Instance.Count;
-
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenContainsItems_ReturnNumberOfItems()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-
-            //Act
-            var result = Instance.Count;
-
-            //Assert
-            result.Should().Be(items.Count);
-        }
+        base.InitializeTest();
+        Fixture.WithCollectionCustomizations();
+        JsonSerializerOptions.WithObservableStackConverters();
     }
 
-    [TestClass]
-    public class Clear : Tester<ObservableStack<Dummy>>
+    [TestMethod]
+    public void ParameterlessConstructor_Always_ReturnEmptyStack()
     {
-        [TestMethod]
-        public void WhenIsEmpty_DoNotTriggerEvent()
-        {
-            //Arrange
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+        //Arrange
 
-            //Act
-            Instance.Clear();
+        //Act
+        var result = new ObservableStack<Dummy>();
 
-            //Assert
-            triggers.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenContainsItems_RemoveAll()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-
-            //Act
-            Instance.Clear();
-
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenContainsItems_TriggerEvent()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
-
-            //Act
-            Instance.Clear();
-
-            //Assert
-            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
-            {
-                new() { OldValues = items }
-            });
-        }
+        //Assert
+        result.Should().BeEmpty();
     }
 
-    [TestClass]
-    public class Contains : Tester<ObservableStack<Dummy>>
+    [TestMethod]
+    public void EnumerableConstructor_WhenCollectionIsNull_Throw()
     {
-        [TestMethod]
-        public void WhenItemIsNotInCollection_ReturnFalse()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
+        //Arrange
+        IEnumerable<Dummy> items = null!;
 
-            var item = Fixture.Create<Dummy>();
+        //Act
+        var action = () => new ObservableStack<Dummy>(items);
 
-            //Act
-            var result = Instance.Contains(item);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenItemIsInCollection_ReturnTrue()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-
-            var item = items.GetRandom();
-
-            //Act
-            var result = Instance.Contains(item);
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        action.Should().Throw<ArgumentNullException>();
     }
 
-    [TestClass]
-    public class Peek : Tester<ObservableStack<Dummy>>
+    [TestMethod]
+    public void EnumerableConstructor_WhenCollectionIsNotNull_InitializeWithItems()
     {
-        [TestMethod]
-        public void WhenIsEmpty_Throw()
-        {
-            //Arrange
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
 
-            //Act
-            var action = () => Instance.Peek();
+        //Act
+        var result = new ObservableStack<Dummy>(items);
 
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
-
-        [TestMethod]
-        public void WhenContainsOnlyOneItem_ReturnThatItem()
-        {
-            //Arrange
-            var item = Fixture.Create<Dummy>();
-            Instance.Push(item);
-
-            //Act
-            var result = Instance.Peek();
-
-            //Assert
-            result.Should().Be(item);
-        }
-
-        [TestMethod]
-        public void WhenContainsItems_ReturnLastItemAdded()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-            //Act
-            var result = Instance.Peek();
-
-            //Assert
-            result.Should().Be(items.Last());
-        }
+        //Assert
+        result.Should().BeEquivalentTo(items);
     }
 
-    [TestClass]
-    public class TryPeek : Tester<ObservableStack<Dummy>>
+    [TestMethod]
+    public void Count_WhenEmpty_ReturnZero()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnFailure()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = Instance.TryPeek();
+        //Act
+        var result = Instance.Count;
 
-            //Assert
-            result.Should().Be(Result<Dummy>.Failure());
-        }
-
-        [TestMethod]
-        public void WhenContainsOnlyOneItem_ReturnThatItem()
-        {
-            //Arrange
-            var item = Fixture.Create<Dummy>();
-            Instance.Push(item);
-
-            //Act
-            var result = Instance.TryPeek();
-
-            //Assert
-            result.Should().Be(Result<Dummy>.Success(item));
-        }
-
-        [TestMethod]
-        public void WhenContainsItems_ReturnLastItemAdded()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-
-            //Act
-            var result = Instance.TryPeek();
-
-            //Assert
-            result.Should().Be(Result<Dummy>.Success(items.Last()));
-        }
+        //Assert
+        result.Should().Be(0);
     }
 
-    [TestClass]
-    public class Pop : Tester<ObservableStack<Dummy>>
+    [TestMethod]
+    public void Count_WhenContainsItems_ReturnNumberOfItems()
     {
-        [TestMethod]
-        public void WhenIsEmpty_Throw()
-        {
-            //Arrange
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
 
-            //Act
-            var action = () => Instance.Pop();
+        //Act
+        var result = Instance.Count;
 
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
-
-        [TestMethod]
-        public void WhenContainsOnlyOneItem_ReturnThatItem()
-        {
-            //Arrange
-            var item = Fixture.Create<Dummy>();
-            Instance.Push(item);
-
-            //Act
-            var result = Instance.Pop();
-
-            //Assert
-            result.Should().Be(item);
-        }
-
-        [TestMethod]
-        public void WhenContainsOnlyOneItem_RemoveItem()
-        {
-            //Arrange
-            var item = Fixture.Create<Dummy>();
-            Instance.Push(item);
-
-            //Act
-            Instance.Pop();
-
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenContainsOnlyOneItem_TriggerEvent()
-        {
-            //Arrange
-            var item = Fixture.Create<Dummy>();
-            Instance.Push(item);
-
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
-
-            //Act
-            Instance.Pop();
-
-            //Assert
-            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
-            {
-                new()
-                {
-                    OldValues = new List<Dummy> { item }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenContainsItems_ReturnLastItemAdded()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-            //Act
-            var result = Instance.Pop();
-
-            //Assert
-            result.Should().Be(items.Last());
-        }
-
-        [TestMethod]
-        public void WhenContainsItems_RemoveItem()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-
-            //Act
-            Instance.Pop();
-
-            //Assert
-            Instance.Should().NotContain(items.Last());
-        }
-
-        [TestMethod]
-        public void WhenContainsItems_TriggerEvent()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
-
-            //Act
-            Instance.Pop();
-
-            //Assert
-            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
-            {
-                new()
-                {
-                    OldValues = new List<Dummy> { items.Last() }
-                }
-            });
-        }
+        //Assert
+        result.Should().Be(items.Count);
     }
 
-    [TestClass]
-    public class TryPop : Tester<ObservableStack<Dummy>>
+    [TestMethod]
+    public void CountFromObservableStackInterface_WhenEmpty_ReturnZero()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnFailure()
+        //Arrange
+
+        //Act
+        var result = ((IObservableStack<Dummy>)Instance).Count;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void CountFromObservableStackInterface_WhenContainsItems_ReturnNumberOfItems()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+
+        //Act
+        var result = ((IObservableStack<Dummy>)Instance).Count;
+
+
+        //Assert
+        result.Should().Be(items.Count);
+    }
+
+    [TestMethod]
+    public void CountFromReadOnlyCollectionInterface_WhenEmpty_ReturnZero()
+    {
+        //Arrange
+
+        //Act
+        var result = ((IReadOnlyCollection<Dummy>)Instance).Count;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void CountFromReadOnlyCollectionInterface_WhenContainsItems_ReturnNumberOfItems()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+
+        //Act
+        var result = ((IReadOnlyCollection<Dummy>)Instance).Count;
+
+
+        //Assert
+        result.Should().Be(items.Count);
+    }
+
+    [TestMethod]
+    public void IsSynchronized_Always_ReturnValueFromInternalCollection()
+    {
+        //Arrange
+        var internalCollection = (ICollection)GetFieldValue<Stack<Dummy>>("_items")!;
+
+        //Act
+        var result = ((ICollection)Instance).IsSynchronized;
+
+        //Assert
+        result.Should().Be(internalCollection.IsSynchronized);
+    }
+
+    [TestMethod]
+    public void SyncRoot_Always_ReturnValueFromInternalCollection()
+    {
+        //Arrange
+        var internalCollection = (ICollection)GetFieldValue<Stack<Dummy>>("_items")!;
+
+        //Act
+        var result = ((ICollection)Instance).SyncRoot;
+
+        //Assert
+        result.Should().Be(internalCollection.SyncRoot);
+    }
+
+    [TestMethod]
+    public void Clear_WhenIsEmpty_DoNotTriggerEvent()
+    {
+        //Arrange
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        //Act
+        Instance.Clear();
+
+        //Assert
+        triggers.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void Clear_WhenContainsItems_RemoveAll()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+
+        //Act
+        Instance.Clear();
+
+        //Assert
+        Instance.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void Clear_WhenContainsItems_TriggerEvent()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        //Act
+        Instance.Clear();
+
+        //Assert
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
         {
-            //Arrange
+            new() { OldValues = items }
+        });
+    }
 
-            //Act
-            var result = Instance.TryPop();
+    [TestMethod]
+    public void Contains_WhenItemIsNotInCollection_ReturnFalse()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
 
-            //Assert
-            result.Should().Be(Result<Dummy>.Failure());
-        }
+        var item = Fixture.Create<Dummy>();
 
-        [TestMethod]
-        public void WhenContainsOnlyOneItem_ReturnThatItem()
-        {
-            //Arrange
-            var item = Fixture.Create<Dummy>();
-            Instance.Push(item);
+        //Act
+        var result = Instance.Contains(item);
 
-            //Act
-            var result = Instance.TryPop();
+        //Assert
+        result.Should().BeFalse();
+    }
 
-            //Assert
-            result.Should().Be(Result<Dummy>.Success(item));
-        }
+    [TestMethod]
+    public void Contains_WhenItemIsInCollection_ReturnTrue()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
 
-        [TestMethod]
-        public void WhenContainsOnlyOneItem_RemoveItem()
-        {
-            //Arrange
-            var item = Fixture.Create<Dummy>();
-            Instance.Push(item);
+        var item = items.GetRandom();
 
-            //Act
-            Instance.TryPop();
+        //Act
+        var result = Instance.Contains(item);
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
+        //Assert
+        result.Should().BeTrue();
+    }
 
-        [TestMethod]
-        public void WhenContainsOnlyOneItem_TriggerEvent()
-        {
-            //Arrange
-            var item = Fixture.Create<Dummy>();
-            Instance.Push(item);
+    [TestMethod]
+    public void Peek_WhenIsEmpty_Throw()
+    {
+        //Arrange
 
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+        //Act
+        var action = () => Instance.Peek();
 
-            //Act
-            Instance.TryPop();
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
 
-            //Assert
-            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+    [TestMethod]
+    public void Peek_WhenContainsOnlyOneItem_ReturnThatItem()
+    {
+        //Arrange
+        var item = Fixture.Create<Dummy>();
+        Instance.Push(item);
+
+        //Act
+        var result = Instance.Peek();
+
+        //Assert
+        result.Should().Be(item);
+    }
+
+    [TestMethod]
+    public void Peek_WhenContainsItems_ReturnLastItemAdded()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+        //Act
+        var result = Instance.Peek();
+
+        //Assert
+        result.Should().Be(items.Last());
+    }
+
+    [TestMethod]
+    public void TryPeek_WhenIsEmpty_ReturnFailure()
+    {
+        //Arrange
+
+        //Act
+        var result = Instance.TryPeek();
+
+        //Assert
+        result.Should().Be(Result<Dummy>.Failure());
+    }
+
+    [TestMethod]
+    public void TryPeek_WhenContainsOnlyOneItem_ReturnThatItem()
+    {
+        //Arrange
+        var item = Fixture.Create<Dummy>();
+        Instance.Push(item);
+
+        //Act
+        var result = Instance.TryPeek();
+
+        //Assert
+        result.Should().Be(Result<Dummy>.Success(item));
+    }
+
+    [TestMethod]
+    public void TryPeek_WhenContainsItems_ReturnLastItemAdded()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+
+        //Act
+        var result = Instance.TryPeek();
+
+        //Assert
+        result.Should().Be(Result<Dummy>.Success(items.Last()));
+    }
+
+    [TestMethod]
+    public void Pop_WhenIsEmpty_Throw()
+    {
+        //Arrange
+
+        //Act
+        var action = () => Instance.Pop();
+
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [TestMethod]
+    public void Pop_WhenContainsOnlyOneItem_ReturnThatItem()
+    {
+        //Arrange
+        var item = Fixture.Create<Dummy>();
+        Instance.Push(item);
+
+        //Act
+        var result = Instance.Pop();
+
+        //Assert
+        result.Should().Be(item);
+    }
+
+    [TestMethod]
+    public void Pop_WhenContainsOnlyOneItem_RemoveItem()
+    {
+        //Arrange
+        var item = Fixture.Create<Dummy>();
+        Instance.Push(item);
+
+        //Act
+        Instance.Pop();
+
+        //Assert
+        Instance.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void Pop_WhenContainsOnlyOneItem_TriggerEvent()
+    {
+        //Arrange
+        var item = Fixture.Create<Dummy>();
+        Instance.Push(item);
+
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        //Act
+        Instance.Pop();
+
+        //Assert
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
             {
                 new()
                 {
                     OldValues = new List<Dummy> { item }
                 }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenContainsItems_ReturnLastItemAdded()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-            //Act
-            var result = Instance.TryPop();
+    [TestMethod]
+    public void Pop_WhenContainsItems_ReturnLastItemAdded()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+        //Act
+        var result = Instance.Pop();
 
-            //Assert
-            result.Should().Be(Result<Dummy>.Success(items.Last()));
-        }
+        //Assert
+        result.Should().Be(items.Last());
+    }
 
-        [TestMethod]
-        public void WhenContainsItems_RemoveItem()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
+    [TestMethod]
+    public void Pop_WhenContainsItems_RemoveItem()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
 
-            //Act
-            Instance.TryPop();
+        //Act
+        Instance.Pop();
 
-            //Assert
-            Instance.Should().NotContain(items.Last());
-        }
+        //Assert
+        Instance.Should().NotContain(items.Last());
+    }
 
-        [TestMethod]
-        public void WhenContainsItems_TriggerEvent()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
+    [TestMethod]
+    public void Pop_WhenContainsItems_TriggerEvent()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
 
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
-            //Act
-            Instance.TryPop();
+        //Act
+        Instance.Pop();
 
-            //Assert
-            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        //Assert
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
             {
                 new()
                 {
                     OldValues = new List<Dummy> { items.Last() }
                 }
             });
-        }
     }
 
-    [TestClass]
-    public class Push_Params : Tester<ObservableStack<Dummy>>
+    [TestMethod]
+    public void TryPop_WhenIsEmpty_ReturnFailure()
     {
-        [TestMethod]
-        public void WhenItemsIsEmpty_DoNotAddNewElements()
+        //Arrange
+
+        //Act
+        var result = Instance.TryPop();
+
+        //Assert
+        result.Should().Be(Result<Dummy>.Failure());
+    }
+
+    [TestMethod]
+    public void TryPop_WhenContainsOnlyOneItem_ReturnThatItem()
+    {
+        //Arrange
+        var item = Fixture.Create<Dummy>();
+        Instance.Push(item);
+
+        //Act
+        var result = Instance.TryPop();
+
+        //Assert
+        result.Should().Be(Result<Dummy>.Success(item));
+    }
+
+    [TestMethod]
+    public void TryPop_WhenContainsOnlyOneItem_RemoveItem()
+    {
+        //Arrange
+        var item = Fixture.Create<Dummy>();
+        Instance.Push(item);
+
+        //Act
+        Instance.TryPop();
+
+        //Assert
+        Instance.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void TryPop_WhenContainsOnlyOneItem_TriggerEvent()
+    {
+        //Arrange
+        var item = Fixture.Create<Dummy>();
+        Instance.Push(item);
+
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        //Act
+        Instance.TryPop();
+
+        //Assert
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+            {
+                new()
+                {
+                    OldValues = new List<Dummy> { item }
+                }
+            });
+    }
+
+    [TestMethod]
+    public void TryPop_WhenContainsItems_ReturnLastItemAdded()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+        //Act
+        var result = Instance.TryPop();
+
+        //Assert
+        result.Should().Be(Result<Dummy>.Success(items.Last()));
+    }
+
+    [TestMethod]
+    public void TryPop_WhenContainsItems_RemoveItem()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+
+        //Act
+        Instance.TryPop();
+
+        //Assert
+        Instance.Should().NotContain(items.Last());
+    }
+
+    [TestMethod]
+    public void TryPop_WhenContainsItems_TriggerEvent()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        //Act
+        Instance.TryPop();
+
+        //Assert
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+            {
+                new()
+                {
+                    OldValues = new List<Dummy> { items.Last() }
+                }
+            });
+    }
+
+    [TestMethod]
+    public void PushParams_WhenItemsIsEmpty_DoNotAddNewElements()
+    {
+        //Arrange
+
+        //Act
+        Instance.Push();
+
+        //Assert
+        Instance.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void PushParams_WhenItemsIsEmpty_DoNotTrigger()
+    {
+        //Arrange
+
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        //Act
+        Instance.Push();
+
+        //Assert
+        triggers.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void PushParams_WhenIsNotEmpty_PushAllOfThemToTopOfStack()
+    {
+        //Arrange
+        var firstItems = Fixture.CreateMany<Dummy>().ToArray();
+        Instance.Push(firstItems);
+
+        var items = Fixture.CreateMany<Dummy>().ToList();
+
+        //Act
+        Instance.Push(items);
+
+        //Assert
+        Instance.Should().ContainInOrder(firstItems.Concat(items).Reverse());
+    }
+
+    [TestMethod]
+    public void PushParams_WhenIsNotEmpty_TriggerEvent()
+    {
+        //Arrange
+        var firstItems = Fixture.CreateMany<Dummy>().ToArray();
+        Instance.Push(firstItems);
+
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        var items = Fixture.CreateMany<Dummy>().ToList();
+
+        //Act
+        Instance.Push(items);
+
+        //Assert
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
         {
-            //Arrange
+            new()
+            {
+                NewValues = items
+            }
+        });
+    }
 
-            //Act
-            Instance.Push();
+    [TestMethod]
+    public void PushEnumerable_WhenItemsIsNull_Throw()
+    {
+        //Arrange
+        IEnumerable<Dummy> items = null!;
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
+        //Act
+        var action = () => Instance.Push(items);
 
-        [TestMethod]
-        public void WhenItemsIsEmpty_DoNotTrigger()
-        {
-            //Arrange
+        //Assert
+        action.Should().Throw<ArgumentNullException>();
+    }
 
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+    [TestMethod]
+    public void PushEnumerable_WhenItemsIsEmpty_DoNotAddNewElements()
+    {
+        //Arrange
+        var items = new List<Dummy>();
 
-            //Act
-            Instance.Push();
+        //Act
+        Instance.Push(items);
 
-            //Assert
-            triggers.Should().BeEmpty();
-        }
+        //Assert
+        Instance.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenIsNotEmpty_PushAllOfThemToTopOfStack()
-        {
-            //Arrange
-            var firstItems = Fixture.CreateMany<Dummy>().ToArray();
-            Instance.Push(firstItems);
+    [TestMethod]
+    public void PushEnumerable_WhenItemsIsEmpty_DoNotTrigger()
+    {
+        //Arrange
+        var items = new List<Dummy>();
 
-            var items = Fixture.CreateMany<Dummy>().ToList();
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
-            //Act
-            Instance.Push(items);
+        //Act
+        Instance.Push(items);
 
-            //Assert
-            Instance.Should().ContainInOrder(firstItems.Concat(items).Reverse());
-        }
+        //Assert
+        triggers.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenIsNotEmpty_TriggerEvent()
-        {
-            //Arrange
-            var firstItems = Fixture.CreateMany<Dummy>().ToArray();
-            Instance.Push(firstItems);
+    [TestMethod]
+    public void PushEnumerable_WhenIsNotEmpty_PushAllOfThemToTopOfStack()
+    {
+        //Arrange
+        var firstItems = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(firstItems);
 
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+        var items = Fixture.CreateMany<Dummy>().ToList();
 
-            var items = Fixture.CreateMany<Dummy>().ToList();
+        //Act
+        Instance.Push(items);
 
-            //Act
-            Instance.Push(items);
+        //Assert
+        Instance.Should().ContainInOrder(firstItems.Concat(items).Reverse());
+    }
 
-            //Assert
-            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+    [TestMethod]
+    public void PushEnumerable_WhenIsNotEmpty_TriggerEvent()
+    {
+        //Arrange
+        var firstItems = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(firstItems);
+
+        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        Instance.CollectionChanged += (sender, args) => triggers.Add(args);
+
+        var items = Fixture.CreateMany<Dummy>().ToList();
+
+        //Act
+        Instance.Push(items);
+
+        //Assert
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
             {
                 new()
                 {
                     NewValues = items
                 }
             });
-        }
-    }
-
-    [TestClass]
-    public class Push_Enumerable : Tester<ObservableStack<Dummy>>
-    {
-        [TestMethod]
-        public void WhenItemsIsNull_Throw()
-        {
-            //Arrange
-            IEnumerable<Dummy> items = null!;
-
-            //Act
-            var action = () => Instance.Push(items);
-
-            //Assert
-            action.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void WhenItemsIsEmpty_DoNotAddNewElements()
-        {
-            //Arrange
-            var items = new List<Dummy>();
-
-            //Act
-            Instance.Push(items);
-
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenItemsIsEmpty_DoNotTrigger()
-        {
-            //Arrange
-            var items = new List<Dummy>();
-
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
-
-            //Act
-            Instance.Push(items);
-
-            //Assert
-            triggers.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenIsNotEmpty_PushAllOfThemToTopOfStack()
-        {
-            //Arrange
-            var firstItems = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(firstItems);
-            
-            var items = Fixture.CreateMany<Dummy>().ToList();
-
-            //Act
-            Instance.Push(items);
-
-            //Assert
-            Instance.Should().ContainInOrder(firstItems.Concat(items).Reverse());
-        }
-
-        [TestMethod]
-        public void WhenIsNotEmpty_TriggerEvent()
-        {
-            //Arrange
-            var firstItems = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(firstItems);
-
-            var triggers = new List<CollectionChangeEventArgs<Dummy>>();
-            Instance.CollectionChanged += (sender, args) => triggers.Add(args);
-
-            var items = Fixture.CreateMany<Dummy>().ToList();
-
-            //Act
-            Instance.Push(items);
-
-            //Assert
-            triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
-            {
-                new()
-                {
-                    NewValues = items
-                }
-            });
-        }
-    }
-
-    [TestClass]
-    public class EqualsMethod : Tester<ObservableStack<Dummy>>
-    {
-        [TestMethod]
-        public void OtherIsNull_ReturnFalse()
-        {
-            //Arrange
-            ObservableStack<Dummy> other = null!;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSameReference_ReturnTrue()
-        {
-            //Arrange
-
-            //Act
-            var result = Instance.Equals(Instance);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentInstanceButContainsSameItemsInDifferentOrder_ReturnFalse()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-
-            var other = new ObservableStack<Dummy>();
-            var otherItems = Fixture.CreateMany<Dummy>().ToList();
-            otherItems.Reverse();
-            other.Push(otherItems);
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentInstanceButContainsSameItemsInSameOrder_ReturnTrue()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>().ToList();
-            Instance.Push(items);
-
-            var other = new ObservableStack<Dummy>();
-            other.Push(items);
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
     }
 
     [TestClass]
@@ -695,4 +723,41 @@ public class ObservableStackTests
             result.Should().Be("ObservableStack<Dummy> with 3 items");
         }
     }
+
+    [TestMethod]
+    public void CopyTo_Always_CopyToArray()
+    {
+        //Arrange
+        var items = Fixture.CreateMany<Dummy>().ToList();
+        Instance.Push(items);
+        var array = new Dummy[items.Count];
+
+        //Act
+        ((ICollection)Instance).CopyTo(array, 0);
+
+        //Assert
+        array.Should().BeEquivalentTo(items);
+    }
+
+    [TestMethod]
+    public void GetHashCode_Always_ReturnFromInternalCollection()
+    {
+        //Arrange
+        var internalCollection = GetFieldValue<Stack<Dummy>>("_items")!;
+
+        //Act
+        var result = Instance.GetHashCode();
+
+        //Assert
+        result.Should().Be(internalCollection.GetHashCode());
+    }
+
+    [TestMethod]
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<ObservableStack<Dummy>>(Fixture, JsonSerializerOptions);
+
+    [TestMethod]
+    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<ObservableStack<Dummy>>(Fixture, JsonSerializerOptions);
+
+    [TestMethod]
+    public void Ensure_EnumeratesAllItems() => Ensure.EnumeratesAllItems<ObservableStack<Dummy>, Dummy>(Fixture);
 }

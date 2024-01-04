@@ -1,8 +1,14 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public class CachingListTests : Tester<CachingList<Dummy>>
+public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
 {
+    protected override void InitializeTest()
+    {
+        base.InitializeTest();
+        JsonSerializerOptions.WithCachingConverters();
+    }
+
     [TestMethod]
     public void Limit_WhenUnset_ReturnIntMaxValueByDefault()
     {

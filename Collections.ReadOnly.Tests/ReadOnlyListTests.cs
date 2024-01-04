@@ -155,7 +155,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     }
 
     [TestMethod]
-    public void Always_EnsureConsistentHashCode() => Ensure.ConsistentHashCode<ReadOnlyList<Dummy>>(Fixture, new JsonSerializerOptions().WithReadOnlyConverters());
+    public void Always_EnsureConsistentHashCode() => Ensure.ConsistentHashCode<ReadOnlyList<Dummy>>(Fixture, JsonSerializerOptions.WithReadOnlyConverters());
 
     [TestMethod]
     public void ToString_WhenIsEmpty_ReturnEmptyMessage()
@@ -1030,10 +1030,10 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     }
 
     [TestMethod]
-    public void Serialization_WhenUsingSystemText_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<DummyWithListInside>(Fixture, new JsonSerializerOptions().WithReadOnlyConverters());
+    public void Serialization_WhenUsingSystemText_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<DummyWithListInside>(Fixture, JsonSerializerOptions.WithReadOnlyConverters());
 
     [TestMethod]
-    public void Serialization_WhenUsingSystemTextOnListItself_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<ReadOnlyList<Dummy>>(Fixture, new JsonSerializerOptions().WithReadOnlyConverters());
+    public void Serialization_WhenUsingSystemTextOnListItself_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<ReadOnlyList<Dummy>>(Fixture, JsonSerializerOptions.WithReadOnlyConverters());
 
     [TestMethod]
     public void Serialization_WhenUsingNewtonsoftJson_SerializeAndDeserializeBack()

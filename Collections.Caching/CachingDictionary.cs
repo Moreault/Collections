@@ -1,4 +1,6 @@
-﻿namespace ToolBX.Collections.Caching;
+﻿using ArgumentNullException = System.ArgumentNullException;
+
+namespace ToolBX.Collections.Caching;
 
 public interface ICachingDictionary<TKey, TValue> : IObservableDictionary<TKey, TValue> where TKey : notnull
 {
@@ -7,7 +9,7 @@ public interface ICachingDictionary<TKey, TValue> : IObservableDictionary<TKey, 
     void TrimEndDownTo(int maxSize);
 }
 
-public class CachingDictionary<TKey, TValue> : ICachingDictionary<TKey, TValue> where TKey : notnull
+public class CachingDictionary<TKey, TValue> : ICachingDictionary<TKey, TValue>, IEquatable<CachingDictionary<TKey, TValue>> where TKey : notnull
 {
     private readonly CachingList<KeyValuePair<TKey, TValue>> _items;
 
@@ -82,7 +84,11 @@ public class CachingDictionary<TKey, TValue> : ICachingDictionary<TKey, TValue> 
 
     public void Remove(params TKey[] keys) => Remove(keys as IEnumerable<TKey>);
 
-    public void Remove(IEnumerable<TKey> keys) => _items.RemoveAll(x => keys.Contains(x.Key));
+    public void Remove(IEnumerable<TKey> keys)
+    {
+        if (keys is null) throw new ArgumentNullException(nameof(keys));
+        _items.RemoveAll(x => keys.Contains(x.Key));
+    }
 
     public void Remove(TKey key) => _items.RemoveAll(x => Equals(key, x.Key));
 
@@ -112,7 +118,11 @@ public class CachingDictionary<TKey, TValue> : ICachingDictionary<TKey, TValue> 
 
     public void TryRemove(params TKey[] keys) => TryRemove(keys as IEnumerable<TKey>);
 
-    public void TryRemove(IEnumerable<TKey> keys) => _items.TryRemoveAll(x => keys.Contains(x.Key));
+    public void TryRemove(IEnumerable<TKey> keys)
+    {
+        if (keys is null) throw new ArgumentNullException(nameof(keys));
+        _items.TryRemoveAll(x => keys.Contains(x.Key));
+    }
 
     public void TryRemove(TKey key) => _items.TryRemoveFirst(x => Equals(x.Key, key));
 
@@ -172,7 +182,7 @@ public class CachingDictionary<TKey, TValue> : ICachingDictionary<TKey, TValue> 
     bool IDictionary<TKey, TValue>.Remove(TKey key)
     {
         if (!ContainsKey(key)) return false;
-        _items.TryRemoveAll(x => Equals(x.Key));
+        _items.TryRemoveAll(x => Equals(key, x.Key));
         return true;
     }
 
@@ -183,12 +193,22 @@ public class CachingDictionary<TKey, TValue> : ICachingDictionary<TKey, TValue> 
         return result.IsSuccess;
     }
 
-    public bool Equals(IObservableDictionary<TKey, TValue>? other)
+    public bool Equals(IObservableDictionary<TKey, TValue>? other) => Equals(other as CachingDictionary<TKey, TValue>);
+
+    public bool Equals(CachingDictionary<TKey, TValue>? other)
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
-        return this.SequenceEqual(other);
+        return Limit.Equals(other.Limit) && this.SequenceEqual(other);
     }
+
+    public override bool Equals(object? obj) => Equals(obj as CachingDictionary<TKey, TValue>);
+
+    public static bool operator ==(CachingDictionary<TKey, TValue>? a, CachingDictionary<TKey, TValue>? b) => a is null && b is null || a is not null && a.Equals(b);
+
+    public static bool operator !=(CachingDictionary<TKey, TValue>? a, CachingDictionary<TKey, TValue>? b) => !(a == b);
+
+    public override int GetHashCode() => _items.GetHashCode();
 
     public void TrimStartDownTo(int maxSize) => _items.TrimStartDownTo(maxSize);
 

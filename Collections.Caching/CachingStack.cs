@@ -53,7 +53,7 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    void ICollection.CopyTo(Array array, int index) => throw new NotImplementedException();
+    void ICollection.CopyTo(Array array, int index) => _items.ToArray().CopyTo(array, index);
 
     public void Clear() => _items.Clear();
 
@@ -110,11 +110,11 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
 
     public override bool Equals(object? obj) => Equals(obj as CachingStack<T>);
 
-    public override int GetHashCode()
-    {
-        //TODO Remove limit : it's mutable
-        return HashCode.Combine(_items, Limit);
-    }
+    public static bool operator ==(CachingStack<T>? a, CachingStack<T>? b) => a is null && b is null || a is not null && a.Equals(b);
+
+    public static bool operator !=(CachingStack<T>? a, CachingStack<T>? b) => !(a == b);
+
+    public override int GetHashCode() => _items.GetHashCode();
 
     public override string ToString() => Count == 0 ? $"Empty {GetType().GetHumanReadableName()}" : $"{GetType().GetHumanReadableName()} with {Count} items";
 

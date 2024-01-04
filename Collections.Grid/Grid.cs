@@ -547,9 +547,10 @@ public class Grid<T> : IGrid<T>
         if (oldItems.Any() || newItems.Any())
             CollectionChanged?.Invoke(this, new GridChangedEventArgs<T> { OldValues = oldItems, NewValues = newItems });
     }
-    //TODO Return Grid<T>
+    //TODO 3.0.0 Return Grid<T>
     public IGrid<T> Copy() => Copy(Boundaries);
 
+    //TODO 3.0.0 Return Grid<T>
     public IGrid<T> Copy(Boundaries<int> boundaries)
     {
         var copy = new Grid<T>();

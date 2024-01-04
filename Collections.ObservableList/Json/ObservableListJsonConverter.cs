@@ -1,7 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace ToolBX.Collections.ObservableList.Json;
+﻿namespace ToolBX.Collections.ObservableList.Json;
 
 public sealed class ObservableListJsonConverterFactory : JsonConverterFactory
 {

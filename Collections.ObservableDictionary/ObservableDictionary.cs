@@ -155,7 +155,9 @@
         {
             if (items == null) throw new ArgumentNullException(nameof(items));
             var list = items.ToList();
-            if (!_items.All(list.Contains)) throw new InvalidOperationException(Exceptions.RemoveAtLeastOneInexistantItem);
+            if (!list.Any()) throw new ArgumentException($"{nameof(items)} should not be empty", nameof(items));
+            if (list.Any(item => !_items.Contains(item)))
+                throw new InvalidOperationException(Exceptions.RemoveAtLeastOneInexistantItem);
 
             foreach (var item in list)
                 _items.Remove(item);
@@ -266,11 +268,12 @@
 
         public void TryRemove(IEnumerable<KeyValuePair<TKey, TValue>> items)
         {
+            if (items is null) throw new ArgumentNullException(nameof(items));
             try
             {
-                Remove(items);
+                Remove(items.Where(Contains));
             }
-            catch (InvalidOperationException)
+            catch
             {
                 //ignore
             }
@@ -290,11 +293,12 @@
 
         public void TryRemove(IEnumerable<TKey> keys)
         {
+            if (keys is null) throw new ArgumentNullException(nameof(keys));
             try
             {
-                Remove(keys);
+                Remove(keys.Where(ContainsKey));
             }
-            catch (InvalidOperationException)
+            catch
             {
                 //ignore
             }
@@ -314,11 +318,12 @@
 
         public void TryRemove(Func<KeyValuePair<TKey, TValue>, bool> match)
         {
+            if (match is null) throw new ArgumentNullException(nameof(match));
             try
             {
                 Remove(match);
             }
-            catch (InvalidOperationException)
+            catch
             {
                 //Ignore
             }
@@ -326,11 +331,12 @@
 
         public void TryRemove(Func<TKey, bool> match)
         {
+            if (match is null) throw new ArgumentNullException(nameof(match));
             try
             {
                 Remove(match);
             }
-            catch (InvalidOperationException)
+            catch
             {
                 //Ignore
             }
@@ -338,11 +344,12 @@
 
         public void TryRemove(Func<TValue, bool> match)
         {
+            if (match is null) throw new ArgumentNullException(nameof(match));
             try
             {
                 Remove(match);
             }
-            catch (InvalidOperationException)
+            catch
             {
                 //Ignore
             }

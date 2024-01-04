@@ -1132,7 +1132,7 @@ public class OverlapGridTests
     [TestClass]
     public class RemoveAt_XY : Tester<OverlapGrid<Dummy>>
     {
-        //TODO Test
+        //TODO Fix
         [TestMethod, Ignore("For some reason it throws something else")]
         public void WhenThereIsNothingAtIndex_Throw()
         {
@@ -4845,12 +4845,12 @@ public class OverlapGridTests
             var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
             Instance.Add(items);
 
-            var options = new JsonSerializerOptions().WithGridConverters();
+            JsonSerializerOptions.WithGridConverters();
 
-            var json = System.Text.Json.JsonSerializer.Serialize(Instance, options);
+            var json = System.Text.Json.JsonSerializer.Serialize(Instance, JsonSerializerOptions);
 
             //Act
-            var result = System.Text.Json.JsonSerializer.Deserialize<OverlapGrid<Dummy>>(json, options);
+            var result = System.Text.Json.JsonSerializer.Deserialize<OverlapGrid<Dummy>>(json, JsonSerializerOptions);
 
             //Assert
             result.Should().BeEquivalentTo(Instance);
