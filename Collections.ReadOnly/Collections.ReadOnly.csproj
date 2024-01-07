@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.2.0-beta8" />
+	  <PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.2.0-beta9" />
 	</ItemGroup>
 
 </Project>
