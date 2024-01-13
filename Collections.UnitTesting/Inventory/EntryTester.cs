@@ -17,7 +17,7 @@ public abstract class EntryTester<TEntry> : RecordTester<TEntry> where TEntry : 
     }
 
     [TestMethod]
-    public void Always_EnsureConsistentHashCode() => Ensure.ConsistentHashCode<TEntry>(Fixture);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<TEntry>(Fixture);
 
     [TestMethod]
     public void Always_EnsureIsJsonSerializable() => Ensure.IsJsonSerializable<TEntry>(Fixture);
@@ -25,5 +25,6 @@ public abstract class EntryTester<TEntry> : RecordTester<TEntry> where TEntry : 
     [TestMethod]
     public void Always_EnsureItemHasBasicGetSetFunctionality() => Ensure.HasBasicGetSetFunctionality<TEntry>(Fixture, nameof(EntryBase<DummyItem>.Item));
 
+    [TestMethod]
     public void Always_EnsureQuantityHasBasicGetSetFunctionality() => Ensure.HasBasicGetSetFunctionality<TEntry>(Fixture, nameof(EntryBase<DummyItem>.Quantity));
 }

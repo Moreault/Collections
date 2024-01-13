@@ -155,9 +155,6 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     }
 
     [TestMethod]
-    public void Always_EnsureConsistentHashCode() => Ensure.ConsistentHashCode<ReadOnlyList<Dummy>>(Fixture, JsonSerializerOptions.WithReadOnlyConverters());
-
-    [TestMethod]
     public void ToString_WhenIsEmpty_ReturnEmptyMessage()
     {
         //Arrange

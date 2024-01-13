@@ -43,10 +43,10 @@ public sealed class TryRemoveResultTests : Tester
     }
 
     [TestMethod]
-    public void Ensure_ConsistentHashCode() => Ensure.ConsistentHashCode<TryRemoveResult>(Fixture);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<TryRemoveResult>(Fixture);
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<TryRemoveResult>(Fixture);
+    public void Ensure_ValueHashCode() => Ensure.ValueHashCode<TryRemoveResult>(Fixture);
 
     [TestMethod]
     public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<TryRemoveResult>(Fixture);

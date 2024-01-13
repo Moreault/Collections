@@ -56,10 +56,10 @@ public sealed class TryAddResultTests : Tester
     }
 
     [TestMethod]
-    public void Ensure_ConsistentHashCode() => Ensure.ConsistentHashCode<TryAddResult>(Fixture);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<TryAddResult>(Fixture);
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<TryAddResult>(Fixture);
+    public void Ensure_ValueHashCode() => Ensure.ValueHashCode<TryAddResult>(Fixture);
 
     [TestMethod]
     public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<TryAddResult>(Fixture);

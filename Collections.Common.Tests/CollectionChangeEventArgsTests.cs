@@ -10,5 +10,5 @@ public class CollectionChangeEventArgsTests : RecordTester<CollectionChangeEvent
     }
 
     [TestMethod]
-    public void Always_EnsureConsistentHashCode() => Ensure.ConsistentHashCode<CollectionChangeEventArgs<Dummy>>(Fixture);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<CollectionChangeEventArgs<Dummy>>(Fixture);
 }

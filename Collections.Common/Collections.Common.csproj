@@ -1,39 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	  <Version>2.2.0-beta1</Version>
-	  <RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
-	  <PackageId>ToolBX.$(AssemblyName)</PackageId>
-	  <Product>ToolBX.$(AssemblyName)</Product>
-	  <Authors>Mathieu Moreault</Authors>
-	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	  <RepositoryUrl>https://github.com/Moreault/Collections</RepositoryUrl>
-	  <PackageProjectUrl>https://github.com/Moreault/Collections</PackageProjectUrl>
-	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-	  <Description>Common types for the ToolBX.Collections namespaces. This package should not be referenced by your project directly.</Description>
-	  <PackageIcon>collections.common.png</PackageIcon>
-	  <PackageReadmeFile>README.md</PackageReadmeFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>2.2.0-beta1</Version>
+		<RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
+		<PackageId>ToolBX.$(AssemblyName)</PackageId>
+		<Product>ToolBX.$(AssemblyName)</Product>
+		<Authors>Mathieu Moreault</Authors>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<RepositoryUrl>https://github.com/Moreault/Collections</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Moreault/Collections</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>Common types for the ToolBX.Collections namespaces. This package should not be referenced by your project directly.</Description>
+		<PackageIcon>collections.common.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\collections.common.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\collections.common.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ToolBX.OPEX" Version="2.2.0-beta3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ToolBX.OPEX" Version="2.2.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 </Project>
