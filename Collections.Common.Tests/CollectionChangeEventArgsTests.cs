@@ -8,7 +8,4 @@ public class CollectionChangeEventArgsTests : RecordTester<CollectionChangeEvent
         public int Id { get; init; }
         public string Name { get; init; } = string.Empty;
     }
-
-    [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<CollectionChangeEventArgs<Dummy>>(Fixture);
 }

@@ -4,7 +4,6 @@ public delegate void CollectionChangeEventHandler<T>(object sender, CollectionCh
 
 public sealed record CollectionChangeEventArgs<T>
 {
-    //TODO 3.0.0 : ImmutableList<T>
     public IReadOnlyList<T> OldValues
     {
         get => _oldValues;
@@ -12,7 +11,6 @@ public sealed record CollectionChangeEventArgs<T>
     }
     private readonly IReadOnlyList<T> _oldValues = Array.Empty<T>();
 
-    //TODO 3.0.0 : ImmutableList<T>
     public IReadOnlyList<T> NewValues
     {
         get => _newValues;
@@ -20,7 +18,6 @@ public sealed record CollectionChangeEventArgs<T>
     }
     private readonly IReadOnlyList<T> _newValues = Array.Empty<T>();
 
-    //TODO 3.0.0 : Remove (equality done automatically via record and ImmutableList<T>)
     public bool Equals(CollectionChangeEventArgs<T>? other)
     {
         if (other is null) return false;
