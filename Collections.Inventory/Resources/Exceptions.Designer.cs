@@ -158,5 +158,14 @@ namespace ToolBX.Collections.Inventory.Resources {
                 return ResourceManager.GetString("CannotRemoveItemUsingPredicateBecauseThereIsNoMatch", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string QuantityMustBeAtLeastOne {
+            get {
+                return ResourceManager.GetString("QuantityMustBeAtLeastOne", resourceCulture);
+            }
+        }
     }
 }

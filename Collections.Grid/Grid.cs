@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ToolBX.Collections.Grid;
+﻿namespace ToolBX.Collections.Grid;
 
 /// <summary>
 /// An observable, dynamic two-dimensional array.
@@ -112,6 +110,7 @@ public interface IGrid<T> : IEnumerable<Cell<T>>, IEquatable<IGrid<T>>, IEquatab
 /// <inheritdoc cref="IGrid{T}"/>
 public class Grid<T> : IGrid<T>
 {
+    //TODO Make into a List<Cell<T>> instead of a Dictionary<Vector2<int>, T?> for performance reasons
     private readonly IDictionary<Vector2<int>, T?> _items = new Dictionary<Vector2<int>, T?>();
 
     public T? this[int columnIndex, int rowIndex]
@@ -203,6 +202,7 @@ public class Grid<T> : IGrid<T>
 
     private void OnCollectionChanged(object sender, GridChangedEventArgs<T> args)
     {
+        //TODO Apply same logic as OverlapGrid<T> for this
         if (_items.Any())
         {
             ColumnCount = (_items.Keys.Any(x => x.X < 0) ? Math.Abs(_items.Keys.Min(x => x.X)) : 0) +
@@ -547,9 +547,10 @@ public class Grid<T> : IGrid<T>
         if (oldItems.Any() || newItems.Any())
             CollectionChanged?.Invoke(this, new GridChangedEventArgs<T> { OldValues = oldItems, NewValues = newItems });
     }
-    //TODO Return Grid<T>
+    //TODO 3.0.0 Return Grid<T>
     public IGrid<T> Copy() => Copy(Boundaries);
 
+    //TODO 3.0.0 Return Grid<T>
     public IGrid<T> Copy(Boundaries<int> boundaries)
     {
         var copy = new Grid<T>();
@@ -653,10 +654,14 @@ public class Grid<T> : IGrid<T>
         return this.SequenceEqual(other);
     }
 
-    //TODO There has to be a better way than to compare both like this (comparing lengths or one-way is not enough since arrays tend to declare more than they need to avoid having to expand often)
     public bool Equals(T[,]? other)
     {
         if (ReferenceEquals(other, null)) return false;
+        //Arrays do not support negative indexes so if the grid has negative indexes then they cannot be equal
+        if (FirstRow < 0 || FirstColumn < 0) return false;
+
+        if (other.Length < ColumnCount) return false;
+        if (other.GetLength(1) < RowCount) return false;
 
         for (var x = 0; x < ColumnCount; x++)
         {
@@ -685,15 +690,18 @@ public class Grid<T> : IGrid<T>
         return true;
     }
 
-    //TODO There has to be a better way than to compare both like this (comparing lengths or one-way is not enough since arrays tend to declare more than they need to avoid having to expand often)
     public bool Equals(T[][]? other)
     {
         if (ReferenceEquals(other, null)) return false;
+        //Arrays do not support negative indexes so if the grid has negative indexes then they cannot be equal
+        if (FirstRow < 0 || FirstColumn < 0) return false;
+        if (!this.Any() && !other.Any()) return true;
+        if (this.Any() && !other.Any() || !this.Any() && other.Any()) return false;
+        if (other.Length < ColumnCount) return false;
+        if (other.Max(x => x?.Length ?? 0) < RowCount) return false;
 
         for (var x = 0; x < ColumnCount; x++)
         {
-            if (x > other.Length - 1) return false;
-
             for (var y = 0; y < RowCount; y++)
             {
                 if (y > other[x].Length - 1 || !Equals(other[x][y], this[x, y]))

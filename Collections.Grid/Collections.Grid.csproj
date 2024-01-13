@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>2.0.5-beta1</Version>
+		<Version>2.2.0-beta1</Version>
 		<RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
 		<PackageId>ToolBX.$(AssemblyName)</PackageId>
 		<Product>ToolBX.$(AssemblyName)</Product>
@@ -23,17 +23,13 @@
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
-	  <None Include="..\README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.Mathemancy" Version="2.0.2" />
-		<PackageReference Include="ToolBX.OPEX" Version="2.0.3" />
-		<PackageReference Include="ToolBX.OutWarden" Version="2.0.0" />
-		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.0.3" />
+		<PackageReference Include="ToolBX.Mathemancy" Version="2.2.1" />
+		<PackageReference Include="ToolBX.OPEX" Version="2.2.0" />
+		<PackageReference Include="ToolBX.OutWarden" Version="2.2.0" />
+		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -55,6 +51,13 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>Collections.Grid.Tests</_Parameter1>
 		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

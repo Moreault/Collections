@@ -1,4 +1,6 @@
-﻿namespace ToolBX.Collections.Inventory;
+﻿using System.Text.Json.Serialization;
+
+namespace ToolBX.Collections.Inventory;
 
 public interface IInventory<T> : IObservableCollection<Entry<T>>, ICollection<Entry<T>>, IEquatable<IInventory<T>>, IReadOnlyInventory<T>
 {
@@ -388,14 +390,14 @@ public abstract class Inventory<T> : IInventory<T>
 
     public bool Equals(Inventory<T>? other)
     {
-        if (ReferenceEquals(other, null)) return false;
+        if (other is null) return false;
         if (ReferenceEquals(other, this)) return true;
         return StackSize == other.StackSize && Items.SequenceEqual(other.Items);
     }
 
     public override bool Equals(object? obj) => Equals(obj as Inventory<T>);
 
-    public override int GetHashCode() => HashCode.Combine(Items, StackSize);
+    public override int GetHashCode() => Items.GetHashCode();
 
     public static bool operator ==(Inventory<T>? a, Inventory<T>? b) => a is null && b is null || a is not null && a.Equals(b);
 

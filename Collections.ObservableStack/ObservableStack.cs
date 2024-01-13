@@ -6,9 +6,9 @@ public interface IObservableStack<T> : IObservableCollection<T>, ICollection, IR
     void Clear();
     bool Contains(T item);
     T Peek();
-    TryGetResult<T> TryPeek();
+    Result<T> TryPeek();
     T Pop();
-    TryGetResult<T> TryPop();
+    Result<T> TryPop();
     void Push(params T[] items);
     void Push(IEnumerable<T> items);
 }
@@ -34,6 +34,7 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
 
     public ObservableStack(IEnumerable<T> collection)
     {
+        if (collection is null) throw new ArgumentNullException(nameof(collection));
         _items = new Stack<T>(collection);
     }
 
@@ -54,10 +55,10 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
 
     public T Peek() => _items.Peek();
 
-    public TryGetResult<T> TryPeek()
+    public Result<T> TryPeek()
     {
-        var isSucess = _items.TryPeek(out var result);
-        return new TryGetResult<T>(isSucess, result);
+        var isSuccess = _items.TryPeek(out var result);
+        return isSuccess ? Result<T>.Success(result) : Result<T>.Failure();
     }
 
     public T Pop()
@@ -70,10 +71,10 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
         return item;
     }
 
-    public TryGetResult<T> TryPop()
+    public Result<T> TryPop()
     {
-        var isSucess = _items.TryPop(out var result);
-        var item = new TryGetResult<T>(isSucess, result);
+        var isSuccess = _items.TryPop(out var result);
+        var item = isSuccess ? Result<T>.Success(result!) : Result<T>.Failure();
         if (item.IsSuccess)
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
             {
@@ -118,10 +119,7 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
 
     public static bool operator !=(ObservableStack<T>? a, ObservableStack<T>? b) => !(a == b);
 
-    public override int GetHashCode()
-    {
-        return _items.GetHashCode();
-    }
+    public override int GetHashCode() => _items.GetHashCode();
 
     public override string ToString() => Count == 0 ? $"Empty {GetType().GetHumanReadableName()}" : $"{GetType().GetHumanReadableName()} with {Count} items";
 }

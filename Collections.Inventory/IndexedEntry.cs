@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.Collections.Inventory;
 
-public record IndexedEntry<T> : Entry<T>
+public sealed record IndexedEntry<T> : EntryBase<T>
 {
     public int Index { get; init; }
 

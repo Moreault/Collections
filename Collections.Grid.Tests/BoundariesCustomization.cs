@@ -1,8 +1,4 @@
-﻿using AutoFixture;
-using ToolBX.Eloquentest.Customizations;
-using ToolBX.Mathemancy;
-
-namespace Collections.Grid.Tests;
+﻿namespace Collections.Grid.Tests;
 
 [AutoCustomization]
 public class BoundariesCustomization : ICustomization

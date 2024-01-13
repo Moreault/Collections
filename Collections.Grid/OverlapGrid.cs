@@ -1,6 +1,4 @@
-﻿using ToolBX.OPEX;
-
-namespace ToolBX.Collections.Grid;
+﻿namespace ToolBX.Collections.Grid;
 
 /// <summary>
 /// A grid with overlapping elements.
@@ -293,7 +291,7 @@ public class OverlapGrid<T> : IEnumerable<Cell<T>>, IEquatable<OverlapGrid<T>>, 
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
-        return this.SequenceEqual(other);
+        return this.UnorderedEqualOrNull(other);
     }
 
     public override bool Equals(object? obj) => Equals(obj as IEnumerable<Cell<T>>);

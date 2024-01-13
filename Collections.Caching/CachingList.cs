@@ -8,6 +8,9 @@ public interface ICachingList<T> : IObservableList<T>
     int Limit { get; set; }
 }
 
+/// <summary>
+/// A linear collection that can be limited to a certain amount of items.
+/// </summary>
 public class CachingList<T> : ObservableList<T>, ICachingList<T>
 {
     public int Limit

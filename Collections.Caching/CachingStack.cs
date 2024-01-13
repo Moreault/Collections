@@ -53,7 +53,7 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    void ICollection.CopyTo(Array array, int index) => throw new NotImplementedException();
+    void ICollection.CopyTo(Array array, int index) => _items.ToArray().CopyTo(array, index);
 
     public void Clear() => _items.Clear();
 
@@ -65,9 +65,9 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
         return _items.First();
     }
 
-    public TryGetResult<T> TryPeek()
+    public Result<T> TryPeek()
     {
-        return Count == 0 ? TryGetResult<T>.Failure : new TryGetResult<T>(true, _items.First());
+        return Count == 0 ? Result<T>.Failure() : Result<T>.Success(_items.First());
     }
 
     public T Pop()
@@ -78,9 +78,9 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
         return item;
     }
 
-    public TryGetResult<T> TryPop()
+    public Result<T> TryPop()
     {
-        return Count == 0 ? TryGetResult<T>.Failure : new TryGetResult<T>(true, Pop());
+        return Count == 0 ? Result<T>.Failure() : Result<T>.Success(Pop());
     }
 
     public void Push(params T[] items) => Push(items as IEnumerable<T>);
@@ -110,10 +110,11 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
 
     public override bool Equals(object? obj) => Equals(obj as CachingStack<T>);
 
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(_items, Limit);
-    }
+    public static bool operator ==(CachingStack<T>? a, CachingStack<T>? b) => a is null && b is null || a is not null && a.Equals(b);
+
+    public static bool operator !=(CachingStack<T>? a, CachingStack<T>? b) => !(a == b);
+
+    public override int GetHashCode() => _items.GetHashCode();
 
     public override string ToString() => Count == 0 ? $"Empty {GetType().GetHumanReadableName()}" : $"{GetType().GetHumanReadableName()} with {Count} items";
 

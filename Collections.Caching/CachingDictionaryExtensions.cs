@@ -24,4 +24,14 @@ public static class CachingDictionaryExtensions
             dictionary.Add(keySelector(element), elementSelector(element));
         return dictionary;
     }
+
+    public static CachingDictionary<TKey, TValue> ToCachingDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source) where TKey : notnull
+    {
+        if (source == null) throw new ArgumentNullException(nameof(source));
+
+        var dictionary = new CachingDictionary<TKey, TValue>();
+        foreach (var element in source)
+            dictionary.Add(element.Key, element.Value);
+        return dictionary;
+    }
 }
