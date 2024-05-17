@@ -1,14 +1,15 @@
 using Newtonsoft.Json.Linq;
+using ToolBX.Dummies;
+using ToolBX.Eloquentest.Dummies;
 
 namespace Collections.ObservableDictionary.Tests;
 
 [TestClass]
-public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>>
+public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<ObservableDictionary<int, Garbage>>
 {
     protected override void InitializeTest()
     {
         base.InitializeTest();
-        Fixture.WithCollectionCustomizations();
         JsonSerializerOptions.WithObservableDictionaryConverters();
     }
 
@@ -16,10 +17,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ConstructorWithCapacity_Always_ReturnNewInstance()
     {
         //Arrange
-        var capacity = Fixture.Create<int>();
+        var capacity = Dummy.Create<int>();
 
         //Act
-        var result = new ObservableDictionary<int, Dummy>(capacity);
+        var result = new ObservableDictionary<int, Garbage>(capacity);
 
         //Assert
         result.Should().BeEmpty();
@@ -29,10 +30,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ConstructorWithEqualityComparer_Always_ReturnWithComparer()
     {
         //Arrange
-        var comparer = Fixture.Create<EqualityComparer<int>>();
+        var comparer = Dummy.Create<EqualityComparer<int>>();
 
         //Act
-        var result = new ObservableDictionary<int, Dummy>(comparer);
+        var result = new ObservableDictionary<int, Garbage>(comparer);
 
         //Assert
         result.Should().BeEmpty();
@@ -42,11 +43,11 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ConstructorWithCapacityAndComparer_Always_ReturnNew()
     {
         //Arrange
-        var capacity = Fixture.Create<int>();
-        var comparer = Fixture.Create<EqualityComparer<int>>();
+        var capacity = Dummy.Create<int>();
+        var comparer = Dummy.Create<EqualityComparer<int>>();
 
         //Act
-        var result = new ObservableDictionary<int, Dummy>(capacity, comparer);
+        var result = new ObservableDictionary<int, Garbage>(capacity, comparer);
 
         //Assert
         result.Should().BeEmpty();
@@ -56,10 +57,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ConstructorWithDictionary_Always_ReturnEquivalent()
     {
         //Arrange
-        var dictionary = Fixture.Create<Dictionary<int, Dummy>>();
+        var dictionary = Dummy.Create<Dictionary<int, Garbage>>();
 
         //Act
-        var result = new ObservableDictionary<int, Dummy>(dictionary);
+        var result = new ObservableDictionary<int, Garbage>(dictionary);
 
         //Assert
         result.Should().BeEquivalentTo(dictionary);
@@ -69,11 +70,11 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ConstructorWithDictionaryAndComparer_Always_ReturnEquivalent()
     {
         //Arrange
-        var dictionary = Fixture.Create<Dictionary<int, Dummy>>();
-        var comparer = Fixture.Create<EqualityComparer<int>>();
+        var dictionary = Dummy.Create<Dictionary<int, Garbage>>();
+        var comparer = Dummy.Create<EqualityComparer<int>>();
 
         //Act
-        var result = new ObservableDictionary<int, Dummy>(dictionary, comparer);
+        var result = new ObservableDictionary<int, Garbage>(dictionary, comparer);
 
         //Assert
         result.Should().BeEquivalentTo(dictionary);
@@ -83,10 +84,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ConstructorWithEnumerable_Always_ReturnEquivalent()
     {
         //Arrange
-        var collection = Fixture.Create<IEnumerable<KeyValuePair<int, Dummy>>>().ToList();
+        var collection = Dummy.Create<IEnumerable<KeyValuePair<int, Garbage>>>().ToList();
 
         //Act
-        var result = new ObservableDictionary<int, Dummy>(collection);
+        var result = new ObservableDictionary<int, Garbage>(collection);
 
         //Assert
         result.Should().BeEquivalentTo(collection);
@@ -96,11 +97,11 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ConstructorWithEnumerableAndComparer_Always_ReturnEquivalent()
     {
         //Arrange
-        var collection = Fixture.Create<IEnumerable<KeyValuePair<int, Dummy>>>().ToList();
-        var comparer = Fixture.Create<EqualityComparer<int>>();
+        var collection = Dummy.Create<IEnumerable<KeyValuePair<int, Garbage>>>().ToList();
+        var comparer = Dummy.Create<EqualityComparer<int>>();
 
         //Act
-        var result = new ObservableDictionary<int, Dummy>(collection, comparer);
+        var result = new ObservableDictionary<int, Garbage>(collection, comparer);
 
         //Assert
         result.Should().BeEquivalentTo(collection);
@@ -122,7 +123,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Keys_WhenContainsItems_ReturnAllKeys()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -148,7 +149,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Values_WhenContainsItems_ReturnAllValues()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -162,11 +163,11 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Indexer_WhenThereIsNothingWithKey_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        var action = () => Instance[Fixture.Create<int>()];
+        var action = () => Instance[Dummy.Create<int>()];
 
         //Assert
         action.Should().Throw<KeyNotFoundException>();
@@ -176,7 +177,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Indexer_WhenThereIsSomethingWithKey_ReturnValueAssociatedWithKey()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -192,11 +193,11 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Indexer_WhenThereIsSomethingWithKey_SwapValues()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
-        var value = Fixture.Create<Dummy>();
+        var value = Dummy.Create<Garbage>();
 
         //Act
         Instance[item.Key] = value;
@@ -209,25 +210,25 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Indexer_WhenThereIsSomethingWithKey_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
-        var value = Fixture.Create<Dummy>();
+        var value = Dummy.Create<Garbage>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance[item.Key] = value;
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new()
                 {
-                    OldValues = new List<KeyValuePair<int, Dummy>>{ item },
-                    NewValues = new List<KeyValuePair<int, Dummy>>{ new(item.Key, value) }
+                    OldValues = new List<KeyValuePair<int, Garbage>>{ item },
+                    NewValues = new List<KeyValuePair<int, Garbage>>{ new(item.Key, value) }
                 }
             });
     }
@@ -236,12 +237,12 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Indexer_WhenPassingTheSameValueToTheSameKey_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -255,16 +256,16 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Indexer_WhenKeyDoesNotExist_AddNewEntry()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance[item.Key] = item.Value;
 
         //Assert
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
             {
                 { items[0].Key, items[0].Value },
                 { items[1].Key, items[1].Value },
@@ -277,21 +278,21 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Indexer_WhenKeyDoesNotExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance[item.Key] = item.Value;
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new() { NewValues = new List<KeyValuePair<int, Dummy>> { item } }
+                new() { NewValues = new List<KeyValuePair<int, Garbage>> { item } }
             });
     }
 
@@ -311,7 +312,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Count_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(5).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(5).ToList();
         Instance.Add(items);
 
         //Act
@@ -337,38 +338,38 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryGetValue_WhenKeyIsNotInCollection_ReturnFailure()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        var result = Instance.TryGetValue(Fixture.Create<int>());
+        var result = Instance.TryGetValue(Dummy.Create<int>());
 
         //Assert
-        result.Should().Be(Result<Dummy>.Failure());
+        result.Should().Be(Result<Garbage>.Failure());
     }
 
     [TestMethod]
     public void TryGetValue_WhenKeyHasNullValueInCollection_ReturnSuccessWithNull()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var key = Fixture.Create<int>();
+        var key = Dummy.Create<int>();
         Instance[key] = null!;
 
         //Act
         var result = Instance.TryGetValue(key);
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(null!));
+        result.Should().Be(Result<Garbage>.Success(null!));
     }
 
     [TestMethod]
     public void TryGetValue_WhenKeyHasValue_ReturnSuccess()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -377,14 +378,14 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
         var result = Instance.TryGetValue(item.Key);
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(item.Value));
+        result.Should().Be(Result<Garbage>.Success(item.Value));
     }
 
     [TestMethod]
     public void AddKeyValue_WhenKeyAlreadyExists_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -400,10 +401,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddKeyValue_WhenKeyDoesNotAlreadyExist_Add()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.Add(item.Key, item.Value);
@@ -416,23 +417,23 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddKeyValue_WhenKeyDoesNotAlreadyExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Add(item.Key, item.Value);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new()
             {
-                NewValues = new List<KeyValuePair<int, Dummy>>{ item }
+                NewValues = new List<KeyValuePair<int, Garbage>>{ item }
             }
         });
     }
@@ -441,7 +442,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddKeyValuePair_WhenKeyAlreadyExists_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -457,10 +458,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddKeyValuePair_WhenKeyDoesNotAlreadyExist_Add()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.Add(item);
@@ -473,23 +474,23 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddKeyValuePair_WhenKeyDoesNotAlreadyExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Add(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new()
             {
-                NewValues = new List<KeyValuePair<int, Dummy>>{ item }
+                NewValues = new List<KeyValuePair<int, Garbage>>{ item }
             }
         });
     }
@@ -498,7 +499,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddParams_WhenKeyAlreadyExists_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item1 = items.GetRandom();
@@ -515,17 +516,17 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddParams_WhenKeyDoesNotAlreadyExist_Add()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item1 = Fixture.Create<KeyValuePair<int, Dummy>>();
-        var item2 = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item1 = Dummy.Create<KeyValuePair<int, Garbage>>();
+        var item2 = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.Add(item1, item2);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
             {
                 { items[0].Key, items[0].Value },
                 { items[1].Key, items[1].Value },
@@ -539,24 +540,24 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddParams_WhenKeyDoesNotAlreadyExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item1 = Fixture.Create<KeyValuePair<int, Dummy>>();
-        var item2 = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item1 = Dummy.Create<KeyValuePair<int, Garbage>>();
+        var item2 = Dummy.Create<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Add(item1, item2);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new()
                 {
-                    NewValues = new List<KeyValuePair<int, Dummy>>{ item1, item2 }
+                    NewValues = new List<KeyValuePair<int, Garbage>>{ item1, item2 }
                 }
             });
     }
@@ -565,7 +566,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddEnumerable_WhenItemsIsNull_Throw()
     {
         //Arrange
-        IEnumerable<KeyValuePair<int, Dummy>> items = null!;
+        IEnumerable<KeyValuePair<int, Garbage>> items = null!;
 
         //Act
         var action = () => Instance.Add(items);
@@ -578,7 +579,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddEnumerable_WhenItemIsEmpty_DoNotModify()
     {
         //Arrange
-        var items = new List<KeyValuePair<int, Dummy>>();
+        var items = new List<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.Add(items);
@@ -591,10 +592,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddEnumerable_WhenItemIsEmpty_DoNotTrigger()
     {
         //Arrange
-        var items = new List<KeyValuePair<int, Dummy>>();
+        var items = new List<KeyValuePair<int, Garbage>>();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -608,10 +609,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddEnumerable_WhenKeyAlreadyExists_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var addedItems = new List<KeyValuePair<int, Dummy>>
+        var addedItems = new List<KeyValuePair<int, Garbage>>
             {
                 items.GetRandom(),
                 items.GetRandom(),
@@ -628,16 +629,16 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddEnumerable_WhenKeyDoesNotAlreadyExist_Add()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var addedItems = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var addedItems = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
 
         //Act
         Instance.Add(addedItems);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
             {
                 { items[0].Key, items[0].Value },
                 { items[1].Key, items[1].Value },
@@ -652,19 +653,19 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void AddEnumerable_WhenKeyDoesNotAlreadyExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var addedItems = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var addedItems = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Add(addedItems);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new()
                 {
@@ -677,7 +678,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Clear_WhenIsAlreadyEmpty_DoNotTrigger()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -691,7 +692,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Clear_WhenContainsItems_RemoveEverything()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -705,17 +706,17 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Clear_WhenContainsItems_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Clear();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = items }
         });
@@ -725,10 +726,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePair_WhenKeyValuePairIsNotInCollection_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         var action = () => Instance.Remove(item);
@@ -741,7 +742,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePair_WhenKeyValuePairIsInCollection_RemoveIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -757,21 +758,21 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePair_WhenKeyValuePairIsInCollection_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { item } }
+            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
         });
     }
 
@@ -779,10 +780,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePair_WhenKeyValuePairIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         var action = () => Instance.TryRemove(item);
@@ -795,7 +796,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePair_WhenKeyValuePairIsInCollection_RemoveIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -811,21 +812,21 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePair_WhenKeyValuePairIsInCollection_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { item } }
+            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
         });
     }
 
@@ -833,10 +834,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKey_WhenKeyValuePairIsNotInCollection_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var key = Fixture.Create<int>();
+        var key = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.Remove(key);
@@ -849,7 +850,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKey_WhenKeyValuePairIsInCollection_RemoveIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -865,21 +866,21 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKey_WhenKeyValuePairIsInCollection_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(item.Key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { item } }
+            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
         });
     }
 
@@ -887,10 +888,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKey_WhenKeyValuePairIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var key = Fixture.Create<int>();
+        var key = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.TryRemove(key);
@@ -903,7 +904,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKey_WhenKeyValuePairIsInCollection_RemoveIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -919,21 +920,21 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKey_WhenKeyValuePairIsInCollection_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(item.Key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { item } }
+            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
         });
     }
 
@@ -941,7 +942,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncKeyValue_WhenMatchIsNull_Throw()
     {
         //Arrange
-        Func<KeyValuePair<int, Dummy>, bool> match = null!;
+        Func<KeyValuePair<int, Garbage>, bool> match = null!;
 
         //Act
         var action = () => Instance.Remove(match);
@@ -966,7 +967,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncKeyValue_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -982,10 +983,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncKeyValue_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -994,9 +995,9 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
         Instance.Remove(x => x.Key == item.Key && x.Value.Description == item.Value.Description);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
             });
     }
 
@@ -1004,14 +1005,14 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncKeyValue_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
@@ -1026,25 +1027,25 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncKeyValue_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(x => x.Key > 0 && x.Value.Description == "Seb");
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1054,7 +1055,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncKeyValue_WhenMatchIsNull_Throw()
     {
         //Arrange
-        Func<KeyValuePair<int, Dummy>, bool> match = null!;
+        Func<KeyValuePair<int, Garbage>, bool> match = null!;
 
         //Act
         var action = () => Instance.TryRemove(match);
@@ -1079,7 +1080,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncKeyValue_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1095,10 +1096,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncKeyValue_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1107,9 +1108,9 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
         Instance.TryRemove(x => x.Key == item.Key && x.Value.Description == item.Value.Description);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
             });
     }
 
@@ -1117,14 +1118,14 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncKeyValue_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
@@ -1139,25 +1140,25 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncKeyValue_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(x => x.Key > 0 && x.Value.Description == "Seb");
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1192,7 +1193,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncKey_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1208,10 +1209,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncKey_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1220,9 +1221,9 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
         Instance.Remove(x => x == item.Key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
             });
     }
 
@@ -1230,10 +1231,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncKey_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         //Act
@@ -1247,20 +1248,20 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncKey_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(x => toRemove.Select(y => y.Key).Contains(x));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1295,7 +1296,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncKey_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1311,10 +1312,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncKey_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1323,9 +1324,9 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
         Instance.TryRemove(x => x == item.Key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
             });
     }
 
@@ -1333,10 +1334,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncKey_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         //Act
@@ -1350,20 +1351,20 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncKey_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(x => toRemove.Select(y => y.Key).Contains(x));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1373,7 +1374,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncValue_WhenMatchIsNull_Throw()
     {
         //Arrange
-        Func<Dummy, bool> match = null!;
+        Func<Garbage, bool> match = null!;
 
         //Act
         var action = () => Instance.Remove(match);
@@ -1388,7 +1389,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
         //Arrange
 
         //Act
-        var action = () => Instance.Remove((Dummy x) => x == null!);
+        var action = () => Instance.Remove((Garbage x) => x == null!);
 
         //Assert
         action.Should().Throw<InvalidOperationException>().WithMessage(Exceptions.RemoveWithNonInexistantPredicate);
@@ -1398,7 +1399,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncValue_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1414,10 +1415,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncValue_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1426,9 +1427,9 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
         Instance.Remove(x => x.Description == item.Value.Description);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
             });
     }
 
@@ -1436,14 +1437,14 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncValue_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
@@ -1458,25 +1459,25 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveFuncValue_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(x => x.Description == "Seb");
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1486,7 +1487,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncValue_WhenMatchIsNull_Throw()
     {
         //Arrange
-        Func<Dummy, bool> match = null!;
+        Func<Garbage, bool> match = null!;
 
         //Act
         var action = () => Instance.TryRemove(match);
@@ -1501,7 +1502,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
         //Arrange
 
         //Act
-        var action = () => Instance.TryRemove((Dummy x) => x == null!);
+        var action = () => Instance.TryRemove((Garbage x) => x == null!);
 
         //Assert
         action.Should().NotThrow();
@@ -1511,7 +1512,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncValue_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1527,10 +1528,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncValue_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1539,9 +1540,9 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
         Instance.TryRemove(x => x.Description == item.Value.Description);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
             });
     }
 
@@ -1549,14 +1550,14 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncValue_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
@@ -1571,25 +1572,25 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveFuncValue_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(x => x.Description == "Seb");
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1599,10 +1600,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Contains_WhenItemIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         var result = Instance.Contains(item);
@@ -1615,7 +1616,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Contains_WhenItemIsInCollection_ReturnTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1631,10 +1632,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ContainsKey_WhenKeyIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         var result = Instance.ContainsKey(item.Key);
@@ -1647,7 +1648,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ContainsKey_WhenKeyIsInCollection_ReturnTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1663,7 +1664,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void Copy_Always_ReturnCopy()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1678,7 +1679,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysParams_WhenKeysIsNull_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         int[] keys = null!;
@@ -1694,7 +1695,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysParams_WhenKeysIsEmpty_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         var keys = Array.Empty<int>();
@@ -1710,10 +1711,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysParams_WhenKeysAreNotInDictionary_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var keys = Fixture.CreateMany<int>().ToArray();
+        var keys = Dummy.CreateMany<int>().ToArray();
 
         //Act
         var action = () => Instance.Remove(keys);
@@ -1726,10 +1727,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysParams_WhenAllKeysAreInDictionary_RemoveAllCorrespondingObjects()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToArray();
@@ -1745,22 +1746,22 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysParams_WhenAllKeysAreInDictionary_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToArray();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -1770,7 +1771,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysEnumerable_WhenKeysIsNull_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         IEnumerable<int> keys = null!;
@@ -1786,7 +1787,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysEnumerable_WhenKeysIsEmpty_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         var keys = new List<int>();
@@ -1802,10 +1803,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysEnumerable_WhenKeysAreNotInDictionary_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var keys = Fixture.CreateMany<int>().ToList();
+        var keys = Dummy.CreateMany<int>().ToList();
 
         //Act
         var action = () => Instance.Remove(keys);
@@ -1818,10 +1819,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysEnumerable_WhenAllKeysAreInDictionary_RemoveAllCorrespondingObjects()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToList();
@@ -1837,22 +1838,22 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeysEnumerable_WhenAllKeysAreInDictionary_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToList();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -1862,7 +1863,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairParams_WhenItemsIsNull_Throw()
     {
         //Arrange
-        KeyValuePair<int, Dummy>[] items = null!;
+        KeyValuePair<int, Garbage>[] items = null!;
 
         //Act
         var action = () => Instance.Remove(items);
@@ -1875,7 +1876,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairParams_WhenItemsIsEmpty_Throw()
     {
         //Arrange
-        var items = Array.Empty<KeyValuePair<int, Dummy>>();
+        var items = Array.Empty<KeyValuePair<int, Garbage>>();
 
         //Act
         var action = () => Instance.Remove(items);
@@ -1888,10 +1889,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairParams_WhenAtLeastOneItemIsNotInCollection_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
 
         //Act
         var action = () => Instance.Remove(toRemove.Concat(items).ToArray());
@@ -1904,10 +1905,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairParams_WhenAllItemsAreInCollection_RemoveThem()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
         Instance.Add(toRemove);
 
         //Act
@@ -1921,20 +1922,20 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairParams_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -1944,7 +1945,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairEnumerable_WhenItemsIsNull_Throw()
     {
         //Arrange
-        IEnumerable<KeyValuePair<int, Dummy>> items = null!;
+        IEnumerable<KeyValuePair<int, Garbage>> items = null!;
 
         //Act
         var action = () => Instance.Remove(items);
@@ -1957,7 +1958,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairEnumerable_WhenItemsIsEmpty_Throw()
     {
         //Arrange
-        var items = new List<KeyValuePair<int, Dummy>>();
+        var items = new List<KeyValuePair<int, Garbage>>();
 
         //Act
         var action = () => Instance.Remove(items);
@@ -1970,10 +1971,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairEnumerable_WhenAtLeastOneItemIsNotInCollection_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
 
         //Act
         var action = () => Instance.Remove(toRemove.Concat(items));
@@ -1986,10 +1987,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairEnumerable_WhenAllItemsAreInCollection_RemoveThem()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         //Act
@@ -2003,20 +2004,20 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairEnumerable_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2026,7 +2027,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysParams_WhenKeyIsNull_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         int[] keys = null!;
@@ -2042,7 +2043,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysParams_WhenKeysIsEmpty_DoNotModify()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = Array.Empty<int>();
@@ -2058,12 +2059,12 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysParams_WhenKeysIsEmpty_DoNotTriggerChange()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = Array.Empty<int>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2077,10 +2078,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysParams_WhenKeysAreNotInCollection_DoNotModify()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var keys = Fixture.CreateMany<int>().ToArray();
+        var keys = Dummy.CreateMany<int>().ToArray();
 
         //Act
         Instance.TryRemove(keys);
@@ -2093,12 +2094,12 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysParams_WhenKeysAreNotInCollection_DoNotTriggerChange()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var keys = Fixture.CreateMany<int>().ToArray();
+        var keys = Dummy.CreateMany<int>().ToArray();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2112,13 +2113,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysParams_WhenSomeKeysAreInCollectionsButOthersAreNot_RemoveThoseThatAreInCollection()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var keys = toRemove.Select(x => x.Key).Concat(Fixture.CreateMany<int>()).ToArray();
+        var keys = toRemove.Select(x => x.Key).Concat(Dummy.CreateMany<int>()).ToArray();
 
         //Act
         Instance.TryRemove(keys);
@@ -2131,22 +2132,22 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysParams_WhenSomeKeysAreInCollectionsButOthersAreNot_TriggerChange()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var keys = toRemove.Select(x => x.Key).Concat(Fixture.CreateMany<int>()).ToArray();
+        var keys = toRemove.Select(x => x.Key).Concat(Dummy.CreateMany<int>()).ToArray();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2156,10 +2157,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysParams_WhenAllKeysAreInCollection_RemoveThemAll()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToArray();
@@ -2175,22 +2176,22 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysParams_WhenAllKeysAreInCollection_TriggerChange()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToArray();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2200,7 +2201,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysEnumerable_WhenKeyIsNull_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         IEnumerable<int> keys = null!;
@@ -2216,7 +2217,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysEnumerable_WhenKeysIsEmpty_DoNotModify()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = new List<int>();
@@ -2232,12 +2233,12 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysEnumerable_WhenKeysIsEmpty_DoNotTriggerChange()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = new List<int>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2251,10 +2252,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysEnumerable_WhenKeysAreNotInCollection_DoNotModify()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var keys = Fixture.CreateMany<int>().ToList();
+        var keys = Dummy.CreateMany<int>().ToList();
 
         //Act
         Instance.TryRemove(keys);
@@ -2267,12 +2268,12 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysEnumerable_WhenKeysAreNotInCollection_DoNotTriggerChange()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var keys = Fixture.CreateMany<int>().ToList();
+        var keys = Dummy.CreateMany<int>().ToList();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2286,13 +2287,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysEnumerable_WhenSomeKeysAreInCollectionsButOthersAreNot_RemoveThoseThatAreInCollection()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var keys = toRemove.Select(x => x.Key).Concat(Fixture.CreateMany<int>()).ToList();
+        var keys = toRemove.Select(x => x.Key).Concat(Dummy.CreateMany<int>()).ToList();
 
         //Act
         Instance.TryRemove(keys);
@@ -2305,22 +2306,22 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysEnumerable_WhenSomeKeysAreInCollectionsButOthersAreNot_TriggerChange()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var keys = toRemove.Select(x => x.Key).Concat(Fixture.CreateMany<int>()).ToList();
+        var keys = toRemove.Select(x => x.Key).Concat(Dummy.CreateMany<int>()).ToList();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2330,10 +2331,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysEnumerable_WhenAllKeysAreInCollection_RemoveThemAll()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToList();
@@ -2349,22 +2350,22 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeysEnumerable_WhenAllKeysAreInCollection_TriggerChange()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToList();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2374,10 +2375,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairParams_WhenItemsIsNull_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        KeyValuePair<int, Dummy>[] items = null!;
+        KeyValuePair<int, Garbage>[] items = null!;
 
         //Act
         var action = () => Instance.TryRemove(items);
@@ -2390,10 +2391,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairParams_WhenItemsIsEmpty_DoNotModify()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = Array.Empty<KeyValuePair<int, Dummy>>();
+        var items = Array.Empty<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.TryRemove(items);
@@ -2406,12 +2407,12 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairParams_WhenItemsIsEmpty_DoNotTriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = Array.Empty<KeyValuePair<int, Dummy>>();
+        var items = Array.Empty<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2425,10 +2426,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairParams_WhenItemsIsNotInCollection_DoNotModify()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
 
         //Act
         Instance.TryRemove(items);
@@ -2441,12 +2442,12 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairParams_WhenItemsIsNotInCollection_DoNotTriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2460,13 +2461,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairParams_WhenSomeItemsAreNotInCollection_RemoveThoseThatAre()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.TryRemove(toRemove);
 
-        var items = toRemove.Concat(Fixture.CreateMany<KeyValuePair<int, Dummy>>()).ToArray();
+        var items = toRemove.Concat(Dummy.CreateMany<KeyValuePair<int, Garbage>>()).ToArray();
 
         //Act
         Instance.TryRemove(items);
@@ -2479,20 +2480,20 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairParams_WhenSomeItemsAreNotInCollection_TriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2502,10 +2503,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairParams_WhenAllItemsAreInCollection_RemoveThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
         Instance.Add(toRemove);
 
         //Act
@@ -2519,20 +2520,20 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairParams_WhenAllItemsAreInCollection_TriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2542,10 +2543,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairEnumerable_WhenItemsIsNull_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        IEnumerable<KeyValuePair<int, Dummy>> items = null!;
+        IEnumerable<KeyValuePair<int, Garbage>> items = null!;
 
         //Act
         var action = () => Instance.TryRemove(items);
@@ -2558,10 +2559,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairEnumerable_WhenItemsIsEmpty_DoNotModify()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = new List<KeyValuePair<int, Dummy>>();
+        var items = new List<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.TryRemove(items);
@@ -2574,12 +2575,12 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairEnumerable_WhenItemsIsEmpty_DoNotTriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = new List<KeyValuePair<int, Dummy>>();
+        var items = new List<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2593,10 +2594,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairEnumerable_WhenItemsIsNotInCollection_DoNotModify()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
 
         //Act
         Instance.TryRemove(items);
@@ -2609,12 +2610,12 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairEnumerable_WhenItemsIsNotInCollection_DoNotTriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2628,13 +2629,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairEnumerable_WhenSomeItemsAreNotInCollection_RemoveThoseThatAre()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.TryRemove(toRemove);
 
-        var items = toRemove.Concat(Fixture.CreateMany<KeyValuePair<int, Dummy>>()).ToList();
+        var items = toRemove.Concat(Dummy.CreateMany<KeyValuePair<int, Garbage>>()).ToList();
 
         //Act
         Instance.TryRemove(items);
@@ -2647,20 +2648,20 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairEnumerable_WhenSomeItemsAreNotInCollection_TriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2670,10 +2671,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairEnumerable_WhenAllItemsAreInCollection_RemoveThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         //Act
@@ -2687,20 +2688,20 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void TryRemoveKeyValuePairEnumerable_WhenAllItemsAreInCollection_TriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2710,13 +2711,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyFromDictionary_WhenKeyIsNotInCollection_DoNotModify()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var key = Fixture.Create<int>();
+        var key = Dummy.Create<int>();
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(key);
+        ((IDictionary<int, Garbage>)Instance).Remove(key);
 
         //Assert
         Instance.Should().BeEquivalentTo(content);
@@ -2726,16 +2727,16 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyFromDictionary_WhenKeyIsNotInCollection_DoNotTrigger()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var key = Fixture.Create<int>();
+        var key = Dummy.Create<int>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(key);
+        ((IDictionary<int, Garbage>)Instance).Remove(key);
 
         //Assert
         triggers.Should().BeEmpty();
@@ -2745,13 +2746,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyFromDictionary_WhenKeyIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var key = Fixture.Create<int>();
+        var key = Dummy.Create<int>();
 
         //Act
-        var result = ((IDictionary<int, Dummy>)Instance).Remove(key);
+        var result = ((IDictionary<int, Garbage>)Instance).Remove(key);
 
         //Assert
         result.Should().BeFalse();
@@ -2761,13 +2762,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyFromDictionary_WhenKeyIsInCollection_RemoveAssociatedItem()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         var key = content.GetRandom().Key;
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(key);
+        ((IDictionary<int, Garbage>)Instance).Remove(key);
 
         //Assert
         Instance.Should().BeEquivalentTo(content.Where(x => x.Key != key));
@@ -2777,21 +2778,21 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyFromDictionary_WhenKeyIsInCollection_TriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         var key = content.GetRandom().Key;
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(key);
+        ((IDictionary<int, Garbage>)Instance).Remove(key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { content.Single(x => x.Key == key) } }
+            new() { OldValues = new List<KeyValuePair<int, Garbage>> { content.Single(x => x.Key == key) } }
         });
     }
 
@@ -2799,13 +2800,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyFromDictionary_WhenKeyIsInCollection_ReturnTrue()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         var key = content.GetRandom().Key;
 
         //Act
-        var result = ((IDictionary<int, Dummy>)Instance).Remove(key);
+        var result = ((IDictionary<int, Garbage>)Instance).Remove(key);
 
         //Assert
         result.Should().BeTrue();
@@ -2815,13 +2816,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairFromDictionary_WhenKeyIsNotInCollection_DoNotModify()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(item);
+        ((IDictionary<int, Garbage>)Instance).Remove(item);
 
         //Assert
         Instance.Should().BeEquivalentTo(content);
@@ -2831,16 +2832,16 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairFromDictionary_WhenKeyIsNotInCollection_DoNotTrigger()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(item);
+        ((IDictionary<int, Garbage>)Instance).Remove(item);
 
         //Assert
         triggers.Should().BeEmpty();
@@ -2850,13 +2851,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairFromDictionary_WhenKeyIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
-        var result = ((IDictionary<int, Dummy>)Instance).Remove(item);
+        var result = ((IDictionary<int, Garbage>)Instance).Remove(item);
 
         //Assert
         result.Should().BeFalse();
@@ -2866,13 +2867,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairFromDictionary_WhenKeyIsInCollection_RemoveAssociatedItem()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         var item = content.GetRandom();
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(item);
+        ((IDictionary<int, Garbage>)Instance).Remove(item);
 
         //Assert
         Instance.Should().BeEquivalentTo(content.Where(x => !x.Equals(item)));
@@ -2882,21 +2883,21 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairFromDictionary_WhenKeyIsInCollection_TriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         var item = content.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(item);
+        ((IDictionary<int, Garbage>)Instance).Remove(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { content.Single(x => x.Equals(item)) } }
+            new() { OldValues = new List<KeyValuePair<int, Garbage>> { content.Single(x => x.Equals(item)) } }
         });
     }
 
@@ -2904,13 +2905,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void RemoveKeyValuePairFromDictionary_WhenKeyIsInCollection_ReturnTrue()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
         var item = content.GetRandom();
 
         //Act
-        var result = ((IDictionary<int, Dummy>)Instance).Remove(item);
+        var result = ((IDictionary<int, Garbage>)Instance).Remove(item);
 
         //Assert
         result.Should().BeTrue();
@@ -2932,7 +2933,7 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void ToString_WhenNotEmpty_ReturnTypeAndCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -2946,13 +2947,13 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void CopyTo_Always_CopyToArray()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var array = new KeyValuePair<int, Dummy>[items.Count];
+        var array = new KeyValuePair<int, Garbage>[items.Count];
 
         //Act
-        ((ICollection<KeyValuePair<int, Dummy>>)Instance).CopyTo(array, 0);
+        ((ICollection<KeyValuePair<int, Garbage>>)Instance).CopyTo(array, 0);
 
         //Assert
         array.Should().BeEquivalentTo(items);
@@ -2962,10 +2963,10 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     public void GetHashCode_Always_ReturnFromInternalCollection()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var internalCollection = GetFieldValue<IDictionary<int, Dummy>>("_items")!;
+        var internalCollection = GetFieldValue<IDictionary<int, Garbage>>("_items")!;
 
         //Act
         var result = Instance.GetHashCode();
@@ -2975,8 +2976,5 @@ public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Dummy>
     }
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<ObservableDictionary<int, Dummy>>(Fixture, JsonSerializerOptions);
-
-    [TestMethod]
-    public void Ensure_EnumeratesAllItems() => Ensure.EnumeratesAllItems<ObservableDictionary<int, Dummy>, KeyValuePair<int, Dummy>>(Fixture);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<ObservableDictionary<int, Garbage>>(Dummy, JsonSerializerOptions);
 }

@@ -1,36 +1,34 @@
-﻿namespace Collections.ObservableList.Tests;
+﻿using ToolBX.Dummies;
+
+namespace Collections.ObservableList.Tests;
 
 [TestClass]
-public class ObservableListExtensionsTests
+public class ObservableListExtensionsTests : ToolBX.Collections.UnitTesting.Tester
 {
-    [TestClass]
-    public class ToObservableList : Tester
+    [TestMethod]
+    public void ToObservableList_WhenCollectionIsNull_Throw()
     {
-        [TestMethod]
-        public void WhenCollectionIsNull_Throw()
-        {
-            //Arrange
-            string[] collection = null!;
+        //Arrange
+        string[] collection = null!;
 
-            //Act
-            var action = () => collection.ToObservableList();
+        //Act
+        var action = () => collection.ToObservableList();
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>();
-        }
+        //Assert
+        action.Should().Throw<ArgumentNullException>();
+    }
 
-        [TestMethod]
-        public void WhenCollectionIsNotNull_ReturnObservableList()
-        {
-            //Arrange
-            var collection = Fixture.CreateMany<string>().ToList();
+    [TestMethod]
+    public void ToObservableList_WhenCollectionIsNotNull_ReturnObservableList()
+    {
+        //Arrange
+        var collection = Dummy.CreateMany<string>().ToList();
 
-            //Act
-            var result = collection.ToObservableList();
+        //Act
+        var result = collection.ToObservableList();
 
-            //Assert
-            result.Should().BeOfType<ObservableList<string>>();
-            result.Should().BeEquivalentTo(collection);
-        }
+        //Assert
+        result.Should().BeOfType<ObservableList<string>>();
+        result.Should().BeEquivalentTo(collection);
     }
 }

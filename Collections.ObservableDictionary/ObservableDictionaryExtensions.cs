@@ -2,6 +2,11 @@
 
 public static class ObservableDictionaryExtensions
 {
+    public static ObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<KeyValuePair<TKey, TSource>> source) where TKey : notnull
+    {
+        return new ObservableDictionary<TKey, TSource>(source);
+    }
+
     public static ObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null) where TKey : notnull
     {
         if (source == null) throw new ArgumentNullException(nameof(source));

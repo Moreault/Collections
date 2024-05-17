@@ -1,13 +1,13 @@
 ﻿namespace Collections.ObservableStack.Tests;
 
 [TestClass]
-public sealed class ObservableStackExtensionsTests : Tester
+public sealed class ObservableStackExtensionsTests : ToolBX.Collections.UnitTesting.Tester
 {
     [TestMethod]
     public void ToObservableStack_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> source = null!;
+        IEnumerable<Garbage> source = null!;
 
         //Act
         var action = () => source.ToObservableStack();
@@ -20,7 +20,7 @@ public sealed class ObservableStackExtensionsTests : Tester
     public void ToObservableStack_WhenSourceIsNotNull_ReturnEquivalent()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.ToObservableStack();

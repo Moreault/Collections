@@ -4,7 +4,7 @@ namespace Collections.Grid.Tests;
 public class GridTests
 {
     [TestClass]
-    public class ColumnCount : Tester<Grid<string>>
+    public class ColumnCount : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -22,7 +22,7 @@ public class GridTests
         public void WhenHasOnlyOneItemAtColumnZero_ReturnOne()
         {
             //Arrange
-            Instance[0, Fixture.Create<int>()] = Fixture.Create<string>();
+            Instance[0, Dummy.Create<int>()] = Dummy.Create<string>();
 
             //Act
             var result = Instance.ColumnCount;
@@ -35,7 +35,7 @@ public class GridTests
         public void WhenHasOneItemAtNegativeColumnIndex_ReturnDifferenceBetweenThatAndZero()
         {
             //Arrange
-            Instance[-3, Fixture.Create<int>()] = Fixture.Create<string>();
+            Instance[-3, Dummy.Create<int>()] = Dummy.Create<string>();
 
             //Act
             var result = Instance.ColumnCount;
@@ -48,7 +48,7 @@ public class GridTests
         public void WhenHasOneItemAtColumnIndexGreaterThanZero_ReturnNumberOfColumns()
         {
             //Arrange
-            Instance[5, Fixture.Create<int>()] = Fixture.Create<string>();
+            Instance[5, Dummy.Create<int>()] = Dummy.Create<string>();
 
             //Act
             var result = Instance.ColumnCount;
@@ -61,8 +61,8 @@ public class GridTests
         public void WhenHasOneItemInNegativeColumnIndexAndOneAtPositiveGreaterThanZero_ReturnDifference()
         {
             //Arrange
-            Instance[-3, Fixture.Create<int>()] = Fixture.Create<string>();
-            Instance[5, Fixture.Create<int>()] = Fixture.Create<string>();
+            Instance[-3, Dummy.Create<int>()] = Dummy.Create<string>();
+            Instance[5, Dummy.Create<int>()] = Dummy.Create<string>();
 
             //Act
             var result = Instance.ColumnCount;
@@ -75,10 +75,10 @@ public class GridTests
         public void WhenHasABunchOfColumns_ReturnDifferenceBetweenMinimumAndMaximum()
         {
             //Arrange
-            Instance[-3, Fixture.Create<int>()] = Fixture.Create<string>();
-            Instance[-5, Fixture.Create<int>()] = Fixture.Create<string>();
-            Instance[5, Fixture.Create<int>()] = Fixture.Create<string>();
-            Instance[7, Fixture.Create<int>()] = Fixture.Create<string>();
+            Instance[-3, Dummy.Create<int>()] = Dummy.Create<string>();
+            Instance[-5, Dummy.Create<int>()] = Dummy.Create<string>();
+            Instance[5, Dummy.Create<int>()] = Dummy.Create<string>();
+            Instance[7, Dummy.Create<int>()] = Dummy.Create<string>();
 
             //Act
             var result = Instance.ColumnCount;
@@ -89,7 +89,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class RowCount : Tester<Grid<string>>
+    public class RowCount : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -107,7 +107,7 @@ public class GridTests
         public void WhenHasOnlyOneItemAtRowZero_ReturnOne()
         {
             //Arrange
-            Instance[Fixture.Create<int>(), 0] = Fixture.Create<string>();
+            Instance[Dummy.Create<int>(), 0] = Dummy.Create<string>();
 
             //Act
             var result = Instance.RowCount;
@@ -120,7 +120,7 @@ public class GridTests
         public void WhenHasOneItemAtNegativeRowIndex_ReturnDifferenceBetweenThatAndZero()
         {
             //Arrange
-            Instance[Fixture.Create<int>(), -3] = Fixture.Create<string>();
+            Instance[Dummy.Create<int>(), -3] = Dummy.Create<string>();
 
             //Act
             var result = Instance.RowCount;
@@ -133,7 +133,7 @@ public class GridTests
         public void WhenHasOneItemAtRowIndexGreaterThanZero_ReturnNumberOfRows()
         {
             //Arrange
-            Instance[Fixture.Create<int>(), 5] = Fixture.Create<string>();
+            Instance[Dummy.Create<int>(), 5] = Dummy.Create<string>();
 
             //Act
             var result = Instance.RowCount;
@@ -146,8 +146,8 @@ public class GridTests
         public void WhenHasOneItemInNegativeRowIndexAndOneAtPositiveGreaterThanZero_ReturnDifference()
         {
             //Arrange
-            Instance[Fixture.Create<int>(), -3] = Fixture.Create<string>();
-            Instance[Fixture.Create<int>(), 5] = Fixture.Create<string>();
+            Instance[Dummy.Create<int>(), -3] = Dummy.Create<string>();
+            Instance[Dummy.Create<int>(), 5] = Dummy.Create<string>();
 
             //Act
             var result = Instance.RowCount;
@@ -160,10 +160,10 @@ public class GridTests
         public void WhenHasABunchOfRows_ReturnDifferenceBetweenMinimumAndMaximum()
         {
             //Arrange
-            Instance[Fixture.Create<int>(), -3] = Fixture.Create<string>();
-            Instance[Fixture.Create<int>(), -5] = Fixture.Create<string>();
-            Instance[Fixture.Create<int>(), 5] = Fixture.Create<string>();
-            Instance[Fixture.Create<int>(), 7] = Fixture.Create<string>();
+            Instance[Dummy.Create<int>(), -3] = Dummy.Create<string>();
+            Instance[Dummy.Create<int>(), -5] = Dummy.Create<string>();
+            Instance[Dummy.Create<int>(), 5] = Dummy.Create<string>();
+            Instance[Dummy.Create<int>(), 7] = Dummy.Create<string>();
 
             //Act
             var result = Instance.RowCount;
@@ -174,7 +174,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class FirstColumn : Tester<Grid<Dummy>>
+    public class FirstColumn : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -192,9 +192,9 @@ public class GridTests
         public void WhenOnlyContainsItemsAtColumnZero_ReturnZero()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[0, Fixture.Create<int>()] = item;
+                Instance[0, Dummy.Create<int>()] = item;
 
             //Act
             var result = Instance.FirstColumn;
@@ -207,12 +207,12 @@ public class GridTests
         public void WhenContainsSomethingInTheNegatives_ReturnThatIndex()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[Fixture.Create<int>(), Fixture.Create<int>()] = item;
+                Instance[Dummy.Create<int>(), Dummy.Create<int>()] = item;
 
-            var negativeIndex = -Fixture.Create<int>();
-            Instance[negativeIndex, Fixture.Create<int>()] = Fixture.Create<Dummy>();
+            var negativeIndex = -Dummy.Create<int>();
+            Instance[negativeIndex, Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.FirstColumn;
@@ -225,11 +225,11 @@ public class GridTests
         public void WhenContainsSomethingGreaterThanZero_ReturnThatIndex()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[Fixture.CreateBetween(10, 30), Fixture.Create<int>()] = item;
+                Instance[Dummy.Number.Between(10, 30).Create(), Dummy.Create<int>()] = item;
 
-            Instance[5, Fixture.Create<int>()] = Fixture.Create<Dummy>();
+            Instance[5, Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.FirstColumn;
@@ -240,7 +240,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class LastColumn : Tester<Grid<Dummy>>
+    public class LastColumn : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -258,9 +258,9 @@ public class GridTests
         public void WhenOnlyContainsItemsAtColumnZero_ReturnZero()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[0, Fixture.Create<int>()] = item;
+                Instance[0, Dummy.Create<int>()] = item;
 
             //Act
             var result = Instance.LastColumn;
@@ -273,12 +273,12 @@ public class GridTests
         public void WhenHighestIsSomethingInTheNegatives_ReturnThatIndex()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[-20, Fixture.Create<int>()] = item;
+                Instance[-20, Dummy.Create<int>()] = item;
 
             var negativeIndex = -5;
-            Instance[negativeIndex, Fixture.Create<int>()] = Fixture.Create<Dummy>();
+            Instance[negativeIndex, Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.LastColumn;
@@ -291,11 +291,11 @@ public class GridTests
         public void WhenHighestIsSomethingGreaterThanZero_ReturnThatIndex()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[Fixture.CreateBetween(0, 20), Fixture.Create<int>()] = item;
+                Instance[Dummy.Number.Between(0, 20).Create(), Dummy.Create<int>()] = item;
 
-            Instance[35, Fixture.Create<int>()] = Fixture.Create<Dummy>();
+            Instance[35, Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.LastColumn;
@@ -306,7 +306,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class FirstRow : Tester<Grid<Dummy>>
+    public class FirstRow : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -324,9 +324,9 @@ public class GridTests
         public void WhenOnlyContainsItemsAtRowZero_ReturnZero()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[Fixture.Create<int>(), 0] = item;
+                Instance[Dummy.Create<int>(), 0] = item;
 
             //Act
             var result = Instance.FirstRow;
@@ -339,12 +339,12 @@ public class GridTests
         public void WhenContainsSomethingInTheNegatives_ReturnThatIndex()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[Fixture.Create<int>(), Fixture.Create<int>()] = item;
+                Instance[Dummy.Create<int>(), Dummy.Create<int>()] = item;
 
-            var negativeIndex = -Fixture.Create<int>();
-            Instance[Fixture.Create<int>(), negativeIndex] = Fixture.Create<Dummy>();
+            var negativeIndex = -Dummy.Create<int>();
+            Instance[Dummy.Create<int>(), negativeIndex] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.FirstRow;
@@ -358,11 +358,11 @@ public class GridTests
         public void WhenContainsSomethingGreaterThanZero_ReturnThatIndex()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[Fixture.CreateBetween(10, 30), Fixture.Create<int>()] = item;
+                Instance[Dummy.Number.Between(10, 30).Create(), Dummy.Create<int>()] = item;
 
-            Instance[Fixture.Create<int>(), 5] = Fixture.Create<Dummy>();
+            Instance[Dummy.Create<int>(), 5] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.FirstRow;
@@ -373,7 +373,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class LastRow : Tester<Grid<Dummy>>
+    public class LastRow : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -391,9 +391,9 @@ public class GridTests
         public void WhenOnlyContainsItemsAtRowZero_ReturnZero()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[Fixture.Create<int>(), 0] = item;
+                Instance[Dummy.Create<int>(), 0] = item;
 
             //Act
             var result = Instance.LastRow;
@@ -406,12 +406,12 @@ public class GridTests
         public void WhenHighestIsSomethingInTheNegatives_ReturnThatIndex()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[Fixture.Create<int>(), -15] = item;
+                Instance[Dummy.Create<int>(), -15] = item;
 
             var negativeIndex = -2;
-            Instance[Fixture.Create<int>(), negativeIndex] = Fixture.Create<Dummy>();
+            Instance[Dummy.Create<int>(), negativeIndex] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.LastRow;
@@ -424,11 +424,11 @@ public class GridTests
         public void WhenHighestIsSomethingGreaterThanZero_ReturnThatIndex()
         {
             //Arrange
-            var items = Fixture.CreateMany<Dummy>();
+            var items = Dummy.CreateMany<Garbage>();
             foreach (var item in items)
-                Instance[Fixture.Create<int>(), Fixture.CreateBetween(10, 30)] = item;
+                Instance[Dummy.Create<int>(), Dummy.Number.Between(10, 30).Create()] = item;
 
-            Instance[Fixture.Create<int>(), 35] = Fixture.Create<Dummy>();
+            Instance[Dummy.Create<int>(), 35] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.LastRow;
@@ -439,7 +439,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class Count : Tester<Grid<string>>
+    public class Count : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -457,7 +457,7 @@ public class GridTests
         public void WhenThereIsOneItem_ReturnOne()
         {
             //Arrange
-            Instance[Fixture.Create<int>(), Fixture.Create<int>()] = Fixture.Create<string>();
+            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<string>();
 
             //Act
             var result = Instance.Count;
@@ -470,8 +470,8 @@ public class GridTests
         public void WhenThereAreTwoItemsAtOppositeSidesOfTheGrid_ReturnTwo()
         {
             //Arrange
-            Instance[-10, -10] = Fixture.Create<string>();
-            Instance[10, 10] = Fixture.Create<string>();
+            Instance[-10, -10] = Dummy.Create<string>();
+            Instance[10, 10] = Dummy.Create<string>();
 
             //Act
             var result = Instance.Count;
@@ -484,9 +484,9 @@ public class GridTests
         public void WhenThereIsABunchOfItems_ReturnExactNumberOfItemsRegardlessOfColumnAndRowCount()
         {
             //Arrange
-            Instance[Fixture.Create<int>(), Fixture.Create<int>()] = Fixture.Create<string>();
-            Instance[Fixture.Create<int>(), Fixture.Create<int>()] = Fixture.Create<string>();
-            Instance[Fixture.Create<int>(), Fixture.Create<int>()] = Fixture.Create<string>();
+            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<string>();
+            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<string>();
+            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<string>();
 
             //Act
             var result = Instance.Count;
@@ -497,7 +497,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class Indexer_XY : Tester<Grid<string>>
+    public class Indexer_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenThereIsNothingAtIndex_ReturnDefaultValue()
@@ -515,9 +515,9 @@ public class GridTests
         public void WhenThereIsValueAtIndex_ReturnValue()
         {
             //Arrange
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
-            var value = Fixture.Create<string>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
+            var value = Dummy.Create<string>();
             Instance[x, y] = value;
 
             //Act
@@ -531,9 +531,9 @@ public class GridTests
         public void WhenThereIsNothingAtGivenIndex_AddValueAtIndex()
         {
             //Arrange
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
-            var value = Fixture.Create<string>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
+            var value = Dummy.Create<string>();
 
             //Act
             Instance[x, y] = value;
@@ -546,9 +546,9 @@ public class GridTests
         public void WhenThereIsNothingAtGivenIndex_TriggerOnChange()
         {
             //Arrange
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
-            var value = Fixture.Create<string>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
+            var value = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -567,11 +567,11 @@ public class GridTests
         public void WhenThereIsSomethingAtGivenIndex_ReplaceExistingValueByNewValue()
         {
             //Arrange
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
-            var oldValue = Fixture.Create<string>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
+            var oldValue = Dummy.Create<string>();
             Instance[x, y] = oldValue;
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
             //Act
             Instance[x, y] = newValue;
@@ -585,11 +585,11 @@ public class GridTests
         public void WhenThereIsSomethingAtGivenIndex_TriggerOnChange()
         {
             //Arrange
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
-            var oldValue = Fixture.Create<string>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
+            var oldValue = Dummy.Create<string>();
             Instance[x, y] = oldValue;
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -610,7 +610,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class Indexer_Coordinates : Tester<Grid<string>>
+    public class Indexer_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenThereIsNothingAtIndex_ReturnDefaultValue()
@@ -628,8 +628,8 @@ public class GridTests
         public void WhenThereIsValueAtIndex_ReturnValue()
         {
             //Arrange
-            var coordinates = Fixture.Create<Vector2<int>>();
-            var value = Fixture.Create<string>();
+            var coordinates = Dummy.Create<Vector2<int>>();
+            var value = Dummy.Create<string>();
             Instance[coordinates] = value;
 
             //Act
@@ -643,8 +643,8 @@ public class GridTests
         public void WhenThereIsNothingAtGivenIndex_AddValueAtIndex()
         {
             //Arrange
-            var coordinates = Fixture.Create<Vector2<int>>();
-            var value = Fixture.Create<string>();
+            var coordinates = Dummy.Create<Vector2<int>>();
+            var value = Dummy.Create<string>();
 
             //Act
             Instance[coordinates] = value;
@@ -657,8 +657,8 @@ public class GridTests
         public void WhenThereIsNothingAtGivenIndex_TriggerOnChange()
         {
             //Arrange
-            var coordinates = Fixture.Create<Vector2<int>>();
-            var value = Fixture.Create<string>();
+            var coordinates = Dummy.Create<Vector2<int>>();
+            var value = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -677,10 +677,10 @@ public class GridTests
         public void WhenThereIsSomethingAtGivenIndex_ReplaceExistingValueByNewValue()
         {
             //Arrange
-            var coordinates = Fixture.Create<Vector2<int>>();
-            var oldValue = Fixture.Create<string>();
+            var coordinates = Dummy.Create<Vector2<int>>();
+            var oldValue = Dummy.Create<string>();
             Instance[coordinates] = oldValue;
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
             //Act
             Instance[coordinates] = newValue;
@@ -694,10 +694,10 @@ public class GridTests
         public void WhenThereIsSomethingAtGivenIndex_TriggerOnChange()
         {
             //Arrange
-            var coordinates = Fixture.Create<Vector2<int>>();
-            var oldValue = Fixture.Create<string>();
+            var coordinates = Dummy.Create<Vector2<int>>();
+            var oldValue = Dummy.Create<string>();
             Instance[coordinates] = oldValue;
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -718,13 +718,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class IndexesOf_Item : Tester<Grid<string>>
+    public class IndexesOf_Item : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_ReturnEmpty()
         {
             //Arrange
-            var item = Fixture.Create<string>();
+            var item = Dummy.Create<string>();
 
             //Act
             var result = Instance.IndexesOf(item);
@@ -737,11 +737,11 @@ public class GridTests
         public void WhenThereAreNoOccurences_ReturnEmpty()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>();
+            var cells = Dummy.CreateMany<Cell<string>>();
             foreach (var cell in cells)
                 Instance.Add(cell.Index, cell.Value);
 
-            var item = Fixture.Create<string>();
+            var item = Dummy.Create<string>();
 
             //Act
             var result = Instance.IndexesOf(item);
@@ -754,8 +754,8 @@ public class GridTests
         public void WhenThereIsOnlyOneOccurence_ReturnListWithOnlyThatOneItem()
         {
             //Arrange
-            var item = Fixture.Create<string>();
-            var index = Fixture.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
             Instance[index] = item;
 
             //Act
@@ -769,12 +769,12 @@ public class GridTests
         public void WhenThereAreMultipleOccurences_ReturnAllOccurences()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>();
+            var cells = Dummy.CreateMany<Cell<string>>();
             foreach (var cell in cells)
                 Instance.Add(cell.Index, cell.Value);
 
-            var indexes = Fixture.CreateMany<Vector2<int>>().ToList();
-            var item = Fixture.Create<string>();
+            var indexes = Dummy.CreateMany<Vector2<int>>().ToList();
+            var item = Dummy.Create<string>();
             foreach (var index in indexes)
                 Instance.Add(index, item);
 
@@ -789,7 +789,7 @@ public class GridTests
         public void WhenSeekingNullAndThereAreNoOccurences_ReturnEmpty()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>();
+            var cells = Dummy.CreateMany<Cell<string>>();
             foreach (var cell in cells)
                 Instance.Add(cell.Index, cell.Value);
 
@@ -804,10 +804,10 @@ public class GridTests
         public void WhenSeekingNullAndThereIsOnlyOneOccurence_ReturnListWithOnlyThatOneItem()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
             Instance[index] = null;
 
-            var cells = Fixture.CreateMany<Cell<string>>();
+            var cells = Dummy.CreateMany<Cell<string>>();
             foreach (var cell in cells)
                 Instance.Add(cell.Index, cell.Value);
 
@@ -822,11 +822,11 @@ public class GridTests
         public void WhenSeekingNullAndThereAreMultipleOccurences_ReturnAllOccurences()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>();
+            var cells = Dummy.CreateMany<Cell<string>>();
             foreach (var cell in cells)
                 Instance.Add(cell.Index, cell.Value);
 
-            var indexes = Fixture.CreateMany<Vector2<int>>().ToList();
+            var indexes = Dummy.CreateMany<Vector2<int>>().ToList();
             foreach (var index in indexes)
                 Instance.Add(index, null);
 
@@ -839,13 +839,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class IndexesOf_Predicate : Tester<Grid<string>>
+    public class IndexesOf_Predicate : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenMatchIsNull_Throw()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>();
+            var cells = Dummy.CreateMany<Cell<string>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -874,7 +874,7 @@ public class GridTests
         public void WhenNothingMatches_ReturnEmpty()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>();
+            var cells = Dummy.CreateMany<Cell<string>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -889,7 +889,7 @@ public class GridTests
         public void WhenOneThingMatches_ReturnItsIndex()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>();
+            var cells = Dummy.CreateMany<Cell<string>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -906,12 +906,12 @@ public class GridTests
         public void WhenMultipleThingsMatch_ReturnAllTheIndexes()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>();
+            var cells = Dummy.CreateMany<Cell<string>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var sameValue = Fixture.Create<string>();
-            var sameCells = Fixture.Build<Cell<string>>().With(x => x.Value, sameValue).CreateMany().ToList();
+            var sameValue = Dummy.Create<string>();
+            var sameCells = Dummy.Build<Cell<string>>().With(x => x.Value, sameValue).CreateMany().ToList();
             foreach (var cell in sameCells)
                 Instance[cell.Index] = cell.Value;
 
@@ -926,11 +926,11 @@ public class GridTests
         public void WhenGridContainsNullValues_DoNotThrow()
         {
             //Arrange
-            var indexesOfNulls = Fixture.CreateMany<Vector2<int>>().ToList();
+            var indexesOfNulls = Dummy.CreateMany<Vector2<int>>().ToList();
             foreach (var index in indexesOfNulls)
                 Instance[index] = null;
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -947,11 +947,11 @@ public class GridTests
         public void WhenGridContainsNullValuesAndMatchIsNull_ReturnIndexesOfNullValues()
         {
             //Arrange
-            var indexesOfNulls = Fixture.CreateMany<Vector2<int>>().ToList();
+            var indexesOfNulls = Dummy.CreateMany<Vector2<int>>().ToList();
             foreach (var index in indexesOfNulls)
                 Instance[index] = null;
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -966,7 +966,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class Boundaries : Tester<Grid<Dummy>>
+    public class Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_AllValuesAreZero()
@@ -984,9 +984,9 @@ public class GridTests
         public void WhenGridHasItems_ReturnBoundaries()
         {
             //Arrange
-            Instance[3, 5] = Fixture.Create<Dummy>();
-            Instance[-4, 9] = Fixture.Create<Dummy>();
-            Instance[2, -14] = Fixture.Create<Dummy>();
+            Instance[3, 5] = Dummy.Create<Garbage>();
+            Instance[-4, 9] = Dummy.Create<Garbage>();
+            Instance[2, -14] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.Boundaries;
@@ -1003,16 +1003,16 @@ public class GridTests
     }
 
     [TestClass]
-    public class Constructor_Cells : Tester
+    public class Constructor_Cells : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCollectionIsNull_Throw()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> cells = null!;
+            IEnumerable<Cell<Garbage>> cells = null!;
 
             //Act
-            var action = () => new Grid<Dummy>(cells);
+            var action = () => new Grid<Garbage>(cells);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -1022,10 +1022,10 @@ public class GridTests
         public void WhenCollectionIsEmpty_InstantiateEmptyGrid()
         {
             //Arrange
-            var cells = Array.Empty<Cell<Dummy>>();
+            var cells = Array.Empty<Cell<Garbage>>();
 
             //Act
-            var result = new Grid<Dummy>(cells);
+            var result = new Grid<Garbage>(cells);
 
             //Assert
             result.Should().BeEmpty();
@@ -1035,10 +1035,10 @@ public class GridTests
         public void WhenCollectionIsNotEmpty_InstantiateWithContents()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
             //Act
-            var result = new Grid<Dummy>(cells);
+            var result = new Grid<Garbage>(cells);
 
             //Assert
             result.Should().BeEquivalentTo(cells);
@@ -1046,16 +1046,16 @@ public class GridTests
     }
 
     [TestClass]
-    public class Constructor_KeyValuePairs : Tester
+    public class Constructor_KeyValuePairs : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCollectionIsNull_Throw()
         {
             //Arrange
-            IEnumerable<KeyValuePair<Vector2<int>, Dummy>> pairs = null!;
+            IEnumerable<KeyValuePair<Vector2<int>, Garbage>> pairs = null!;
 
             //Act
-            var action = () => new Grid<Dummy>(pairs);
+            var action = () => new Grid<Garbage>(pairs);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -1065,10 +1065,10 @@ public class GridTests
         public void WhenCollectionIsEmpty_InstantiateEmptyGrid()
         {
             //Arrange
-            var pairs = Array.Empty<KeyValuePair<Vector2<int>, Dummy>>();
+            var pairs = Array.Empty<KeyValuePair<Vector2<int>, Garbage>>();
 
             //Act
-            var result = new Grid<Dummy>(pairs);
+            var result = new Grid<Garbage>(pairs);
 
             //Assert
             result.Should().BeEmpty();
@@ -1078,27 +1078,27 @@ public class GridTests
         public void WhenCollectionIsNotEmpty_InstantiateWithContents()
         {
             //Arrange
-            var pairs = Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
+            var pairs = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
 
             //Act
-            var result = new Grid<Dummy>(pairs);
+            var result = new Grid<Garbage>(pairs);
 
             //Assert
-            result.Should().BeEquivalentTo(pairs.Select(x => new Cell<Dummy>(x.Key, x.Value)));
+            result.Should().BeEquivalentTo(pairs.Select(x => new Cell<Garbage>(x.Key, x.Value)));
         }
     }
 
     [TestClass]
-    public class Constructor_2dArray : Tester
+    public class Constructor_2dArray : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCollectionIsNull_Throw()
         {
             //Arrange
-            Dummy[,] array = null!;
+            Garbage[,] array = null!;
 
             //Act
-            var action = () => new Grid<Dummy>(array);
+            var action = () => new Grid<Garbage>(array);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -1108,10 +1108,10 @@ public class GridTests
         public void WhenCollectionIsEmpty_InstantiateEmptyGrid()
         {
             //Arrange
-            var array = new Dummy[0, 0];
+            var array = new Garbage[0, 0];
 
             //Act
-            var result = new Grid<Dummy>(array);
+            var result = new Grid<Garbage>(array);
 
             //Assert
             result.Should().BeEmpty();
@@ -1121,10 +1121,10 @@ public class GridTests
         public void WhenCollectionIsNotEmpty_InstantiateWithContents()
         {
             //Arrange
-            var array = Fixture.Create<Dummy[,]>();
+            var array = Dummy.Create<Garbage[,]>();
 
             //Act
-            var result = new Grid<Dummy>(array);
+            var result = new Grid<Garbage>(array);
 
             //Assert
             result.Should().BeEquivalentTo(array.ToGrid());
@@ -1132,16 +1132,16 @@ public class GridTests
     }
 
     [TestClass]
-    public class Constructor_JaggedArray : Tester
+    public class Constructor_JaggedArray : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCollectionIsNull_Throw()
         {
             //Arrange
-            Dummy[][] array = null!;
+            Garbage[][] array = null!;
 
             //Act
-            var action = () => new Grid<Dummy>(array);
+            var action = () => new Grid<Garbage>(array);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -1151,10 +1151,10 @@ public class GridTests
         public void WhenCollectionIsEmpty_InstantiateEmptyGrid()
         {
             //Arrange
-            var array = Array.Empty<Dummy[]>();
+            var array = Array.Empty<Garbage[]>();
 
             //Act
-            var result = new Grid<Dummy>(array);
+            var result = new Grid<Garbage>(array);
 
             //Assert
             result.Should().BeEmpty();
@@ -1164,10 +1164,10 @@ public class GridTests
         public void WhenCollectionIsNotEmpty_InstantiateWithContents()
         {
             //Arrange
-            var array = Fixture.Create<Dummy[][]>();
+            var array = Dummy.Create<Garbage[][]>();
 
             //Act
-            var result = new Grid<Dummy>(array);
+            var result = new Grid<Garbage>(array);
 
             //Assert
             result.Should().BeEquivalentTo(array.ToGrid());
@@ -1175,14 +1175,14 @@ public class GridTests
     }
 
     [TestClass]
-    public class Add_XY : Tester<Grid<string>>
+    public class Add_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenIndexIsNegative_AddAtIndex()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<string>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.Add(index.X, index.Y, item);
@@ -1195,8 +1195,8 @@ public class GridTests
         public void WhenIndexIsNegative_TriggerEvent()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<string>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1215,8 +1215,8 @@ public class GridTests
         public void WhenIndexIsPositive_AddAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.Add(index.X, index.Y, item);
@@ -1229,8 +1229,8 @@ public class GridTests
         public void WhenIndexIsPositive_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1249,7 +1249,7 @@ public class GridTests
         public void WhenItemIsNull_AddNullAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Add(index.X, index.Y, null);
@@ -1262,7 +1262,7 @@ public class GridTests
         public void WhenItemIsNull_DoNotTriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1285,9 +1285,9 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
-            Instance.Add(index.X, index.Y, Fixture.Create<string>());
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
+            Instance.Add(index.X, index.Y, Dummy.Create<string>());
 
             //Act
             var action = () => Instance.Add(index.X, index.Y, item);
@@ -1300,8 +1300,8 @@ public class GridTests
         public void WhenAddingNullAtExistingIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance.Add(index.X, index.Y, Fixture.Create<string>());
+            var index = Dummy.Create<Vector2<int>>();
+            Instance.Add(index.X, index.Y, Dummy.Create<string>());
 
             //Act
             var action = () => Instance.Add(index.X, index.Y, null);
@@ -1314,14 +1314,14 @@ public class GridTests
     }
 
     [TestClass]
-    public class Add_Coordinates : Tester<Grid<string>>
+    public class Add_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenIndexIsNegative_AddAtIndex()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<string>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.Add(index, item);
@@ -1334,8 +1334,8 @@ public class GridTests
         public void WhenIndexIsNegative_TriggerEvent()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<string>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1354,8 +1354,8 @@ public class GridTests
         public void WhenIndexIsPositive_AddAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.Add(index, item);
@@ -1368,8 +1368,8 @@ public class GridTests
         public void WhenIndexIsPositive_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1388,7 +1388,7 @@ public class GridTests
         public void WhenItemIsNull_AddNullAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Add(index, null);
@@ -1401,7 +1401,7 @@ public class GridTests
         public void WhenItemIsNullButInNewCell_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1424,9 +1424,9 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
-            Instance.Add(index.X, index.Y, Fixture.Create<string>());
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
+            Instance.Add(index.X, index.Y, Dummy.Create<string>());
 
             //Act
             var action = () => Instance.Add(index, item);
@@ -1439,8 +1439,8 @@ public class GridTests
         public void WhenAddingNullAtExistingIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance.Add(index.X, index.Y, Fixture.Create<string>());
+            var index = Dummy.Create<Vector2<int>>();
+            Instance.Add(index.X, index.Y, Dummy.Create<string>());
 
             //Act
             var action = () => Instance.Add(index, null);
@@ -1451,14 +1451,14 @@ public class GridTests
     }
 
     [TestClass]
-    public class Add_ValueType : Tester<Grid<bool>>
+    public class Add_ValueType : ToolBX.Collections.UnitTesting.Tester<Grid<bool>>
     {
         [TestMethod]
         public void WhenIndexIsNegative_AddAtIndex()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<bool>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<bool>();
 
             //Act
             Instance.Add(index.X, index.Y, item);
@@ -1471,8 +1471,8 @@ public class GridTests
         public void WhenIndexIsNegative_TriggerEvent()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<bool>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<bool>();
 
             var eventArgs = new List<GridChangedEventArgs<bool>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1491,8 +1491,8 @@ public class GridTests
         public void WhenIndexIsPositive_AddAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<bool>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<bool>();
 
             //Act
             Instance.Add(index.X, index.Y, item);
@@ -1505,8 +1505,8 @@ public class GridTests
         public void WhenIndexIsPositive_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<bool>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<bool>();
 
             var eventArgs = new List<GridChangedEventArgs<bool>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1525,7 +1525,7 @@ public class GridTests
         public void WhenItemIsDefaultValue_AddDefaultValueAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Add(index.X, index.Y, default);
@@ -1538,7 +1538,7 @@ public class GridTests
         public void WhenItemIsDefaultValue_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<bool>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1561,9 +1561,9 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<bool>();
-            Instance.Add(index.X, index.Y, Fixture.Create<bool>());
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<bool>();
+            Instance.Add(index.X, index.Y, Dummy.Create<bool>());
 
             //Act
             var action = () => Instance.Add(index.X, index.Y, item);
@@ -1576,7 +1576,7 @@ public class GridTests
         public void WhenAddingNegativeIndexWithDefaultValue_UpdateFirstRow()
         {
             //Arrange
-            var index = -Fixture.Create<Vector2<int>>();
+            var index = -Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Add(index, default);
@@ -1589,7 +1589,7 @@ public class GridTests
         public void WhenAddingNegativeIndexWithDefaultValue_UpdateFirstColumn()
         {
             //Arrange
-            var index = -Fixture.Create<Vector2<int>>();
+            var index = -Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Add(index, default);
@@ -1600,14 +1600,14 @@ public class GridTests
     }
 
     [TestClass]
-    public class TryAdd_XY : Tester<Grid<string>>
+    public class TryAdd_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenIndexIsNegative_AddAtIndex()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<string>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.TryAdd(index.X, index.Y, item);
@@ -1620,8 +1620,8 @@ public class GridTests
         public void WhenIndexIsNegative_TriggerEvent()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<string>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1640,8 +1640,8 @@ public class GridTests
         public void WhenIndexIsPositive_AddAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.TryAdd(index.X, index.Y, item);
@@ -1654,8 +1654,8 @@ public class GridTests
         public void WhenIndexIsPositive_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1674,7 +1674,7 @@ public class GridTests
         public void WhenItemIsNull_AddNullAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.TryAdd(index.X, index.Y, null);
@@ -1687,7 +1687,7 @@ public class GridTests
         public void WhenItemIsNull_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1710,10 +1710,10 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtIndex_DoNotReplace()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
-            var originalItem = Fixture.Create<string>();
+            var originalItem = Dummy.Create<string>();
             Instance.Add(index.X, index.Y, originalItem);
 
             //Act
@@ -1727,9 +1727,9 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
-            Instance.Add(index.X, index.Y, Fixture.Create<string>());
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
+            Instance.Add(index.X, index.Y, Dummy.Create<string>());
 
             //Act
             var action = () => Instance.TryAdd(index.X, index.Y, item);
@@ -1742,8 +1742,8 @@ public class GridTests
         public void WhenAddingNullAtExistingIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance.Add(index.X, index.Y, Fixture.Create<string>());
+            var index = Dummy.Create<Vector2<int>>();
+            Instance.Add(index.X, index.Y, Dummy.Create<string>());
 
             //Act
             var action = () => Instance.TryAdd(index.X, index.Y, null);
@@ -1756,8 +1756,8 @@ public class GridTests
         public void WhenAddingNullAtExistingIndex_DoNotReplace()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var originalItem = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var originalItem = Dummy.Create<string>();
             Instance.Add(index.X, index.Y, originalItem);
 
             //Act
@@ -1769,14 +1769,14 @@ public class GridTests
     }
 
     [TestClass]
-    public class TryAdd_Coordinates : Tester<Grid<string>>
+    public class TryAdd_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenIndexIsNegative_AddAtIndex()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<string>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.TryAdd(index, item);
@@ -1789,8 +1789,8 @@ public class GridTests
         public void WhenIndexIsNegative_TriggerEvent()
         {
             //Arrange
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
-            var item = Fixture.Create<string>();
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+            var item = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1809,8 +1809,8 @@ public class GridTests
         public void WhenIndexIsPositive_AddAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.TryAdd(index, item);
@@ -1823,8 +1823,8 @@ public class GridTests
         public void WhenIndexIsPositive_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1843,7 +1843,7 @@ public class GridTests
         public void WhenItemIsNull_AddNullAtIndex()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.TryAdd(index, null);
@@ -1856,7 +1856,7 @@ public class GridTests
         public void WhenItemIsNull_TriggerEvent()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -1879,10 +1879,10 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtIndex_DoNotReplace()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
 
-            var originalItem = Fixture.Create<string>();
+            var originalItem = Dummy.Create<string>();
             Instance.Add(index.X, index.Y, originalItem);
 
             //Act
@@ -1896,9 +1896,9 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
-            Instance.Add(index.X, index.Y, Fixture.Create<string>());
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
+            Instance.Add(index.X, index.Y, Dummy.Create<string>());
 
             //Act
             var action = () => Instance.TryAdd(index, item);
@@ -1911,8 +1911,8 @@ public class GridTests
         public void WhenAddingNullAtExistingIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance.Add(index.X, index.Y, Fixture.Create<string>());
+            var index = Dummy.Create<Vector2<int>>();
+            Instance.Add(index.X, index.Y, Dummy.Create<string>());
 
             //Act
             var action = () => Instance.TryAdd(index, null);
@@ -1925,8 +1925,8 @@ public class GridTests
         public void WhenAddingNullAtExistingIndex_DoNotReplace()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var originalItem = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var originalItem = Dummy.Create<string>();
             Instance.Add(index.X, index.Y, originalItem);
 
             //Act
@@ -1938,13 +1938,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Add_Cells_Params : Tester<Grid<Dummy>>
+    public class Add_Cells_Params : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenCellsIsEmpty_DoNotModify()
         {
             //Arrange
-            var cells = Array.Empty<Cell<Dummy>>();
+            var cells = Array.Empty<Cell<Garbage>>();
             var copy = Instance.Copy();
 
             //Act
@@ -1958,7 +1958,7 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(cells);
 
             //Act
@@ -1972,7 +1972,7 @@ public class GridTests
         public void WhenAddingToNewCoordinates_Add()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
 
             //Act
             Instance.Add(cells);
@@ -1985,16 +1985,16 @@ public class GridTests
         public void WhenAddingToNewCoordinates_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
 
-            var triggered = new List<GridChangedEventArgs<Dummy>>();
+            var triggered = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => triggered.Add(args);
 
             //Act
             Instance.Add(cells);
 
             //Assert
-            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new(){NewValues = cells}
             });
@@ -2002,13 +2002,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Add_Cells_Enumerable : Tester<Grid<Dummy>>
+    public class Add_Cells_Enumerable : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenCellsIsNull_Throw()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> cells = null!;
+            IEnumerable<Cell<Garbage>> cells = null!;
 
             //Act
             var action = () => Instance.Add(cells);
@@ -2021,7 +2021,7 @@ public class GridTests
         public void WhenCellsIsEmpty_DoNotModify()
         {
             //Arrange
-            var cells = new List<Cell<Dummy>>();
+            var cells = new List<Cell<Garbage>>();
             var copy = Instance.Copy();
 
             //Act
@@ -2035,7 +2035,7 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtCoordinates_Throw()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(cells);
 
             //Act
@@ -2049,7 +2049,7 @@ public class GridTests
         public void WhenAddingToNewCoordinates_Add()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
             //Act
             Instance.Add(cells);
@@ -2062,16 +2062,16 @@ public class GridTests
         public void WhenAddingToNewCoordinates_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
-            var triggered = new List<GridChangedEventArgs<Dummy>>();
+            var triggered = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => triggered.Add(args);
 
             //Act
             Instance.Add(cells);
 
             //Assert
-            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new(){NewValues = cells}
             });
@@ -2079,13 +2079,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class TryAdd_Cells_Params : Tester<Grid<Dummy>>
+    public class TryAdd_Cells_Params : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenCellsIsNull_DoNotThrow()
         {
             //Arrange
-            Cell<Dummy>[] cells = null!;
+            Cell<Garbage>[] cells = null!;
 
             //Act
             var action = () => Instance.TryAdd(cells);
@@ -2098,7 +2098,7 @@ public class GridTests
         public void WhenCellsIsEmpty_DoNotModify()
         {
             //Arrange
-            var cells = Array.Empty<Cell<Dummy>>();
+            var cells = Array.Empty<Cell<Garbage>>();
             var copy = Instance.Copy();
 
             //Act
@@ -2112,10 +2112,10 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
         {
             //Arrange
-            var alreadyThereCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(alreadyThereCells);
 
-            var newCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             var cells = alreadyThereCells.Concat(newCells).ToArray();
 
             //Act
@@ -2129,10 +2129,10 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtCoordinates_StillAddThoseThatAreNotAlreadyIn()
         {
             //Arrange
-            var alreadyThereCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(alreadyThereCells);
 
-            var newCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             var cells = alreadyThereCells.Concat(newCells).ToArray();
 
             //Act
@@ -2146,7 +2146,7 @@ public class GridTests
         public void WhenAddingToNewCoordinates_Add()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
 
             //Act
             Instance.TryAdd(cells);
@@ -2159,16 +2159,16 @@ public class GridTests
         public void WhenAddingToNewCoordinates_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
 
-            var triggered = new List<GridChangedEventArgs<Dummy>>();
+            var triggered = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => triggered.Add(args);
 
             //Act
             Instance.TryAdd(cells);
 
             //Assert
-            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new(){NewValues = cells}
             });
@@ -2176,13 +2176,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class TryAdd_Cells_Enumerable : Tester<Grid<Dummy>>
+    public class TryAdd_Cells_Enumerable : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenCellsIsNull_DoNotThrow()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> cells = null!;
+            IEnumerable<Cell<Garbage>> cells = null!;
 
             //Act
             var action = () => Instance.TryAdd(cells);
@@ -2195,7 +2195,7 @@ public class GridTests
         public void WhenCellsIsEmpty_DoNotModify()
         {
             //Arrange
-            var cells = new List<Cell<Dummy>>();
+            var cells = new List<Cell<Garbage>>();
             var copy = Instance.Copy();
 
             //Act
@@ -2209,10 +2209,10 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
         {
             //Arrange
-            var alreadyThereCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(alreadyThereCells);
 
-            var newCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             var cells = alreadyThereCells.Concat(newCells).ToList();
 
             //Act
@@ -2226,10 +2226,10 @@ public class GridTests
         public void WhenThereIsAlreadySomethingAtCoordinates_StillAddThoseThatAreNotAlreadyIn()
         {
             //Arrange
-            var alreadyThereCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(alreadyThereCells);
 
-            var newCells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             var cells = alreadyThereCells.Concat(newCells).ToList();
 
             //Act
@@ -2243,7 +2243,7 @@ public class GridTests
         public void WhenAddingToNewCoordinates_Add()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
             //Act
             Instance.TryAdd(cells);
@@ -2256,16 +2256,16 @@ public class GridTests
         public void WhenAddingToNewCoordinates_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
-            var triggered = new List<GridChangedEventArgs<Dummy>>();
+            var triggered = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => triggered.Add(args);
 
             //Act
             Instance.TryAdd(cells);
 
             //Assert
-            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new(){NewValues = cells}
             });
@@ -2273,13 +2273,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class RemoveAt_XY : Tester<Grid<string>>
+    public class RemoveAt_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenThereIsNoItemAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.RemoveAt(index.X, index.Y);
@@ -2292,8 +2292,8 @@ public class GridTests
         public void WhenThereIsItemAtIndex_RemoveItem()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance[index] = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            Instance[index] = Dummy.Create<string>();
 
             //Act
             Instance.RemoveAt(index.X, index.Y);
@@ -2306,8 +2306,8 @@ public class GridTests
         public void WhenThereIsItemAtIndex_TriggerChange()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
             Instance[index] = item;
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -2322,13 +2322,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class TryRemoveAt_XY : Tester<Grid<string>>
+    public class TryRemoveAt_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenThereIsNoItemAtIndex_DoNotThrow()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.TryRemoveAt(index.X, index.Y);
@@ -2341,8 +2341,8 @@ public class GridTests
         public void WhenThereIsItemAtIndex_RemoveItem()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance[index] = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            Instance[index] = Dummy.Create<string>();
 
             //Act
             Instance.TryRemoveAt(index.X, index.Y);
@@ -2355,8 +2355,8 @@ public class GridTests
         public void WhenThereIsItemAtIndex_TriggerChange()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
             Instance[index] = item;
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -2371,13 +2371,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class RemoveAt_Coordinates : Tester<Grid<string>>
+    public class RemoveAt_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenThereIsNoItemAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.RemoveAt(index);
@@ -2390,8 +2390,8 @@ public class GridTests
         public void WhenThereIsItemAtIndex_RemoveItem()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance[index] = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            Instance[index] = Dummy.Create<string>();
 
             //Act
             Instance.RemoveAt(index);
@@ -2404,8 +2404,8 @@ public class GridTests
         public void WhenThereIsItemAtIndex_TriggerChange()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
             Instance[index] = item;
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -2420,13 +2420,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class TryRemoveAt_Coordinates : Tester<Grid<string>>
+    public class TryRemoveAt_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenThereIsNoItemAtIndex_Throw()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.TryRemoveAt(index);
@@ -2439,8 +2439,8 @@ public class GridTests
         public void WhenThereIsItemAtIndex_RemoveItem()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance[index] = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            Instance[index] = Dummy.Create<string>();
 
             //Act
             Instance.TryRemoveAt(index);
@@ -2453,8 +2453,8 @@ public class GridTests
         public void WhenThereIsItemAtIndex_TriggerChange()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<string>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<string>();
             Instance[index] = item;
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
@@ -2469,17 +2469,17 @@ public class GridTests
     }
 
     [TestClass]
-    public class RemoveAll_Item : Tester<Grid<string>>
+    public class RemoveAll_Item : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenItemIsNull_RemoveAllKeysThatPointToNullReferences()
         {
             //Arrange
-            var keys = Fixture.CreateMany<Vector2<int>>().ToList();
+            var keys = Dummy.CreateMany<Vector2<int>>().ToList();
             foreach (var key in keys)
                 Instance[key] = null;
 
-            var nonNullEntries = Fixture.CreateMany<Cell<string>>().ToList();
+            var nonNullEntries = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var entry in nonNullEntries)
                 Instance[entry.Index] = entry.Value;
 
@@ -2494,11 +2494,11 @@ public class GridTests
         public void WhenItemIsNull_DoNotRemoveNonNullReferences()
         {
             //Arrange
-            var keys = Fixture.CreateMany<Vector2<int>>().ToList();
+            var keys = Dummy.CreateMany<Vector2<int>>().ToList();
             foreach (var key in keys)
                 Instance[key] = null;
 
-            var nonNullEntries = Fixture.CreateMany<Cell<string>>().ToList();
+            var nonNullEntries = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var entry in nonNullEntries)
                 Instance[entry.Index] = entry.Value;
 
@@ -2513,11 +2513,11 @@ public class GridTests
         public void WhenItemIsNull_TriggerEvent()
         {
             //Arrange
-            var keys = Fixture.CreateMany<Vector2<int>>().ToList();
+            var keys = Dummy.CreateMany<Vector2<int>>().ToList();
             foreach (var key in keys)
                 Instance[key] = null;
 
-            var nonNullEntries = Fixture.CreateMany<Cell<string>>().ToList();
+            var nonNullEntries = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var entry in nonNullEntries)
                 Instance[entry.Index] = entry.Value;
 
@@ -2541,13 +2541,13 @@ public class GridTests
         public void WhenThereIsNoOccurenceOfItemInGrid_DoNotModifyCollection()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<string>>().ToList();
+            var entries = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
             var copy = Instance.Copy();
 
-            var item = Fixture.Create<string>();
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.RemoveAll(item);
@@ -2560,14 +2560,14 @@ public class GridTests
         public void WhenThereIsNoOccurenceOfItemInGrid_DoNotTriggerEvent()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<string>>().ToList();
+            var entries = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
             var eventArgs = new List<GridChangedEventArgs<string>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            var item = Fixture.Create<string>();
+            var item = Dummy.Create<string>();
 
             //Act
             Instance.RemoveAll(item);
@@ -2580,12 +2580,12 @@ public class GridTests
         public void WhenThereAreOccurencesOfItemInGrid_RemoveAllThoseOccurences()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<string>>().ToList();
+            var entries = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var item = Fixture.Create<string>();
-            var keys = Fixture.CreateMany<Vector2<int>>();
+            var item = Dummy.Create<string>();
+            var keys = Dummy.CreateMany<Vector2<int>>();
             foreach (var key in keys)
                 Instance[key] = item;
 
@@ -2600,12 +2600,12 @@ public class GridTests
         public void WhenThereAreOccurencesOfItemInGrid_TriggerEvent()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<string>>().ToList();
+            var entries = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var item = Fixture.Create<string>();
-            var keys = Fixture.CreateMany<Vector2<int>>().ToList();
+            var item = Dummy.Create<string>();
+            var keys = Dummy.CreateMany<Vector2<int>>().ToList();
             foreach (var key in keys)
                 Instance[key] = item;
 
@@ -2627,13 +2627,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class RemoveAll_Predicate : Tester<Grid<Dummy>>
+    public class RemoveAll_Predicate : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenMatchIsNull_Throw()
         {
             //Arrange
-            Func<Dummy?, bool> match = null!;
+            Func<Garbage?, bool> match = null!;
 
             //Act
             var action = () => Instance.RemoveAll(match);
@@ -2646,7 +2646,7 @@ public class GridTests
         public void WhenNoItemsMatch_DoNotModifyGrid()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
@@ -2663,11 +2663,11 @@ public class GridTests
         public void WhenNoItemsMatch_DoNotTriggerEvent()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -2681,13 +2681,13 @@ public class GridTests
         public void WhenItemsMatch_RemoveThoseItems()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var value = Fixture.Create<string>();
-            var dummies = Fixture.Build<Dummy>().With(x => x.Value, value).CreateMany();
-            var items = dummies.Select(x => new Cell<Dummy>(Fixture.Create<Vector2<int>>(), x)).ToList();
+            var value = Dummy.Create<string>();
+            var dummies = Dummy.Build<Garbage>().With(x => x.Value, value).CreateMany();
+            var items = dummies.Select(x => new Cell<Garbage>(Dummy.Create<Vector2<int>>(), x)).ToList();
             foreach (var item in items)
                 Instance[item.Index] = item.Value;
 
@@ -2695,31 +2695,31 @@ public class GridTests
             Instance.RemoveAll(x => x.Value == value);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>(entries));
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>(entries));
         }
 
         [TestMethod]
         public void WhenItemsMatch_TriggerEvent()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var value = Fixture.Create<string>();
-            var dummies = Fixture.Build<Dummy>().With(x => x.Value, value).CreateMany();
-            var items = dummies.Select(x => new Cell<Dummy>(Fixture.Create<Vector2<int>>(), x)).ToList();
+            var value = Dummy.Create<string>();
+            var dummies = Dummy.Build<Garbage>().With(x => x.Value, value).CreateMany();
+            var items = dummies.Select(x => new Cell<Garbage>(Dummy.Create<Vector2<int>>(), x)).ToList();
             foreach (var item in items)
                 Instance[item.Index] = item.Value;
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.RemoveAll(x => x.Value == value);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -2730,18 +2730,18 @@ public class GridTests
     }
 
     [TestClass]
-    public class Contains_Coordinates_Item : Tester<Grid<Dummy>>
+    public class Contains_Coordinates_Item : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenThereIsItemAtIndex_ReturnTrue()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<Dummy>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<Garbage>();
             Instance[index] = item;
 
             //Act
@@ -2755,13 +2755,13 @@ public class GridTests
         public void WhenSomethingElseIsAtIndex_ReturnFalse()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<Dummy>();
-            Instance[index] = Fixture.Create<Dummy>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<Garbage>();
+            Instance[index] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.Contains(index, item);
@@ -2774,11 +2774,11 @@ public class GridTests
         public void WhenItemIsSomewhereInGridButNotAtIndex_ReturnFalse()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
             var item = entries.GetRandom().Value;
 
             //Act
@@ -2792,11 +2792,11 @@ public class GridTests
         public void WhenThereIsNothingAtIndexAndItemIsNull_ReturnTrue()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index, null);
@@ -2809,7 +2809,7 @@ public class GridTests
         public void WhenThereIsSomethingAtIndexAndItemIsNull_ReturnFalse()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
@@ -2825,18 +2825,18 @@ public class GridTests
     }
 
     [TestClass]
-    public class Contains_XY_Item : Tester<Grid<Dummy>>
+    public class Contains_XY_Item : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenThereIsItemAtIndex_ReturnTrue()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<Dummy>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<Garbage>();
             Instance[index] = item;
 
             //Act
@@ -2850,13 +2850,13 @@ public class GridTests
         public void WhenSomethingElseIsAtIndex_ReturnFalse()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Vector2<int>>();
-            var item = Fixture.Create<Dummy>();
-            Instance[index] = Fixture.Create<Dummy>();
+            var index = Dummy.Create<Vector2<int>>();
+            var item = Dummy.Create<Garbage>();
+            Instance[index] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.Contains(index.X, index.Y, item);
@@ -2869,11 +2869,11 @@ public class GridTests
         public void WhenItemIsSomewhereInGridButNotAtIndex_ReturnFalse()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
             var item = entries.GetRandom().Value;
 
             //Act
@@ -2887,11 +2887,11 @@ public class GridTests
         public void WhenThereIsNothingAtIndexAndItemIsNull_ReturnTrue()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index.X, index.Y, null);
@@ -2904,7 +2904,7 @@ public class GridTests
         public void WhenThereIsSomethingAtIndexAndItemIsNull_ReturnFalse()
         {
             //Arrange
-            var entries = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var entry in entries)
                 Instance[entry.Index] = entry.Value;
 
@@ -2920,7 +2920,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class Contains_Item : Tester<Grid<Dummy>>
+    public class Contains_Item : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenGridIsEmptyAndSeekingNull_ReturnFalse()
@@ -2938,7 +2938,7 @@ public class GridTests
         public void WhenGridIsEmptyAndSeekingSomething_ReturnFalse()
         {
             //Arrange
-            var item = Fixture.Create<Dummy>();
+            var item = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.Contains(item);
@@ -2951,7 +2951,7 @@ public class GridTests
         public void WhenThereIsAtLeastOneNullValueSomewhereAndSeekingNull_ReturnTrue()
         {
             //Arrange
-            var indexes = Fixture.CreateMany<Vector2<int>>().ToList();
+            var indexes = Dummy.CreateMany<Vector2<int>>().ToList();
             foreach (var index in indexes)
                 Instance[index] = null;
 
@@ -2966,7 +2966,7 @@ public class GridTests
         public void WhenThereAreNoNullValuesAndSeekingNull_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -2981,7 +2981,7 @@ public class GridTests
         public void WhenThereIsAtLeastOneOccurenceOfItemInGrid_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -2994,13 +2994,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Contains_XY : Tester<Grid<Dummy>>
+    public class Contains_XY : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_ReturnFalse()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index.X, index.Y);
@@ -3013,7 +3013,7 @@ public class GridTests
         public void WhenThereWasSomethingThereButItWasRemoved_ReturnFalse()
         {
             //Arrange
-            var cell = Fixture.Create<Cell<Dummy>>();
+            var cell = Dummy.Create<Cell<Garbage>>();
             Instance[cell.Index] = cell.Value;
 
             Instance.RemoveAt(cell.Index);
@@ -3029,7 +3029,7 @@ public class GridTests
         public void WhenThereIsSomethingAtIndex_ReturnTrue()
         {
             //Arrange
-            var cell = Fixture.Create<Cell<Dummy>>();
+            var cell = Dummy.Create<Cell<Garbage>>();
             Instance[cell.Index] = cell.Value;
 
             //Act
@@ -3043,7 +3043,7 @@ public class GridTests
         public void WhenThereIsNullAtIndex_ReturnTrue()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
             Instance[index] = null;
 
             //Act
@@ -3055,13 +3055,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Contains_Coordinates : Tester<Grid<Dummy>>
+    public class Contains_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_ReturnFalse()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index);
@@ -3074,7 +3074,7 @@ public class GridTests
         public void WhenThereWasSomethingThereButItWasRemoved_ReturnFalse()
         {
             //Arrange
-            var cell = Fixture.Create<Cell<Dummy>>();
+            var cell = Dummy.Create<Cell<Garbage>>();
             Instance[cell.Index] = cell.Value;
 
             Instance.RemoveAt(cell.Index);
@@ -3090,7 +3090,7 @@ public class GridTests
         public void WhenThereIsSomethingAtIndex_ReturnTrue()
         {
             //Arrange
-            var cell = Fixture.Create<Cell<Dummy>>();
+            var cell = Dummy.Create<Cell<Garbage>>();
             Instance[cell.Index] = cell.Value;
 
             //Act
@@ -3104,7 +3104,7 @@ public class GridTests
         public void WhenThereIsNullAtIndex_ReturnTrue()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
             Instance[index] = null;
 
             //Act
@@ -3116,16 +3116,16 @@ public class GridTests
     }
 
     [TestClass]
-    public class FloodFill_XY_NewValue : Tester<Grid<string>>
+    public class FloodFill_XY_NewValue : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
         {
             //Arrange
             var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -3142,11 +3142,11 @@ public class GridTests
         public void WhenTryingToFillOutsideBoundaries_DoNotTriggerChange()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -3438,16 +3438,16 @@ public class GridTests
     }
 
     [TestClass]
-    public class FloodFill_Coordinates_NewValue : Tester<Grid<string>>
+    public class FloodFill_Coordinates_NewValue : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
         {
             //Arrange
             var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -3464,11 +3464,11 @@ public class GridTests
         public void WhenTryingToFillOutsideBoundaries_DoNotTriggerChange()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -3760,17 +3760,17 @@ public class GridTests
     }
 
     [TestClass]
-    public class FloodFill_XY_NewValue_Boundaries : Tester<Grid<string>>
+    public class FloodFill_XY_NewValue_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -3787,11 +3787,11 @@ public class GridTests
         public void WhenTryingToFillOutsideBoundaries_DoNotTriggerChange()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -4165,17 +4165,17 @@ public class GridTests
     }
 
     [TestClass]
-    public class FloodFill_Coordinates_NewValue_Boundaries : Tester<Grid<string>>
+    public class FloodFill_Coordinates_NewValue_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -4192,11 +4192,11 @@ public class GridTests
         public void WhenTryingToFillOutsideBoundaries_DoNotTriggerChange()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
-            var newValue = Fixture.Create<string>();
+            var newValue = Dummy.Create<string>();
 
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -4570,7 +4570,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class FloodClear_XY : Tester<Grid<int>>
+    public class FloodClear_XY : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_DoNotModify()
@@ -4578,7 +4578,7 @@ public class GridTests
             //Arrange
 
             //Act
-            Instance.FloodClear(Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.FloodClear(Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -4592,7 +4592,7 @@ public class GridTests
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.FloodClear(Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -4602,7 +4602,7 @@ public class GridTests
         public void WhenTryingToClearOutsideBoundaries_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -4619,7 +4619,7 @@ public class GridTests
         public void WhenTryingToClearOutsideBoundaries_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -4763,7 +4763,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class FloodClear_Coordinates : Tester<Grid<int>>
+    public class FloodClear_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_DoNotModify()
@@ -4771,7 +4771,7 @@ public class GridTests
             //Arrange
 
             //Act
-            Instance.FloodClear(Fixture.Create<Vector2<int>>());
+            Instance.FloodClear(Dummy.Create<Vector2<int>>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -4785,7 +4785,7 @@ public class GridTests
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(Fixture.Create<Vector2<int>>());
+            Instance.FloodClear(Dummy.Create<Vector2<int>>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -4795,7 +4795,7 @@ public class GridTests
         public void WhenTryingToClearOutsideBoundaries_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -4814,7 +4814,7 @@ public class GridTests
         public void WhenTryingToClearOutsideBoundaries_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -4960,7 +4960,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class FloodClear_XY_Boundaries : Tester<Grid<int>>
+    public class FloodClear_XY_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_DoNotModify()
@@ -4968,7 +4968,7 @@ public class GridTests
             //Arrange
 
             //Act
-            Instance.FloodClear(Fixture.Create<int>(), Fixture.Create<int>(), Fixture.Create<Boundaries<int>>());
+            Instance.FloodClear(Dummy.Create<int>(), Dummy.Create<int>(), Dummy.Create<Boundaries<int>>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -4982,7 +4982,7 @@ public class GridTests
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(Fixture.Create<int>(), Fixture.Create<int>(), Fixture.Create<Boundaries<int>>());
+            Instance.FloodClear(Dummy.Create<int>(), Dummy.Create<int>(), Dummy.Create<Boundaries<int>>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -4992,7 +4992,7 @@ public class GridTests
         public void WhenTryingToClearOutsideBoundaries_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5009,7 +5009,7 @@ public class GridTests
         public void WhenTryingToClearOutsideBoundaries_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5180,7 +5180,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class FloodClear_Coordinates_Boundaries : Tester<Grid<int>>
+    public class FloodClear_Coordinates_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_DoNotModify()
@@ -5188,7 +5188,7 @@ public class GridTests
             //Arrange
 
             //Act
-            Instance.FloodClear(Fixture.Create<Vector2<int>>(), Fixture.Create<Boundaries<int>>());
+            Instance.FloodClear(Dummy.Create<Vector2<int>>(), Dummy.Create<Boundaries<int>>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -5202,7 +5202,7 @@ public class GridTests
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.FloodClear(Fixture.Create<Vector2<int>>(), Fixture.Create<Boundaries<int>>());
+            Instance.FloodClear(Dummy.Create<Vector2<int>>(), Dummy.Create<Boundaries<int>>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -5212,7 +5212,7 @@ public class GridTests
         public void WhenTryingToClearOutsideBoundaries_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5231,7 +5231,7 @@ public class GridTests
         public void WhenTryingToClearOutsideBoundaries_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5404,7 +5404,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class Resize : Tester<Grid<int>>
+    public class Resize : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_DoNotModifyGrid()
@@ -5412,7 +5412,7 @@ public class GridTests
             //Arrange
 
             //Act
-            Instance.Resize(Fixture.Create<Boundaries<int>>());
+            Instance.Resize(Dummy.Create<Boundaries<int>>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -5426,7 +5426,7 @@ public class GridTests
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Resize(Fixture.Create<Boundaries<int>>());
+            Instance.Resize(Dummy.Create<Boundaries<int>>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -5436,7 +5436,7 @@ public class GridTests
         public void WhenTryingToResizeUsingSameSize_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5453,7 +5453,7 @@ public class GridTests
         public void WhenTryingToResizeUsingSameSize_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5471,7 +5471,7 @@ public class GridTests
         public void WhenTryingToResizeUsingLargerBoundaries_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5488,7 +5488,7 @@ public class GridTests
         public void WhenTryingToResizeUsingLargerBoundaries_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>();
+            var cells = Dummy.CreateMany<Cell<int>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5602,7 +5602,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class TranslateAll_XY : Tester<Grid<char>>
+    public class TranslateAll_XY : ToolBX.Collections.UnitTesting.Tester<Grid<char>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_DoNotModifyGrid()
@@ -5610,7 +5610,7 @@ public class GridTests
             //Arrange
 
             //Act
-            Instance.TranslateAll(Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.TranslateAll(Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -5624,7 +5624,7 @@ public class GridTests
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.TranslateAll(Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.TranslateAll(Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -5634,7 +5634,7 @@ public class GridTests
         public void WhenZeroIndex_DoNotModifyGrid()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>();
+            var cells = Dummy.CreateMany<Cell<char>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5651,7 +5651,7 @@ public class GridTests
         public void WhenZeroIndex_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>();
+            var cells = Dummy.CreateMany<Cell<char>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -5669,11 +5669,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingToTheLeft_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = -Fixture.Create<int>();
+            var x = -Dummy.Create<int>();
             var y = 0;
             var index = new Vector2<int>(x, y);
 
@@ -5688,11 +5688,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingToTheLeft_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = -Fixture.Create<int>();
+            var x = -Dummy.Create<int>();
             var y = 0;
             var index = new Vector2<int>(x, y);
 
@@ -5717,12 +5717,12 @@ public class GridTests
         public void WhenTryingToTranslateEverythingUp_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
             var x = 0;
-            var y = -Fixture.Create<int>();
+            var y = -Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             //Act
@@ -5736,12 +5736,12 @@ public class GridTests
         public void WhenTryingToTranslateEverythingUp_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
             var x = 0;
-            var y = -Fixture.Create<int>();
+            var y = -Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
@@ -5765,11 +5765,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingToTheRight_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = Fixture.Create<int>();
+            var x = Dummy.Create<int>();
             var y = 0;
             var index = new Vector2<int>(x, y);
 
@@ -5784,11 +5784,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingToTheRight_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = Fixture.Create<int>();
+            var x = Dummy.Create<int>();
             var y = 0;
             var index = new Vector2<int>(x, y);
 
@@ -5813,12 +5813,12 @@ public class GridTests
         public void WhenTryingToTranslateEverythingDown_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
             var x = 0;
-            var y = Fixture.Create<int>();
+            var y = Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             //Act
@@ -5832,12 +5832,12 @@ public class GridTests
         public void WhenTryingToTranslateEverythingDown_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
             var x = 0;
-            var y = Fixture.Create<int>();
+            var y = Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
@@ -5861,12 +5861,12 @@ public class GridTests
         public void WhenTryingToMoveUpLeft_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = -Fixture.Create<int>();
-            var y = -Fixture.Create<int>();
+            var x = -Dummy.Create<int>();
+            var y = -Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             //Act
@@ -5880,12 +5880,12 @@ public class GridTests
         public void WhenTryingToMoveUpLeft_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = -Fixture.Create<int>();
-            var y = -Fixture.Create<int>();
+            var x = -Dummy.Create<int>();
+            var y = -Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
@@ -5909,12 +5909,12 @@ public class GridTests
         public void WhenTryingToMoveUpRight_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = Fixture.Create<int>();
-            var y = -Fixture.Create<int>();
+            var x = Dummy.Create<int>();
+            var y = -Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             //Act
@@ -5928,12 +5928,12 @@ public class GridTests
         public void WhenTryingToMoveUpRight_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = Fixture.Create<int>();
-            var y = -Fixture.Create<int>();
+            var x = Dummy.Create<int>();
+            var y = -Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
@@ -5957,12 +5957,12 @@ public class GridTests
         public void WhenTryingToMoveDownLeft_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = -Fixture.Create<int>();
-            var y = Fixture.Create<int>();
+            var x = -Dummy.Create<int>();
+            var y = Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             //Act
@@ -5976,12 +5976,12 @@ public class GridTests
         public void WhenTryingToMoveDownLeft_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = -Fixture.Create<int>();
-            var y = Fixture.Create<int>();
+            var x = -Dummy.Create<int>();
+            var y = Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
@@ -6005,12 +6005,12 @@ public class GridTests
         public void WhenTryingToMoveDownRight_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             //Act
@@ -6024,12 +6024,12 @@ public class GridTests
         public void WhenTryingToMoveDownRight_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
             var index = new Vector2<int>(x, y);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
@@ -6051,7 +6051,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class TranslateAll_Coordinates : Tester<Grid<char>>
+    public class TranslateAll_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<char>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_DoNotModifyGrid()
@@ -6059,7 +6059,7 @@ public class GridTests
             //Arrange
 
             //Act
-            Instance.TranslateAll(Fixture.Create<Vector2<int>>());
+            Instance.TranslateAll(Dummy.Create<Vector2<int>>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -6073,7 +6073,7 @@ public class GridTests
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.TranslateAll(Fixture.Create<Vector2<int>>());
+            Instance.TranslateAll(Dummy.Create<Vector2<int>>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -6083,7 +6083,7 @@ public class GridTests
         public void WhenZeroIndex_DoNotModifyGrid()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>();
+            var cells = Dummy.CreateMany<Cell<char>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -6100,7 +6100,7 @@ public class GridTests
         public void WhenZeroIndex_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>();
+            var cells = Dummy.CreateMany<Cell<char>>();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -6118,11 +6118,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingToTheLeft_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(-Fixture.Create<int>(), 0);
+            var index = new Vector2<int>(-Dummy.Create<int>(), 0);
 
             //Act
             Instance.TranslateAll(index);
@@ -6135,11 +6135,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingToTheLeft_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(-Fixture.Create<int>(), 0);
+            var index = new Vector2<int>(-Dummy.Create<int>(), 0);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6162,11 +6162,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingUp_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(0, -Fixture.Create<int>());
+            var index = new Vector2<int>(0, -Dummy.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6179,11 +6179,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingUp_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(0, -Fixture.Create<int>());
+            var index = new Vector2<int>(0, -Dummy.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6206,11 +6206,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingToTheRight_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(Fixture.Create<int>(), 0);
+            var index = new Vector2<int>(Dummy.Create<int>(), 0);
 
             //Act
             Instance.TranslateAll(index);
@@ -6223,11 +6223,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingToTheRight_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(Fixture.Create<int>(), 0);
+            var index = new Vector2<int>(Dummy.Create<int>(), 0);
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6250,11 +6250,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingDown_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(0, Fixture.Create<int>());
+            var index = new Vector2<int>(0, Dummy.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6267,11 +6267,11 @@ public class GridTests
         public void WhenTryingToTranslateEverythingDown_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(0, Fixture.Create<int>());
+            var index = new Vector2<int>(0, Dummy.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6294,11 +6294,11 @@ public class GridTests
         public void WhenTryingToMoveUpLeft_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6311,11 +6311,11 @@ public class GridTests
         public void WhenTryingToMoveUpLeft_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(-Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6338,11 +6338,11 @@ public class GridTests
         public void WhenTryingToMoveUpRight_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(Dummy.Create<int>(), -Dummy.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6355,11 +6355,11 @@ public class GridTests
         public void WhenTryingToMoveUpRight_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(Fixture.Create<int>(), -Fixture.Create<int>());
+            var index = new Vector2<int>(Dummy.Create<int>(), -Dummy.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6382,11 +6382,11 @@ public class GridTests
         public void WhenTryingToMoveDownLeft_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(-Fixture.Create<int>(), Fixture.Create<int>());
+            var index = new Vector2<int>(-Dummy.Create<int>(), Dummy.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6399,11 +6399,11 @@ public class GridTests
         public void WhenTryingToMoveDownLeft_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(-Fixture.Create<int>(), Fixture.Create<int>());
+            var index = new Vector2<int>(-Dummy.Create<int>(), Dummy.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6426,11 +6426,11 @@ public class GridTests
         public void WhenTryingToMoveDownRight_Move()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(Fixture.Create<int>(), Fixture.Create<int>());
+            var index = new Vector2<int>(Dummy.Create<int>(), Dummy.Create<int>());
 
             //Act
             Instance.TranslateAll(index);
@@ -6443,11 +6443,11 @@ public class GridTests
         public void WhenTryingToMoveDownRight_TriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<char>>().ToList();
+            var cells = Dummy.CreateMany<Cell<char>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
-            var index = new Vector2<int>(Fixture.Create<int>(), Fixture.Create<int>());
+            var index = new Vector2<int>(Dummy.Create<int>(), Dummy.Create<int>());
 
             var eventArgs = new List<GridChangedEventArgs<char>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
@@ -6468,22 +6468,22 @@ public class GridTests
     }
 
     [TestClass]
-    public class Translate_Range_XY : Tester<Grid<Dummy>>
+    public class Translate_Range_XY : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenRectangleHasZeroSize_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var copy = Instance.Copy();
 
-            var range = new Rectangle<int>(Fixture.Create<Vector2<int>>(), 0, 0);
+            var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
 
             //Act
-            Instance.Translate(range, Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.Translate(range, Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             Instance.Should().BeEquivalentTo(copy);
@@ -6493,17 +6493,17 @@ public class GridTests
         public void WhenRectangleHasZeroSize_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var range = new Rectangle<int>(Fixture.Create<Vector2<int>>(), 0, 0);
+            var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Translate(range, Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.Translate(range, Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -6513,8 +6513,8 @@ public class GridTests
         public void WhenGridIsEmpty_DoNotModify()
         {
             //Arrange
-            var range = Fixture.Create<Rectangle<int>>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var range = Dummy.Create<Rectangle<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(range, translation);
@@ -6527,13 +6527,13 @@ public class GridTests
         public void WhenGridIsEmpty_DoNotTriggerChange()
         {
             //Arrange
-            var range = Fixture.Create<Rectangle<int>>();
+            var range = Dummy.Create<Rectangle<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Translate(range, Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.Translate(range, Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -6543,15 +6543,15 @@ public class GridTests
         public void WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
@@ -6559,7 +6559,7 @@ public class GridTests
             Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 1, 0);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[0, 0] },
                 { 1, 1, copy[0, 1] },
@@ -6574,30 +6574,30 @@ public class GridTests
         public void WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 1, 0);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
@@ -6606,7 +6606,7 @@ public class GridTests
                         new(1, 1, copy[1, 1]),
                         new(1, 2, copy[1, 2]),
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(1, 0, copy[0, 0]),
                         new(1, 1, copy[0, 1]),
@@ -6620,15 +6620,15 @@ public class GridTests
         public void WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
@@ -6636,7 +6636,7 @@ public class GridTests
             Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 3, 0);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[1, 0] },
                 { 1, 1, copy[1, 1] },
@@ -6654,36 +6654,36 @@ public class GridTests
         public void WhenMovingRectangleOverEmptyArea_TriggerChange()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 3, 0);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(3, 0, copy[0, 0]),
                         new(3, 1, copy[0, 1]),
                         new(3, 2, copy[0, 2]),
                     },
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
@@ -6695,20 +6695,20 @@ public class GridTests
     }
 
     [TestClass]
-    public class Translate_Range_Coordinates : Tester<Grid<Dummy>>
+    public class Translate_Range_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenRectangleHasZeroSize_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var copy = Instance.Copy();
 
-            var range = new Rectangle<int>(Fixture.Create<Vector2<int>>(), 0, 0);
-            var translation = Fixture.Create<Vector2<int>>();
+            var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(range, translation);
@@ -6721,14 +6721,14 @@ public class GridTests
         public void WhenRectangleHasZeroSize_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var range = new Rectangle<int>(Fixture.Create<Vector2<int>>(), 0, 0);
-            var translation = Fixture.Create<Vector2<int>>();
+            var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -6742,8 +6742,8 @@ public class GridTests
         public void WhenGridIsEmpty_DoNotModify()
         {
             //Arrange
-            var range = Fixture.Create<Rectangle<int>>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var range = Dummy.Create<Rectangle<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(range, translation);
@@ -6756,10 +6756,10 @@ public class GridTests
         public void WhenGridIsEmpty_DoNotTriggerChange()
         {
             //Arrange
-            var range = Fixture.Create<Rectangle<int>>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var range = Dummy.Create<Rectangle<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -6773,15 +6773,15 @@ public class GridTests
         public void WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
@@ -6789,7 +6789,7 @@ public class GridTests
             Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(1, 0));
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[0, 0] },
                 { 1, 1, copy[0, 1] },
@@ -6804,30 +6804,30 @@ public class GridTests
         public void WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(1, 0));
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
@@ -6836,7 +6836,7 @@ public class GridTests
                         new(1, 1, copy[1, 1]),
                         new(1, 2, copy[1, 2]),
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(1, 0, copy[0, 0]),
                         new(1, 1, copy[0, 1]),
@@ -6850,15 +6850,15 @@ public class GridTests
         public void WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
@@ -6866,7 +6866,7 @@ public class GridTests
             Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(3, 0));
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[1, 0] },
                 { 1, 1, copy[1, 1] },
@@ -6884,36 +6884,36 @@ public class GridTests
         public void WhenMovingRectangleOverEmptyArea_TriggerChange()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(3, 0));
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(3, 0, copy[0, 0]),
                         new(3, 1, copy[0, 1]),
                         new(3, 2, copy[0, 2]),
                     },
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
@@ -6925,13 +6925,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Translate_Boundaries_XY : Tester<Grid<Dummy>>
+    public class Translate_Boundaries_XY : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenRectangleHasZeroBoundaries_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -6940,7 +6940,7 @@ public class GridTests
             var boundaries = new Boundaries<int>(0, 0, 0, 0);
 
             //Act
-            Instance.Translate(boundaries, Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             Instance.Should().BeEquivalentTo(copy);
@@ -6950,17 +6950,17 @@ public class GridTests
         public void WhenRectangleHasZeroSize_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var boundaries = new Boundaries<int>(0, 0, 0, 0);
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Translate(boundaries, Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -6970,10 +6970,10 @@ public class GridTests
         public void WhenGridIsEmpty_DoNotModify()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
 
             //Act
-            Instance.Translate(boundaries, Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             Instance.Should().BeEmpty();
@@ -6983,13 +6983,13 @@ public class GridTests
         public void WhenGridIsEmpty_DoNotTriggerChange()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
-            Instance.Translate(boundaries, Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             eventArgs.Should().BeEmpty();
@@ -6999,15 +6999,15 @@ public class GridTests
         public void WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
@@ -7015,7 +7015,7 @@ public class GridTests
             Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 1, 0);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[0, 0] },
                 { 1, 1, copy[0, 1] },
@@ -7030,30 +7030,30 @@ public class GridTests
         public void WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 1, 0);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
@@ -7062,7 +7062,7 @@ public class GridTests
                         new(1, 1, copy[1, 1]),
                         new(1, 2, copy[1, 2]),
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(1, 0, copy[0, 0]),
                         new(1, 1, copy[0, 1]),
@@ -7076,15 +7076,15 @@ public class GridTests
         public void WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
@@ -7092,7 +7092,7 @@ public class GridTests
             Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 3, 0);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[1, 0] },
                 { 1, 1, copy[1, 1] },
@@ -7110,36 +7110,36 @@ public class GridTests
         public void WhenMovingRectangleOverEmptyArea_TriggerChange()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 3, 0);
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(3, 0, copy[0, 0]),
                         new(3, 1, copy[0, 1]),
                         new(3, 2, copy[0, 2]),
                     },
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
@@ -7151,20 +7151,20 @@ public class GridTests
     }
 
     [TestClass]
-    public class Translate_Boundaries_Coordinates : Tester<Grid<Dummy>>
+    public class Translate_Boundaries_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenRectangleHasZeroBoundaries_DoNotModify()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var copy = Instance.Copy();
 
             var boundaries = new Boundaries<int>(0, 0, 0, 0);
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(boundaries, translation);
@@ -7177,14 +7177,14 @@ public class GridTests
         public void WhenRectangleHasZeroSize_DoNotTriggerChange()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var boundaries = new Boundaries<int>(0, 0, 0, 0);
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -7198,8 +7198,8 @@ public class GridTests
         public void WhenGridIsEmpty_DoNotModify()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(boundaries, translation);
@@ -7212,10 +7212,10 @@ public class GridTests
         public void WhenGridIsEmpty_DoNotTriggerChange()
         {
             //Arrange
-            var boundaries = Fixture.Create<Boundaries<int>>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -7229,15 +7229,15 @@ public class GridTests
         public void WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
@@ -7245,7 +7245,7 @@ public class GridTests
             Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(1, 0));
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[0, 0] },
                 { 1, 1, copy[0, 1] },
@@ -7260,30 +7260,30 @@ public class GridTests
         public void WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(1, 0));
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
@@ -7292,7 +7292,7 @@ public class GridTests
                         new(1, 1, copy[1, 1]),
                         new(1, 2, copy[1, 2]),
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(1, 0, copy[0, 0]),
                         new(1, 1, copy[0, 1]),
@@ -7306,15 +7306,15 @@ public class GridTests
         public void WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
@@ -7322,7 +7322,7 @@ public class GridTests
             Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(3, 0));
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[1, 0] },
                 { 1, 1, copy[1, 1] },
@@ -7340,36 +7340,36 @@ public class GridTests
         public void WhenMovingRectangleOverEmptyArea_TriggerChange()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(3, 0));
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(3, 0, copy[0, 0]),
                         new(3, 1, copy[0, 1]),
                         new(3, 2, copy[0, 2]),
                     },
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
@@ -7381,7 +7381,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class Copy : Tester<Grid<Dummy>>
+    public class Copy : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_ReturnEmptyGrid()
@@ -7399,7 +7399,7 @@ public class GridTests
         public void WhenGridIsNotEmpty_ReturnExactCopy()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -7413,13 +7413,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Copy_Boundaries : Tester<Grid<string>>
+    public class Copy_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenBoundariesAreEqualToGrid_ReturnExactCopyOfGrid()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>().ToList();
+            var cells = Dummy.CreateMany<Cell<string>>().ToList();
             foreach (var cell in cells)
                 Instance[cell.Index] = cell.Value;
 
@@ -7435,10 +7435,10 @@ public class GridTests
         public void WhenBoundariesAreOutsideGrid_ReturnEmpty()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<string>();
-            Instance[1, 4] = Fixture.Create<string>();
-            Instance[2, 3] = Fixture.Create<string>();
-            Instance[3, 2] = Fixture.Create<string>();
+            Instance[0, 0] = Dummy.Create<string>();
+            Instance[1, 4] = Dummy.Create<string>();
+            Instance[2, 3] = Dummy.Create<string>();
+            Instance[3, 2] = Dummy.Create<string>();
 
             //Act
             var result = Instance.Copy(new Boundaries<int> { Top = -14, Left = -8, Right = -4, Bottom = -7 });
@@ -7451,10 +7451,10 @@ public class GridTests
         public void WhenBoundariesAreInsideGrid_ReturnThatPartOfGrid()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<string>();
-            Instance[1, 4] = Fixture.Create<string>();
-            Instance[2, 3] = Fixture.Create<string>();
-            Instance[3, 2] = Fixture.Create<string>();
+            Instance[0, 0] = Dummy.Create<string>();
+            Instance[1, 4] = Dummy.Create<string>();
+            Instance[2, 3] = Dummy.Create<string>();
+            Instance[3, 2] = Dummy.Create<string>();
 
             //Act
             var result = Instance.Copy(new Boundaries<int> { Top = 0, Bottom = 2, Left = 0, Right = 3 });
@@ -7473,7 +7473,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = Instance.Copy(Fixture.Create<Boundaries<int>>());
+            var result = Instance.Copy(Dummy.Create<Boundaries<int>>());
 
             //Assert
             result.Should().BeEmpty();
@@ -7481,21 +7481,21 @@ public class GridTests
     }
 
     [TestClass]
-    public class Swap : Tester<Grid<Dummy>>
+    public class Swap : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenCurrentAndDestinationAreEqual_DoNotModifyGrid()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var copy = Instance.Copy();
 
@@ -7510,17 +7510,17 @@ public class GridTests
         public void WhenCurrentAndDestinationAreEqual_DoNotTriggerChange()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
@@ -7534,15 +7534,15 @@ public class GridTests
         public void WhenCurrentAndDestinationAreDifferent_Swap()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var firstItem = Instance[2, 0];
             var secondItem = Instance[1, 2];
@@ -7551,7 +7551,7 @@ public class GridTests
             Instance.Swap(new Vector2<int>(2, 0), new Vector2<int>(1, 2));
 
             //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Dummy>
+            Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 0, 0, Instance[0, 0] },
                 { 1, 0, Instance[1, 0] },
@@ -7569,39 +7569,39 @@ public class GridTests
         public void WhenCurrentAndDestinationAreDifferent_TriggerChangeWithNewIndexes()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
-            Instance[0, 1] = Fixture.Create<Dummy>();
-            Instance[1, 1] = Fixture.Create<Dummy>();
-            Instance[2, 1] = Fixture.Create<Dummy>();
-            Instance[0, 2] = Fixture.Create<Dummy>();
-            Instance[1, 2] = Fixture.Create<Dummy>();
-            Instance[2, 2] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
+            Instance[0, 1] = Dummy.Create<Garbage>();
+            Instance[1, 1] = Dummy.Create<Garbage>();
+            Instance[2, 1] = Dummy.Create<Garbage>();
+            Instance[0, 2] = Dummy.Create<Garbage>();
+            Instance[1, 2] = Dummy.Create<Garbage>();
+            Instance[2, 2] = Dummy.Create<Garbage>();
 
             var firstItem = Instance[2, 0];
             var secondItem = Instance[1, 2];
 
-            var eventArgs = new List<GridChangedEventArgs<Dummy>>();
+            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
             //Act
             Instance.Swap(new Vector2<int>(2, 0), new Vector2<int>(1, 2));
 
             //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Dummy>> { new(2,0, secondItem), new(1, 2, firstItem) },
-                    OldValues = new List<Cell<Dummy>> { new(2,0, firstItem), new(1, 2, secondItem) },
+                    NewValues = new List<Cell<Garbage>> { new(2,0, secondItem), new(1, 2, firstItem) },
+                    OldValues = new List<Cell<Garbage>> { new(2,0, firstItem), new(1, 2, secondItem) },
                 }
             });
         }
     }
 
     [TestClass]
-    public class ToStringMethod : Tester<Grid<string>>
+    public class ToStringMethod : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_ReturnEmptyMessage()
@@ -7619,7 +7619,7 @@ public class GridTests
         public void WhenGridIsNotEmpty_ReturnCount()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<string>>(5).ToList();
+            var cells = Dummy.CreateMany<Cell<string>>(5).ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -7632,13 +7632,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Equals_Object : Tester<Grid<Dummy>>
+    public class Equals_Object : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenOtherIsSimilarGrid_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -7655,11 +7655,11 @@ public class GridTests
         public void WhenOtherIsDifferentGrid_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
             //Act
             var result = Instance.Equals((object)other);
@@ -7672,7 +7672,7 @@ public class GridTests
         public void WhenOtherIsSimilar2dArray_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -7689,11 +7689,11 @@ public class GridTests
         public void WhenOtherIsDifferent2dArray_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.Build<Cell<Garbage>>().With(x => x.Index, new Vector2<int>(Dummy.Number.Between(-5, 5).Create(), Dummy.Number.Between(-5, 5).Create())).CreateMany().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Fixture.Create<Dummy[,]>();
+            var other = Dummy.Create<Garbage[,]>();
 
             //Act
             var result = Instance.Equals((object)other);
@@ -7706,7 +7706,7 @@ public class GridTests
         public void WhenOtherIsSimilarJaggedArray_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -7723,11 +7723,11 @@ public class GridTests
         public void WhenOtherIsDifferentJaggedArray_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Fixture.Create<Dummy[][]>();
+            var other = Dummy.Create<Garbage[][]>();
 
             //Act
             var result = Instance.Equals((object)other);
@@ -7740,7 +7740,7 @@ public class GridTests
         public void WhenOtherIsSimilarCells_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -7755,11 +7755,11 @@ public class GridTests
         public void WhenOtherIsDifferentCells_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
             //Act
             var result = Instance.Equals((object)other);
@@ -7772,7 +7772,7 @@ public class GridTests
         public void WhenOtherIsSimilarKeyValuePairs_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -7789,11 +7789,11 @@ public class GridTests
         public void WhenOtherIsDifferentKeyValuePairs_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Fixture.Create<Dictionary<Vector2<int>, Dummy>>();
+            var other = Dummy.Create<Dictionary<Vector2<int>, Garbage>>();
 
             //Act
             var result = Instance.Equals((object)other);
@@ -7806,11 +7806,11 @@ public class GridTests
         public void WhenOtherIsDifferentUnsupportedType_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Fixture.Create<int>();
+            var other = Dummy.Create<int>();
 
             //Act
             var result = Instance.Equals(other);
@@ -7821,13 +7821,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Equals_Grid : Tester<Grid<Dummy>>
+    public class Equals_Grid : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenOtherGridIsNull_ReturnFalse()
         {
             //Arrange
-            Grid<Dummy> other = null!;
+            Grid<Garbage> other = null!;
 
             //Act
             var result = Instance.Equals(other);
@@ -7840,9 +7840,9 @@ public class GridTests
         public void WhenOtherGridIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -7857,7 +7857,7 @@ public class GridTests
         public void WhenOtherGridIsSameReference_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -7872,11 +7872,11 @@ public class GridTests
         public void WhenOtherGridAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToGrid();
+            var other = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToGrid();
 
             //Act
             var result = Instance.Equals(other);
@@ -7889,11 +7889,11 @@ public class GridTests
         public void WhenOtherGridAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Instance.Select(x => new Cell<Dummy>(x.Index, Fixture.Create<Dummy>())).ToGrid();
+            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToGrid();
 
             //Act
             var result = Instance.Equals(other);
@@ -7906,7 +7906,7 @@ public class GridTests
         public void WhenOtherGridAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -7923,11 +7923,11 @@ public class GridTests
         public void WhenOtherIsGridButOrderedDifferently_ReturnTrue()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
 
-            var other = new Grid<Dummy>
+            var other = new Grid<Garbage>
             {
                 { 1,0, Instance[1,0] },
                 { 0,0, Instance[0,0] },
@@ -7945,11 +7945,11 @@ public class GridTests
         public void WhenOtherIsCellsButOrderedDifferently_ReturnTrue()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 0] = Fixture.Create<Dummy>();
-            Instance[2, 0] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 0] = Dummy.Create<Garbage>();
+            Instance[2, 0] = Dummy.Create<Garbage>();
 
-            var other = new List<Cell<Dummy>>
+            var other = new List<Cell<Garbage>>
             {
                 new(1, 0, Instance[1, 0]),
                 new(0, 0, Instance[0, 0]),
@@ -7965,7 +7965,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class EqualsOperator_Grid : Tester<Grid<Dummy>>
+    public class EqualsOperator_Grid : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnTrue()
@@ -7973,7 +7973,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == (Grid<Dummy>)null!;
+            var result = (Grid<Garbage>)null! == (Grid<Garbage>)null!;
 
             //Assert
             result.Should().BeTrue();
@@ -7985,7 +7985,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var result = (Grid<Garbage>)null! == Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
             //Assert
             result.Should().BeFalse();
@@ -7995,7 +7995,7 @@ public class GridTests
         public void WhenOtherGridIsNull_ReturnFalse()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> other = null!;
+            IEnumerable<Cell<Garbage>> other = null!;
 
             //Act
             var result = Instance == other;
@@ -8008,9 +8008,9 @@ public class GridTests
         public void WhenOtherGridIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8025,11 +8025,11 @@ public class GridTests
         public void WhenOtherGridAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToGrid();
+            var other = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToGrid();
 
             //Act
             var result = Instance == other;
@@ -8042,11 +8042,11 @@ public class GridTests
         public void WhenOtherGridAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Instance.Select(x => new Cell<Dummy>(x.Index, Fixture.Create<Dummy>())).ToGrid();
+            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToGrid();
 
             //Act
             var result = Instance == other;
@@ -8059,7 +8059,7 @@ public class GridTests
         public void WhenOtherGridAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8074,7 +8074,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class NotEqualsOperator_Grid : Tester<Grid<Dummy>>
+    public class NotEqualsOperator_Grid : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnFalse()
@@ -8082,7 +8082,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != (Grid<Dummy>)null!;
+            var result = (Grid<Garbage>)null! != (Grid<Garbage>)null!;
 
             //Assert
             result.Should().BeFalse();
@@ -8094,7 +8094,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var result = (Grid<Garbage>)null! != Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
             //Assert
             result.Should().BeTrue();
@@ -8104,7 +8104,7 @@ public class GridTests
         public void WhenOtherGridIsNull_ReturnTrue()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> other = null!;
+            IEnumerable<Cell<Garbage>> other = null!;
 
             //Act
             var result = Instance != other;
@@ -8117,9 +8117,9 @@ public class GridTests
         public void WhenOtherGridIsDifferent_ReturnTrue()
         {
             //Arrange
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8134,11 +8134,11 @@ public class GridTests
         public void WhenOtherGridAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToGrid();
+            var other = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToGrid();
 
             //Act
             var result = Instance != other;
@@ -8151,11 +8151,11 @@ public class GridTests
         public void WhenOtherGridAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Instance.Select(x => new Cell<Dummy>(x.Index, Fixture.Create<Dummy>())).ToGrid();
+            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToGrid();
 
             //Act
             var result = Instance != other;
@@ -8168,7 +8168,7 @@ public class GridTests
         public void WhenOtherGridAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8183,13 +8183,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Equals_Cells : Tester<Grid<Dummy>>
+    public class Equals_Cells : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenCellsIsNull_ReturnFalse()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> other = null!;
+            IEnumerable<Cell<Garbage>> other = null!;
 
             //Act
             var result = Instance.Equals(other);
@@ -8202,9 +8202,9 @@ public class GridTests
         public void WhenCellsIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8219,11 +8219,11 @@ public class GridTests
         public void WhenCellsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
+            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
 
             //Act
             var result = Instance.Equals(differentCells);
@@ -8236,11 +8236,11 @@ public class GridTests
         public void WhenCellsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Instance.Select(x => new Cell<Dummy>(x.Index, Fixture.Create<Dummy>())).ToList();
+            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToList();
 
             //Act
             var result = Instance.Equals(other);
@@ -8253,7 +8253,7 @@ public class GridTests
         public void WhenCellsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8268,7 +8268,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class EqualsOperator_Cells : Tester<Grid<Dummy>>
+    public class EqualsOperator_Cells : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnTrue()
@@ -8276,7 +8276,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == (IEnumerable<Cell<Dummy>>)null!;
+            var result = (Grid<Garbage>)null! == (IEnumerable<Cell<Garbage>>)null!;
 
             //Assert
             result.Should().BeTrue();
@@ -8288,7 +8288,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var result = (Grid<Garbage>)null! == Dummy.CreateMany<Cell<Garbage>>().ToList();
 
             //Assert
             result.Should().BeFalse();
@@ -8298,7 +8298,7 @@ public class GridTests
         public void WhenCellsIsNull_ReturnFalse()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> other = null!;
+            IEnumerable<Cell<Garbage>> other = null!;
 
             //Act
             var result = Instance == other;
@@ -8311,9 +8311,9 @@ public class GridTests
         public void WhenCellsIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8328,11 +8328,11 @@ public class GridTests
         public void WhenCellsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
+            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
 
             //Act
             var result = Instance == differentCells;
@@ -8345,11 +8345,11 @@ public class GridTests
         public void WhenCellsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Instance.Select(x => new Cell<Dummy>(x.Index, Fixture.Create<Dummy>())).ToList();
+            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToList();
 
             //Act
             var result = Instance == other;
@@ -8362,7 +8362,7 @@ public class GridTests
         public void WhenCellsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8377,7 +8377,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class NotEqualsOperator_Cells : Tester<Grid<Dummy>>
+    public class NotEqualsOperator_Cells : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnFalse()
@@ -8385,7 +8385,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != (IEnumerable<Cell<Dummy>>)null!;
+            var result = (Grid<Garbage>)null! != (IEnumerable<Cell<Garbage>>)null!;
 
             //Assert
             result.Should().BeFalse();
@@ -8397,7 +8397,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var result = (Grid<Garbage>)null! != Dummy.CreateMany<Cell<Garbage>>().ToList();
 
             //Assert
             result.Should().BeTrue();
@@ -8407,7 +8407,7 @@ public class GridTests
         public void WhenCellsIsNull_ReturnTrue()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> other = null!;
+            IEnumerable<Cell<Garbage>> other = null!;
 
             //Act
             var result = Instance != other;
@@ -8420,9 +8420,9 @@ public class GridTests
         public void WhenCellsIsDifferent_ReturnTrue()
         {
             //Arrange
-            var other = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8437,11 +8437,11 @@ public class GridTests
         public void WhenCellsAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
+            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
 
             //Act
             var result = Instance != differentCells;
@@ -8454,11 +8454,11 @@ public class GridTests
         public void WhenCellsAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var other = Instance.Select(x => new Cell<Dummy>(x.Index, Fixture.Create<Dummy>())).ToList();
+            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToList();
 
             //Act
             var result = Instance != other;
@@ -8471,7 +8471,7 @@ public class GridTests
         public void WhenCellsAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8486,13 +8486,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Equals_KeyValuePairs : Tester<Grid<Dummy>>
+    public class Equals_KeyValuePairs : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenKeyValuePairsIsNull_ReturnFalse()
         {
             //Arrange
-            IEnumerable<KeyValuePair<Vector2<int>, Dummy>> other = null!;
+            IEnumerable<KeyValuePair<Vector2<int>, Garbage>> other = null!;
 
             //Act
             var result = Instance.Equals(other);
@@ -8505,9 +8505,9 @@ public class GridTests
         public void WhenKeyValuePairsIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
+            var other = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8522,12 +8522,12 @@ public class GridTests
         public void WhenKeyValuePairsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Dummy>(differentCells).ToDictionary();
+            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+            var other = new Grid<Garbage>(differentCells).ToDictionary();
 
             //Act
             var result = Instance.Equals(other!);
@@ -8540,13 +8540,13 @@ public class GridTests
         public void WhenKeyValuePairsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var other = Instance.ToDictionary();
             foreach (var ((x, y), _) in Instance)
-                other[new Vector2<int>(x, y)] = Fixture.Create<Dummy>();
+                other[new Vector2<int>(x, y)] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.Equals(other!);
@@ -8559,7 +8559,7 @@ public class GridTests
         public void WhenKeyValuePairsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8574,7 +8574,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class EqualsOperator_KeyValuePairs : Tester<Grid<Dummy>>
+    public class EqualsOperator_KeyValuePairs : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnTrue()
@@ -8582,7 +8582,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == (IEnumerable<KeyValuePair<Vector2<int>, Dummy>>)null!;
+            var result = (Grid<Garbage>)null! == (IEnumerable<KeyValuePair<Vector2<int>, Garbage>>)null!;
 
             //Assert
             result.Should().BeTrue();
@@ -8594,7 +8594,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
+            var result = (Grid<Garbage>)null! == Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
 
             //Assert
             result.Should().BeFalse();
@@ -8604,7 +8604,7 @@ public class GridTests
         public void WhenKeyValuePairsIsNull_ReturnFalse()
         {
             //Arrange
-            IEnumerable<KeyValuePair<Vector2<int>, Dummy>> other = null!;
+            IEnumerable<KeyValuePair<Vector2<int>, Garbage>> other = null!;
 
             //Act
             var result = Instance == other;
@@ -8617,9 +8617,9 @@ public class GridTests
         public void WhenKeyValuePairsIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
+            var other = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8634,12 +8634,12 @@ public class GridTests
         public void WhenKeyValuePairsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Dummy>(differentCells).ToDictionary();
+            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+            var other = new Grid<Garbage>(differentCells).ToDictionary();
 
             //Act
             var result = Instance == other!;
@@ -8652,13 +8652,13 @@ public class GridTests
         public void WhenKeyValuePairsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var other = Instance.ToDictionary();
             foreach (var ((x, y), _) in Instance)
-                other[new Vector2<int>(x, y)] = Fixture.Create<Dummy>();
+                other[new Vector2<int>(x, y)] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance == other!;
@@ -8671,7 +8671,7 @@ public class GridTests
         public void WhenKeyValuePairsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8686,7 +8686,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class NotEqualsOperator_KeyValuePairs : Tester<Grid<Dummy>>
+    public class NotEqualsOperator_KeyValuePairs : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnFalse()
@@ -8694,7 +8694,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != (IEnumerable<KeyValuePair<Vector2<int>, Dummy>>)null!;
+            var result = (Grid<Garbage>)null! != (IEnumerable<KeyValuePair<Vector2<int>, Garbage>>)null!;
 
             //Assert
             result.Should().BeFalse();
@@ -8706,7 +8706,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
+            var result = (Grid<Garbage>)null! != Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
 
             //Assert
             result.Should().BeTrue();
@@ -8716,7 +8716,7 @@ public class GridTests
         public void WhenKeyValuePairsIsNull_ReturnTrue()
         {
             //Arrange
-            IEnumerable<KeyValuePair<Vector2<int>, Dummy>> other = null!;
+            IEnumerable<KeyValuePair<Vector2<int>, Garbage>> other = null!;
 
             //Act
             var result = Instance != other;
@@ -8729,9 +8729,9 @@ public class GridTests
         public void WhenKeyValuePairsIsDifferent_ReturnTrue()
         {
             //Arrange
-            var other = Fixture.CreateMany<KeyValuePair<Vector2<int>, Dummy>>().ToList();
+            var other = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8746,12 +8746,12 @@ public class GridTests
         public void WhenKeyValuePairsAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Dummy>(differentCells).ToDictionary();
+            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+            var other = new Grid<Garbage>(differentCells).ToDictionary();
 
             //Act
             var result = Instance != other!;
@@ -8764,13 +8764,13 @@ public class GridTests
         public void WhenKeyValuePairsAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var other = Instance.ToDictionary();
             foreach (var ((x, y), _) in Instance)
-                other[new Vector2<int>(x, y)] = Fixture.Create<Dummy>();
+                other[new Vector2<int>(x, y)] = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance != other!;
@@ -8783,7 +8783,7 @@ public class GridTests
         public void WhenKeyValuePairsAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8798,13 +8798,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Equals_2dArray : Tester<Grid<Dummy>>
+    public class Equals_2dArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenArrayIsNull_ReturnFalse()
         {
             //Arrange
-            Dummy[,] other = null!;
+            Garbage[,] other = null!;
 
             //Act
             //Assert
@@ -8815,7 +8815,7 @@ public class GridTests
         public void WhenBothAreEmpty_ReturnTrue()
         {
             //Arrange
-            var other = new Dummy[0, 0];
+            var other = new Garbage[0, 0];
 
             //Act
             //Assert
@@ -8826,7 +8826,7 @@ public class GridTests
         public void WhenGridIsEmptyButArrayIsNot_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.Create<Dummy[,]>();
+            var other = Dummy.Create<Garbage[,]>();
 
             //Act
             //Assert
@@ -8838,9 +8838,9 @@ public class GridTests
         public void WhenGridContainsItemsButArrayIsEmpty_ReturnFalse()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var other = new Dummy[0, 0];
+            var other = new Garbage[0, 0];
 
             //Act
             //Assert
@@ -8868,11 +8868,11 @@ public class GridTests
             // Arrange
             for (var x = 0; x < 3; x++)
                 for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Fixture.Create<Dummy>();
+                    Instance[x, y] = Dummy.Create<Garbage>();
 
             var otherGrid = Instance.ToGrid();
             for (var x = 0; x < 3; x++)
-                otherGrid[x, 3] = Fixture.Create<Dummy>();
+                otherGrid[x, 3] = Dummy.Create<Garbage>();
 
             var other = otherGrid.To2dArray();
 
@@ -8887,7 +8887,7 @@ public class GridTests
             // Arrange
             for (var x = 0; x < 3; x++)
                 for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Fixture.Create<Dummy>();
+                    Instance[x, y] = Dummy.Create<Garbage>();
 
             var otherGrid = Instance.ToGrid();
             otherGrid.RemoveAt(0, 2);
@@ -8907,11 +8907,11 @@ public class GridTests
             //Arrange
             for (var x = 0; x < 3; x++)
                 for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Fixture.Create<Dummy>();
+                    Instance[x, y] = Dummy.Create<Garbage>();
 
             var otherGrid = Instance.ToGrid();
             for (var y = 0; y < 3; y++)
-                otherGrid[3, y] = Fixture.Create<Dummy>();
+                otherGrid[3, y] = Dummy.Create<Garbage>();
 
             var other = otherGrid.To2dArray();
 
@@ -8926,7 +8926,7 @@ public class GridTests
             //Arrange
             for (var x = 0; x < 3; x++)
                 for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Fixture.Create<Dummy>();
+                    Instance[x, y] = Dummy.Create<Garbage>();
 
             var otherGrid = Instance.ToGrid();
             otherGrid.RemoveAt(2, 0);
@@ -8945,11 +8945,11 @@ public class GridTests
         public void WhenGridHasMoreColumnsThanArray_ReturnFalse()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 3] = Fixture.Create<Dummy>();
-            Instance[2, 4] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 3] = Dummy.Create<Garbage>();
+            Instance[2, 4] = Dummy.Create<Garbage>();
 
-            var other = new Dummy[2, 0];
+            var other = new Garbage[2, 0];
 
             //Act
             //Assert
@@ -8960,9 +8960,9 @@ public class GridTests
         public void WhenArrayIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.Create<Dummy[,]>();
+            var other = Dummy.Create<Garbage[,]>();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -8975,12 +8975,12 @@ public class GridTests
         public void WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Dummy>(differentCells).To2dArray();
+            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+            var other = new Grid<Garbage>(differentCells).To2dArray();
 
             //Act
             //Assert
@@ -8991,13 +8991,13 @@ public class GridTests
         public void WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var other = Instance.To2dArray();
             foreach (var ((x, y), _) in Instance)
-                other[x, y] = Fixture.Create<Dummy>();
+                other[x, y] = Dummy.Create<Garbage>();
 
             //Act
             //Assert
@@ -9008,7 +9008,7 @@ public class GridTests
         public void WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -9023,13 +9023,13 @@ public class GridTests
         public void WhenGridHasANegativeX_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var other = Instance.To2dArray();
 
-            Instance[-Fixture.Create<int>(), Fixture.Create<int>()] = Fixture.Create<Dummy>();
+            Instance[-Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
             //Act
             //Assert
@@ -9040,13 +9040,13 @@ public class GridTests
         public void WhenGridHasANegativeY_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var other = Instance.To2dArray();
 
-            Instance[Fixture.Create<int>(), -Fixture.Create<int>()] = Fixture.Create<Dummy>();
+            Instance[Dummy.Create<int>(), -Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
             //Act
             //Assert
@@ -9055,7 +9055,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class EqualsOperator_2dArray : Tester<Grid<Dummy>>
+    public class EqualsOperator_2dArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnTrue()
@@ -9063,7 +9063,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == (Dummy[,])null!;
+            var result = (Grid<Garbage>)null! == (Garbage[,])null!;
 
             //Assert
             result.Should().BeTrue();
@@ -9075,7 +9075,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == Fixture.Create<Dummy[,]>();
+            var result = (Grid<Garbage>)null! == Dummy.Create<Garbage[,]>();
 
             //Assert
             result.Should().BeFalse();
@@ -9085,7 +9085,7 @@ public class GridTests
         public void WhenArrayIsNull_ReturnFalse()
         {
             //Arrange
-            Dummy[,] other = null!;
+            Garbage[,] other = null!;
 
             //Act
             var result = Instance == other;
@@ -9096,7 +9096,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class NotEqualsOperator_2dArray : Tester<Grid<Dummy>>
+    public class NotEqualsOperator_2dArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnFalse()
@@ -9104,7 +9104,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != (Dummy[,])null!;
+            var result = (Grid<Garbage>)null! != (Garbage[,])null!;
 
             //Assert
             result.Should().BeFalse();
@@ -9116,7 +9116,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != Fixture.Create<Dummy[,]>();
+            var result = (Grid<Garbage>)null! != Dummy.Create<Garbage[,]>();
 
             //Assert
             result.Should().BeTrue();
@@ -9126,7 +9126,7 @@ public class GridTests
         public void WhenArrayIsNull_ReturnTrue()
         {
             //Arrange
-            Dummy[,] other = null!;
+            Garbage[,] other = null!;
 
             //Act
             var result = Instance != other;
@@ -9137,13 +9137,13 @@ public class GridTests
     }
 
     [TestClass]
-    public class Equals_JaggedArray : Tester<Grid<Dummy>>
+    public class Equals_JaggedArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenArrayIsNull_ReturnFalse()
         {
             //Arrange
-            Dummy[][] other = null!;
+            Garbage[][] other = null!;
 
             //Act
             //Assert
@@ -9154,7 +9154,7 @@ public class GridTests
         public void WhenBothAreEmpty_ReturnTrue()
         {
             //Arrange
-            var other = Array.Empty<Dummy[]>();
+            var other = Array.Empty<Garbage[]>();
 
             //Act
             //Assert
@@ -9165,7 +9165,7 @@ public class GridTests
         public void WhenGridIsEmptyButArrayIsNot_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.Create<Dummy[][]>();
+            var other = Dummy.Create<Garbage[][]>();
 
             //Act
             //Assert
@@ -9177,9 +9177,9 @@ public class GridTests
         public void WhenGridContainsItemsButArrayIsEmpty_ReturnFalse()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var other = Array.Empty<Dummy[]>();
+            var other = Array.Empty<Garbage[]>();
 
             //Act
             //Assert
@@ -9207,11 +9207,11 @@ public class GridTests
             // Arrange
             for (var x = 0; x < 3; x++)
                 for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Fixture.Create<Dummy>();
+                    Instance[x, y] = Dummy.Create<Garbage>();
 
             var otherGrid = Instance.ToGrid();
             for (var x = 0; x < 3; x++)
-                otherGrid[x, 3] = Fixture.Create<Dummy>();
+                otherGrid[x, 3] = Dummy.Create<Garbage>();
 
             var other = otherGrid.ToJaggedArray();
 
@@ -9226,7 +9226,7 @@ public class GridTests
             // Arrange
             for (var x = 0; x < 3; x++)
                 for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Fixture.Create<Dummy>();
+                    Instance[x, y] = Dummy.Create<Garbage>();
 
             var otherGrid = Instance.ToGrid();
             otherGrid.RemoveAt(0, 2);
@@ -9246,11 +9246,11 @@ public class GridTests
             //Arrange
             for (var x = 0; x < 3; x++)
                 for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Fixture.Create<Dummy>();
+                    Instance[x, y] = Dummy.Create<Garbage>();
 
             var otherGrid = Instance.ToGrid();
             for (var y = 0; y < 3; y++)
-                otherGrid[3, y] = Fixture.Create<Dummy>();
+                otherGrid[3, y] = Dummy.Create<Garbage>();
 
             var other = otherGrid.ToJaggedArray();
 
@@ -9265,7 +9265,7 @@ public class GridTests
             //Arrange
             for (var x = 0; x < 3; x++)
                 for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Fixture.Create<Dummy>();
+                    Instance[x, y] = Dummy.Create<Garbage>();
 
             var otherGrid = Instance.ToGrid();
             otherGrid.RemoveAt(2, 0);
@@ -9283,11 +9283,11 @@ public class GridTests
         public void WhenGridHasMoreColumnsThanArray_ReturnFalse()
         {
             //Arrange
-            Instance[0, 0] = Fixture.Create<Dummy>();
-            Instance[1, 3] = Fixture.Create<Dummy>();
-            Instance[2, 4] = Fixture.Create<Dummy>();
+            Instance[0, 0] = Dummy.Create<Garbage>();
+            Instance[1, 3] = Dummy.Create<Garbage>();
+            Instance[2, 4] = Dummy.Create<Garbage>();
 
-            var other = new Dummy[2][];
+            var other = new Garbage[2][];
 
             //Act
             //Assert
@@ -9298,9 +9298,9 @@ public class GridTests
         public void WhenArrayIsDifferent_ReturnFalse()
         {
             //Arrange
-            var other = Fixture.Create<Dummy[][]>();
+            var other = Dummy.Create<Garbage[][]>();
 
-            var cells = Fixture.CreateMany<Cell<Dummy>>();
+            var cells = Dummy.CreateMany<Cell<Garbage>>();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -9313,12 +9313,12 @@ public class GridTests
         public void WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
-            var differentCells = cells.Select(x => Fixture.Build<Cell<Dummy>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Dummy>(differentCells).ToJaggedArray();
+            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+            var other = new Grid<Garbage>(differentCells).ToJaggedArray();
 
             //Act
             //Assert
@@ -9329,13 +9329,13 @@ public class GridTests
         public void WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var other = Instance.ToJaggedArray();
             foreach (var ((x, y), _) in Instance)
-                other[x][y] = Fixture.Create<Dummy>();
+                other[x][y] = Dummy.Create<Garbage>();
 
             //Act
             //Assert
@@ -9346,7 +9346,7 @@ public class GridTests
         public void WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
@@ -9361,13 +9361,13 @@ public class GridTests
         public void WhenGridHasANegativeX_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var other = Instance.ToJaggedArray();
 
-            Instance[-Fixture.Create<int>(), Fixture.Create<int>()] = Fixture.Create<Dummy>();
+            Instance[-Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
             //Act
             //Assert
@@ -9378,13 +9378,13 @@ public class GridTests
         public void WhenGridHasANegativeY_ReturnFalse()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
             foreach (var (index, value) in cells)
                 Instance[index] = value;
 
             var other = Instance.ToJaggedArray();
 
-            Instance[Fixture.Create<int>(), -Fixture.Create<int>()] = Fixture.Create<Dummy>();
+            Instance[Dummy.Create<int>(), -Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
             //Act
             //Assert
@@ -9393,7 +9393,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class EqualsOperator_JaggedArray : Tester<Grid<Dummy>>
+    public class EqualsOperator_JaggedArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnTrue()
@@ -9401,7 +9401,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == (Dummy[][])null!;
+            var result = (Grid<Garbage>)null! == (Garbage[][])null!;
 
             //Assert
             result.Should().BeTrue();
@@ -9413,7 +9413,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! == Fixture.Create<Dummy[][]>();
+            var result = (Grid<Garbage>)null! == Dummy.Create<Garbage[][]>();
 
             //Assert
             result.Should().BeFalse();
@@ -9423,7 +9423,7 @@ public class GridTests
         public void WhenArrayIsNull_ReturnFalse()
         {
             //Arrange
-            Dummy[][] other = null!;
+            Garbage[][] other = null!;
 
             //Act
             var result = Instance == other;
@@ -9434,7 +9434,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class NotEqualsOperator_JaggedArray : Tester<Grid<Dummy>>
+    public class NotEqualsOperator_JaggedArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenBothAreNull_ReturnFalse()
@@ -9442,7 +9442,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != (Dummy[][])null!;
+            var result = (Grid<Garbage>)null! != (Garbage[][])null!;
 
             //Assert
             result.Should().BeFalse();
@@ -9454,7 +9454,7 @@ public class GridTests
             //Arrange
 
             //Act
-            var result = (Grid<Dummy>)null! != Fixture.Create<Dummy[][]>();
+            var result = (Grid<Garbage>)null! != Dummy.Create<Garbage[][]>();
 
             //Assert
             result.Should().BeTrue();
@@ -9464,7 +9464,7 @@ public class GridTests
         public void WhenArrayIsNull_ReturnTrue()
         {
             //Arrange
-            Dummy[][] other = null!;
+            Garbage[][] other = null!;
 
             //Act
             var result = Instance != other;
@@ -9475,15 +9475,15 @@ public class GridTests
     }
 
     [TestClass]
-    public class Enumerator : Tester<Grid<Dummy>>
+    public class Enumerator : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void Always_Enumerates()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var enumeratedItems = new List<Cell<Dummy>>();
+            var enumeratedItems = new List<Cell<Garbage>>();
 
             //Act
             foreach (var item in Instance)
@@ -9499,7 +9499,7 @@ public class GridTests
         public void Enumerator_WhenUsingResetAfterCollectionChanged_Throw()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
             using var enumerator = Instance.GetEnumerator();
 
@@ -9508,7 +9508,7 @@ public class GridTests
             {
                 while (enumerator.MoveNext())
                 {
-                    Instance.Add(Fixture.Create<Cell<Dummy>>());
+                    Instance.Add(Dummy.Create<Cell<Garbage>>());
                     enumerator.Reset();
                 }
             };
@@ -9519,7 +9519,7 @@ public class GridTests
     }
 
     [TestClass]
-    public class HashCode : Tester<Grid<Dummy>>
+    public class HashCode : Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void Always_ReturnInternalCollectionHashCode()
@@ -9530,37 +9530,31 @@ public class GridTests
             var result = Instance.GetHashCode();
 
             //Assert
-            result.Should().Be(GetFieldValue<Dictionary<Vector2<int>, Dummy>>("_items")!.GetHashCode());
+            result.Should().Be(GetFieldValue<Dictionary<Vector2<int>, Garbage>>("_items")!.GetHashCode());
         }
     }
 
     [TestClass]
-    public class Equality : Tester
+    public class Equality : ToolBX.Collections.UnitTesting.Tester
     {
-        protected override void InitializeTest()
-        {
-            base.InitializeTest();
-            Fixture.Customizations.Add(new GridSpecimenBuilder());
-        }
-
         [TestMethod]
-        public void Always_EnsureValueEquality() => Ensure.ValueEquality<Grid<Dummy>>(Fixture);
+        public void Always_EnsureValueEquality() => Ensure.ValueEquality<Grid<Garbage>>(Dummy);
     }
 
     [TestClass]
-    public class Serialization : Tester<Grid<Dummy>>
+    public class Serialization : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
     {
         [TestMethod]
         public void WhenSerializingJsonUsingNewtonsoft_DeserializeEquivalentObject()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var json = JsonConvert.SerializeObject(Instance);
 
             //Act
-            var result = JsonConvert.DeserializeObject<Grid<Dummy>>(json);
+            var result = JsonConvert.DeserializeObject<Grid<Garbage>>(json);
 
             //Assert
             result.Should().BeEquivalentTo(Instance);
@@ -9570,7 +9564,7 @@ public class GridTests
         public void WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             JsonSerializerOptions.WithGridConverters();
@@ -9578,7 +9572,7 @@ public class GridTests
             var json = System.Text.Json.JsonSerializer.Serialize(Instance, JsonSerializerOptions);
 
             //Act
-            var result = System.Text.Json.JsonSerializer.Deserialize<Grid<Dummy>>(json, JsonSerializerOptions);
+            var result = System.Text.Json.JsonSerializer.Deserialize<Grid<Garbage>>(json, JsonSerializerOptions);
 
             //Assert
             result.Should().BeEquivalentTo(Instance);

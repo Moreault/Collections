@@ -54,19 +54,6 @@ public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCol
 
     ObservableList<T> Copy(int startingIndex = 0);
     ObservableList<T> Copy(int startingIndex, int count);
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    int FirstIndexOf(T item);
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    int FirstIndexOf(Func<T, bool> predicate);
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    int LastIndexOf(T item);
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    int LastIndexOf(Func<T, bool> predicate);
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    IReadOnlyList<int> IndexesOf(T item);
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    IReadOnlyList<int> IndexesOf(Func<T, bool> predicate);
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     void Swap(int currentIndex, int destinationIndex);
 
     /// <summary>
@@ -80,22 +67,29 @@ public interface IObservableList<T> : IList<T>, IReadOnlyList<T>, IObservableCol
     void TrimEndDownTo(int maxSize);
 
     /// <summary>
-    /// Returns a random element from the collection.
-    /// </summary>
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    T? GetRandom();
-
-    /// <summary>
-    /// Returns a random index from the collection.
-    /// </summary>
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    int GetRandomIndex();
-
-    /// <summary>
     /// Randomly rearranges the collection's content order.
     /// </summary>
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     IObservableList<T> Shuffle();
+
+    /// <summary>
+    /// Clears the collection and adds those items instead.
+    /// </summary>
+    void Overwrite(params T[]? items);
+
+    /// <summary>
+    /// Clears the collection and adds those items instead.
+    /// </summary>
+    void Overwrite(IEnumerable<T> items);
+
+    /// <summary>
+    /// Reverses the order of the elements in the entire <see cref="IObservableList{T}"/>.
+    /// </summary>
+    void Reverse();
+
+    /// <summary>
+    /// Reverses the order of the elements in the entire <see cref="IObservableList{T}"/>.
+    /// </summary>
+    void Reverse(int index, int count);
 }
 
 public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
@@ -145,9 +139,6 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     void ICollection<T>.Add(T item) => Add(item);
-
-    //Required for XML Serialization
-    public void Add(object item) => Add((T)item);
 
     public void Add(params T[]? items)
     {
@@ -201,29 +192,8 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         return copy;
     }
 
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    int IList<T>.IndexOf(T item) => FirstIndexOf(item);
+    int IList<T>.IndexOf(T item) => this.FirstIndexOf(item);
 
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    public int FirstIndexOf(T item) => _items.FirstIndexOf(item);
-
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    public int FirstIndexOf(Func<T, bool> predicate) => _items.FirstIndexOf(predicate);
-
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    public int LastIndexOf(T item) => _items.LastIndexOf(item);
-
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    public int LastIndexOf(Func<T, bool> predicate) => _items.LastIndexOf(predicate);
-
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    public IReadOnlyList<int> IndexesOf(T item) => _items.IndexesOf(item);
-
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    public IReadOnlyList<int> IndexesOf(Func<T, bool> predicate) => _items.IndexesOf(predicate);
-
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    //TODO Maybe keep Swap to ensure that CollectionChanged only gets called once instead of twice? (also, add an event trigger here if I do this!)
     public void Swap(int currentIndex, int destinationIndex) => _items.Swap(currentIndex, destinationIndex);
 
     public void TrimStartDownTo(int maxSize)
@@ -283,23 +253,39 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         }
     }
 
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    public T? GetRandom() => _items.GetRandom();
-
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
-    public int GetRandomIndex() => _items.GetRandomIndex();
-
-    [Obsolete("Use the OPEX extension method instead. Will be removed in 3.0.0")]
     public IObservableList<T> Shuffle()
     {
         _items.Shuffle();
         return this;
     }
 
+    public void Overwrite(params T[]? items)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Overwrite(IEnumerable<T> items)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Reverse()
+    {
+
+        throw new NotImplementedException();
+    }
+
+    public void Reverse(int index, int count)
+    {
+
+        _items.Reverse();
+        throw new NotImplementedException();
+    }
+
     public void TryRemoveAll(T item)
     {
         var originalCount = Count;
-        foreach (var index in IndexesOf(item).OrderByDescending(x => x))
+        foreach (var index in this.IndexesOf(item).OrderByDescending(x => x))
             _items.RemoveAt(index);
 
         if (CollectionChanged != null && originalCount > Count)
@@ -317,7 +303,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public void RemoveAll(T item)
     {
-        var firstIndex = FirstIndexOf(item);
+        var firstIndex = this.FirstIndexOf(item);
         if (firstIndex == -1) throw new InvalidOperationException(string.Format(Exceptions.CannotRemoveItemBecauseItIsNotInCollection, GetType().GetHumanReadableName(), item));
         TryRemoveAll(item);
     }
@@ -332,7 +318,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         if (!list.Any())
             throw new ArgumentException($"{nameof(items)} should not be empty");
 
-        var indexes = list.Select(item => IndexesOf(item)).SelectMany(x => x).ToList();
+        var indexes = list.Select(item => this.IndexesOf(item)).SelectMany(x => x).ToList();
         if (indexes.Count != list.Count) throw new InvalidOperationException(string.Format(Exceptions.CannotRemoveItemsBecauseOneIsNotInCollection, GetType().GetHumanReadableName()));
 
         foreach (var index in indexes.OrderByDescending(x => x))
@@ -359,7 +345,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
         IList<T> removedItems = CollectionChanged == null ? Array.Empty<T>() : new List<T>();
 
-        var indexes = IndexesOf(predicate);
+        var indexes = this.IndexesOf(predicate);
         foreach (var index in indexes.OrderByDescending(x => x))
         {
             if (CollectionChanged != null)
@@ -377,7 +363,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
     public void RemoveAll(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        var firstIndex = FirstIndexOf(predicate);
+        var firstIndex = this.FirstIndexOf(predicate);
         if (firstIndex == -1) throw new InvalidOperationException(string.Format(Exceptions.CannotRemoveItemBecauseNoItemFitPredicate, GetType().GetHumanReadableName()));
         TryRemoveAll(predicate);
     }
@@ -427,21 +413,21 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public void TryRemoveFirst(T item)
     {
-        var index = FirstIndexOf(item);
+        var index = this.FirstIndexOf(item);
         if (index > -1)
             RemoveAt(index);
     }
 
     public void RemoveFirst(T item)
     {
-        var index = FirstIndexOf(item);
+        var index = this.FirstIndexOf(item);
         RemoveAt(index);
     }
 
     public void TryRemoveFirst(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        var index = FirstIndexOf(predicate);
+        var index = this.FirstIndexOf(predicate);
         if (index > -1)
             RemoveAt(index);
     }
@@ -449,27 +435,27 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
     public void RemoveFirst(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        var index = FirstIndexOf(predicate);
+        var index = this.FirstIndexOf(predicate);
         RemoveAt(index);
     }
 
     public void TryRemoveLast(T item)
     {
-        var index = LastIndexOf(item);
+        var index = this.LastIndexOf(item);
         if (index > -1)
             RemoveAt(index);
     }
 
     public void RemoveLast(T item)
     {
-        var index = LastIndexOf(item);
+        var index = this.LastIndexOf(item);
         RemoveAt(index);
     }
 
     public void TryRemoveLast(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        var index = LastIndexOf(predicate);
+        var index = this.LastIndexOf(predicate);
         if (index > -1)
             RemoveAt(index);
     }
@@ -477,7 +463,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
     public void RemoveLast(Func<T, bool> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        var index = LastIndexOf(predicate);
+        var index = this.LastIndexOf(predicate);
         RemoveAt(index);
     }
 

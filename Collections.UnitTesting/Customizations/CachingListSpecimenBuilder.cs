@@ -1,18 +1,8 @@
 ﻿namespace ToolBX.Collections.UnitTesting.Customizations;
 
-public sealed class CachingListSpecimenBuilder : ISpecimenBuilder
+public sealed class CachingListCustomization : ListCustomizationBase
 {
-    public object Create(object request, ISpecimenContext context)
-    {
-        if (request is Type type && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(CachingList<>))
-        {
-            var elementType = type.GetGenericArguments()[0];
-            var listType = typeof(List<>).MakeGenericType(elementType);
-            var list = context.Resolve(listType);
+    public override IEnumerable<Type> Types => [typeof(CachingList<>)];
 
-            return Activator.CreateInstance(typeof(CachingList<>).MakeGenericType(elementType), list)!;
-        }
-
-        return new NoSpecimen();
-    }
+    protected override object Convert<T>(IEnumerable<T> source) => source.ToCachingList();
 }

@@ -1,6 +1,4 @@
-﻿using ArgumentNullException = System.ArgumentNullException;
-
-namespace ToolBX.Collections.Caching;
+﻿namespace ToolBX.Collections.Caching;
 
 public interface ICachingDictionary<TKey, TValue> : IObservableDictionary<TKey, TValue> where TKey : notnull
 {

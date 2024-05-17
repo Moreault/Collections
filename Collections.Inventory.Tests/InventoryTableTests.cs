@@ -1,7 +1,7 @@
 namespace Collections.Inventory.Tests;
 
 [TestClass]
-public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
+public class InventoryTableTests : InventoryTester<InventoryTable<GarbageItem>>
 {
     [TestMethod]
     public void ParameterlessConstructor_Always_InitializeStackSizeWithDefaultValue()
@@ -9,7 +9,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
 
         //Act
-        var result = new InventoryTable<DummyItem>();
+        var result = new InventoryTable<GarbageItem>();
 
         //Assert
         result.StackSize.Should().Be(DefaultValues.StackSize);
@@ -19,10 +19,10 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void StackSizeConstructor_WhenStackSizeIsNegative_Throw()
     {
         //Arrange
-        var stackSize = -Fixture.Create<int>();
+        var stackSize = -Dummy.Create<int>();
 
         //Act
-        var action = () => new InventoryTable<DummyItem>(stackSize);
+        var action = () => new InventoryTable<GarbageItem>(stackSize);
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -34,7 +34,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
 
         //Act
-        var action = () => new InventoryTable<DummyItem>(0);
+        var action = () => new InventoryTable<GarbageItem>(0);
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -44,10 +44,10 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void StackSizeConstructor_WhenStackSizeIsPositive_SetStackSize()
     {
         //Arrange
-        var stackSize = Fixture.Create<int>();
+        var stackSize = Dummy.Create<int>();
 
         //Act
-        var result = new InventoryTable<DummyItem>(stackSize);
+        var result = new InventoryTable<GarbageItem>(stackSize);
 
         //Assert
         result.StackSize.Should().Be(stackSize);
@@ -57,11 +57,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableConstructor_WhenStackSizeIsNegative_Throw()
     {
         //Arrange
-        var stackSize = -Fixture.Create<int>();
-        var collection = Fixture.CreateMany<DummyItem>();
+        var stackSize = -Dummy.Create<int>();
+        var collection = Dummy.CreateMany<GarbageItem>();
 
         //Act
-        var action = () => new InventoryTable<DummyItem>(collection, stackSize);
+        var action = () => new InventoryTable<GarbageItem>(collection, stackSize);
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -71,10 +71,10 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableConstructor_WhenStackSizeIsZero_Throw()
     {
         //Arrange
-        var collection = Fixture.CreateMany<DummyItem>();
+        var collection = Dummy.CreateMany<GarbageItem>();
 
         //Act
-        var action = () => new InventoryTable<DummyItem>(collection, 0);
+        var action = () => new InventoryTable<GarbageItem>(collection, 0);
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -84,11 +84,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableConstructor_WhenCollectionIsNull_Throw()
     {
         //Arrange
-        var stackSize = Fixture.Create<int>();
-        IEnumerable<DummyItem> collection = null!;
+        var stackSize = Dummy.Create<int>();
+        IEnumerable<GarbageItem> collection = null!;
 
         //Act
-        var action = () => new InventoryTable<DummyItem>(collection, stackSize);
+        var action = () => new InventoryTable<GarbageItem>(collection, stackSize);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -98,11 +98,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableConstructor_WhenStackSizeIsPositiveAndCollectionIsNotNull_InstantiateWithStackSize()
     {
         //Arrange
-        var stackSize = Fixture.Create<int>();
-        var collection = Fixture.CreateMany<DummyItem>().ToList();
+        var stackSize = Dummy.Create<int>();
+        var collection = Dummy.CreateMany<GarbageItem>().ToList();
 
         //Act
-        var result = new InventoryTable<DummyItem>(collection, stackSize);
+        var result = new InventoryTable<GarbageItem>(collection, stackSize);
 
         //Assert
         result.StackSize.Should().Be(stackSize);
@@ -112,25 +112,25 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableConstructor_WhenStackSizeIsPositiveAndCollectionIsNotNull_InstantiateWithCollectionWithOneElementInEach()
     {
         //Arrange
-        var stackSize = Fixture.Create<int>();
-        var collection = Fixture.CreateMany<DummyItem>().ToList();
+        var stackSize = Dummy.Create<int>();
+        var collection = Dummy.CreateMany<GarbageItem>().ToList();
 
         //Act
-        var result = new InventoryTable<DummyItem>(collection, stackSize);
+        var result = new InventoryTable<GarbageItem>(collection, stackSize);
 
         //Assert
-        result.Should().BeEquivalentTo(collection.Select(x => new Entry<DummyItem>(x)));
+        result.Should().BeEquivalentTo(collection.Select(x => new Entry<GarbageItem>(x)));
     }
 
     [TestMethod]
     public void EnumerableOfEntriesConstructor_WhenStackSizeIsNegative_Throw()
     {
         //Arrange
-        var stackSize = -Fixture.Create<int>();
-        var collection = Fixture.CreateMany<Entry<DummyItem>>();
+        var stackSize = -Dummy.Create<int>();
+        var collection = Dummy.CreateMany<Entry<GarbageItem>>();
 
         //Act
-        var action = () => new InventoryTable<DummyItem>(collection, stackSize);
+        var action = () => new InventoryTable<GarbageItem>(collection, stackSize);
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -140,10 +140,10 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableOfEntriesConstructor_WhenStackSizeIsZero_Throw()
     {
         //Arrange
-        var collection = Fixture.CreateMany<Entry<DummyItem>>();
+        var collection = Dummy.CreateMany<Entry<GarbageItem>>();
 
         //Act
-        var action = () => new InventoryTable<DummyItem>(collection, 0);
+        var action = () => new InventoryTable<GarbageItem>(collection, 0);
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -153,11 +153,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableOfEntriesConstructor_WhenCollectionIsNull_Throw()
     {
         //Arrange
-        var stackSize = Fixture.Create<int>();
-        IEnumerable<Entry<DummyItem>> collection = null!;
+        var stackSize = Dummy.Create<int>();
+        IEnumerable<Entry<GarbageItem>> collection = null!;
 
         //Act
-        var action = () => new InventoryTable<DummyItem>(collection, stackSize);
+        var action = () => new InventoryTable<GarbageItem>(collection, stackSize);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -167,11 +167,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableOfEntriesConstructor_WhenStackSizeIsPositiveAndCollectionIsNotNull_InstantiateWithStackSize()
     {
         //Arrange
-        var stackSize = Fixture.Create<int>();
-        var collection = Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, stackSize).CreateMany().ToList();
+        var stackSize = Dummy.Create<int>();
+        var collection = Dummy.Build<Entry<GarbageItem>>().With(x => x.Quantity, stackSize).CreateMany().ToList();
 
         //Act
-        var result = new InventoryTable<DummyItem>(collection, stackSize);
+        var result = new InventoryTable<GarbageItem>(collection, stackSize);
 
         //Assert
         result.StackSize.Should().Be(stackSize);
@@ -181,11 +181,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableOfEntriesConstructor_WhenStackSizeIsPositiveAndCollectionIsNotNull_InstantiateWithCollectionWithOneElementInEach()
     {
         //Arrange
-        var stackSize = Fixture.Create<int>();
-        var collection = Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, stackSize).CreateMany().ToList();
+        var stackSize = Dummy.Create<int>();
+        var collection = Dummy.Build<Entry<GarbageItem>>().With(x => x.Quantity, stackSize).CreateMany().ToList();
 
         //Act
-        var result = new InventoryTable<DummyItem>(collection, stackSize);
+        var result = new InventoryTable<GarbageItem>(collection, stackSize);
 
         //Assert
         result.Should().BeEquivalentTo(collection);
@@ -195,11 +195,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void EnumerableOfEntriesConstructor_WhenAtLeastOneEntryHasQuantityHigherThanStackSize_Throw()
     {
         //Arrange
-        var stackSize = Fixture.Create<int>();
-        var collection = Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, stackSize + 1).CreateMany().ToList();
+        var stackSize = Dummy.Create<int>();
+        var collection = Dummy.Build<Entry<GarbageItem>>().With(x => x.Quantity, stackSize + 1).CreateMany().ToList();
 
         //Act
-        var action = () => new InventoryTable<DummyItem>(collection, stackSize);
+        var action = () => new InventoryTable<GarbageItem>(collection, stackSize);
 
         //Assert
         action.Should().Throw<InventoryStackFullException>();
@@ -210,7 +210,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     {
         //Arrange
         Instance.StackSize = 99;
-        var item = Fixture.Create<DummyItem>();
+        var item = Dummy.Create<GarbageItem>();
         var oldQuantity = 44;
         Instance.Add(item, oldQuantity);
 
@@ -229,7 +229,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 99;
 
-        var item = Fixture.Create<DummyItem>();
+        var item = Dummy.Create<GarbageItem>();
         var oldQuantity = 50;
         Instance.Add(item, oldQuantity);
 
@@ -248,7 +248,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 99;
 
-        var item = Fixture.Create<DummyItem>();
+        var item = Dummy.Create<GarbageItem>();
         var quantity = Instance.StackSize;
 
         //Act
@@ -264,7 +264,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 99;
 
-        var item = Fixture.Create<DummyItem>();
+        var item = Dummy.Create<GarbageItem>();
         var quantity = Instance.StackSize + 1;
 
         //Act
@@ -280,7 +280,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
 
         //Act
-        var action = () => Instance.TryAdd(Fixture.Create<DummyItem>(), 0);
+        var action = () => Instance.TryAdd(Dummy.Create<GarbageItem>(), 0);
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -292,7 +292,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
 
         //Act
-        var action = () => Instance.TryAdd(Fixture.Create<DummyItem>(), -Fixture.Create<int>());
+        var action = () => Instance.TryAdd(Dummy.Create<GarbageItem>(), -Dummy.Create<int>());
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -302,11 +302,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAdd_WhenThisItemIsAlreadyInStock_AddNewQuantityToOldQuantity()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var oldQuantity = Fixture.Create<int>();
+        var item = Dummy.Create<GarbageItem>();
+        var oldQuantity = Dummy.Create<int>();
         Instance.TryAdd(item, oldQuantity);
 
-        var newQuantity = Fixture.Create<int>();
+        var newQuantity = Dummy.Create<int>();
 
         //Act
         Instance.TryAdd(item, newQuantity);
@@ -319,24 +319,24 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAdd_WhenThisItemIsAlreadyInStock_TriggerChange()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var oldQuantity = Fixture.Create<int>();
+        var item = Dummy.Create<GarbageItem>();
+        var oldQuantity = Dummy.Create<int>();
         Instance.TryAdd(item, oldQuantity);
 
-        var newQuantity = Fixture.Create<int>();
+        var newQuantity = Dummy.Create<int>();
 
-        var eventArgs = new List<CollectionChangeEventArgs<Entry<DummyItem>>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Entry<GarbageItem>>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         Instance.TryAdd(item, newQuantity);
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<DummyItem>>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<GarbageItem>>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<DummyItem>> { new(item, newQuantity) }
+                    NewValues = new List<Entry<GarbageItem>> { new(item, newQuantity) }
                 }
             });
     }
@@ -345,8 +345,8 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAdd_WhenItemIsNotCurrentlyInStock_AddNewEntry()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
 
         //Act
         Instance.TryAdd(item, quantity);
@@ -359,21 +359,21 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAdd_WhenItemIsNotCurrentlyInStock_TriggerChange()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
 
-        var eventArgs = new List<CollectionChangeEventArgs<Entry<DummyItem>>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Entry<GarbageItem>>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         Instance.TryAdd(item, quantity);
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<DummyItem>>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<GarbageItem>>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<DummyItem>> { new(item, quantity) }
+                    NewValues = new List<Entry<GarbageItem>> { new(item, quantity) }
                 }
             });
     }
@@ -384,7 +384,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 99;
 
-        var item = Fixture.Create<DummyItem>();
+        var item = Dummy.Create<GarbageItem>();
         var oldQuantity = 44;
         Instance.Add(item, oldQuantity);
 
@@ -403,7 +403,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 99;
 
-        var item = Fixture.Create<DummyItem>();
+        var item = Dummy.Create<GarbageItem>();
         var oldQuantity = 50;
         Instance.Add(item, oldQuantity);
 
@@ -422,7 +422,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 99;
 
-        var item = Fixture.Create<DummyItem>();
+        var item = Dummy.Create<GarbageItem>();
         var quantity = Instance.StackSize;
 
         //Act
@@ -438,7 +438,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 99;
 
-        var item = Fixture.Create<DummyItem>();
+        var item = Dummy.Create<GarbageItem>();
         var quantity = Instance.StackSize + 1;
 
         //Act
@@ -452,8 +452,8 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAdd_WhenAllItemsAreAdded_ReturnAllItemsAdded()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
 
         //Act
         var result = Instance.TryAdd(item, quantity);
@@ -468,8 +468,8 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 10;
 
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
         Instance.Add(item, 10);
 
         //Act
@@ -485,8 +485,8 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 10;
 
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
         Instance.Add(item, 5);
 
         //Act
@@ -502,10 +502,10 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 99;
 
-        var item = Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, Instance.StackSize + 1).Create();
+        var item = Dummy.Build<Entry<GarbageItem>>().With(x => x.Quantity, Instance.StackSize + 1).Create();
 
         //Act
-        var action = () => ((ICollection<Entry<DummyItem>>)Instance).Add(item);
+        var action = () => ((ICollection<Entry<GarbageItem>>)Instance).Add(item);
 
         //Assert
         action.Should().Throw<InventoryStackFullException>();
@@ -517,13 +517,13 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 99;
         var oldQuantity = 50;
-        var item = Fixture.Build<Entry<DummyItem>>().With(x => x.Quantity, oldQuantity).Create();
+        var item = Dummy.Build<Entry<GarbageItem>>().With(x => x.Quantity, oldQuantity).Create();
         Instance.Add(item.Item, oldQuantity);
 
         var newQuantity = 50;
 
         //Act
-        var action = () => ((ICollection<Entry<DummyItem>>)Instance).Add(item with { Quantity = newQuantity });
+        var action = () => ((ICollection<Entry<GarbageItem>>)Instance).Add(item with { Quantity = newQuantity });
 
         //Assert
         action.Should().Throw<InventoryStackFullException>();
@@ -535,14 +535,14 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 50;
 
-        var id = Fixture.Create<int>();
+        var id = Dummy.Create<int>();
 
-        var entries = Fixture.Build<Entry<DummyItem>>()
-            .With(x => x.Item, () => Fixture.Build<DummyItem>().With(y => y.Id, id).Create())
+        var entries = Dummy.Build<Entry<GarbageItem>>()
+            .With(x => x.Item, () => Dummy.Build<GarbageItem>().With(y => y.Id, id).Create())
             .With(x => x.Quantity, 20).CreateMany().ToList();
 
-        var bustingEntry = Fixture.Build<Entry<DummyItem>>()
-            .With(x => x.Item, Fixture.Build<DummyItem>().With(y => y.Id, id).Create())
+        var bustingEntry = Dummy.Build<Entry<GarbageItem>>()
+            .With(x => x.Item, Dummy.Build<GarbageItem>().With(y => y.Id, id).Create())
             .With(x => x.Quantity, 49).Create();
 
         entries.Add(bustingEntry);
@@ -563,8 +563,8 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenPredicateIsNull_Throw()
     {
         //Arrange
-        Func<DummyItem, bool> predicate = null!;
-        var quantity = Fixture.Create<int>();
+        Func<GarbageItem, bool> predicate = null!;
+        var quantity = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.TryAdd(predicate, quantity);
@@ -577,8 +577,8 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenQuantityIsNegative_Throw()
     {
         //Arrange
-        var predicate = Fixture.Create<Func<DummyItem, bool>>();
-        var quantity = -Fixture.Create<int>();
+        var predicate = Dummy.Create<Func<GarbageItem, bool>>();
+        var quantity = -Dummy.Create<int>();
 
         //Act
         var action = () => Instance.TryAdd(predicate, quantity);
@@ -591,7 +591,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenQuantityIsZero_Throw()
     {
         //Arrange
-        var predicate = Fixture.Create<Func<DummyItem, bool>>();
+        var predicate = Dummy.Create<Func<GarbageItem, bool>>();
         var quantity = 0;
 
         //Act
@@ -605,16 +605,16 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenThereIsZeroPredicateMatch_DoNotModifyStock()
     {
         //Arrange
-        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        var entries = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
-        var quantity = Fixture.Create<int>();
+        var quantity = Dummy.Create<int>();
 
         var copy = Instance.Select(x => x with { }).ToList();
 
         //Act
-        Instance.TryAdd(x => x.Id == Fixture.Create<int>(), quantity);
+        Instance.TryAdd(x => x.Id == Dummy.Create<int>(), quantity);
 
         //Assert
         Instance.Should().BeEquivalentTo(copy);
@@ -624,17 +624,17 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenThereIsZeroPredicateMatch_DoNotTriggerChange()
     {
         //Arrange
-        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        var entries = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
-        var quantity = Fixture.Create<int>();
+        var quantity = Dummy.Create<int>();
 
-        var eventArgs = new List<CollectionChangeEventArgs<Entry<DummyItem>>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Entry<GarbageItem>>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
-        Instance.TryAdd(x => x.Id == Fixture.Create<int>(), quantity);
+        Instance.TryAdd(x => x.Id == Dummy.Create<int>(), quantity);
 
         //Assert
         eventArgs.Should().BeEmpty();
@@ -644,14 +644,14 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenThereIsZeroPredicateMatch_ReturnZeroItemsAdded()
     {
         //Arrange
-        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        var entries = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
-        var quantity = Fixture.Create<int>();
+        var quantity = Dummy.Create<int>();
 
         //Act
-        var result = Instance.TryAdd(x => x.Id == Fixture.Create<int>(), quantity);
+        var result = Instance.TryAdd(x => x.Id == Dummy.Create<int>(), quantity);
 
         //Assert
         result.Should().BeEquivalentTo(new TryAddResult(0, quantity));
@@ -661,11 +661,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenThereIsOneMatch_AddToThatItemOnly()
     {
         //Arrange
-        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        var entries = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
-        var quantity = Fixture.Create<int>();
+        var quantity = Dummy.Create<int>();
 
         var entry = entries.GetRandom();
         var id = entry.Item.Id;
@@ -682,27 +682,27 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenThereIsOneMatch_TriggerChange()
     {
         //Arrange
-        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        var entries = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
-        var quantity = Fixture.Create<int>();
+        var quantity = Dummy.Create<int>();
 
         var entry = entries.GetRandom();
         var id = entry.Item.Id;
 
-        var eventArgs = new List<CollectionChangeEventArgs<Entry<DummyItem>>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Entry<GarbageItem>>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         Instance.TryAdd(x => x.Id == id, quantity);
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<DummyItem>>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<GarbageItem>>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<DummyItem>>
+                    NewValues = new List<Entry<GarbageItem>>
                     {
                         new(entry.Item, quantity)
                     }
@@ -714,11 +714,11 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenThereIsOneMatch_ReturnItemsAdded()
     {
         //Arrange
-        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        var entries = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
-        var quantity = Fixture.Create<int>();
+        var quantity = Dummy.Create<int>();
 
         var entry = entries.GetRandom();
         var id = entry.Item.Id;
@@ -734,15 +734,15 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenThereAreMultipleMatches_AddToAllThoseItems()
     {
         //Arrange
-        var id = Fixture.Create<int>();
+        var id = Dummy.Create<int>();
 
-        var entries = Fixture.Build<Entry<DummyItem>>()
-            .With(x => x.Item, () => Fixture.Build<DummyItem>().With(y => y.Id, id).Create()).CreateMany().ToList();
+        var entries = Dummy.Build<Entry<GarbageItem>>()
+            .With(x => x.Item, () => Dummy.Build<GarbageItem>().With(y => y.Id, id).Create()).CreateMany().ToList();
 
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
-        var quantity = Fixture.Create<int>();
+        var quantity = Dummy.Create<int>();
 
         var copy = Instance.Select(x => x with { }).ToList();
 
@@ -757,24 +757,24 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenThereAreMultipleMatches_TriggerChange()
     {
         //Arrange
-        var id = Fixture.Create<int>();
+        var id = Dummy.Create<int>();
 
-        var entries = Fixture.Build<Entry<DummyItem>>()
-            .With(x => x.Item, () => Fixture.Build<DummyItem>().With(y => y.Id, id).Create()).CreateMany().ToList();
+        var entries = Dummy.Build<Entry<GarbageItem>>()
+            .With(x => x.Item, () => Dummy.Build<GarbageItem>().With(y => y.Id, id).Create()).CreateMany().ToList();
 
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
-        var quantity = Fixture.Create<int>();
+        var quantity = Dummy.Create<int>();
 
-        var eventArgs = new List<CollectionChangeEventArgs<Entry<DummyItem>>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Entry<GarbageItem>>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         Instance.TryAdd(x => x.Id == id, quantity);
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<DummyItem>>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<GarbageItem>>>
             {
                 new()
                 {
@@ -787,15 +787,15 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void TryAddPredicate_WhenThereAreMultipleMatches_ReturnAllItemsAdded()
     {
         //Arrange
-        var id = Fixture.Create<int>();
+        var id = Dummy.Create<int>();
 
-        var entries = Fixture.Build<Entry<DummyItem>>()
-            .With(x => x.Item, () => Fixture.Build<DummyItem>().With(y => y.Id, id).Create()).CreateMany().ToList();
+        var entries = Dummy.Build<Entry<GarbageItem>>()
+            .With(x => x.Item, () => Dummy.Build<GarbageItem>().With(y => y.Id, id).Create()).CreateMany().ToList();
 
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
-        var quantity = Fixture.Create<int>();
+        var quantity = Dummy.Create<int>();
 
         //Act
         var result = Instance.TryAdd(x => x.Id == id, quantity);
@@ -810,10 +810,10 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 50;
 
-        var id = Fixture.Create<int>();
+        var id = Dummy.Create<int>();
 
-        var entries = Fixture.Build<Entry<DummyItem>>()
-            .With(x => x.Item, () => Fixture.Build<DummyItem>().With(y => y.Id, id).Create()).With(x => x.Quantity, 40).CreateMany().ToList();
+        var entries = Dummy.Build<Entry<GarbageItem>>()
+            .With(x => x.Item, () => Dummy.Build<GarbageItem>().With(y => y.Id, id).Create()).With(x => x.Quantity, 40).CreateMany().ToList();
 
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
@@ -835,24 +835,24 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 50;
 
-        var id = Fixture.Create<int>();
+        var id = Dummy.Create<int>();
 
-        var entries = Fixture.Build<Entry<DummyItem>>()
-            .With(x => x.Item, () => Fixture.Build<DummyItem>().With(y => y.Id, id).Create()).With(x => x.Quantity, 40).CreateMany().ToList();
+        var entries = Dummy.Build<Entry<GarbageItem>>()
+            .With(x => x.Item, () => Dummy.Build<GarbageItem>().With(y => y.Id, id).Create()).With(x => x.Quantity, 40).CreateMany().ToList();
 
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
         var quantity = 20;
 
-        var eventArgs = new List<CollectionChangeEventArgs<Entry<DummyItem>>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Entry<GarbageItem>>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
         Instance.TryAdd(x => x.Id == id, quantity);
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<DummyItem>>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Entry<GarbageItem>>>
             {
                 new()
                 {
@@ -867,17 +867,17 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
         Instance.StackSize = 50;
 
-        var id = Fixture.Create<int>();
+        var id = Dummy.Create<int>();
 
-        var entries = Fixture.Build<Entry<DummyItem>>()
-            .With(x => x.Item, () => Fixture.Build<DummyItem>().With(y => y.Id, id).Create()).With(x => x.Quantity, 40).CreateMany().ToList();
+        var entries = Dummy.Build<Entry<GarbageItem>>()
+            .With(x => x.Item, () => Dummy.Build<GarbageItem>().With(y => y.Id, id).Create()).With(x => x.Quantity, 40).CreateMany().ToList();
 
         foreach (var (dummy, entryQuantity) in entries)
             Instance.Add(dummy, entryQuantity);
 
         var quantity = 20;
 
-        var eventArgs = new List<CollectionChangeEventArgs<Entry<DummyItem>>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Entry<GarbageItem>>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
         //Act
@@ -893,7 +893,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
         //Arrange
 
         //Act
-        var result = Instance.IndexOf(Fixture.Create<DummyItem>());
+        var result = Instance.IndexOf(Dummy.Create<GarbageItem>());
 
         //Assert
         result.Should().Be(-1);
@@ -903,12 +903,12 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void IndexOf_WhenItemIsNotInCollection_ReturnMinusOne()
     {
         //Arrange
-        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        var entries = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
         foreach (var (dummy, quantity) in entries)
             Instance.Add(dummy, quantity);
 
         //Act
-        var result = Instance.IndexOf(Fixture.Create<DummyItem>());
+        var result = Instance.IndexOf(Dummy.Create<GarbageItem>());
 
         //Assert
         result.Should().Be(-1);
@@ -918,7 +918,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<DummyItem>>
     public void IndexOf_WhenItemIsInCollection_ReturnItsIndex()
     {
         //Arrange
-        var entries = Fixture.CreateMany<Entry<DummyItem>>().ToList();
+        var entries = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
         foreach (var (dummy, quantity) in entries)
             Instance.Add(dummy, quantity);
 

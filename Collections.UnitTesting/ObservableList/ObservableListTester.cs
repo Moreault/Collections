@@ -8,7 +8,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     protected override void InitializeTest()
     {
         base.InitializeTest();
-        Fixture.WithCollectionCustomizations();
+        Dummy.WithCollectionCustomizations();
     }
 
     [TestMethod]
@@ -28,7 +28,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void LastIndex_WhenCollectionContainsOneItem_ReturnZero()
     {
         //Arrange
-        var observableList = new TList { Fixture.Create<TItem>() };
+        var observableList = new TList { Dummy.Create<TItem>() };
 
         //Act
         var result = observableList.LastIndex;
@@ -41,7 +41,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void LastIndex_WhenCollectionContainsABunchOfItems_ReturnLastIndex()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
 
         //Act
         var result = observableList.LastIndex;
@@ -54,7 +54,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IsReadOnly_Always_ReturnFalse()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
 
         //Act
         var result = ((ICollection<TItem>)observableList).IsReadOnly;
@@ -67,7 +67,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexerGet_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         var index = -1;
 
         //Act
@@ -81,7 +81,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexerGet_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         var index = observableList.LastIndex + 1;
 
         //Act
@@ -95,7 +95,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexerGet_WhenIndexIsZero_ReturnFirstItem()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         var index = 0;
 
         //Act
@@ -109,7 +109,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexerGet_WhenIndexIsLastIndex_ReturnLastItem()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         var index = observableList.LastIndex;
 
         //Act
@@ -123,7 +123,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexerGet_WhenIndexIsWhatever_ReturnWhatever()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         var list = observableList.ToList();
         var index = observableList.GetRandomIndex();
 
@@ -138,9 +138,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexerSet_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         var index = -1;
-        var value = Fixture.Create<TItem>();
+        var value = Dummy.Create<TItem>();
 
         //Act
         var action = () => observableList[index] = value;
@@ -153,9 +153,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexerSet_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         var index = observableList.LastIndex + 1;
-        var value = Fixture.Create<TItem>();
+        var value = Dummy.Create<TItem>();
 
         //Act
         var action = () => observableList[index] = value;
@@ -168,9 +168,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexerSet_WhenIndexIsWithinBounds_ReplaceItemAtIndex()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         var index = observableList.GetRandomIndex();
-        var value = Fixture.Create<TItem>();
+        var value = Dummy.Create<TItem>();
 
         //Act
         observableList[index] = value;
@@ -183,9 +183,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexerSet_WhenIndexIsWithinBounds_TriggerCollectionChanged()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         var index = observableList.GetRandomIndex();
-        var value = Fixture.Create<TItem>();
+        var value = Dummy.Create<TItem>();
 
         var oldItem = observableList[index];
 
@@ -210,7 +210,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Add_WhenUsingTheICollectionOverload_AddToObservableList()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         ((ICollection<TItem>)Instance).Add(item);
@@ -223,7 +223,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Add_WhenUsingTheICollectionOverload_SetCountToOne()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         ((ICollection<TItem>)Instance).Add(item);
@@ -236,7 +236,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Add_WhenAddingSingleItem_ItemIsAdded()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         Instance.Add(item);
@@ -249,7 +249,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Add_WhenAddingSingleItem_TriggerChange()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
@@ -267,7 +267,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Add_WhenAddingSingleItem_SetCountToOne()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         Instance.Add(item);
@@ -280,7 +280,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Add_WhenAddingABunchOfItems_AddAllOfThem()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(20).ToArray();
+        var items = Dummy.CreateMany<TItem>(20).ToArray();
 
         //Act
         Instance.Add(items);
@@ -293,7 +293,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Add_WhenAddingABunchOfItems_TriggerChangeOnlyOnce()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(20).ToArray();
+        var items = Dummy.CreateMany<TItem>(20).ToArray();
         var triggered = 0;
         Instance.CollectionChanged += (_, _) => triggered++;
 
@@ -308,7 +308,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Add_WhenAddingABunchOfItems_TriggerChangeWithAllNewItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(20).ToArray();
+        var items = Dummy.CreateMany<TItem>(20).ToArray();
         var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
@@ -326,7 +326,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Add_WhenAddingABunchOfItems_SetCountToTwenty()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(20).ToArray();
+        var items = Dummy.CreateMany<TItem>(20).ToArray();
         var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
@@ -401,7 +401,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Clear_Always_RemoveAllItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(20).ToArray();
+        var items = Dummy.CreateMany<TItem>(20).ToArray();
         Instance.Add(items);
 
         //Act
@@ -415,7 +415,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Clear_WhenContainsItems_TriggerCollectionChanged()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(20).ToArray();
+        var items = Dummy.CreateMany<TItem>(20).ToArray();
         Instance.Add(items);
 
         var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
@@ -435,7 +435,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Clear_Always_SetCountToZero()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(20).ToArray();
+        var items = Dummy.CreateMany<TItem>(20).ToArray();
         Instance.Add(items);
 
         //Act
@@ -449,7 +449,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Clear_WhenThereAreThreeItems_EventShouldOnlyHaveThreeItemsAndNotAFourthNullObject()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToArray();
+        var items = Dummy.CreateMany<TItem>(3).ToArray();
         Instance.Add(items);
 
         var eventArgs = new List<CollectionChangeEventArgs<TItem>>();
@@ -483,7 +483,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Contains_WhenItemIsInObservableList_ReturnTrue()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item);
 
         //Act
@@ -497,7 +497,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Contains_WhenItemIsNotInObservableList_ReturnFalse()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         var result = ((ICollection<TItem>)Instance).Contains(item);
@@ -511,7 +511,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     {
         //Arrange
         var array = new TItem[3];
-        Instance.Add(Fixture.CreateMany<TItem>(3));
+        Instance.Add(Dummy.CreateMany<TItem>(3));
 
         //Act
         ((ICollection<TItem>)Instance).CopyTo(array, 0);
@@ -524,7 +524,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Copy_WhenIndexIsZero_ReturnAnExactCopy()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -538,7 +538,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Copy_WhenIndexIsZero_ShouldNotBeSameReference()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -552,7 +552,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Copy_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var startingIndex = -Fixture.Create<int>();
+        var startingIndex = -Dummy.Create<int>();
 
         //Act
         var action = () => Instance.Copy(startingIndex);
@@ -565,7 +565,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Copy_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var startingIndex = Instance.LastIndex + 1;
@@ -581,7 +581,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Copy_WhenStartingIndexIsLastIndex_ReturnObservableListWithOnlyTheLastItemInIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var startingIndex = Instance.LastIndex;
@@ -597,7 +597,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Copy_WhenIndexIsGreaterThanZero_CopyObservableListStartingFromIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(6).ToList();
+        var items = Dummy.CreateMany<TItem>(6).ToList();
         var startingIndex = 3;
         Instance.Add(items);
 
@@ -615,8 +615,8 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void CopyWithCount_WhenStartingIndexIsNegative_Throw()
     {
         //Arrange
-        var index = -Fixture.Create<int>();
-        var count = Fixture.Create<int>();
+        var index = -Dummy.Create<int>();
+        var count = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.Copy(index, count);
@@ -629,10 +629,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void CopyWithCount_WhenStartingIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>(3));
+        Instance.Add(Dummy.CreateMany<TItem>(3));
 
         var index = 3;
-        var count = Fixture.Create<int>();
+        var count = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.Copy(index, count);
@@ -645,9 +645,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void CopyWithCount_WhenCountIsNegative_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>(3));
+        Instance.Add(Dummy.CreateMany<TItem>(3));
         var index = Instance.GetRandomIndex();
-        var count = -Fixture.Create<int>();
+        var count = -Dummy.Create<int>();
 
         //Act
         var action = () => Instance.Copy(index, count);
@@ -660,7 +660,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void CopyWithCount_WhenStartingIndexPlusCountIsGreaterThanCollectionSize_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>(3));
+        Instance.Add(Dummy.CreateMany<TItem>(3));
         var index = 0;
         var count = 4;
 
@@ -675,7 +675,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void CopyWithCount_WhenStartingIndexPlusCountIsWithinBounds_ReturnACopyOfThat()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(8).ToList();
+        var items = Dummy.CreateMany<TItem>(8).ToList();
         Instance.Add(items);
 
         var index = 3;
@@ -695,7 +695,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void CopyWithCount_WhenStartingIndexIsZeroAndCountIsTheSameAsCollection_ReturnCopyOfObservableList()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(8).ToList();
+        var items = Dummy.CreateMany<TItem>(8).ToList();
         Instance.Add(items);
 
         var index = 0;
@@ -712,7 +712,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexOfIList_WhenItemIsInObservableList_ReturnItsIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var expectedIndex = items.GetRandomIndex();
@@ -728,10 +728,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexOfIList_WhenItemIsNotInObservableList_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         var result = ((IList<TItem>)Instance).IndexOf(item);
@@ -744,7 +744,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void FirstIndexOfItem_WhenItemIsInObservableList_ReturnItsIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var expectedIndex = items.GetRandomIndex();
@@ -760,10 +760,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void FirstIndexOfItem_WhenItemIsNotInObservableList_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         var result = Instance.FirstIndexOf(item);
@@ -788,7 +788,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void FirstIndexOfPredicate_WhenContainsDummyThatFitsConditions_ReturnIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var index = items.GetRandomIndex();
@@ -805,7 +805,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void FirstIndexOfPredicate_WhenThereAreMultipleDummiesThatFitConditions_ReturnOnlyTheFirst()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         var item = items.GetRandom();
         var identicalItems = new List<TItem> { item, item, item };
 
@@ -823,10 +823,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void FirstIndexOfPredicate_WhenNoDummiesFitConditions_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
 
         //Act
-        var result = Instance.FirstIndexOf(x => x!.Equals(Fixture.Create<TItem>()));
+        var result = Instance.FirstIndexOf(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         result.Should().Be(-1);
@@ -836,7 +836,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void LastIndexOfItem_WhenItemIsInObservableList_ReturnItsIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var expectedIndex = items.GetRandomIndex();
@@ -852,10 +852,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void LastIndexOfItem_WhenItemIsNotInObservableList_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         var result = Instance.LastIndexOf(item);
@@ -880,7 +880,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void LastIndexOfPredicate_WhenContainsDummyThatFitsConditions_ReturnIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var index = items.GetRandomIndex();
@@ -897,13 +897,13 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void LastIndexOfPredicate_WhenThereAreMultipleDummiesThatFitConditions_ReturnOnlyTheLast()
     {
         //Arrange
-        var id = Fixture.Create<int>();
+        var id = Dummy.Create<int>();
 
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
 
-        var itemOfInterest = Fixture.Create<TItem>();
+        var itemOfInterest = Dummy.Create<TItem>();
         items.AddRange(itemOfInterest, itemOfInterest, itemOfInterest);
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         Instance.Add(items);
 
@@ -918,11 +918,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void LastIndexOfPredicate_WhenNoDummiesFitConditions_ReturnMinusOne()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
-        var result = Instance.LastIndexOf(x => x!.Equals(Fixture.Create<TItem>()));
+        var result = Instance.LastIndexOf(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         result.Should().Be(-1);
@@ -932,9 +932,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexesOfItem_WhenThereAreNoOccurences_ReturnEmpty()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -948,8 +948,8 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexesOfItem_WhenThereIsOnlyOneOccurence_ReturnItsIndexInAObservableList()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var item = Dummy.Create<TItem>();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
         Instance.Add(item);
 
@@ -964,8 +964,8 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexesOfItem_WhenThereAreMultipleOccurences_ReturnThemAll()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var item = Dummy.Create<TItem>();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(item);
         Instance.Add(items);
         Instance.Add(item);
@@ -994,11 +994,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexesOfPrecidate_WhenThereAreNoCorrespondingItems_ReturnEmpty()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
-        var result = Instance.IndexesOf(x => x!.Equals(Fixture.Create<TItem>()));
+        var result = Instance.IndexesOf(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         result.Should().BeEmpty();
@@ -1008,9 +1008,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexesOfPrecidate_WhenThereIsOneCorrespondingItem_ReturnIndex()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(items);
         Instance.Add(item);
 
@@ -1025,11 +1025,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void IndexesOfPrecidate_WhenThereAreMultipleCorrespondingItems_ReturnThoseIndexes()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
-        var id = Fixture.Create<int>();
-        var itemsOfInterest = Fixture.CreateMany<TItem>(3).ToList();
+        var id = Dummy.Create<int>();
+        var itemsOfInterest = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(itemsOfInterest);
 
         //Act
@@ -1043,7 +1043,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Swap_WhenCurrentIndexIsNegative_Throw()
     {
         //Arrange
-        var entries = Fixture.CreateMany<TItem>().ToList();
+        var entries = Dummy.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1061,7 +1061,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Swap_WhenCurrentIndexIsOutOfRange_Throw()
     {
         //Arrange
-        var entries = Fixture.CreateMany<TItem>().ToList();
+        var entries = Dummy.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1079,7 +1079,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Swap_WhenDestinationIndexIsNegative_Throw()
     {
         //Arrange
-        var entries = Fixture.CreateMany<TItem>().ToList();
+        var entries = Dummy.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1097,7 +1097,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Swap_WhenDestinationIndexIsOutOfRange_Throw()
     {
         //Arrange
-        var entries = Fixture.CreateMany<TItem>().ToList();
+        var entries = Dummy.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1115,7 +1115,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Swap_WhenCurrentAndDestinationIndexesAreEqual_DoNotModifyCollection()
     {
         //Arrange
-        var entries = Fixture.CreateMany<TItem>().ToList();
+        var entries = Dummy.CreateMany<TItem>().ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1135,7 +1135,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Swap_WhenCurrentAndDestinationAreBothInTheMiddleOfCollection_SwapThemTogether()
     {
         //Arrange
-        var entries = Fixture.CreateMany<TItem>(4).ToList();
+        var entries = Dummy.CreateMany<TItem>(4).ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1159,7 +1159,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Swap_WhenSwappingFirstWithLastIndex_Swap()
     {
         //Arrange
-        var entries = Fixture.CreateMany<TItem>(4).ToList();
+        var entries = Dummy.CreateMany<TItem>(4).ToList();
         foreach (var entry in entries)
             Instance.Add(entry);
 
@@ -1183,7 +1183,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimStartDownTo_WhenMaxSizeIsNegative_Throw()
     {
         //Arrange
-        var maxSize = -Fixture.Create<int>();
+        var maxSize = -Dummy.Create<int>();
 
         //Act
         var action = () => Instance.TrimStartDownTo(maxSize);
@@ -1210,7 +1210,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimStartDownTo_WhenContainsItemsAndTrimToZero_RemoveEverything()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1224,7 +1224,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimStartDownTo_WhenContainsItemsAndTrimToZero_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1244,7 +1244,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimStartDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1258,7 +1258,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimStartDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1275,7 +1275,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimStartDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1289,7 +1289,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimStartDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1306,7 +1306,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimStartDownTo_WhenContainsItemsAndTrimToHalf_RemoveFirstHalfOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(12).ToList();
+        var items = Dummy.CreateMany<TItem>(12).ToList();
         Instance.Add(items);
 
         //Act
@@ -1328,7 +1328,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimStartDownTo_WhenContainsItemsAndTrimToHalf_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(12).ToList();
+        var items = Dummy.CreateMany<TItem>(12).ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1359,7 +1359,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimEndDownTo_WhenMaxSizeIsNegative_Throw()
     {
         //Arrange
-        var maxSize = -Fixture.Create<int>();
+        var maxSize = -Dummy.Create<int>();
 
         //Act
         var action = () => Instance.TrimEndDownTo(maxSize);
@@ -1386,7 +1386,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimEndDownTo_WhenContainsItemsAndTrimToZero_RemoveEverything()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1400,7 +1400,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimEndDownTo_WhenContainsItemsAndTrimToZero_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1420,7 +1420,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimEndDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1434,7 +1434,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimEndDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1451,7 +1451,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimEndDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1465,7 +1465,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimEndDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1482,7 +1482,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimEndDownTo_WhenContainsItemsAndTrimToHalf_RemoveFirstHalfOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(12).ToList();
+        var items = Dummy.CreateMany<TItem>(12).ToList();
         Instance.Add(items);
 
         //Act
@@ -1504,7 +1504,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TrimEndDownTo_WhenContainsItemsAndTrimToHalf_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(12).ToList();
+        var items = Dummy.CreateMany<TItem>(12).ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1535,12 +1535,12 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllItem_WhenContainsItem_RemoveAllOfThem()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1554,9 +1554,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllItem_WhenDoesNotContainItem_DoNotThrow()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1570,12 +1570,12 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllItem_WhenContainsItem_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1589,12 +1589,12 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllItem_WhenContainsItem_TriggerEventOnce()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1611,12 +1611,12 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllItem_WhenContainsItem_RemoveAllOfThem()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1630,9 +1630,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllItem_WhenDoesNotContainItem_Throw()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1646,12 +1646,12 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllItem_WhenContainsItem_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -1665,12 +1665,12 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllItem_WhenContainsItem_TriggerEventOnce()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item);
         Instance.Add(item);
         Instance.Add(item);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1687,11 +1687,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllParams_WhenOneItemIsNotInCollection_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToArray();
+        var content = Dummy.CreateMany<TItem>().ToArray();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1717,10 +1717,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllParams_WhenNoneOfTheItemsAreInCollection_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToArray();
+        var items = Dummy.CreateMany<TItem>().ToArray();
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1733,10 +1733,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllParams_WhenOneItemIsNotInCollection_DoNotRemoveTheOthers()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = content.Concat(Fixture.Create<TItem>()).ToArray();
+        var items = content.Concat(Dummy.Create<TItem>()).ToArray();
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1750,10 +1750,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllParams_WhenOneItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = content.Concat(Fixture.Create<TItem>()).ToArray();
+        var items = content.Concat(Dummy.Create<TItem>()).ToArray();
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
@@ -1770,10 +1770,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllParams_WhenAllItemsAreInCollection_RemoveAllOfThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>(3).ToList();
+        var content = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToArray();
+        var items = Dummy.CreateMany<TItem>().ToArray();
         Instance.Add(items);
 
         //Act
@@ -1787,10 +1787,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllParams_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>(3).ToList();
+        var content = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToArray();
+        var items = Dummy.CreateMany<TItem>().ToArray();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1836,11 +1836,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllEnumerable_WhenOneItemIsNotInCollection_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1853,10 +1853,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllEnumerable_WhenNoneOfTheItemsAreInCollection_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1869,11 +1869,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllEnumerable_WhenOneItemIsNotInCollection_DoNotRemoveTheOthers()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         //Act
         var action = () => Instance.RemoveAll(items);
@@ -1887,11 +1887,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllEnumerable_WhenOneItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
@@ -1908,10 +1908,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllEnumerable_WhenAllItemsAreInCollection_RemoveAllOfThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>(3).ToList();
+        var content = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1925,10 +1925,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllEnumerable_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>(3).ToList();
+        var content = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1948,11 +1948,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllParams_WhenOneItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         //Act
         var action = () => Instance.TryRemoveAll(items.ToArray());
@@ -1965,7 +1965,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllParams_WhenItemsIsEmpty_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         //Act
@@ -1979,7 +1979,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllParams_WhenItemsIsEmpty_DoNotTriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -1996,10 +1996,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllParams_WhenNoneOfTheItemsAreInCollection_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToArray();
+        var items = Dummy.CreateMany<TItem>().ToArray();
 
         //Act
         var action = () => Instance.TryRemoveAll(items);
@@ -2012,11 +2012,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllParams_WhenOneItemIsNotInCollection_RemoveThose()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         //Act
         Instance.TryRemoveAll(items.ToArray());
@@ -2029,11 +2029,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllParams_WhenOneItemIsNotInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
@@ -2052,10 +2052,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllParams_WhenAllItemsAreInCollection_RemoveAllOfThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>(3).ToList();
+        var content = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -2069,10 +2069,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllParams_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>(3).ToList();
+        var content = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -2105,7 +2105,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllEnumerable_WhenItemsIsEmpty_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         //Act
@@ -2119,7 +2119,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllEnumerable_WhenItemsIsEmpty_DoNotTriggerChange()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -2136,11 +2136,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllEnumerable_WhenOneItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         //Act
         var action = () => Instance.TryRemoveAll(items);
@@ -2153,10 +2153,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllEnumerable_WhenNoneOfTheItemsAreInCollection_DoNotThrow()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
 
         //Act
         var action = () => Instance.TryRemoveAll(items);
@@ -2169,11 +2169,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllEnumerable_WhenOneItemIsNotInCollection_RemoveThose()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         //Act
         Instance.TryRemoveAll(items);
@@ -2186,11 +2186,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllEnumerable_WhenOneItemIsNotInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>().ToList();
+        var content = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(content);
 
         var items = content.ToList();
-        items.Add(Fixture.Create<TItem>());
+        items.Add(Dummy.Create<TItem>());
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
@@ -2209,10 +2209,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllEnumerable_WhenAllItemsAreInCollection_RemoveAllOfThem()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>(3).ToList();
+        var content = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -2226,10 +2226,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllEnumerable_WhenAllItemsAreInCollection_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<TItem>(3).ToList();
+        var content = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(content);
 
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -2262,11 +2262,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllPredicate_WhenContainsNoItemCorrespondingToPredicate_DoNotThrow()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
-        var action = () => Instance.TryRemoveAll(x => x!.Equals(Fixture.Create<TItem>()));
+        var action = () => Instance.TryRemoveAll(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         action.Should().NotThrow();
@@ -2276,10 +2276,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllPredicate_WhenContainsItemsThatCorrespondToPredicate_RemoveThem()
     {
         //Arrange
-        var toRemove = Fixture.Create<TItem>();
+        var toRemove = Dummy.Create<TItem>();
         Instance.Add(toRemove, toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         Instance.Shuffle();
@@ -2295,10 +2295,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllPredicate_WhenContainsItem_DecreaseCount()
     {
         //Arrange
-        var toRemove = Fixture.Create<TItem>();
+        var toRemove = Dummy.Create<TItem>();
         Instance.Add(toRemove, toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         Instance.Shuffle();
@@ -2314,10 +2314,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveAllPredicate_WhenContainsItem_TriggerEventOnce()
     {
         //Arrange
-        var toRemove = Fixture.Create<TItem>();
+        var toRemove = Dummy.Create<TItem>();
         Instance.Add(toRemove, toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         Instance.Shuffle();
@@ -2349,11 +2349,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllPredicate_WhenContainsNoItemCorrespondingToPredicate_Throw()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
-        var action = () => Instance.RemoveAll(x => x!.Equals(Fixture.Create<TItem>()));
+        var action = () => Instance.RemoveAll(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         action.Should().Throw<InvalidOperationException>();
@@ -2363,10 +2363,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllPredicate_WhenContainsItemsThatCorrespondToPredicate_RemoveThem()
     {
         //Arrange
-        var toRemove = Fixture.Create<TItem>();
+        var toRemove = Dummy.Create<TItem>();
         Instance.Add(toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2380,10 +2380,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllPredicate_WhenContainsItemsThatCorrespondToPredicate_DecreaseCount()
     {
         //Arrange
-        var toRemove = Fixture.Create<TItem>();
+        var toRemove = Dummy.Create<TItem>();
         Instance.Add(toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2397,10 +2397,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAllPredicate_WhenContainsItem_TriggerEventOnce()
     {
         //Arrange
-        var toRemove = Fixture.Create<TItem>();
+        var toRemove = Dummy.Create<TItem>();
         Instance.Add(toRemove, toRemove);
 
-        var otherItems = Fixture.CreateMany<TItem>().ToList();
+        var otherItems = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(otherItems);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -2417,9 +2417,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertIList_Always_Insert()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2439,9 +2439,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertIList_Always_IncrementCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2455,9 +2455,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertIList_Always_TriggerEventOnce()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -2480,8 +2480,8 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertIList_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var index = -Fixture.Create<int>();
-        var item = Fixture.Create<TItem>();
+        var index = -Dummy.Create<int>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         var action = () => ((IList<TItem>)Instance).Insert(index, item);
@@ -2494,7 +2494,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertIList_WhenItemIsNull_InsertNullValue()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2523,9 +2523,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertEnumerableNoIndex_Always_InsertAtTheBegining()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2547,9 +2547,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertEnumerableNoIndex_Always_IncrementCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2563,9 +2563,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertEnumerableNoIndex_Always_TriggerEventOnce()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -2588,7 +2588,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertParamsNoIndex_WhenPassingSingleNull_InsertNullValue()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2605,9 +2605,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertParamsNoIndex_Always_InsertAtTheBegining()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToArray();
+        var items = Dummy.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2629,9 +2629,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertParamsNoIndex_Always_IncrementCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToArray();
+        var items = Dummy.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2645,9 +2645,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertParamsNoIndex_Always_TriggerEventOnce()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToArray();
+        var items = Dummy.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -2670,8 +2670,8 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertEnumerableWithIndex_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var index = -Fixture.Create<int>();
-        var items = Fixture.CreateMany<TItem>();
+        var index = -Dummy.Create<int>();
+        var items = Dummy.CreateMany<TItem>();
 
         //Act
         var action = () => Instance.Insert(index, items);
@@ -2684,7 +2684,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertEnumerableWithIndex_WhenItemsAreNull_Throw()
     {
         //Arrange
-        var index = Fixture.Create<int>();
+        var index = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.Insert(index, (IEnumerable<TItem>)null!);
@@ -2698,9 +2698,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     {
         //Arrange
         var index = 0;
-        var items = Fixture.CreateMany<TItem>(3).ToArray();
+        var items = Dummy.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2722,9 +2722,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InsertEnumerableWithIndex_WhenIndexIsLastIndex_InsertAtTheEndOfObservableListSameAsAddWould()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToArray();
+        var items = Dummy.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
         var index = Instance.LastIndex;
 
@@ -2749,9 +2749,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     {
         //Arrange
         var index = 2;
-        var items = Fixture.CreateMany<TItem>(3).ToArray();
+        var items = Dummy.CreateMany<TItem>(3).ToArray();
 
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
         //Act
@@ -2775,7 +2775,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         //Arrange
         var index = 1;
 
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         //Act
@@ -2799,7 +2799,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         //Arrange
         var index = 1;
 
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         //Act
@@ -2815,7 +2815,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         //Arrange
         var index = 1;
 
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -2838,7 +2838,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveICollection_WhenItemIsInCollection_ReturnTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
@@ -2854,10 +2854,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveICollection_WhenItemIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         //Act
         var result = ((ICollection<TItem>)Instance).Remove(item);
@@ -2870,7 +2870,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveICollection_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
@@ -2895,10 +2895,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveICollection_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
@@ -2914,7 +2914,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveICollection_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
@@ -2932,10 +2932,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveICollection_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         var originalCount = Instance.Count;
 
         //Act
@@ -2949,7 +2949,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAt_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var index = -Fixture.Create<int>();
+        var index = -Dummy.Create<int>();
 
         //Act
         var action = () => Instance.RemoveAt(index);
@@ -2962,7 +2962,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAt_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>());
+        Instance.Add(Dummy.CreateMany<TItem>());
 
         var index = Instance.LastIndex + 1;
 
@@ -2977,7 +2977,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAt_WhenItemIsRemoved_DecreaseCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
         var index = items.GetRandomIndex();
         var originalCount = Instance.Count;
@@ -2993,7 +2993,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAt_WhenItemIsRemoved_MoveSubsequentItemsToTheLeft()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
         var index = 1;
         var originalCount = Instance.Count;
@@ -3012,7 +3012,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAt_WhenItemIsRemoved_TriggerCollectionChanged()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
         var index = items.GetRandomIndex();
 
@@ -3033,10 +3033,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAtRange_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>());
+        Instance.Add(Dummy.CreateMany<TItem>());
 
-        var index = -Fixture.Create<int>();
-        var count = Fixture.Create<int>();
+        var index = -Dummy.Create<int>();
+        var count = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.RemoveAt(index, count);
@@ -3049,10 +3049,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAtRange_WhenIndexIsGreaterThanLastIndex_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>());
+        Instance.Add(Dummy.CreateMany<TItem>());
 
         var index = Instance.LastIndex + 1;
-        var count = Fixture.Create<int>();
+        var count = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.RemoveAt(index, count);
@@ -3065,10 +3065,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAtRange_WhenCountIsNegative_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>());
+        Instance.Add(Dummy.CreateMany<TItem>());
 
         var index = Instance.GetRandomIndex();
-        var count = -Fixture.Create<int>();
+        var count = -Dummy.Create<int>();
 
         //Act
         var action = () => Instance.RemoveAt(index, count);
@@ -3081,7 +3081,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAtRange_WhenIndexPlusCountWouldFallOutsideRange_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>(3));
+        Instance.Add(Dummy.CreateMany<TItem>(3));
 
         var index = 1;
         var count = 3;
@@ -3097,7 +3097,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAtRange_WhenCountIsZero_Throw()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>());
+        Instance.Add(Dummy.CreateMany<TItem>());
 
         var index = Instance.GetRandomIndex();
         var count = 0;
@@ -3113,7 +3113,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAtRange_WhenIndexAndCountAreWithinBounds_RemoveItemsWithinThoseBounds()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(6).ToList();
+        var items = Dummy.CreateMany<TItem>(6).ToList();
         Instance.Add(items);
 
         var index = 3;
@@ -3133,7 +3133,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAtRange_WhenIndexAndCountAreWithinBounds_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(6).ToList();
+        var items = Dummy.CreateMany<TItem>(6).ToList();
         Instance.Add(items);
 
         var index = 3;
@@ -3156,7 +3156,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveAtRange_WhenIndexAndCountAreWithinBounds_AdjustCollectionCountAccordingly()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(6).ToList();
+        var items = Dummy.CreateMany<TItem>(6).ToList();
         Instance.Add(items);
 
         var index = 3;
@@ -3173,7 +3173,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstItem_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3190,9 +3190,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstItem_WhenItemIsInCollection_RemoveActualFirstAndNotSomeOtherOccurence()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var buffer = Fixture.Create<TItem>();
+        var buffer = Dummy.Create<TItem>();
         Instance.Add(item, buffer, item, item);
 
         //Act
@@ -3209,7 +3209,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstItem_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3223,7 +3223,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstItem_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -3243,10 +3243,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstItem_WhenItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<TItem>();
+        var someOtherItem = Dummy.Create<TItem>();
 
         //Act
         var action = () => Instance.TryRemoveFirst(someOtherItem);
@@ -3259,10 +3259,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstItem_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<TItem>();
+        var someOtherItem = Dummy.Create<TItem>();
 
         //Act
         Instance.TryRemoveFirst(someOtherItem);
@@ -3275,13 +3275,13 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstItem_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
-        var someOtherItem = Fixture.Create<TItem>();
+        var someOtherItem = Dummy.Create<TItem>();
 
         //Act
         Instance.TryRemoveFirst(someOtherItem);
@@ -3294,7 +3294,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveFirstItem_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3311,9 +3311,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveFirstItem_WhenItemIsInCollection_RemoveActualFirstAndNotSomeOtherOccurence()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var buffer = Fixture.Create<TItem>();
+        var buffer = Dummy.Create<TItem>();
         Instance.Add(item, buffer, item, item);
 
         //Act
@@ -3330,7 +3330,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveFirstItem_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3344,7 +3344,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveFirstItem_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -3364,10 +3364,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveFirstItem_WhenItemIsNotInCollection_Throw()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<TItem>();
+        var someOtherItem = Dummy.Create<TItem>();
 
         //Act
         var action = () => Instance.RemoveFirst(someOtherItem);
@@ -3393,8 +3393,8 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstPredicate_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var item = Dummy.Create<TItem>();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
 
         Instance.Add(otherItems);
         Instance.Add(item, item, item);
@@ -3413,8 +3413,8 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstPredicate_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var item = Dummy.Create<TItem>();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
 
         Instance.Add(otherItems);
         Instance.Add(item, item, item);
@@ -3430,8 +3430,8 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstPredicate_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var item = Dummy.Create<TItem>();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
 
         Instance.Add(otherItems);
         Instance.Add(item, item, item);
@@ -3453,11 +3453,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstPredicate_WhenItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
-        var action = () => Instance.TryRemoveFirst(x => x!.Equals(Fixture.Create<TItem>()));
+        var action = () => Instance.TryRemoveFirst(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         action.Should().NotThrow();
@@ -3467,11 +3467,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstPredicate_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         //Act
-        Instance.TryRemoveFirst(x => x!.Equals(Fixture.Create<TItem>()));
+        Instance.TryRemoveFirst(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         Instance.Should().HaveCount(3);
@@ -3481,14 +3481,14 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveFirstPredicate_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>(3).ToList();
+        var items = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        Instance.TryRemoveFirst(x => x!.Equals(Fixture.Create<TItem>()));
+        Instance.TryRemoveFirst(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         triggers.Should().BeEmpty();
@@ -3511,10 +3511,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveFirstPredicate_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3531,10 +3531,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveFirstPredicate_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3548,10 +3548,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveFirstPredicate_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var otherItems = Fixture.CreateMany<TItem>(3).ToList();
+        var otherItems = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(otherItems);
 
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -3571,11 +3571,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveFirstPredicate_WhenItemIsNotInCollection_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>();
+        var items = Dummy.CreateMany<TItem>();
         Instance.Add(items);
 
         //Act
-        var action = () => Instance.RemoveFirst(x => x!.Equals(Fixture.Create<TItem>()));
+        var action = () => Instance.RemoveFirst(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         action.Should().Throw<ArgumentOutOfRangeException>();
@@ -3585,7 +3585,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastItem_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3602,9 +3602,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastItem_WhenItemIsInCollection_RemoveActualFirstAndNotSomeOtherOccurence()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var buffer = Fixture.Create<TItem>();
+        var buffer = Dummy.Create<TItem>();
         Instance.Add(item, item, buffer, item);
 
         //Act
@@ -3621,7 +3621,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastItem_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3635,7 +3635,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastItem_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -3655,10 +3655,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastItem_WhenItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<TItem>();
+        var someOtherItem = Dummy.Create<TItem>();
 
         //Act
         var action = () => Instance.TryRemoveLast(someOtherItem);
@@ -3671,10 +3671,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastItem_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<TItem>();
+        var someOtherItem = Dummy.Create<TItem>();
 
         //Act
         Instance.TryRemoveLast(someOtherItem);
@@ -3687,13 +3687,13 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastItem_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
-        var someOtherItem = Fixture.Create<TItem>();
+        var someOtherItem = Dummy.Create<TItem>();
 
         //Act
         Instance.TryRemoveLast(someOtherItem);
@@ -3706,7 +3706,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveLastItem_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3723,9 +3723,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveLastItem_WhenItemIsInCollection_RemoveActualFirstAndNotSomeOtherOccurence()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
 
-        var buffer = Fixture.Create<TItem>();
+        var buffer = Dummy.Create<TItem>();
         Instance.Add(item, item, buffer, item);
 
         //Act
@@ -3742,7 +3742,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveLastItem_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         //Act
@@ -3756,7 +3756,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveLastItem_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -3776,10 +3776,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveLastItem_WhenItemIsNotInCollection_Throw()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var someOtherItem = Fixture.Create<TItem>();
+        var someOtherItem = Dummy.Create<TItem>();
 
         //Act
         var action = () => Instance.RemoveLast(someOtherItem);
@@ -3805,10 +3805,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastPredicate_WhenItemIsInCollection_RemoveFirstOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<TItem>(3).ToList();
+        var buffer = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
@@ -3825,10 +3825,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastPredicate_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<TItem>(3).ToList();
+        var buffer = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
@@ -3842,10 +3842,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastPredicate_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<TItem>(3).ToList();
+        var buffer = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -3865,11 +3865,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastPredicate_WhenItemIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
-        var action = () => Instance.TryRemoveLast(x => x!.Equals(Fixture.Create<TItem>()));
+        var action = () => Instance.TryRemoveLast(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         action.Should().NotThrow();
@@ -3879,11 +3879,11 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastPredicate_WhenItemIsNotInCollection_DoNotChangeCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
-        Instance.TryRemoveLast(x => x!.Equals(Fixture.Create<TItem>()));
+        Instance.TryRemoveLast(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         Instance.Should().HaveCount(3);
@@ -3893,14 +3893,14 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void TryRemoveLastPredicate_WhenItemIsNotInCollection_DoNotTriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        Instance.TryRemoveLast(x => x!.Equals(Fixture.Create<TItem>()));
+        Instance.TryRemoveLast(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         triggers.Should().BeEmpty();
@@ -3923,10 +3923,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveLastPredicate_WhenItemIsInCollection_RemoveLastOccurenceOnly()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<TItem>(3).ToList();
+        var buffer = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
@@ -3943,10 +3943,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveLastPredicate_WhenItemIsInCollection_DecreaseCount()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<TItem>(3).ToList();
+        var buffer = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
@@ -3960,10 +3960,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveLastPredicate_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<TItem>(3).ToList();
+        var buffer = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         var triggers = new List<CollectionChangeEventArgs<TItem>>();
@@ -3983,14 +3983,14 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void RemoveLastPredicate_WhenItemIsNotInCollection_Throw()
     {
         //Arrange
-        var item = Fixture.Create<TItem>();
+        var item = Dummy.Create<TItem>();
         Instance.Add(item, item, item);
 
-        var buffer = Fixture.CreateMany<TItem>(3).ToList();
+        var buffer = Dummy.CreateMany<TItem>(3).ToList();
         Instance.Add(buffer);
 
         //Act
-        var action = () => Instance.RemoveLast(x => x!.Equals(Fixture.Create<TItem>()));
+        var action = () => Instance.RemoveLast(x => x!.Equals(Dummy.Create<TItem>()));
 
         //Assert
         action.Should().Throw<ArgumentOutOfRangeException>();
@@ -4012,7 +4012,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void ToString_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<TItem>(3));
+        Instance.Add(Dummy.CreateMany<TItem>(3));
 
         //Act
         var result = Instance.ToString();
@@ -4025,7 +4025,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Enumerator_Always_CorrectlyEnumeratesEveryItem()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
 
         var enumeratedItems = new List<TItem>();
 
@@ -4043,7 +4043,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Enumerator_WhenCollectionIsModifiedDuringEnumeration_Throw()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
 
         //Act
         var action = () =>
@@ -4060,7 +4060,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Enumerator_WhenUsingResetAfterCollectionChanged_Throw()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
 
         using var enumerator = observableList.GetEnumerator();
         observableList.RemoveAt(observableList.GetRandomIndex());
@@ -4076,7 +4076,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void Enumerator_WhenUsingResetWhileCollectionIsStillUnchanged_SetCurrentToDefault()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         using var enumerator = observableList.GetEnumerator();
 
         //Act
@@ -4090,7 +4090,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InterfaceEnumerator_WhenUsingResetAfterCollectionChanged_Throw()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
 
         using var enumerator = ((IEnumerable)observableList).GetEnumerator() as IEnumerator<TItem>;
         observableList.RemoveAt(observableList.GetRandomIndex());
@@ -4106,7 +4106,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void InterfaceEnumerator_WhenUsingResetWhileCollectionIsStillUnchanged_SetCurrentToDefault()
     {
         //Arrange
-        var observableList = Fixture.Create<TList>();
+        var observableList = Dummy.Create<TList>();
         using var enumerator = ((IEnumerable)observableList).GetEnumerator() as IEnumerator<TItem>;
 
         //Act
@@ -4117,32 +4117,10 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     }
 
     [TestMethod]
-    public void XmlSerialization_Always_DeserializeEquivalentObject()
-    {
-        //Arrange
-        var items = Fixture.CreateMany<TItem>();
-        foreach (var item in items)
-            Instance.Add(item);
-
-        var serializer = new XmlSerializer(typeof(TList));
-        var stringWriter = new StringWriter();
-        using var xmlWriter = XmlWriter.Create(stringWriter);
-        serializer.Serialize(xmlWriter, Instance);
-        var xml = stringWriter.ToString();
-
-        //Act
-        var stringReader = new StringReader(xml);
-        var result = (TList)serializer.Deserialize(stringReader)!;
-
-        //Assert
-        Instance.Should().BeEquivalentTo(result);
-    }
-
-    [TestMethod]
     public void SystemTextSerialization_Always_DeserializeEquivalentObject()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>();
+        var items = Dummy.CreateMany<TItem>();
         foreach (var item in items)
             Instance.Add(item);
 
@@ -4172,7 +4150,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     public void GetRandom_WhenContainsItems_ReturnAnyItemInCollection()
     {
         //Arrange
-        var items = Fixture.CreateMany<TItem>().ToList();
+        var items = Dummy.CreateMany<TItem>().ToList();
         Instance.Add(items);
 
         //Act
@@ -4195,11 +4173,9 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     }
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<TList>(Fixture, JsonSerializerOptions.WithObservableListConverters());
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<TList>(Dummy, JsonSerializerOptions.WithObservableListConverters());
 
     [TestMethod]
-    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<TList>(Fixture, JsonSerializerOptions.WithObservableListConverters());
+    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<TList>(Dummy, JsonSerializerOptions.WithObservableListConverters());
 
-    [TestMethod]
-    public void Ensure_EnumeratesAllItems() => Ensure.EnumeratesAllItems<TList, TItem>(Fixture);
 }

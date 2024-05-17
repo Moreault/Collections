@@ -1,7 +1,7 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
+public class CachingListTests : ObservableListTester<CachingList<Garbage>, Garbage>
 {
     protected override void InitializeTest()
     {
@@ -25,7 +25,7 @@ public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
     public void Limit_WhenLimitIsSetToZero_ClearCollection()
     {
         //Arrange
-        Instance.Add(Fixture.CreateMany<Dummy>());
+        Instance.Add(Dummy.CreateMany<Garbage>());
 
         //Act
         Instance.Limit = 0;
@@ -43,7 +43,7 @@ public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
         Instance.Limit = 0;
 
         //Assert
-        Instance.Add(Fixture.CreateMany<Dummy>());
+        Instance.Add(Dummy.CreateMany<Garbage>());
         Instance.Should().BeEmpty();
     }
 
@@ -51,17 +51,17 @@ public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
     public void Limit_WhenLimitIsSetToZeroAndCollectionIsNotEmpty_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Add(items);
 
-        var eventArgs = new List<CollectionChangeEventArgs<Dummy>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => eventArgs.Add(args);
 
         //Act
         Instance.Limit = 0;
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new() { OldValues = items }
             });
@@ -71,7 +71,7 @@ public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
     public void Limit_WhenLimitIsSetToZeroAndCollectionIsEmpty_DoNotTriggerEvent()
     {
         //Arrange
-        var eventArgs = new List<CollectionChangeEventArgs<Dummy>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => eventArgs.Add(args);
 
         //Act
@@ -85,14 +85,14 @@ public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
     public void Limit_WhenLimitIsSetToHalfCollection_CutFirstHalfOfCollectionOut()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(14).ToList();
+        var items = Dummy.CreateMany<Garbage>(14).ToList();
         Instance.Add(items);
 
         //Act
         Instance.Limit = 7;
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<Dummy>
+        Instance.Should().BeEquivalentTo(new List<Garbage>
             {
                 items[7],
                 items[8],
@@ -108,16 +108,16 @@ public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
     public void Limit_WhenLimitIsSetToHalfCollection_TrimDownTheBeginingOfCollectionToThatSizeAutomaticallyWhenAddingNewItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(14).ToList();
+        var items = Dummy.CreateMany<Garbage>(14).ToList();
         Instance.Add(items);
 
         //Act
         Instance.Limit = 7;
 
         //Assert
-        var newItems = Fixture.CreateMany<Dummy>(3).ToList();
+        var newItems = Dummy.CreateMany<Garbage>(3).ToList();
         Instance.Add(newItems);
-        Instance.Should().BeEquivalentTo(new List<Dummy>
+        Instance.Should().BeEquivalentTo(new List<Garbage>
             {
                 items[10],
                 items[11],
@@ -133,21 +133,21 @@ public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
     public void Limit_WhenLimitIsSetToHalfCollection_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(14).ToList();
+        var items = Dummy.CreateMany<Garbage>(14).ToList();
         Instance.Add(items);
 
-        var eventArgs = new List<CollectionChangeEventArgs<Dummy>>();
+        var eventArgs = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => eventArgs.Add(args);
 
         //Act
         Instance.Limit = 7;
 
         //Assert
-        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        eventArgs.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy>
+                    OldValues = new List<Garbage>
                     {
                         items[0],
                         items[1],
@@ -165,10 +165,10 @@ public class CachingListTests : ObservableListTester<CachingList<Dummy>, Dummy>
     public void Constructor_WhenUsingParams_ReturnNewCachingList()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
-        var result = new CachingList<Dummy>(items);
+        var result = new CachingList<Garbage>(items);
 
         //Assert
         result.Should().BeEquivalentTo(items);

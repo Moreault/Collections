@@ -1,13 +1,13 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public sealed class CachingDictionaryExtensionsTests : Tester
+public sealed class CachingDictionaryExtensionsTests : ToolBX.Collections.UnitTesting.Tester
 {
     [TestMethod]
     public void ToCachingDictionaryKey_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> source = null!;
+        IEnumerable<Garbage> source = null!;
 
         //Act
         var action = () => source.ToCachingDictionary(x => x.Id);
@@ -20,8 +20,8 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKey_WhenKeySelectorIsNull_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
-        Func<Dummy, int>? keySelector = null!;
+        var source = Dummy.CreateMany<Garbage>().ToList();
+        Func<Garbage, int>? keySelector = null!;
 
         //Act
         var action = () => source.ToCachingDictionary(keySelector);
@@ -34,7 +34,7 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKey_WhenIsEmpty_ConvertToEmptyCachingDictionary()
     {
         //Arrange
-        var source = Enumerable.Empty<Dummy>();
+        var source = Enumerable.Empty<Garbage>();
 
         //Act
         var result = source.ToCachingDictionary(x => x.Id);
@@ -47,7 +47,7 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKey_WhenIsNotEmpty_ConvertToCachingDictionary()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.ToCachingDictionary(x => x.Id);
@@ -60,7 +60,7 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKeyElement_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> source = null!;
+        IEnumerable<Garbage> source = null!;
 
         //Act
         var action = () => source.ToCachingDictionary(x => x.Id, x => x.Description);
@@ -73,9 +73,9 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKeyElement_WhenKeySelectorIsNull_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
-        Func<Dummy, int>? keySelector = null!;
-        Func<Dummy, string> elementSelector = x => x.Description;
+        var source = Dummy.CreateMany<Garbage>().ToList();
+        Func<Garbage, int>? keySelector = null!;
+        Func<Garbage, string> elementSelector = x => x.Description;
 
         //Act
         var action = () => source.ToCachingDictionary(keySelector, elementSelector);
@@ -88,9 +88,9 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKeyElement_WhenElementSelectorIsNull_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
-        Func<Dummy, int>? keySelector = x => x.Id;
-        Func<Dummy, string> elementSelector = null!;
+        var source = Dummy.CreateMany<Garbage>().ToList();
+        Func<Garbage, int>? keySelector = x => x.Id;
+        Func<Garbage, string> elementSelector = null!;
 
         //Act
         var action = () => source.ToCachingDictionary(keySelector, elementSelector);
@@ -103,7 +103,7 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKeyElement_WhenIsEmpty_ConvertToEmptyCachingDictionary()
     {
         //Arrange
-        var source = Enumerable.Empty<Dummy>();
+        var source = Enumerable.Empty<Garbage>();
 
         //Act
         var result = source.ToCachingDictionary(x => x.Id, x => x.Description);
@@ -116,7 +116,7 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKeyElement_WhenIsNotEmpty_ConvertToCachingDictionary()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.ToCachingDictionary(x => x.Id, x => x.Description);
@@ -129,7 +129,7 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKeyValuePair_WhenSourceIsNull_Throw()
     {
         //Arrange
-        Dictionary<int, Dummy> source = null!;
+        Dictionary<int, Garbage> source = null!;
 
         //Act
         var action = () => source.ToCachingDictionary();
@@ -142,7 +142,7 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKeyValuePair_WhenSourceIsEmpty_ReturnEmpty()
     {
         //Arrange
-        var source = new Dictionary<int, Dummy>();
+        var source = new Dictionary<int, Garbage>();
 
         //Act
         var result = source.ToCachingDictionary();
@@ -155,7 +155,7 @@ public sealed class CachingDictionaryExtensionsTests : Tester
     public void ToCachingDictionaryKeyValuePair_WhenSourceIsNotEmpty_ReturnEquivalent()
     {
         //Arrange
-        var source = Fixture.Create<Dictionary<int, Dummy>>();
+        var source = Dummy.Create<Dictionary<int, Garbage>>();
 
         //Act
         var result = source.ToCachingDictionary();

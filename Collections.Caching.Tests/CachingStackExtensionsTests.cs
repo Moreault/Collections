@@ -1,13 +1,13 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public sealed class CachingStackExtensionsTests : Tester
+public sealed class CachingStackExtensionsTests : ToolBX.Collections.UnitTesting.Tester
 {
     [TestMethod]
     public void WhenSourceIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> collection = null!;
+        IEnumerable<Garbage> collection = null!;
 
         //Act
         var action = new Action(() => collection.ToCachingStack());
@@ -20,7 +20,7 @@ public sealed class CachingStackExtensionsTests : Tester
     public void WhenSourceIsNotNull_InstantiateCachingStack()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.ToCachingStack();

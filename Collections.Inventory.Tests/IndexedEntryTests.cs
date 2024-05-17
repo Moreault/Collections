@@ -1,13 +1,13 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public sealed class IndexedEntryTests : EntryTester<IndexedEntry<DummyItem>>
+public sealed class IndexedEntryTests : EntryTester<IndexedEntry<GarbageItem>>
 {
     [TestMethod]
     public void ToString_WhenItemIsNull_ReturnNull()
     {
         //Arrange
-        var instance = Fixture.Build<IndexedEntry<DummyItem>>().Without(x => x.Item).Create();
+        var instance = Dummy.Build<IndexedEntry<GarbageItem>>().Without(x => x.Item).Create();
 
         //Act
         var result = instance.ToString();
@@ -20,7 +20,7 @@ public sealed class IndexedEntryTests : EntryTester<IndexedEntry<DummyItem>>
     public void ToString_WhenItemIsNotNull_ReturnItemWithQuantity()
     {
         //Arrange
-        var instance = Fixture.Create<IndexedEntry<DummyItem>>();
+        var instance = Dummy.Create<IndexedEntry<GarbageItem>>();
 
         //Act
         var result = instance.ToString();
@@ -33,7 +33,7 @@ public sealed class IndexedEntryTests : EntryTester<IndexedEntry<DummyItem>>
     public void Deconstruct_Always_ReturnValues()
     {
         //Arrange
-        var instance = Fixture.Create<IndexedEntry<DummyItem>>();
+        var instance = Dummy.Create<IndexedEntry<GarbageItem>>();
 
         //Act
         var (item, quantity, index) = instance;

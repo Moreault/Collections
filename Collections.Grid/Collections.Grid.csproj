@@ -29,7 +29,7 @@
 		<PackageReference Include="ToolBX.Mathemancy" Version="2.2.1" />
 		<PackageReference Include="ToolBX.OPEX" Version="2.2.0" />
 		<PackageReference Include="ToolBX.OutWarden" Version="2.2.0" />
-		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="2.2.0" />
+		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="3.0.0-beta0a" />
 	</ItemGroup>
 
 	<ItemGroup>

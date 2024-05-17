@@ -4,13 +4,13 @@
 public class OverlapGridTests
 {
     [TestClass]
-    public class Indexer_XY : Tester<OverlapGrid<Dummy>>
+    public class Indexer_XY : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnEmpty()
         {
             //Arrange
-            var value = Fixture.Create<Vector2<int>>();
+            var value = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance[value.X, value.Y];
@@ -23,10 +23,10 @@ public class OverlapGridTests
         public void WhenThereIsNothingThere_ReturnEmpty()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
-            var value = Fixture.Create<Vector2<int>>();
+            var value = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance[value.X, value.Y];
@@ -39,7 +39,7 @@ public class OverlapGridTests
         public void WhenThereIsSomethingWithThatIndex_ReturnThatThing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
             var item = items.GetRandom();
@@ -50,18 +50,18 @@ public class OverlapGridTests
             var result = Instance[value.X, value.Y];
 
             //Assert
-            result.Should().BeEquivalentTo(new List<Dummy> { item.Value! });
+            result.Should().BeEquivalentTo(new List<Garbage> { item.Value! });
         }
 
         [TestMethod]
         public void WhenThereAreManyThingsWithThatIndex_ReturnAllOfThem()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
-            var value = Fixture.Create<Vector2<int>>();
-            var searchedItems = Fixture.Build<Cell<Dummy>>().With(x => x.Index, value).CreateMany().ToArray();
+            var value = Dummy.Create<Vector2<int>>();
+            var searchedItems = Dummy.Build<Cell<Garbage>>().With(x => x.Index, value).CreateMany().ToArray();
             Instance.Add(searchedItems);
 
 
@@ -74,13 +74,13 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Indexer_Vector : Tester<OverlapGrid<Dummy>>
+    public class Indexer_Vector : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnEmpty()
         {
             //Arrange
-            var value = Fixture.Create<Vector2<int>>();
+            var value = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance[value];
@@ -93,10 +93,10 @@ public class OverlapGridTests
         public void WhenThereIsNothingThere_ReturnEmpty()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
-            var value = Fixture.Create<Vector2<int>>();
+            var value = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance[value];
@@ -109,7 +109,7 @@ public class OverlapGridTests
         public void WhenThereIsSomethingWithThatIndex_ReturnThatThing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
             var item = items.GetRandom();
@@ -120,18 +120,18 @@ public class OverlapGridTests
             var result = Instance[value];
 
             //Assert
-            result.Should().BeEquivalentTo(new List<Dummy> { item.Value! });
+            result.Should().BeEquivalentTo(new List<Garbage> { item.Value! });
         }
 
         [TestMethod]
         public void WhenThereAreManyThingsWithThatIndex_ReturnAllOfThem()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
-            var value = Fixture.Create<Vector2<int>>();
-            var searchedItems = Fixture.Build<Cell<Dummy>>().With(x => x.Index, value).CreateMany().ToArray();
+            var value = Dummy.Create<Vector2<int>>();
+            var searchedItems = Dummy.Build<Cell<Garbage>>().With(x => x.Index, value).CreateMany().ToArray();
             Instance.Add(searchedItems);
 
 
@@ -144,7 +144,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class ColumnCount : Tester<OverlapGrid<Dummy>>
+    public class ColumnCount : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -162,7 +162,7 @@ public class OverlapGridTests
         public void WhenContainsOneColumn_ReturnOne()
         {
             //Arrange
-            Instance.Add(Fixture.Create<Cell<Dummy>>());
+            Instance.Add(Dummy.Create<Cell<Garbage>>());
 
             //Act
             var result = Instance.ColumnCount;
@@ -175,9 +175,9 @@ public class OverlapGridTests
         public void WhenContainsMultipleItemsOnSameColumn_ReturnOne()
         {
             //Arrange
-            var column = Fixture.Create<int>();
+            var column = Dummy.Create<int>();
 
-            Instance.Add(Fixture.Build<Cell<Dummy>>().With(x => x.Index, new Vector2<int>(column, Fixture.Create<int>())).CreateMany());
+            Instance.Add(Dummy.Build<Cell<Garbage>>().With(x => x.Index, new Vector2<int>(column, Dummy.Create<int>())).CreateMany());
 
             //Act
             var result = Instance.ColumnCount;
@@ -190,9 +190,9 @@ public class OverlapGridTests
         public void WhenContainsMultipleConsecutiveColumns_ReturnColumnCount()
         {
             //Arrange
-            Instance.Add(2, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(3, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(4, Fixture.Create<int>(), Fixture.Create<Dummy>());
+            Instance.Add(2, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(3, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(4, Dummy.Create<int>(), Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.ColumnCount;
@@ -205,9 +205,9 @@ public class OverlapGridTests
         public void WhenContainsMultipleColumnsWithGaps_ReturnByCountingGaps()
         {
             //Arrange
-            Instance.Add(2, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(4, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(6, Fixture.Create<int>(), Fixture.Create<Dummy>());
+            Instance.Add(2, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(4, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(6, Dummy.Create<int>(), Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.ColumnCount;
@@ -220,9 +220,9 @@ public class OverlapGridTests
         public void WhenContainsOnlyNegativeColumns_ReturnAmount()
         {
             //Arrange
-            Instance.Add(-2, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(-4, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(-6, Fixture.Create<int>(), Fixture.Create<Dummy>());
+            Instance.Add(-2, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(-4, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(-6, Dummy.Create<int>(), Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.ColumnCount;
@@ -235,9 +235,9 @@ public class OverlapGridTests
         public void WhenContainsColumnsInNegativesAndPositives_ReturnAmount()
         {
             //Arrange
-            Instance.Add(2, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(4, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(-6, Fixture.Create<int>(), Fixture.Create<Dummy>());
+            Instance.Add(2, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(4, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(-6, Dummy.Create<int>(), Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.ColumnCount;
@@ -248,7 +248,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class RowCount : Tester<OverlapGrid<Dummy>>
+    public class RowCount : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -266,7 +266,7 @@ public class OverlapGridTests
         public void WhenThereIsOnlyOneItem_ReturnOne()
         {
             //Arrange
-            Instance.Add(Fixture.Create<Cell<Dummy>>());
+            Instance.Add(Dummy.Create<Cell<Garbage>>());
 
             //Act
             var result = Instance.RowCount;
@@ -279,9 +279,9 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsAlignedOnSameRow_ReturnOne()
         {
             //Arrange
-            var row = Fixture.Create<int>();
+            var row = Dummy.Create<int>();
 
-            Instance.Add(Fixture.Build<Cell<Dummy>>().With(x => x.Index, new Vector2<int>(Fixture.Create<int>(), row)).CreateMany());
+            Instance.Add(Dummy.Build<Cell<Garbage>>().With(x => x.Index, new Vector2<int>(Dummy.Create<int>(), row)).CreateMany());
 
             //Act
             var result = Instance.RowCount;
@@ -294,9 +294,9 @@ public class OverlapGridTests
         public void WhenThereAreMultipleConsecutiveItemsOnRows_ReturnAmount()
         {
             //Arrange
-            Instance.Add(Fixture.Create<int>(), 4, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), 5, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), 6, Fixture.Create<Dummy>());
+            Instance.Add(Dummy.Create<int>(), 4, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), 5, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), 6, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.RowCount;
@@ -309,9 +309,9 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsWithGaps_CountGapsAsWell()
         {
             //Arrange
-            Instance.Add(Fixture.Create<int>(), 4, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), 6, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), 9, Fixture.Create<Dummy>());
+            Instance.Add(Dummy.Create<int>(), 4, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), 6, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), 9, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.RowCount;
@@ -324,9 +324,9 @@ public class OverlapGridTests
         public void WhenAllRowsAreNegative_ReturnAmount()
         {
             //Arrange
-            Instance.Add(Fixture.Create<int>(), -4, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), -6, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), -9, Fixture.Create<Dummy>());
+            Instance.Add(Dummy.Create<int>(), -4, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), -6, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), -9, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.RowCount;
@@ -339,9 +339,9 @@ public class OverlapGridTests
         public void WhenThereAreNegativeAndPositiveRowIndexes_ReturnAmount()
         {
             //Arrange
-            Instance.Add(Fixture.Create<int>(), 4, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), -6, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), 9, Fixture.Create<Dummy>());
+            Instance.Add(Dummy.Create<int>(), 4, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), -6, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), 9, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.RowCount;
@@ -352,7 +352,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class FirstColumn : Tester<OverlapGrid<Dummy>>
+    public class FirstColumn : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -370,7 +370,7 @@ public class OverlapGridTests
         public void WhenContainsOneItem_ReturnItemColumn()
         {
             //Arrange
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -384,10 +384,10 @@ public class OverlapGridTests
         public void WhenContainsMultipleItemsOnSameColumn_ReturnThatColumn()
         {
             //Arrange
-            var column = Fixture.Create<int>();
-            Instance.Add(column, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(column, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(column, Fixture.Create<int>(), Fixture.Create<Dummy>());
+            var column = Dummy.Create<int>();
+            Instance.Add(column, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(column, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(column, Dummy.Create<int>(), Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.FirstColumn;
@@ -400,9 +400,9 @@ public class OverlapGridTests
         public void WhenContainsMultipleItems_ReturnSmallestColumn()
         {
             //Arrange
-            Instance.Add(-14, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(0, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(29, Fixture.Create<int>(), Fixture.Create<Dummy>());
+            Instance.Add(-14, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(0, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(29, Dummy.Create<int>(), Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.FirstColumn;
@@ -413,7 +413,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class LastColumn : Tester<OverlapGrid<Dummy>>
+    public class LastColumn : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -431,7 +431,7 @@ public class OverlapGridTests
         public void WhenContainsOneItem_ReturnItemColumn()
         {
             //Arrange
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -445,10 +445,10 @@ public class OverlapGridTests
         public void WhenContainsMultipleItemsOnSameColumn_ReturnThatColumn()
         {
             //Arrange
-            var column = Fixture.Create<int>();
-            Instance.Add(column, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(column, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(column, Fixture.Create<int>(), Fixture.Create<Dummy>());
+            var column = Dummy.Create<int>();
+            Instance.Add(column, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(column, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(column, Dummy.Create<int>(), Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.LastColumn;
@@ -461,9 +461,9 @@ public class OverlapGridTests
         public void WhenContainsMultipleItems_ReturnHighestColumn()
         {
             //Arrange
-            Instance.Add(-14, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(0, Fixture.Create<int>(), Fixture.Create<Dummy>());
-            Instance.Add(29, Fixture.Create<int>(), Fixture.Create<Dummy>());
+            Instance.Add(-14, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(0, Dummy.Create<int>(), Dummy.Create<Garbage>());
+            Instance.Add(29, Dummy.Create<int>(), Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.LastColumn;
@@ -474,7 +474,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class FirstRow : Tester<OverlapGrid<Dummy>>
+    public class FirstRow : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -492,7 +492,7 @@ public class OverlapGridTests
         public void WhenThereIsOnlyOneItem_ReturnItemRow()
         {
             //Arrange
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -506,12 +506,12 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsWithSameRow_ReturnThatRow()
         {
             //Arrange
-            var row = Fixture.Create<int>();
+            var row = Dummy.Create<int>();
 
-            Instance.Add(Fixture.Create<int>(), row, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), row, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), row, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), row, Fixture.Create<Dummy>());
+            Instance.Add(Dummy.Create<int>(), row, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), row, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), row, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), row, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.FirstRow;
@@ -524,10 +524,10 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsOnDifferentRows_ReturnSmallestRow()
         {
             //Arrange
-            Instance.Add(Fixture.Create<int>(), -8, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), -1, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), 0, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), 91, Fixture.Create<Dummy>());
+            Instance.Add(Dummy.Create<int>(), -8, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), -1, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), 0, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), 91, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.FirstRow;
@@ -538,7 +538,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class LastRow : Tester<OverlapGrid<Dummy>>
+    public class LastRow : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZero()
@@ -556,7 +556,7 @@ public class OverlapGridTests
         public void WhenThereIsOnlyOneItem_ReturnItemRow()
         {
             //Arrange
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -570,12 +570,12 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsWithSameRow_ReturnThatRow()
         {
             //Arrange
-            var row = Fixture.Create<int>();
+            var row = Dummy.Create<int>();
 
-            Instance.Add(Fixture.Create<int>(), row, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), row, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), row, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), row, Fixture.Create<Dummy>());
+            Instance.Add(Dummy.Create<int>(), row, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), row, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), row, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), row, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.LastRow;
@@ -588,10 +588,10 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsOnDifferentRows_ReturnHighestRow()
         {
             //Arrange
-            Instance.Add(Fixture.Create<int>(), -8, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), -1, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), 0, Fixture.Create<Dummy>());
-            Instance.Add(Fixture.Create<int>(), 91, Fixture.Create<Dummy>());
+            Instance.Add(Dummy.Create<int>(), -8, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), -1, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), 0, Dummy.Create<Garbage>());
+            Instance.Add(Dummy.Create<int>(), 91, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.LastRow;
@@ -602,7 +602,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Count : Tester<OverlapGrid<Dummy>>
+    public class Count : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenThereAreNoItems_ReturnZero()
@@ -620,7 +620,7 @@ public class OverlapGridTests
         public void WhenThereIsOneItem_ReturnOne()
         {
             //Arrange
-            Instance.Add(Fixture.Create<Cell<Dummy>>());
+            Instance.Add(Dummy.Create<Cell<Garbage>>());
 
             //Act
             var result = Instance.Count;
@@ -633,8 +633,8 @@ public class OverlapGridTests
         public void WhenThereAreItemsButTheyAreAllInSameCell_ReturnNumberOfItems()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance.Add(Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany(4));
+            var index = Dummy.Create<Vector2<int>>();
+            Instance.Add(Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany(4));
 
             //Act
             var result = Instance.Count;
@@ -647,7 +647,7 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItems_ReturnNumberOfItems()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>(7));
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>(7));
 
             //Act
             var result = Instance.Count;
@@ -658,7 +658,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Constructor : Tester
+    public class Constructor : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCollectionIsNull_Throw()
@@ -666,7 +666,7 @@ public class OverlapGridTests
             //Arrange
 
             //Act
-            var action = () => new OverlapGrid<Dummy>(null!);
+            var action = () => new OverlapGrid<Garbage>(null!);
 
             //Assert
             action.Should().Throw<ArgumentNullException>().WithParameterName("collection");
@@ -676,10 +676,10 @@ public class OverlapGridTests
         public void WhenCollectionIsEmpty_InstantiateEmpty()
         {
             //Arrange
-            var collection = new List<Cell<Dummy>>();
+            var collection = new List<Cell<Garbage>>();
 
             //Act
-            var result = new OverlapGrid<Dummy>(collection);
+            var result = new OverlapGrid<Garbage>(collection);
 
             //Assert
             result.Should().BeEmpty();
@@ -689,10 +689,10 @@ public class OverlapGridTests
         public void WhenCollectionContainsItems_ContainThoseItems()
         {
             //Arrange
-            var collection = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var collection = Dummy.CreateMany<Cell<Garbage>>().ToArray();
 
             //Act
-            var result = new OverlapGrid<Dummy>(collection);
+            var result = new OverlapGrid<Garbage>(collection);
 
             //Assert
             result.Should().BeEquivalentTo(collection);
@@ -700,7 +700,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Boundaries : Tester<OverlapGrid<Dummy>>
+    public class Boundaries : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnZeroes()
@@ -718,7 +718,7 @@ public class OverlapGridTests
         public void WhenContainsOneItemAtZeroZero_ReturnZeroes()
         {
             //Arrange
-            Instance.Add(0, 0, Fixture.Create<Dummy>());
+            Instance.Add(0, 0, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.Boundaries;
@@ -731,11 +731,11 @@ public class OverlapGridTests
         public void WhenContainsMultipleItemsAtTheSameSpot_ReturnThatSpot()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            Instance.Add(index, Fixture.Create<Dummy>());
-            Instance.Add(index, Fixture.Create<Dummy>());
-            Instance.Add(index, Fixture.Create<Dummy>());
-            Instance.Add(index, Fixture.Create<Dummy>());
+            var index = Dummy.Create<Vector2<int>>();
+            Instance.Add(index, Dummy.Create<Garbage>());
+            Instance.Add(index, Dummy.Create<Garbage>());
+            Instance.Add(index, Dummy.Create<Garbage>());
+            Instance.Add(index, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.Boundaries;
@@ -754,10 +754,10 @@ public class OverlapGridTests
         public void WhenContainsMultipleItemsAtDifferentPositions_ReturnBoundaries()
         {
             //Arrange
-            Instance.Add(-2, 4, Fixture.Create<Dummy>());
-            Instance.Add(-8, 2, Fixture.Create<Dummy>());
-            Instance.Add(12, 1, Fixture.Create<Dummy>());
-            Instance.Add(0, -3, Fixture.Create<Dummy>());
+            Instance.Add(-2, 4, Dummy.Create<Garbage>());
+            Instance.Add(-8, 2, Dummy.Create<Garbage>());
+            Instance.Add(12, 1, Dummy.Create<Garbage>());
+            Instance.Add(0, -3, Dummy.Create<Garbage>());
 
             //Act
             var result = Instance.Boundaries;
@@ -774,13 +774,13 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class IndexesOf_Item : Tester<OverlapGrid<Dummy>>
+    public class IndexesOf_Item : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenIsEmpty_ReturnEmpty()
         {
             //Arrange
-            var item = Fixture.Create<Dummy>();
+            var item = Dummy.Create<Garbage>();
 
             //Act
             var result = Instance.IndexesOf(item);
@@ -793,8 +793,8 @@ public class OverlapGridTests
         public void WhenItemIsNotInGrid_ReturnEmpty()
         {
             //Arrange
-            var item = Fixture.Create<Dummy>();
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            var item = Dummy.Create<Garbage>();
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
             //Act
             var result = Instance.IndexesOf(item);
@@ -807,7 +807,7 @@ public class OverlapGridTests
         public void WhereThereIsOnlyOneOccurence_ReturnThatOccurence()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var item = items.GetRandom();
@@ -823,11 +823,11 @@ public class OverlapGridTests
         public void WhenThereAreMultipleOccurences_ReturnAll()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Dummy>();
+            var item = Dummy.Create<Garbage>();
 
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Value, item).CreateMany().ToList();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Value, item).CreateMany().ToList();
             Instance.Add(items);
 
             //Act
@@ -839,13 +839,13 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class IndexesOf_Predicate : Tester<OverlapGrid<Dummy>>
+    public class IndexesOf_Predicate : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            Func<Dummy, bool> predicate = null!;
+            Func<Garbage, bool> predicate = null!;
 
             //Act
             var action = () => Instance.IndexesOf(predicate);
@@ -870,7 +870,7 @@ public class OverlapGridTests
         public void WhenThereIsNoOccurenceOfPredicate_ReturnEmpty()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
             //Act
             var result = Instance.IndexesOf(x => x.Value.StartsWith("Jer"));
@@ -883,8 +883,8 @@ public class OverlapGridTests
         public void WhenThereAreOccurencesOfPredicate_ReturnThoseOccurences()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Value, Fixture.Build<Dummy>().With(y => y.Value, "Jerry").Create()).CreateMany().ToList();
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Value, Dummy.Build<Garbage>().With(y => y.Value, "Jerry").Create()).CreateMany().ToList();
             Instance.Add(items);
 
             //Act
@@ -896,43 +896,43 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Add_XY_Item : Tester<OverlapGrid<Dummy>>
+    public class Add_XY_Item : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void Always_AddItemAtPosition()
         {
             //Arrange
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
-            var value = Fixture.Create<Dummy>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
+            var value = Dummy.Create<Garbage>();
 
             //Act
             Instance.Add(x, y, value);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new OverlapGrid<Dummy> { new Cell<Dummy>(x, y, value) });
+            Instance.Should().BeEquivalentTo(new OverlapGrid<Garbage> { new Cell<Garbage>(x, y, value) });
         }
 
         [TestMethod]
         public void Always_TriggerChange()
         {
             //Arrange
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
-            var value = Fixture.Create<Dummy>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
+            var value = Dummy.Create<Garbage>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Add(x, y, value);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Dummy>> { new(x, y, value) }
+                    NewValues = new List<Cell<Garbage>> { new(x, y, value) }
                 }
             });
         }
@@ -941,55 +941,55 @@ public class OverlapGridTests
         public void WhenAddingMultipleItemsAtSamePosition_AddThemAll()
         {
             //Arrange
-            var x = Fixture.Create<int>();
-            var y = Fixture.Create<int>();
+            var x = Dummy.Create<int>();
+            var y = Dummy.Create<int>();
 
-            var values = Fixture.CreateMany<Dummy>().ToList();
+            var values = Dummy.CreateMany<Garbage>().ToList();
 
             //Act
             foreach (var value in values) Instance.Add(x, y, value);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new OverlapGrid<Dummy>(values.Select(value => new Cell<Dummy>(x, y, value))));
+            Instance.Should().BeEquivalentTo(new OverlapGrid<Garbage>(values.Select(value => new Cell<Garbage>(x, y, value))));
         }
     }
 
     [TestClass]
-    public class Add_Vector_Item : Tester<OverlapGrid<Dummy>>
+    public class Add_Vector_Item : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void Always_AddItemAtPosition()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var value = Fixture.Create<Dummy>();
+            var index = Dummy.Create<Vector2<int>>();
+            var value = Dummy.Create<Garbage>();
 
             //Act
             Instance.Add(index, value);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new OverlapGrid<Dummy> { new Cell<Dummy>(index, value) });
+            Instance.Should().BeEquivalentTo(new OverlapGrid<Garbage> { new Cell<Garbage>(index, value) });
         }
 
         [TestMethod]
         public void Always_TriggerChange()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var value = Fixture.Create<Dummy>();
+            var index = Dummy.Create<Vector2<int>>();
+            var value = Dummy.Create<Garbage>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Add(index, value);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Dummy>> { new(index, value) }
+                    NewValues = new List<Cell<Garbage>> { new(index, value) }
                 }
             });
         }
@@ -998,26 +998,26 @@ public class OverlapGridTests
         public void WhenAddingMultipleItemsAtSamePosition_AddThemAll()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
-            var values = Fixture.CreateMany<Dummy>().ToList();
+            var values = Dummy.CreateMany<Garbage>().ToList();
 
             //Act
             foreach (var value in values) Instance.Add(index, value);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new OverlapGrid<Dummy>(values.Select(value => new Cell<Dummy>(index, value))));
+            Instance.Should().BeEquivalentTo(new OverlapGrid<Garbage>(values.Select(value => new Cell<Garbage>(index, value))));
         }
     }
 
     [TestClass]
-    public class Add_Params_Cells : Tester<OverlapGrid<Dummy>>
+    public class Add_Params_Cells : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void Always_AddItemsAtPosition()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
 
             //Act
             Instance.Add(cells);
@@ -1030,16 +1030,16 @@ public class OverlapGridTests
         public void Always_TriggerChangeOnce()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Add(cells);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -1052,8 +1052,8 @@ public class OverlapGridTests
         public void WhenAddingMultipleItemsAtSamePosition_AddThemAll()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var cells = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToArray();
+            var index = Dummy.Create<Vector2<int>>();
+            var cells = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToArray();
 
             //Act
             Instance.Add(cells);
@@ -1064,13 +1064,13 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Add_Enumerable_Cells : Tester<OverlapGrid<Dummy>>
+    public class Add_Enumerable_Cells : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenCellsAreNull_Throw()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> cells = null!;
+            IEnumerable<Cell<Garbage>> cells = null!;
 
             //Act
             var action = () => Instance.Add(cells);
@@ -1083,7 +1083,7 @@ public class OverlapGridTests
         public void Always_AddItemsAtPosition()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
             //Act
             Instance.Add(cells);
@@ -1096,16 +1096,16 @@ public class OverlapGridTests
         public void Always_TriggerChangeOnce()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Add(cells);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -1118,8 +1118,8 @@ public class OverlapGridTests
         public void WhenAddingMultipleItemsAtSamePosition_AddThemAll()
         {
             //Arrange
-            var index = Fixture.Create<Vector2<int>>();
-            var cells = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToList();
+            var index = Dummy.Create<Vector2<int>>();
+            var cells = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToList();
 
             //Act
             Instance.Add(cells);
@@ -1130,16 +1130,16 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class RemoveAt_XY : Tester<OverlapGrid<Dummy>>
+    public class RemoveAt_XY : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         //TODO Fix
         [TestMethod, Ignore("For some reason it throws something else")]
         public void WhenThereIsNothingAtIndex_Throw()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.RemoveAt(index.X, index.Y);
@@ -1152,9 +1152,9 @@ public class OverlapGridTests
         public void WhenThereIsOneItemAtIndex_RemoveThatItem()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -1169,23 +1169,23 @@ public class OverlapGridTests
         public void WhenThereIsOneItemAtIndex_TriggerChange()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.RemoveAt(item.X, item.Y);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { item }
+                    OldValues = new List<Cell<Garbage>> { item }
                 }
             });
         }
@@ -1194,10 +1194,10 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsAtIndex_RemoveThemAll()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToList();
+            var index = Dummy.Create<Vector2<int>>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToList();
             Instance.Add(items);
 
             //Act
@@ -1212,20 +1212,20 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsAtIndex_TriggerChangeOnce()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToList();
+            var index = Dummy.Create<Vector2<int>>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToList();
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.RemoveAt(index.X, index.Y);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -1236,15 +1236,15 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class RemoveAt_Vector : Tester<OverlapGrid<Dummy>>
+    public class RemoveAt_Vector : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod, Ignore("For some reason it throws something else")]
         public void WhenThereIsNothingAtIndex_Throw()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.RemoveAt(index);
@@ -1257,9 +1257,9 @@ public class OverlapGridTests
         public void WhenThereIsOneItemAtIndex_RemoveThatItem()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -1274,23 +1274,23 @@ public class OverlapGridTests
         public void WhenThereIsOneItemAtIndex_TriggerChange()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.RemoveAt(item.Index);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { item }
+                    OldValues = new List<Cell<Garbage>> { item }
                 }
             });
         }
@@ -1299,10 +1299,10 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsAtIndex_RemoveThemAll()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToList();
+            var index = Dummy.Create<Vector2<int>>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToList();
             Instance.Add(items);
 
             //Act
@@ -1317,20 +1317,20 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsAtIndex_TriggerChangeOnce()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToList();
+            var index = Dummy.Create<Vector2<int>>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToList();
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.RemoveAt(index);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -1341,15 +1341,15 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class TryRemoveAt_XY : Tester<OverlapGrid<Dummy>>
+    public class TryRemoveAt_XY : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenThereIsNothingAtIndex_DoesNotThrow()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.TryRemoveAt(index.X, index.Y);
@@ -1362,9 +1362,9 @@ public class OverlapGridTests
         public void WhenThereIsOneItemAtIndex_RemoveThatItem()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -1379,23 +1379,23 @@ public class OverlapGridTests
         public void WhenThereIsOneItemAtIndex_TriggerChange()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.TryRemoveAt(item.X, item.Y);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { item }
+                    OldValues = new List<Cell<Garbage>> { item }
                 }
             });
         }
@@ -1404,10 +1404,10 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsAtIndex_RemoveThemAll()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToList();
+            var index = Dummy.Create<Vector2<int>>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToList();
             Instance.Add(items);
 
             //Act
@@ -1422,20 +1422,20 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsAtIndex_TriggerChangeOnce()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToList();
+            var index = Dummy.Create<Vector2<int>>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToList();
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.TryRemoveAt(index.X, index.Y);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -1446,15 +1446,15 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class TryRemoveAt_Vector : Tester<OverlapGrid<Dummy>>
+    public class TryRemoveAt_Vector : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenThereIsNothingAtIndex_DoesNotThrow()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var action = () => Instance.TryRemoveAt(index);
@@ -1467,9 +1467,9 @@ public class OverlapGridTests
         public void WhenThereIsOneItemAtIndex_RemoveThatItem()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -1484,23 +1484,23 @@ public class OverlapGridTests
         public void WhenThereIsOneItemAtIndex_TriggerChange()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.TryRemoveAt(item.Index);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { item }
+                    OldValues = new List<Cell<Garbage>> { item }
                 }
             });
         }
@@ -1509,10 +1509,10 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsAtIndex_RemoveThemAll()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToList();
+            var index = Dummy.Create<Vector2<int>>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToList();
             Instance.Add(items);
 
             //Act
@@ -1527,20 +1527,20 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsAtIndex_TriggerChangeOnce()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany().ToList();
+            var index = Dummy.Create<Vector2<int>>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany().ToList();
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.TryRemoveAt(index);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -1551,16 +1551,16 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class RemoveAll_Item : Tester<OverlapGrid<Dummy>>
+    public class RemoveAll_Item : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenItemIsNotInGrid_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
-            var item = Fixture.Create<Dummy>();
+            var item = Dummy.Create<Garbage>();
 
             //Act
             Instance.RemoveAll(item);
@@ -1573,12 +1573,12 @@ public class OverlapGridTests
         public void WhenItemIsNotInGrid_DoNotTriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -1592,10 +1592,10 @@ public class OverlapGridTests
         public void WhenItemIsInGridOnce_RemoveThatInstanceOnly()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -1609,24 +1609,24 @@ public class OverlapGridTests
         public void WhenItemIsInGridOnce_TriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.RemoveAll(item.Value);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { item }
+                    OldValues = new List<Cell<Garbage>> { item }
                 }
             });
         }
@@ -1635,11 +1635,11 @@ public class OverlapGridTests
         public void WhenItemIsInMultiplePlaces_RemoveAll()
         {
             //Arrange
-            var originalItems = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var originalItems = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(originalItems);
 
-            var value = Fixture.Create<Dummy>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Value, value).CreateMany().ToList();
+            var value = Dummy.Create<Garbage>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Value, value).CreateMany().ToList();
             Instance.Add(items);
 
             //Act
@@ -1653,21 +1653,21 @@ public class OverlapGridTests
         public void WhenItemIsInMultiplePlaces_DoNotTriggerChange()
         {
             //Arrange
-            var originalItems = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var originalItems = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(originalItems);
 
-            var value = Fixture.Create<Dummy>();
-            var items = Fixture.Build<Cell<Dummy>>().With(x => x.Value, value).CreateMany().ToList();
+            var value = Dummy.Create<Garbage>();
+            var items = Dummy.Build<Cell<Garbage>>().With(x => x.Value, value).CreateMany().ToList();
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.RemoveAll(value);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -1678,16 +1678,16 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class RemoveAll_Predicate : Tester<OverlapGrid<Dummy>>
+    public class RemoveAll_Predicate : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenPredicateIsNull_Throw()
         {
             //Arrange
-            var originalItems = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var originalItems = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(originalItems);
 
-            Func<Dummy, bool> predicate = null!;
+            Func<Garbage, bool> predicate = null!;
 
             //Act
             var action = () => Instance.RemoveAll(predicate);
@@ -1700,7 +1700,7 @@ public class OverlapGridTests
         public void WhenNothingMatchesPredicate_DoNothing()
         {
             //Arrange
-            var originalItems = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var originalItems = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(originalItems);
 
             //Act
@@ -1714,10 +1714,10 @@ public class OverlapGridTests
         public void WhenNothingMatchesPredicate_DoNotTriggerChange()
         {
             //Arrange
-            var originalItems = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var originalItems = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(originalItems);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -1731,10 +1731,10 @@ public class OverlapGridTests
         public void WhenOneItemMatchesPredicate_RemoveIt()
         {
             //Arrange
-            var originalItems = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var originalItems = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(originalItems);
 
-            var extraItem = Fixture.Create<Cell<Dummy>>();
+            var extraItem = Dummy.Create<Cell<Garbage>>();
             Instance.Add(extraItem);
 
             //Act
@@ -1748,24 +1748,24 @@ public class OverlapGridTests
         public void WhenOneItemMatchesPredicate_TriggerChange()
         {
             //Arrange
-            var originalItems = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var originalItems = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(originalItems);
 
-            var extraItem = Fixture.Create<Cell<Dummy>>();
+            var extraItem = Dummy.Create<Cell<Garbage>>();
             Instance.Add(extraItem);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.RemoveAll(x => x.Id == extraItem.Value!.Id);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { extraItem }
+                    OldValues = new List<Cell<Garbage>> { extraItem }
                 }
             });
         }
@@ -1774,11 +1774,11 @@ public class OverlapGridTests
         public void WhenMultipleItemsMatchPredicate_RemoveThemAll()
         {
             //Arrange
-            var originalItems = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var originalItems = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(originalItems);
 
-            var value = Fixture.Create<string>();
-            var extraItems = Fixture.Build<Cell<Dummy>>().With(x => x.Value, Fixture.Build<Dummy>().With(y => y.Value, value).Create()).CreateMany().ToList();
+            var value = Dummy.Create<string>();
+            var extraItems = Dummy.Build<Cell<Garbage>>().With(x => x.Value, Dummy.Build<Garbage>().With(y => y.Value, value).Create()).CreateMany().ToList();
             Instance.Add(extraItems);
 
             //Act
@@ -1792,21 +1792,21 @@ public class OverlapGridTests
         public void WhenMultipleItemsMatchPredicate_TriggerChangeOnce()
         {
             //Arrange
-            var originalItems = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var originalItems = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(originalItems);
 
-            var value = Fixture.Create<string>();
-            var extraItems = Fixture.Build<Cell<Dummy>>().With(x => x.Value, Fixture.Build<Dummy>().With(y => y.Value, value).Create()).CreateMany().ToList();
+            var value = Dummy.Create<string>();
+            var extraItems = Dummy.Build<Cell<Garbage>>().With(x => x.Value, Dummy.Build<Garbage>().With(y => y.Value, value).Create()).CreateMany().ToList();
             Instance.Add(extraItems);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.RemoveAll(x => x.Value == value);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -1817,20 +1817,20 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Contains_XY_Item : Tester<OverlapGrid<Dummy>>
+    public class Contains_XY_Item : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenItemIsInGridButNotAtPosition_ReturnFalse()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
             var item = items.GetRandom();
             Instance.Add(item);
 
             //Act
-            var result = Instance.Contains(Fixture.Create<int>(), Fixture.Create<int>(), item.Value);
+            var result = Instance.Contains(Dummy.Create<int>(), Dummy.Create<int>(), item.Value);
 
             //Assert
             result.Should().BeFalse();
@@ -1840,14 +1840,14 @@ public class OverlapGridTests
         public void WhenThereIsSomethingAtPositionButNotItem_ReturnFalse()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
             var item = items.GetRandom();
             Instance.Add(item);
 
             //Act
-            var result = Instance.Contains(item.X, item.Y, Fixture.Create<Dummy>());
+            var result = Instance.Contains(item.X, item.Y, Dummy.Create<Garbage>());
 
             //Assert
             result.Should().BeFalse();
@@ -1857,7 +1857,7 @@ public class OverlapGridTests
         public void WhenItemIsAtPosition_ReturnTrue()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
             var item = items.GetRandom();
@@ -1872,20 +1872,20 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Contains_Vector_Item : Tester<OverlapGrid<Dummy>>
+    public class Contains_Vector_Item : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenItemIsInGridButNotAtPosition_ReturnFalse()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
             var item = items.GetRandom();
             Instance.Add(item);
 
             //Act
-            var result = Instance.Contains(Fixture.Create<Vector2<int>>(), item.Value);
+            var result = Instance.Contains(Dummy.Create<Vector2<int>>(), item.Value);
 
             //Assert
             result.Should().BeFalse();
@@ -1895,14 +1895,14 @@ public class OverlapGridTests
         public void WhenThereIsSomethingAtPositionButNotItem_ReturnFalse()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
             var item = items.GetRandom();
             Instance.Add(item);
 
             //Act
-            var result = Instance.Contains(item.Index, Fixture.Create<Dummy>());
+            var result = Instance.Contains(item.Index, Dummy.Create<Garbage>());
 
             //Assert
             result.Should().BeFalse();
@@ -1912,7 +1912,7 @@ public class OverlapGridTests
         public void WhenItemIsAtPosition_ReturnTrue()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToArray();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToArray();
             Instance.Add(items);
 
             var item = items.GetRandom();
@@ -1927,7 +1927,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Contains_Item : Tester<OverlapGrid<Dummy>>
+    public class Contains_Item : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenItemIsNullButGridIsEmpty_ReturnFalse()
@@ -1945,8 +1945,8 @@ public class OverlapGridTests
         public void WhenItemIsNullAndGridContainsNullValues_ReturnTrue()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
-            Instance.Add(Fixture.Create<Vector2<int>>(), null);
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
+            Instance.Add(Dummy.Create<Vector2<int>>(), null);
 
             //Act
             var result = Instance.Contains(null);
@@ -1959,10 +1959,10 @@ public class OverlapGridTests
         public void WhenItemIsNotInGrid_ReturnFalse()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
             //Act
-            var result = Instance.Contains(Fixture.Create<Dummy>());
+            var result = Instance.Contains(Dummy.Create<Garbage>());
 
             //Assert
             result.Should().BeFalse();
@@ -1972,9 +1972,9 @@ public class OverlapGridTests
         public void WhenItemIsInGrid_ReturnTrue()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var item = Fixture.Create<Cell<Dummy>>();
+            var item = Dummy.Create<Cell<Garbage>>();
             Instance.Add(item);
 
             //Act
@@ -1986,15 +1986,15 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Contains_XY : Tester<OverlapGrid<Dummy>>
+    public class Contains_XY : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenThereIsNothingAtPosition_ReturnFalse()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index.X, index.Y);
@@ -2007,7 +2007,7 @@ public class OverlapGridTests
         public void WhenThereIsSomethingAtPosition_ReturnTrue()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var index = items.GetRandom().Index;
@@ -2023,8 +2023,8 @@ public class OverlapGridTests
         public void WhenThereIsOneNullValueAtPosition_ReturnTrue()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
-            var index = Fixture.Create<Vector2<int>>();
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
+            var index = Dummy.Create<Vector2<int>>();
             Instance.Add(index, null);
 
             //Act
@@ -2036,15 +2036,15 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Contains_Vector : Tester<OverlapGrid<Dummy>>
+    public class Contains_Vector : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenThereIsNothingAtPosition_ReturnFalse()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
 
-            var index = Fixture.Create<Vector2<int>>();
+            var index = Dummy.Create<Vector2<int>>();
 
             //Act
             var result = Instance.Contains(index);
@@ -2057,7 +2057,7 @@ public class OverlapGridTests
         public void WhenThereIsSomethingAtPosition_ReturnTrue()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var index = items.GetRandom().Index;
@@ -2073,8 +2073,8 @@ public class OverlapGridTests
         public void WhenThereIsOneNullValueAtPosition_ReturnTrue()
         {
             //Arrange
-            Instance.Add(Fixture.CreateMany<Cell<Dummy>>());
-            var index = Fixture.Create<Vector2<int>>();
+            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
+            var index = Dummy.Create<Vector2<int>>();
             Instance.Add(index, null);
 
             //Act
@@ -2086,17 +2086,17 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Resize : Tester<OverlapGrid<Dummy>>
+    public class Resize : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenResizedBiggerThanContent_DoNothing()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(-5, -5, Fixture.Create<Dummy>()),
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(5, 5, Fixture.Create<Dummy>()),
+                new(-5, -5, Dummy.Create<Garbage>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(5, 5, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -2112,16 +2112,16 @@ public class OverlapGridTests
         public void WhenResizedBiggerThanContent_DoNotTrigger()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(-5, -5, Fixture.Create<Dummy>()),
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(5, 5, Fixture.Create<Dummy>()),
+                new(-5, -5, Dummy.Create<Garbage>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(5, 5, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -2135,11 +2135,11 @@ public class OverlapGridTests
         public void WhenResizedSmallerThanContent_RemoveExcess()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(-5, -5, Fixture.Create<Dummy>()),
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(5, 5, Fixture.Create<Dummy>()),
+                new(-5, -5, Dummy.Create<Garbage>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(5, 5, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -2148,34 +2148,34 @@ public class OverlapGridTests
             Instance.Resize(new Boundaries<int>(-4, 4, 4, -4));
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>> { items[1] });
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>> { items[1] });
         }
 
         [TestMethod]
         public void WhenResizedSmallerThanContent_TriggerChangeOnce()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(-5, -5, Fixture.Create<Dummy>()),
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(5, 5, Fixture.Create<Dummy>()),
+                new(-5, -5, Dummy.Create<Garbage>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(5, 5, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Resize(new Boundaries<int>(-4, 4, 4, -4));
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         items[0], items[2]
                     }
@@ -2187,13 +2187,13 @@ public class OverlapGridTests
         public void WhenResizedToZero_OnlyItemsAtOriginRemain()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(-5, -5, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(5, 5, Fixture.Create<Dummy>()),
+                new(-5, -5, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(5, 5, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -2202,49 +2202,49 @@ public class OverlapGridTests
             Instance.Resize(new Boundaries<int>(0, 0, 0, 0));
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>> { items[2] });
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>> { items[2] });
         }
 
         [TestMethod]
         public void WhenResizedToZero_TriggerChangeOnce()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(-5, -5, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(5, 5, Fixture.Create<Dummy>()),
+                new(-5, -5, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(5, 5, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Resize(new Boundaries<int>(0, 0, 0, 0));
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { items[0], items[1], items[3], items[4] }
+                    OldValues = new List<Cell<Garbage>> { items[0], items[1], items[3], items[4] }
                 }
             });
         }
     }
 
     [TestClass]
-    public class TranslateAll_XY : Tester<OverlapGrid<Dummy>>
+    public class TranslateAll_XY : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenTranslationIsZero_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var translation = Vector2<int>.Zero;
@@ -2260,12 +2260,12 @@ public class OverlapGridTests
         public void WhenTranslationIsZero_DoNotTrigger()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var translation = Vector2<int>.Zero;
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -2279,10 +2279,10 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_MoveAllItemsInDirection()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.TranslateAll(translation.X, translation.Y);
@@ -2295,19 +2295,19 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_TriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.TranslateAll(translation.X, translation.Y);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -2321,10 +2321,10 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_MoveAllItemsInDirection()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var translation = -Fixture.Create<Vector2<int>>();
+            var translation = -Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.TranslateAll(translation.X, translation.Y);
@@ -2337,19 +2337,19 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_TriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var translation = -Fixture.Create<Vector2<int>>();
+            var translation = -Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.TranslateAll(translation.X, translation.Y);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -2361,13 +2361,13 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class TranslateAll_Vector : Tester<OverlapGrid<Dummy>>
+    public class TranslateAll_Vector : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenTranslationIsZero_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var translation = Vector2<int>.Zero;
@@ -2383,12 +2383,12 @@ public class OverlapGridTests
         public void WhenTranslationIsZero_DoNotTrigger()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var translation = Vector2<int>.Zero;
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -2402,10 +2402,10 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_MoveAllItemsInDirection()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.TranslateAll(translation);
@@ -2418,19 +2418,19 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_TriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.TranslateAll(translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -2444,10 +2444,10 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_MoveAllItemsInDirection()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var translation = -Fixture.Create<Vector2<int>>();
+            var translation = -Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.TranslateAll(translation);
@@ -2460,19 +2460,19 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_TriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var translation = -Fixture.Create<Vector2<int>>();
+            var translation = -Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.TranslateAll(translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -2484,16 +2484,16 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Translate_Range_XY : Tester<OverlapGrid<Dummy>>
+    public class Translate_Range_XY : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenTranslationIsZero_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var range = Fixture.Create<Rectangle<int>>();
+            var range = Dummy.Create<Rectangle<int>>();
             var translation = Vector2<int>.Zero;
 
             //Act
@@ -2507,13 +2507,13 @@ public class OverlapGridTests
         public void WhenTranslationIsZero_DoNotTriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var range = Fixture.Create<Rectangle<int>>();
+            var range = Dummy.Create<Rectangle<int>>();
             var translation = Vector2<int>.Zero;
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -2527,11 +2527,11 @@ public class OverlapGridTests
         public void WhenBoundariesAreEqualOnAllAxis_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var range = new Rectangle<int>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(range, translation.X, translation.Y);
@@ -2544,13 +2544,13 @@ public class OverlapGridTests
         public void WhenBoundariesAreEqualOnAllAxis_DoNotTriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var range = new Rectangle<int>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -2564,20 +2564,20 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_MoveBoundariesInThatDirection()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -2589,7 +2589,7 @@ public class OverlapGridTests
             Instance.Translate(range, translation.X, translation.Y);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -2610,25 +2610,25 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var range = new Rectangle<int>(1, 1, 2, 2);
@@ -2638,11 +2638,11 @@ public class OverlapGridTests
             Instance.Translate(range, translation.X, translation.Y);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -2651,7 +2651,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(-4, -4, items[5].Value),
                         new(-3, -4, items[6].Value),
@@ -2668,20 +2668,20 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_MoveBoundariesInThatDirection()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -2693,7 +2693,7 @@ public class OverlapGridTests
             Instance.Translate(range, translation.X, translation.Y);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -2714,25 +2714,25 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var range = new Rectangle<int>(1, 1, 2, 2);
@@ -2742,11 +2742,11 @@ public class OverlapGridTests
             Instance.Translate(range, translation.X, translation.Y);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -2755,7 +2755,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(6, 6, items[5].Value),
                         new(7, 6, items[6].Value),
@@ -2772,26 +2772,26 @@ public class OverlapGridTests
         public void WhenThereIsNothingWithinBoundaries_DoNothing()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
             //Act
-            Instance.Translate(new Rectangle<int>(15, 20, 100, 200), Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.Translate(new Rectangle<int>(15, 20, 100, 200), Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             Instance.Should().BeEquivalentTo(items);
@@ -2801,29 +2801,29 @@ public class OverlapGridTests
         public void WhenThereIsNothingWithinBoundaries_DoNotTrigger()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
-            Instance.Translate(new Rectangle<int>(15, 20, 100, 200), Fixture.Create<int>(), Fixture.Create<int>());
+            Instance.Translate(new Rectangle<int>(15, 20, 100, 200), Dummy.Create<int>(), Dummy.Create<int>());
 
             //Assert
             triggers.Should().BeEmpty();
@@ -2833,20 +2833,20 @@ public class OverlapGridTests
         public void WhenTranslationMovesItemsIntoExistingItems_OverlapItems()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -2858,7 +2858,7 @@ public class OverlapGridTests
             Instance.Translate(range, translation.X, translation.Y);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -2879,25 +2879,25 @@ public class OverlapGridTests
         public void WhenTranslationMovesItemsIntoExistingItems_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var range = new Rectangle<int>(1, 1, 2, 2);
@@ -2907,11 +2907,11 @@ public class OverlapGridTests
             Instance.Translate(range, translation.X, translation.Y);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -2920,7 +2920,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(1, 0, items[5].Value),
                         new(2, 0, items[6].Value),
@@ -2935,16 +2935,16 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Translate_Range_Vector : Tester<OverlapGrid<Dummy>>
+    public class Translate_Range_Vector : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenTranslationIsZero_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var range = Fixture.Create<Rectangle<int>>();
+            var range = Dummy.Create<Rectangle<int>>();
             var translation = Vector2<int>.Zero;
 
             //Act
@@ -2958,13 +2958,13 @@ public class OverlapGridTests
         public void WhenTranslationIsZero_DoNotTriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var range = Fixture.Create<Rectangle<int>>();
+            var range = Dummy.Create<Rectangle<int>>();
             var translation = Vector2<int>.Zero;
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -2978,11 +2978,11 @@ public class OverlapGridTests
         public void WhenBoundariesAreEqualOnAllAxis_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var range = new Rectangle<int>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(range, translation);
@@ -2995,13 +2995,13 @@ public class OverlapGridTests
         public void WhenBoundariesAreEqualOnAllAxis_DoNotTriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var range = new Rectangle<int>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -3015,20 +3015,20 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_MoveBoundariesInThatDirection()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -3040,7 +3040,7 @@ public class OverlapGridTests
             Instance.Translate(range, translation);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -3061,25 +3061,25 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var range = new Rectangle<int>(1, 1, 2, 2);
@@ -3089,11 +3089,11 @@ public class OverlapGridTests
             Instance.Translate(range, translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -3102,7 +3102,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(-4, -4, items[5].Value),
                         new(-3, -4, items[6].Value),
@@ -3119,20 +3119,20 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_MoveBoundariesInThatDirection()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -3144,7 +3144,7 @@ public class OverlapGridTests
             Instance.Translate(range, translation);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -3165,25 +3165,25 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var range = new Rectangle<int>(1, 1, 2, 2);
@@ -3193,11 +3193,11 @@ public class OverlapGridTests
             Instance.Translate(range, translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -3206,7 +3206,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(6, 6, items[5].Value),
                         new(7, 6, items[6].Value),
@@ -3223,26 +3223,26 @@ public class OverlapGridTests
         public void WhenThereIsNothingWithinBoundaries_DoNothing()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
             //Act
-            Instance.Translate(new Rectangle<int>(15, 20, 100, 200), Fixture.Create<Vector2<int>>());
+            Instance.Translate(new Rectangle<int>(15, 20, 100, 200), Dummy.Create<Vector2<int>>());
 
             //Assert
             Instance.Should().BeEquivalentTo(items);
@@ -3252,29 +3252,29 @@ public class OverlapGridTests
         public void WhenThereIsNothingWithinBoundaries_DoNotTrigger()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
-            Instance.Translate(new Rectangle<int>(15, 20, 100, 200), Fixture.Create<Vector2<int>>());
+            Instance.Translate(new Rectangle<int>(15, 20, 100, 200), Dummy.Create<Vector2<int>>());
 
             //Assert
             triggers.Should().BeEmpty();
@@ -3284,20 +3284,20 @@ public class OverlapGridTests
         public void WhenTranslationMovesItemsIntoExistingItems_OverlapItems()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -3309,7 +3309,7 @@ public class OverlapGridTests
             Instance.Translate(range, translation);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -3330,25 +3330,25 @@ public class OverlapGridTests
         public void WhenTranslationMovesItemsIntoExistingItems_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var range = new Rectangle<int>(1, 1, 2, 2);
@@ -3358,11 +3358,11 @@ public class OverlapGridTests
             Instance.Translate(range, translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -3371,7 +3371,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(1, 0, items[5].Value),
                         new(2, 0, items[6].Value),
@@ -3386,16 +3386,16 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Translate_Boundaries_XY : Tester<OverlapGrid<Dummy>>
+    public class Translate_Boundaries_XY : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenTranslationIsZero_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var translation = Vector2<int>.Zero;
 
             //Act
@@ -3409,13 +3409,13 @@ public class OverlapGridTests
         public void WhenTranslationIsZero_DoNotTriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var translation = Vector2<int>.Zero;
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -3429,11 +3429,11 @@ public class OverlapGridTests
         public void WhenBoundariesAreEqualOnAllAxis_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var boundaries = new Boundaries<int>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(boundaries, translation);
@@ -3446,13 +3446,13 @@ public class OverlapGridTests
         public void WhenBoundariesAreEqualOnAllAxis_DoNotTriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var boundaries = new Boundaries<int>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -3466,20 +3466,20 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_MoveBoundariesInThatDirection()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -3491,7 +3491,7 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -3512,25 +3512,25 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var boundaries = new Boundaries<int>(1, 3, 3, 1);
@@ -3540,11 +3540,11 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -3553,7 +3553,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(-4, -4, items[5].Value),
                         new(-3, -4, items[6].Value),
@@ -3570,20 +3570,20 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_MoveBoundariesInThatDirection()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -3595,7 +3595,7 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -3616,25 +3616,25 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var boundaries = new Boundaries<int>(1, 3, 3, 1);
@@ -3644,11 +3644,11 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -3657,7 +3657,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(6, 6, items[5].Value),
                         new(7, 6, items[6].Value),
@@ -3674,26 +3674,26 @@ public class OverlapGridTests
         public void WhenThereIsNothingWithinBoundaries_DoNothing()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
             //Act
-            Instance.Translate(new Boundaries<int>(25, 400, 500, 100), Fixture.Create<Vector2<int>>());
+            Instance.Translate(new Boundaries<int>(25, 400, 500, 100), Dummy.Create<Vector2<int>>());
 
             //Assert
             Instance.Should().BeEquivalentTo(items);
@@ -3703,29 +3703,29 @@ public class OverlapGridTests
         public void WhenThereIsNothingWithinBoundaries_DoNotTrigger()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
-            Instance.Translate(new Boundaries<int>(25, 400, 500, 100), Fixture.Create<Vector2<int>>());
+            Instance.Translate(new Boundaries<int>(25, 400, 500, 100), Dummy.Create<Vector2<int>>());
 
             //Assert
             triggers.Should().BeEmpty();
@@ -3735,20 +3735,20 @@ public class OverlapGridTests
         public void WhenTranslationMovesItemsIntoExistingItems_OverlapItems()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -3760,7 +3760,7 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -3781,25 +3781,25 @@ public class OverlapGridTests
         public void WhenTranslationMovesItemsIntoExistingItems_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var boundaries = new Boundaries<int>(1, 3, 3, 1);
@@ -3809,11 +3809,11 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -3822,7 +3822,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(1, 0, items[5].Value),
                         new(2, 0, items[6].Value),
@@ -3837,16 +3837,16 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Translate_Boundaries_Vector : Tester<OverlapGrid<Dummy>>
+    public class Translate_Boundaries_Vector : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenTranslationIsZero_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var translation = Vector2<int>.Zero;
 
             //Act
@@ -3860,13 +3860,13 @@ public class OverlapGridTests
         public void WhenTranslationIsZero_DoNotTriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var boundaries = Fixture.Create<Boundaries<int>>();
+            var boundaries = Dummy.Create<Boundaries<int>>();
             var translation = Vector2<int>.Zero;
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -3880,11 +3880,11 @@ public class OverlapGridTests
         public void WhenBoundariesAreEqualOnAllAxis_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var boundaries = new Boundaries<int>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Translate(boundaries, translation.X, translation.Y);
@@ -3897,13 +3897,13 @@ public class OverlapGridTests
         public void WhenBoundariesAreEqualOnAllAxis_DoNotTriggerChange()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var boundaries = new Boundaries<int>();
-            var translation = Fixture.Create<Vector2<int>>();
+            var translation = Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -3917,20 +3917,20 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_MoveBoundariesInThatDirection()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -3942,7 +3942,7 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -3963,25 +3963,25 @@ public class OverlapGridTests
         public void WhenTranslationIsNegative_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var boundaries = new Boundaries<int>(1, 3, 3, 1);
@@ -3991,11 +3991,11 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -4004,7 +4004,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(-4, -4, items[5].Value),
                         new(-3, -4, items[6].Value),
@@ -4021,20 +4021,20 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_MoveBoundariesInThatDirection()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -4046,7 +4046,7 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -4067,25 +4067,25 @@ public class OverlapGridTests
         public void WhenTranslationIsPositiveAndNotZero_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var boundaries = new Boundaries<int>(1, 3, 3, 1);
@@ -4095,11 +4095,11 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -4108,7 +4108,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(6, 6, items[5].Value),
                         new(7, 6, items[6].Value),
@@ -4125,26 +4125,26 @@ public class OverlapGridTests
         public void WhenThereIsNothingWithinBoundaries_DoNothing()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
             //Act
-            Instance.Translate(new Boundaries<int>(25, 400, 500, 100), Fixture.Create<Vector2<int>>());
+            Instance.Translate(new Boundaries<int>(25, 400, 500, 100), Dummy.Create<Vector2<int>>());
 
             //Assert
             Instance.Should().BeEquivalentTo(items);
@@ -4154,29 +4154,29 @@ public class OverlapGridTests
         public void WhenThereIsNothingWithinBoundaries_DoNotTrigger()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
-            Instance.Translate(new Boundaries<int>(25, 400, 500, 100), Fixture.Create<Vector2<int>>());
+            Instance.Translate(new Boundaries<int>(25, 400, 500, 100), Dummy.Create<Vector2<int>>());
 
             //Assert
             triggers.Should().BeEmpty();
@@ -4186,20 +4186,20 @@ public class OverlapGridTests
         public void WhenTranslationMovesItemsIntoExistingItems_OverlapItems()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -4211,7 +4211,7 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(0, 0, items[0].Value),
                 new(1, 0, items[1].Value),
@@ -4232,25 +4232,25 @@ public class OverlapGridTests
         public void WhenTranslationMovesItemsIntoExistingItems_TriggerChange()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             var boundaries = new Boundaries<int>(1, 3, 3, 1);
@@ -4260,11 +4260,11 @@ public class OverlapGridTests
             Instance.Translate(boundaries, translation);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>>
                     {
                         new(1, 1, items[5].Value),
                         new(2, 1, items[6].Value),
@@ -4273,7 +4273,7 @@ public class OverlapGridTests
                         new(2, 2, items[10].Value),
                         new(3, 2, items[11].Value)
                     },
-                    NewValues = new List<Cell<Dummy>>
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(1, 0, items[5].Value),
                         new(2, 0, items[6].Value),
@@ -4288,13 +4288,13 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Copy : Tester<OverlapGrid<Dummy>>
+    public class Copy : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void Always_MakeAPerfectCopy()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             //Act
@@ -4307,26 +4307,26 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Copy_Boundaries : Tester<OverlapGrid<Dummy>>
+    public class Copy_Boundaries : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenBoundariesAreEqualToCollectionBoundaries_CopyEverything()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -4342,20 +4342,20 @@ public class OverlapGridTests
         public void WhenBoundariesAreEqualToPartOfCollection_CopyThatPart()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -4364,7 +4364,7 @@ public class OverlapGridTests
             var result = Instance.Copy(new Boundaries<int>(1, 3, 3, 1));
 
             //Assert
-            result.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            result.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(1, 1, items[5].Value),
                 new(2, 1, items[6].Value),
@@ -4379,20 +4379,20 @@ public class OverlapGridTests
         public void WhenBoundariesAreEmpty_CreateEmptyGrid()
         {
             //Arrange
-            var items = new List<Cell<Dummy>>
+            var items = new List<Cell<Garbage>>
             {
-                new(0, 0, Fixture.Create<Dummy>()),
-                new(1, 0, Fixture.Create<Dummy>()),
-                new(2, 0, Fixture.Create<Dummy>()),
-                new(3, 0, Fixture.Create<Dummy>()),
-                new(0, 1, Fixture.Create<Dummy>()),
-                new(1, 1, Fixture.Create<Dummy>()),
-                new(2, 1, Fixture.Create<Dummy>()),
-                new(3, 1, Fixture.Create<Dummy>()),
-                new(0, 2, Fixture.Create<Dummy>()),
-                new(1, 2, Fixture.Create<Dummy>()),
-                new(2, 2, Fixture.Create<Dummy>()),
-                new(3, 2, Fixture.Create<Dummy>()),
+                new(0, 0, Dummy.Create<Garbage>()),
+                new(1, 0, Dummy.Create<Garbage>()),
+                new(2, 0, Dummy.Create<Garbage>()),
+                new(3, 0, Dummy.Create<Garbage>()),
+                new(0, 1, Dummy.Create<Garbage>()),
+                new(1, 1, Dummy.Create<Garbage>()),
+                new(2, 1, Dummy.Create<Garbage>()),
+                new(3, 1, Dummy.Create<Garbage>()),
+                new(0, 2, Dummy.Create<Garbage>()),
+                new(1, 2, Dummy.Create<Garbage>()),
+                new(2, 2, Dummy.Create<Garbage>()),
+                new(3, 2, Dummy.Create<Garbage>()),
             };
 
             Instance.Add(items);
@@ -4406,16 +4406,16 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Swap : Tester<OverlapGrid<Dummy>>
+    public class Swap : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenCurrentAndDestinationAreEqual_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var current = Fixture.Create<Vector2<int>>();
+            var current = Dummy.Create<Vector2<int>>();
             var destination = current;
 
             //Act
@@ -4429,13 +4429,13 @@ public class OverlapGridTests
         public void WhenCurrentAndDestinationAreEqual_DoNotTriggerEvent()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var current = Fixture.Create<Vector2<int>>();
+            var current = Dummy.Create<Vector2<int>>();
             var destination = current;
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -4449,11 +4449,11 @@ public class OverlapGridTests
         public void WhenThereIsNothingAtBothCurrentAndDestination_DoNothing()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var current = Fixture.Create<Vector2<int>>();
-            var destination = Fixture.Create<Vector2<int>>();
+            var current = Dummy.Create<Vector2<int>>();
+            var destination = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Swap(current, destination);
@@ -4466,13 +4466,13 @@ public class OverlapGridTests
         public void WhenThereIsNothingAtBothCurrentAndDestination_DoNotTriggerEvent()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var current = Fixture.Create<Vector2<int>>();
-            var destination = Fixture.Create<Vector2<int>>();
+            var current = Dummy.Create<Vector2<int>>();
+            var destination = Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -4486,7 +4486,7 @@ public class OverlapGridTests
         public void WhenCurrentAndDestinationAreDifferent_SwapTheirIndexes()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>(3).ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>(3).ToList();
             Instance.Add(items);
 
             var current = items.First().Index;
@@ -4496,7 +4496,7 @@ public class OverlapGridTests
             Instance.Swap(current, destination);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(items[2].Index, items[0].Value),
                 items[1],
@@ -4508,25 +4508,25 @@ public class OverlapGridTests
         public void WhenCurrentAndDestinationAreDifferent_TriggerEvent()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>(3).ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>(3).ToList();
             Instance.Add(items);
 
             var current = items.First().Index;
             var destination = items.Last().Index;
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Swap(current, destination);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { items[0], items[2] },
-                    NewValues = new List<Cell<Dummy>> { new(items[2].Index, items[0].Value), new(items[0].Index, items[2].Value) }
+                    OldValues = new List<Cell<Garbage>> { items[0], items[2] },
+                    NewValues = new List<Cell<Garbage>> { new(items[2].Index, items[0].Value), new(items[0].Index, items[2].Value) }
                 }
             });
         }
@@ -4535,11 +4535,11 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsInBothCurrentAndDestination_SwapThemAll()
         {
             //Arrange
-            var indexes = Fixture.CreateMany<Vector2<int>>(3).ToList();
+            var indexes = Dummy.CreateMany<Vector2<int>>(3).ToList();
 
-            var items = new List<Cell<Dummy>>();
+            var items = new List<Cell<Garbage>>();
             foreach (var index in indexes)
-                items.AddRange(Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany(3));
+                items.AddRange(Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany(3));
 
             Instance.Add(items);
 
@@ -4550,7 +4550,7 @@ public class OverlapGridTests
             Instance.Swap(current, destination);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(indexes[2], items[0].Value),
                 new(indexes[2], items[1].Value),
@@ -4568,30 +4568,30 @@ public class OverlapGridTests
         public void WhenThereAreMultipleItemsInBothCurrentAndDestination_TriggerEventOnce()
         {
             //Arrange
-            var indexes = Fixture.CreateMany<Vector2<int>>(3).ToList();
+            var indexes = Dummy.CreateMany<Vector2<int>>(3).ToList();
 
-            var items = new List<Cell<Dummy>>();
+            var items = new List<Cell<Garbage>>();
             foreach (var index in indexes)
-                items.AddRange(Fixture.Build<Cell<Dummy>>().With(x => x.Index, index).CreateMany(3));
+                items.AddRange(Dummy.Build<Cell<Garbage>>().With(x => x.Index, index).CreateMany(3));
 
             Instance.Add(items);
 
             var current = indexes.First();
             var destination = indexes.Last();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Swap(current, destination);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { items[0], items[1], items[2], items[6], items[7], items[8] },
-                    NewValues = new List<Cell<Dummy>>
+                    OldValues = new List<Cell<Garbage>> { items[0], items[1], items[2], items[6], items[7], items[8] },
+                    NewValues = new List<Cell<Garbage>>
                     {
                         new(indexes[2], items[0].Value),
                         new(indexes[2], items[1].Value),
@@ -4608,17 +4608,17 @@ public class OverlapGridTests
         public void WhenThereIsNothingAtCurrent_MoveDestinationToCurrent()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>(3).ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>(3).ToList();
             Instance.Add(items);
 
-            var current = Fixture.Create<Vector2<int>>();
+            var current = Dummy.Create<Vector2<int>>();
             var destination = items.Last().Index;
 
             //Act
             Instance.Swap(current, destination);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 items[0],
                 items[1],
@@ -4630,25 +4630,25 @@ public class OverlapGridTests
         public void WhenThereIsNothingAtCurrent_TriggerEvent()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>(3).ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>(3).ToList();
             Instance.Add(items);
 
-            var current = Fixture.Create<Vector2<int>>();
+            var current = Dummy.Create<Vector2<int>>();
             var destination = items.Last().Index;
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Swap(current, destination);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { items[2] },
-                    NewValues = new List<Cell<Dummy>> { new(current, items[2].Value) }
+                    OldValues = new List<Cell<Garbage>> { items[2] },
+                    NewValues = new List<Cell<Garbage>> { new(current, items[2].Value) }
                 }
             });
         }
@@ -4657,17 +4657,17 @@ public class OverlapGridTests
         public void WhenThereIsNothingAtDestination_MoveCurrentToDestination()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>(3).ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>(3).ToList();
             Instance.Add(items);
 
             var current = items.First().Index;
-            var destination = Fixture.Create<Vector2<int>>();
+            var destination = Dummy.Create<Vector2<int>>();
 
             //Act
             Instance.Swap(current, destination);
 
             //Assert
-            Instance.Should().BeEquivalentTo(new List<Cell<Dummy>>
+            Instance.Should().BeEquivalentTo(new List<Cell<Garbage>>
             {
                 new(destination, items[0].Value),
                 items[1],
@@ -4679,38 +4679,38 @@ public class OverlapGridTests
         public void WhenThereIsNothingAtDestination_TriggerEvent()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>(3).ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>(3).ToList();
             Instance.Add(items);
 
             var current = items.First().Index;
-            var destination = Fixture.Create<Vector2<int>>();
+            var destination = Dummy.Create<Vector2<int>>();
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Swap(current, destination);
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Dummy>> { items[0] },
-                    NewValues = new List<Cell<Dummy>> { new(destination, items[0].Value) }
+                    OldValues = new List<Cell<Garbage>> { items[0] },
+                    NewValues = new List<Cell<Garbage>> { new(destination, items[0].Value) }
                 }
             });
         }
     }
 
     [TestClass]
-    public class Clear : Tester<OverlapGrid<Dummy>>
+    public class Clear : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_DoNotTrigger()
         {
             //Arrange
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
@@ -4724,7 +4724,7 @@ public class OverlapGridTests
         public void WhenGridIsNotEmpty_RemoveAllItems()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             //Act
@@ -4738,17 +4738,17 @@ public class OverlapGridTests
         public void WhenGridIsNotEmpty_TriggerEvent()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
-            var triggers = new List<GridChangedEventArgs<Dummy>>();
+            var triggers = new List<GridChangedEventArgs<Garbage>>();
             Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
             //Act
             Instance.Clear();
 
             //Assert
-            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Dummy>>
+            triggers.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
@@ -4759,7 +4759,7 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class ToStringMethod : Tester<OverlapGrid<Dummy>>
+    public class ToStringMethod : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenGridIsEmpty_ReturnEmptyMessage()
@@ -4777,7 +4777,7 @@ public class OverlapGridTests
         public void WhenGridIsNotEmpty_ReturnCount()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>(5).ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>(5).ToList();
             Instance.Add(cells);
 
             //Act
@@ -4789,50 +4789,49 @@ public class OverlapGridTests
     }
 
     [TestClass]
-    public class Equality : Tester<OverlapGrid<Dummy>>
+    public class Equality : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         protected override void InitializeTest()
         {
             base.InitializeTest();
-            Fixture.Customizations.Add(new OverlapGridSpecimenBuilder());
         }
 
         [TestMethod]
-        public void Always_EnsureValueEquality() => Ensure.ValueEquality<OverlapGrid<Dummy>>(Fixture);
+        public void Always_EnsureValueEquality() => Ensure.ValueEquality<OverlapGrid<Garbage>>(Dummy);
     }
 
     [TestClass]
-    public class HashCode : Tester<OverlapGrid<Dummy>>
+    public class HashCode : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void Always_ReturnInternalListHashCode()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             //Act
             var result = Instance.GetHashCode();
 
             //Assert
-            result.Should().Be(GetFieldValue<List<Cell<Dummy>>>("_items")!.GetHashCode());
+            result.Should().Be(GetFieldValue<List<Cell<Garbage>>>("_items")!.GetHashCode());
         }
     }
 
     [TestClass]
-    public class Serialization : Tester<OverlapGrid<Dummy>>
+    public class Serialization : ToolBX.Collections.UnitTesting.Tester<OverlapGrid<Garbage>>
     {
         [TestMethod]
         public void WhenSerializingJsonUsingNewtonsoft_DeserializeEquivalentObject()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             var json = JsonConvert.SerializeObject(Instance);
 
             //Act
-            var result = JsonConvert.DeserializeObject<OverlapGrid<Dummy>>(json);
+            var result = JsonConvert.DeserializeObject<OverlapGrid<Garbage>>(json);
 
             //Assert
             result.Should().BeEquivalentTo(Instance);
@@ -4842,7 +4841,7 @@ public class OverlapGridTests
         public void WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
         {
             //Arrange
-            var items = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
             Instance.Add(items);
 
             JsonSerializerOptions.WithGridConverters();
@@ -4850,7 +4849,7 @@ public class OverlapGridTests
             var json = System.Text.Json.JsonSerializer.Serialize(Instance, JsonSerializerOptions);
 
             //Act
-            var result = System.Text.Json.JsonSerializer.Deserialize<OverlapGrid<Dummy>>(json, JsonSerializerOptions);
+            var result = System.Text.Json.JsonSerializer.Deserialize<OverlapGrid<Garbage>>(json, JsonSerializerOptions);
 
             //Assert
             result.Should().BeEquivalentTo(Instance);

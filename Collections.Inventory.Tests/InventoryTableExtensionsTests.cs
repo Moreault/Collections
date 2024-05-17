@@ -4,7 +4,7 @@
 public class InventoryTableExtensionsTests
 {
     [TestClass]
-    public class ToInventory_EnumerableOfDummy : Tester
+    public class ToInventory_EnumerableOfDummy : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCollectionIsNull_Throw()
@@ -37,7 +37,7 @@ public class InventoryTableExtensionsTests
         public void WhenCollectionHasNoDuplicates_ReturnInventoryWithQuantityOfOneForEach()
         {
             //Arrange
-            var collection = Fixture.CreateMany<string>().ToList();
+            var collection = Dummy.CreateMany<string>().ToList();
 
             //Act
             var result = collection.ToInventoryTable();
@@ -102,7 +102,7 @@ public class InventoryTableExtensionsTests
     }
 
     [TestClass]
-    public class ToInventory_EnumerableOfEntries : Tester
+    public class ToInventory_EnumerableOfEntries : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenEntriesNull_Throw()
@@ -121,8 +121,8 @@ public class InventoryTableExtensionsTests
         public void WhenStackSizeIsNegative_Throw()
         {
             //Arrange
-            var collection = Fixture.Create<List<Entry<string>>>();
-            var stackSize = -Fixture.Create<int>();
+            var collection = Dummy.Create<List<Entry<string>>>();
+            var stackSize = -Dummy.Create<int>();
 
             //Act
             var action = () => collection.ToInventoryTable(stackSize);
@@ -135,7 +135,7 @@ public class InventoryTableExtensionsTests
         public void WhenStackSizeIsZero_Throw()
         {
             //Arrange
-            var collection = Fixture.Create<List<Entry<string>>>();
+            var collection = Dummy.Create<List<Entry<string>>>();
 
             //Act
             var action = () => collection.ToInventoryTable(0);
@@ -161,7 +161,7 @@ public class InventoryTableExtensionsTests
         public void WhenThereAreNoDuplicateEntries_ReturnEquivalentInventory()
         {
             //Arrange
-            var collection = Fixture.Create<List<Entry<string>>>();
+            var collection = Dummy.Create<List<Entry<string>>>();
 
             //Act
             var result = collection.ToInventoryTable(int.MaxValue);

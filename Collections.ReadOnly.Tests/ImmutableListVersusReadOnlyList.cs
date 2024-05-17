@@ -1,13 +1,13 @@
 ﻿namespace Collections.ReadOnly.Tests;
 
 [TestClass]
-public sealed class ImmutableListVersusReadOnlyList : Tester
+public sealed class ImmutableListVersusReadOnlyList : ToolBX.Collections.UnitTesting.Tester
 {
     [TestMethod]
     public void ImmutableList_WhenComparedToEquivalentObjectOfSameType_ReturnsTrue()
     {
         //Arrange
-        var instance = Fixture.Create<ImmutableList<Dummy>>();
+        var instance = Dummy.Create<ImmutableList<Garbage>>();
         var copy = instance.Select(x => x).ToImmutableList();
 
         //Act
@@ -21,7 +21,7 @@ public sealed class ImmutableListVersusReadOnlyList : Tester
     public void ReadOnlyList_WhenComparedToEquivalentObjectOfSameType_ReturnsTrue()
     {
         //Arrange
-        var instance = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var instance = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var copy = instance.Select(x => x).ToReadOnlyList();
 
         //Act
@@ -35,7 +35,7 @@ public sealed class ImmutableListVersusReadOnlyList : Tester
     public void ImmutableList_WhenComparedToReadOnlyList_ReturnsFalse()
     {
         //Arrange
-        var instance = Fixture.Create<ImmutableList<Dummy>>();
+        var instance = Dummy.Create<ImmutableList<Garbage>>();
         var copy = instance.Select(x => x).ToReadOnlyList();
 
         //Act
@@ -49,7 +49,7 @@ public sealed class ImmutableListVersusReadOnlyList : Tester
     public void ReadOnlyList_WhenComparedToImmutableList_ReturnsTrue()
     {
         //Arrange
-        var instance = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var instance = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var copy = instance.Select(x => x).ToImmutableList();
 
         //Act
@@ -63,7 +63,7 @@ public sealed class ImmutableListVersusReadOnlyList : Tester
     public void ImmutableList_ToString_ReturnTypeName()
     {
         //Arrange
-        var instance = Fixture.Create<ImmutableList<Dummy>>();
+        var instance = Dummy.Create<ImmutableList<Garbage>>();
 
         //Act
         var result = instance.ToString();
@@ -76,7 +76,7 @@ public sealed class ImmutableListVersusReadOnlyList : Tester
     public void ReadOnlyList_ToStringWhenEmpty_ReturnEmptyReadOnlyListWithGenericType()
     {
         //Arrange
-        var instance = ReadOnlyList<Dummy>.Empty;
+        var instance = ReadOnlyList<Garbage>.Empty;
 
         //Act
         var result = instance.ToString();
@@ -89,7 +89,7 @@ public sealed class ImmutableListVersusReadOnlyList : Tester
     public void ReadOnlyList_ToStringWhenContainsItems_ReturnAmountTypeName()
     {
         //Arrange
-        var instance = Fixture.CreateMany<Dummy>(3).ToReadOnlyList();
+        var instance = Dummy.CreateMany<Garbage>(3).ToReadOnlyList();
 
         //Act
         var result = instance.ToString();

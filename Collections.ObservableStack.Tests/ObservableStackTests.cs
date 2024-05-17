@@ -1,16 +1,16 @@
 using System.Collections;
 using ToolBX.Collections.ObservableStack.Json;
-using ToolBX.Collections.UnitTesting.Extensions;
+using ToolBX.Dummies;
+using ToolBX.Eloquentest.Dummies;
 
 namespace Collections.ObservableStack.Tests;
 
 [TestClass]
-public class ObservableStackTests : Tester<ObservableStack<Dummy>>
+public class ObservableStackTests : ToolBX.Collections.UnitTesting.Tester<ObservableStack<Garbage>>
 {
     protected override void InitializeTest()
     {
         base.InitializeTest();
-        Fixture.WithCollectionCustomizations();
         JsonSerializerOptions.WithObservableStackConverters();
     }
 
@@ -20,7 +20,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
         //Arrange
 
         //Act
-        var result = new ObservableStack<Dummy>();
+        var result = new ObservableStack<Garbage>();
 
         //Assert
         result.Should().BeEmpty();
@@ -30,10 +30,10 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void EnumerableConstructor_WhenCollectionIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> items = null!;
+        IEnumerable<Garbage> items = null!;
 
         //Act
-        var action = () => new ObservableStack<Dummy>(items);
+        var action = () => new ObservableStack<Garbage>(items);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -43,10 +43,10 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void EnumerableConstructor_WhenCollectionIsNotNull_InitializeWithItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
-        var result = new ObservableStack<Dummy>(items);
+        var result = new ObservableStack<Garbage>(items);
 
         //Assert
         result.Should().BeEquivalentTo(items);
@@ -68,7 +68,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Count_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -84,7 +84,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
         //Arrange
 
         //Act
-        var result = ((IObservableStack<Dummy>)Instance).Count;
+        var result = ((IObservableStack<Garbage>)Instance).Count;
 
         //Assert
         result.Should().Be(0);
@@ -94,11 +94,11 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void CountFromObservableStackInterface_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
-        var result = ((IObservableStack<Dummy>)Instance).Count;
+        var result = ((IObservableStack<Garbage>)Instance).Count;
 
 
         //Assert
@@ -111,7 +111,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
         //Arrange
 
         //Act
-        var result = ((IReadOnlyCollection<Dummy>)Instance).Count;
+        var result = ((IReadOnlyCollection<Garbage>)Instance).Count;
 
         //Assert
         result.Should().Be(0);
@@ -121,11 +121,11 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void CountFromReadOnlyCollectionInterface_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
-        var result = ((IReadOnlyCollection<Dummy>)Instance).Count;
+        var result = ((IReadOnlyCollection<Garbage>)Instance).Count;
 
 
         //Assert
@@ -136,7 +136,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void IsSynchronized_Always_ReturnValueFromInternalCollection()
     {
         //Arrange
-        var internalCollection = (ICollection)GetFieldValue<Stack<Dummy>>("_items")!;
+        var internalCollection = (ICollection)GetFieldValue<Stack<Garbage>>("_items")!;
 
         //Act
         var result = ((ICollection)Instance).IsSynchronized;
@@ -149,7 +149,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void SyncRoot_Always_ReturnValueFromInternalCollection()
     {
         //Arrange
-        var internalCollection = (ICollection)GetFieldValue<Stack<Dummy>>("_items")!;
+        var internalCollection = (ICollection)GetFieldValue<Stack<Garbage>>("_items")!;
 
         //Act
         var result = ((ICollection)Instance).SyncRoot;
@@ -162,7 +162,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Clear_WhenIsEmpty_DoNotTriggerEvent()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -176,7 +176,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Clear_WhenContainsItems_RemoveAll()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -190,17 +190,17 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Clear_WhenContainsItems_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Clear();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
         {
             new() { OldValues = items }
         });
@@ -210,10 +210,10 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Contains_WhenItemIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
 
         //Act
         var result = Instance.Contains(item);
@@ -226,7 +226,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Contains_WhenItemIsInCollection_ReturnTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         var item = items.GetRandom();
@@ -254,7 +254,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Peek_WhenContainsOnlyOneItem_ReturnThatItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
@@ -268,7 +268,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Peek_WhenContainsItems_ReturnLastItemAdded()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
         //Act
         var result = Instance.Peek();
@@ -286,35 +286,35 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
         var result = Instance.TryPeek();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Failure());
+        result.Should().Be(Result<Garbage>.Failure());
     }
 
     [TestMethod]
     public void TryPeek_WhenContainsOnlyOneItem_ReturnThatItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
         var result = Instance.TryPeek();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(item));
+        result.Should().Be(Result<Garbage>.Success(item));
     }
 
     [TestMethod]
     public void TryPeek_WhenContainsItems_ReturnLastItemAdded()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
         var result = Instance.TryPeek();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(items.Last()));
+        result.Should().Be(Result<Garbage>.Success(items.Last()));
     }
 
     [TestMethod]
@@ -333,7 +333,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Pop_WhenContainsOnlyOneItem_ReturnThatItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
@@ -347,7 +347,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Pop_WhenContainsOnlyOneItem_RemoveItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
@@ -361,21 +361,21 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Pop_WhenContainsOnlyOneItem_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Pop();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy> { item }
+                    OldValues = new List<Garbage> { item }
                 }
             });
     }
@@ -384,7 +384,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Pop_WhenContainsItems_ReturnLastItemAdded()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
         //Act
         var result = Instance.Pop();
@@ -397,7 +397,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Pop_WhenContainsItems_RemoveItem()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -411,21 +411,21 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void Pop_WhenContainsItems_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Pop();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy> { items.Last() }
+                    OldValues = new List<Garbage> { items.Last() }
                 }
             });
     }
@@ -439,28 +439,28 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
         var result = Instance.TryPop();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Failure());
+        result.Should().Be(Result<Garbage>.Failure());
     }
 
     [TestMethod]
     public void TryPop_WhenContainsOnlyOneItem_ReturnThatItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
         var result = Instance.TryPop();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(item));
+        result.Should().Be(Result<Garbage>.Success(item));
     }
 
     [TestMethod]
     public void TryPop_WhenContainsOnlyOneItem_RemoveItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
@@ -474,21 +474,21 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void TryPop_WhenContainsOnlyOneItem_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryPop();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy> { item }
+                    OldValues = new List<Garbage> { item }
                 }
             });
     }
@@ -497,20 +497,20 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void TryPop_WhenContainsItems_ReturnLastItemAdded()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
         //Act
         var result = Instance.TryPop();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(items.Last()));
+        result.Should().Be(Result<Garbage>.Success(items.Last()));
     }
 
     [TestMethod]
     public void TryPop_WhenContainsItems_RemoveItem()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -524,21 +524,21 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void TryPop_WhenContainsItems_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryPop();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy> { items.Last() }
+                    OldValues = new List<Garbage> { items.Last() }
                 }
             });
     }
@@ -560,7 +560,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     {
         //Arrange
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -574,10 +574,10 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void PushParams_WhenIsNotEmpty_PushAllOfThemToTopOfStack()
     {
         //Arrange
-        var firstItems = Fixture.CreateMany<Dummy>().ToArray();
+        var firstItems = Dummy.CreateMany<Garbage>().ToArray();
         Instance.Push(firstItems);
 
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         Instance.Push(items);
@@ -590,19 +590,19 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void PushParams_WhenIsNotEmpty_TriggerEvent()
     {
         //Arrange
-        var firstItems = Fixture.CreateMany<Dummy>().ToArray();
+        var firstItems = Dummy.CreateMany<Garbage>().ToArray();
         Instance.Push(firstItems);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         Instance.Push(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
         {
             new()
             {
@@ -615,7 +615,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void PushEnumerable_WhenItemsIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> items = null!;
+        IEnumerable<Garbage> items = null!;
 
         //Act
         var action = () => Instance.Push(items);
@@ -628,7 +628,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void PushEnumerable_WhenItemsIsEmpty_DoNotAddNewElements()
     {
         //Arrange
-        var items = new List<Dummy>();
+        var items = new List<Garbage>();
 
         //Act
         Instance.Push(items);
@@ -641,9 +641,9 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void PushEnumerable_WhenItemsIsEmpty_DoNotTrigger()
     {
         //Arrange
-        var items = new List<Dummy>();
+        var items = new List<Garbage>();
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -657,10 +657,10 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void PushEnumerable_WhenIsNotEmpty_PushAllOfThemToTopOfStack()
     {
         //Arrange
-        var firstItems = Fixture.CreateMany<Dummy>().ToList();
+        var firstItems = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(firstItems);
 
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         Instance.Push(items);
@@ -673,19 +673,19 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void PushEnumerable_WhenIsNotEmpty_TriggerEvent()
     {
         //Arrange
-        var firstItems = Fixture.CreateMany<Dummy>().ToList();
+        var firstItems = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(firstItems);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         Instance.Push(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
@@ -694,43 +694,39 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
             });
     }
 
-    [TestClass]
-    public class ToStringMethod : Tester<ObservableStack<Dummy>>
+    [TestMethod]
+    public void ToString_WhenIsEmpty_ReturnEmptyMessage()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnEmptyMessage()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = Instance.ToString();
+        //Act
+        var result = Instance.ToString();
 
-            //Assert
-            result.Should().Be("Empty ObservableStack<Dummy>");
-        }
+        //Assert
+        result.Should().Be("Empty ObservableStack<Dummy>");
+    }
 
-        [TestMethod]
-        public void WhenContainsItems_ReturnNumberOfItems()
-        {
-            //Arrange
-            var items = Fixture.CreateMany<Dummy>(3).ToList();
-            Instance.Push(items);
+    [TestMethod]
+    public void ToString_WhenContainsItems_ReturnNumberOfItems()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>(3).ToList();
+        Instance.Push(items);
 
-            //Act
-            var result = Instance.ToString();
+        //Act
+        var result = Instance.ToString();
 
-            //Assert
-            result.Should().Be("ObservableStack<Dummy> with 3 items");
-        }
+        //Assert
+        result.Should().Be("ObservableStack<Dummy> with 3 items");
     }
 
     [TestMethod]
     public void CopyTo_Always_CopyToArray()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
-        var array = new Dummy[items.Count];
+        var array = new Garbage[items.Count];
 
         //Act
         ((ICollection)Instance).CopyTo(array, 0);
@@ -743,7 +739,7 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     public void GetHashCode_Always_ReturnFromInternalCollection()
     {
         //Arrange
-        var internalCollection = GetFieldValue<Stack<Dummy>>("_items")!;
+        var internalCollection = GetFieldValue<Stack<Garbage>>("_items")!;
 
         //Act
         var result = Instance.GetHashCode();
@@ -753,11 +749,8 @@ public class ObservableStackTests : Tester<ObservableStack<Dummy>>
     }
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<ObservableStack<Dummy>>(Fixture, JsonSerializerOptions);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<ObservableStack<Garbage>>(Dummy, JsonSerializerOptions);
 
     [TestMethod]
-    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<ObservableStack<Dummy>>(Fixture, JsonSerializerOptions);
-
-    [TestMethod]
-    public void Ensure_EnumeratesAllItems() => Ensure.EnumeratesAllItems<ObservableStack<Dummy>, Dummy>(Fixture);
+    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<ObservableStack<Garbage>>(Dummy, JsonSerializerOptions);
 }

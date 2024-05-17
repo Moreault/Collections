@@ -1,19 +1,16 @@
 ﻿namespace ToolBX.Collections.UnitTesting.Customizations;
 
-public sealed class InventoryListSpecimenBuilder : ISpecimenBuilder
+public sealed class InventoryListCustomization : GenericCollectionCustomizationBase
 {
-    public object Create(object request, ISpecimenContext context)
+    public override IEnumerable<Type> Types => [typeof(InventoryList<>)];
+
+    protected override object Factory(Dummy dummy, Type type)
     {
-        if (request is Type type && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(InventoryList<>))
-        {
-            var elementType = type.GetGenericArguments()[0];
-            var entryType = typeof(Entry<>).MakeGenericType(elementType);
-            var listType = typeof(List<>).MakeGenericType(entryType);
-            var list = context.Resolve(listType);
+        var elementType = type.GetGenericArguments()[0];
+        var entryType = typeof(Entry<>).MakeGenericType(elementType);
 
-            return Activator.CreateInstance(typeof(InventoryList<>).MakeGenericType(elementType), list, int.MaxValue)!;
-        }
+        var list = CreateEnumerable(dummy, entryType);
 
-        return new NoSpecimen();
+        return Activator.CreateInstance(typeof(InventoryList<>).MakeGenericType(elementType), list, int.MaxValue)!;
     }
 }

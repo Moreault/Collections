@@ -1,13 +1,13 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public sealed class InventoryListExtensionsTests : Tester
+public sealed class InventoryListExtensionsTests : ToolBX.Collections.UnitTesting.Tester
 {
     [TestMethod]
     public void ToInventoryListType_WhenCollectionIsNull_Throw()
     {
         //Arrange
-        IEnumerable<DummyItem> collection = null!;
+        IEnumerable<GarbageItem> collection = null!;
 
         //Act
         var action = () => collection.ToInventoryList();
@@ -20,14 +20,14 @@ public sealed class InventoryListExtensionsTests : Tester
     public void ToInventoryListType_WhenCollectionIsNotNull_ReturnInventoryListWithAllItemsWithOneQuantity()
     {
         //Arrange
-        var collection = Fixture.CreateMany<DummyItem>().ToList();
-        var stackSize = Fixture.Create<int>();
+        var collection = Dummy.CreateMany<GarbageItem>().ToList();
+        var stackSize = Dummy.Create<int>();
 
         //Act
         var result = collection.ToInventoryList(stackSize);
 
         //Assert
-        result.Should().BeEquivalentTo(collection.Select(x => new Entry<DummyItem>(x, 1)));
+        result.Should().BeEquivalentTo(collection.Select(x => new Entry<GarbageItem>(x, 1)));
         result.StackSize.Should().Be(stackSize);
     }
 
@@ -35,7 +35,7 @@ public sealed class InventoryListExtensionsTests : Tester
     public void ToInventoryListEntries_WhenCollectionIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Entry<DummyItem>> collection = null!;
+        IEnumerable<Entry<GarbageItem>> collection = null!;
 
         //Act
         var action = () => collection.ToInventoryList();
@@ -48,8 +48,8 @@ public sealed class InventoryListExtensionsTests : Tester
     public void ToInventoryListEntries_WhenCollectionIsNotNull_ReturnNew()
     {
         //Arrange
-        var collection = Fixture.CreateMany<Entry<DummyItem>>().ToList();
-        var stackSize = collection.Max(x => x.Quantity) + Fixture.Create<int>();
+        var collection = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
+        var stackSize = collection.Max(x => x.Quantity) + Dummy.Create<int>();
 
         //Act
         var result = collection.ToInventoryList(stackSize);

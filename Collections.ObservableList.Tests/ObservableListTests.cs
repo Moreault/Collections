@@ -1,7 +1,7 @@
 namespace Collections.ObservableList.Tests;
 
 [TestClass]
-public class ObservableListTests : ObservableListTester<ObservableList<Dummy>, Dummy>
+public class ObservableListTests : ObservableListTester<ObservableList<Garbage>, Garbage>
 {
     [TestMethod]
     public void Constructor_WhenUsingDefaultConstructor_InitializeWithEmptyArray()
@@ -9,7 +9,7 @@ public class ObservableListTests : ObservableListTester<ObservableList<Dummy>, D
         //Arrange
 
         //Act
-        var result = new ObservableList<Dummy>();
+        var result = new ObservableList<Garbage>();
 
         //Assert
         result.Should().BeEmpty();
@@ -19,10 +19,10 @@ public class ObservableListTests : ObservableListTester<ObservableList<Dummy>, D
     public void Constructor_WhenUsingParams_InitializeWithThoseItems()
     {
         //Arrange
-        var items = Fixture.Create<Dummy[]>();
+        var items = Dummy.Create<Garbage[]>();
 
         //Act
-        var result = new ObservableList<Dummy>(items);
+        var result = new ObservableList<Garbage>(items);
 
         //Assert
         result.Should().BeEquivalentTo(items);
@@ -34,7 +34,7 @@ public class ObservableListTests : ObservableListTester<ObservableList<Dummy>, D
         //Arrange
 
         //Act
-        var action = () => new ObservableList<Dummy>(null!);
+        var action = () => new ObservableList<Garbage>(null!);
 
         //Assert
         action.Should().Throw<ArgumentNullException>();
@@ -44,10 +44,10 @@ public class ObservableListTests : ObservableListTester<ObservableList<Dummy>, D
     public void Constructor_WhenPassingList_InitializeWithListItems()
     {
         //Arrange
-        var items = Fixture.Create<List<Dummy>>();
+        var items = Dummy.Create<List<Garbage>>();
 
         //Act
-        var result = new ObservableList<Dummy>(items);
+        var result = new ObservableList<Garbage>(items);
 
         //Assert
         result.Should().BeEquivalentTo(items);
@@ -57,14 +57,14 @@ public class ObservableListTests : ObservableListTester<ObservableList<Dummy>, D
     public void Constructor_WhenUsingInitializer_AddThoseItemsToObservableList()
     {
         //Arrange
-        var item1 = Fixture.Create<Dummy>();
-        var item2 = Fixture.Create<Dummy>();
-        var item3 = Fixture.Create<Dummy>();
+        var item1 = Dummy.Create<Garbage>();
+        var item2 = Dummy.Create<Garbage>();
+        var item3 = Dummy.Create<Garbage>();
 
         //Act
-        var result = new ObservableList<Dummy> { item1, item2, item3 };
+        var result = new ObservableList<Garbage> { item1, item2, item3 };
 
         //Assert
-        result.Should().BeEquivalentTo(new List<Dummy> { item1, item2, item3 });
+        result.Should().BeEquivalentTo(new List<Garbage> { item1, item2, item3 });
     }
 }

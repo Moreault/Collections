@@ -4,13 +4,13 @@
 public class OverlapGridExtensionsTests
 {
     [TestClass]
-    public class ToOverlapGrid : Tester
+    public class ToOverlapGrid : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCellsIsNull_Throw()
         {
             //Arrange
-            IEnumerable<Cell<Dummy>> cells = null!;
+            IEnumerable<Cell<Garbage>> cells = null!;
 
             //Act
             var action = () => cells.ToOverlapGrid();
@@ -23,13 +23,13 @@ public class OverlapGridExtensionsTests
         public void WhenCellsIsEmpty_CreateEmptyGrid()
         {
             //Arrange
-            var cells = Array.Empty<Cell<Dummy>>();
+            var cells = Array.Empty<Cell<Garbage>>();
 
             //Act
             var result = cells.ToOverlapGrid();
 
             //Assert
-            result.Should().BeOfType<OverlapGrid<Dummy>>();
+            result.Should().BeOfType<OverlapGrid<Garbage>>();
             result.Should().BeEmpty();
         }
 
@@ -37,13 +37,13 @@ public class OverlapGridExtensionsTests
         public void WhenCellsIsNotEmpty_CreateOverlapGrid()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<Dummy>>().ToList();
+            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
             //Act
             var result = cells.ToOverlapGrid();
 
             //Assert
-            result.Should().BeOfType<OverlapGrid<Dummy>>();
+            result.Should().BeOfType<OverlapGrid<Garbage>>();
             result.Should().BeEquivalentTo(cells);
         }
     }

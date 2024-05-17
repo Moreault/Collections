@@ -4,7 +4,7 @@
 public class GridExtensionsTests
 {
     [TestClass]
-    public class ToGrid_Cells : Tester
+    public class ToGrid_Cells : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCellsAreNull_Throw()
@@ -36,7 +36,7 @@ public class GridExtensionsTests
         public void WhenCellsAreNotEmpty_ReturnGrid()
         {
             //Arrange
-            var cells = Fixture.CreateMany<Cell<int>>().ToList();
+            var cells = Dummy.CreateMany<Cell<int>>().ToList();
 
             //Act
             var result = cells.ToGrid();
@@ -47,7 +47,7 @@ public class GridExtensionsTests
     }
 
     [TestClass]
-    public class ToGrid_KeyValuePairs : Tester
+    public class ToGrid_KeyValuePairs : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCellsAreNull_Throw()
@@ -79,7 +79,7 @@ public class GridExtensionsTests
         public void WhenCellsAreNotEmpty_ReturnGrid()
         {
             //Arrange
-            var keyValuePairs = Fixture.CreateMany<KeyValuePair<Vector2<int>, string>>().ToList();
+            var keyValuePairs = Dummy.CreateMany<KeyValuePair<Vector2<int>, string>>().ToList();
 
             //Act
             var result = keyValuePairs.ToGrid();
@@ -90,7 +90,7 @@ public class GridExtensionsTests
     }
 
     [TestClass]
-    public class ToGrid_2dArray : Tester
+    public class ToGrid_2dArray : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenArrayIsNull_Throw()
@@ -122,7 +122,7 @@ public class GridExtensionsTests
         public void WhenArrayIsNotEmpty_ReturnGrid()
         {
             //Arrange
-            var collection = Fixture.Create<char[,]>();
+            var collection = Dummy.Create<char[,]>();
 
             //Act
             var result = collection.ToGrid();
@@ -142,7 +142,7 @@ public class GridExtensionsTests
     }
 
     [TestClass]
-    public class ToGrid_JaggedArray : Tester
+    public class ToGrid_JaggedArray : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenArrayIsNull_Throw()
@@ -174,7 +174,7 @@ public class GridExtensionsTests
         public void WhenArrayIsNotEmpty_ReturnGrid()
         {
             //Arrange
-            var collection = Fixture.Create<float[][]>();
+            var collection = Dummy.Create<float[][]>();
 
             //Act
             var result = collection.ToGrid();
@@ -194,14 +194,14 @@ public class GridExtensionsTests
     }
 
     [TestClass]
-    public class ToGrid_ColumnCount : Tester
+    public class ToGrid_ColumnCount : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenCollectionIsNull_Throw()
         {
             //Arrange
             IEnumerable<int> collection = null!;
-            var columnCount = Fixture.Create<int>();
+            var columnCount = Dummy.Create<int>();
 
             //Act
             var action = () => collection.ToGrid(columnCount);
@@ -214,7 +214,7 @@ public class GridExtensionsTests
         public void WhenColumnCountIsZero_Throw()
         {
             //Arrange
-            var collection = Fixture.CreateMany<int>().ToList();
+            var collection = Dummy.CreateMany<int>().ToList();
             var columnCount = 0;
 
             //Act
@@ -228,8 +228,8 @@ public class GridExtensionsTests
         public void WhenColumnCountIsNegative_Throw()
         {
             //Arrange
-            var collection = Fixture.CreateMany<int>().ToList();
-            var columnCount = -Fixture.Create<int>();
+            var collection = Dummy.CreateMany<int>().ToList();
+            var columnCount = -Dummy.Create<int>();
 
             //Act
             var action = () => collection.ToGrid(columnCount);
@@ -242,7 +242,7 @@ public class GridExtensionsTests
         public void Always_ConvertToGrid()
         {
             //Arrange
-            var collection = Fixture.CreateMany<int>(9).ToList();
+            var collection = Dummy.CreateMany<int>(9).ToList();
             var maxX = 2;
 
             var expected = new Grid<int>
@@ -267,7 +267,7 @@ public class GridExtensionsTests
     }
 
     [TestClass]
-    public class To2dArray : Tester
+    public class To2dArray : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenGridIsNull_Throw()
@@ -299,7 +299,7 @@ public class GridExtensionsTests
         public void WhenGridIsNotEmpty_ReturnArray()
         {
             //Arrange
-            var grid = Fixture.CreateMany<Cell<int>>().ToGrid();
+            var grid = Dummy.CreateMany<Cell<int>>().ToGrid();
 
             //Act
             var result = grid.To2dArray();
@@ -313,7 +313,7 @@ public class GridExtensionsTests
     }
 
     [TestClass]
-    public class ToJaggedArray : Tester
+    public class ToJaggedArray : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenGridIsNull_Throw()
@@ -345,7 +345,7 @@ public class GridExtensionsTests
         public void WhenGridIsNotEmpty_ReturnArray()
         {
             //Arrange
-            var grid = Fixture.CreateMany<Cell<int>>().ToGrid();
+            var grid = Dummy.CreateMany<Cell<int>>().ToGrid();
 
             //Act
             var result = grid.ToJaggedArray();
@@ -359,13 +359,13 @@ public class GridExtensionsTests
     }
 
     [TestClass]
-    public class ToDictionary : Tester
+    public class ToDictionary : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenGridIsNull_Throw()
         {
             //Arrange
-            IGrid<Dummy> grid = null!;
+            IGrid<Garbage> grid = null!;
 
             //Act
             var action = () => grid.ToDictionary();
@@ -378,7 +378,7 @@ public class GridExtensionsTests
         public void WhenGridIsEmpty_ReturnEmptyDictionary()
         {
             //Arrange
-            var grid = new Grid<Dummy>();
+            var grid = new Grid<Garbage>();
 
             //Act
             var result = grid.ToDictionary();
@@ -391,7 +391,7 @@ public class GridExtensionsTests
         public void WhenGridIsNotEmpty_ReturnDictionary()
         {
             //Arrange
-            var grid = Fixture.CreateMany<Cell<int>>().ToGrid();
+            var grid = Dummy.CreateMany<Cell<int>>().ToGrid();
 
             //Act
             var result = grid.ToDictionary();
@@ -402,14 +402,14 @@ public class GridExtensionsTests
     }
 
     [TestClass]
-    public class SequenceEqual : Tester
+    public class SequenceEqual : ToolBX.Collections.UnitTesting.Tester
     {
         [TestMethod]
         public void WhenFirstIsNull_Throw()
         {
             //Arrange
-            IGrid<Dummy> first = null!;
-            var second = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            IGrid<Garbage> first = null!;
+            var second = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
             //Act
             var action = () => first.SequenceEqual(second);
@@ -422,8 +422,8 @@ public class GridExtensionsTests
         public void WhenSecondIsNull_Throw()
         {
             //Arrange
-            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
-            IGrid<Dummy> second = null!;
+            var first = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
+            IGrid<Garbage> second = null!;
 
             //Act
             var action = () => first.SequenceEqual(second);
@@ -436,8 +436,8 @@ public class GridExtensionsTests
         public void WhenFirstIsEmptyAndSecondIsNot_ReturnFalse()
         {
             //Arrange
-            var first = new Grid<Dummy>();
-            var second = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var first = new Grid<Garbage>();
+            var second = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
             //Act
             var result = first.SequenceEqual(second);
@@ -450,8 +450,8 @@ public class GridExtensionsTests
         public void WhenSecondIsEmptyAndFirstIsNot_ReturnFalse()
         {
             //Arrange
-            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
-            var second = new Grid<Dummy>();
+            var first = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
+            var second = new Grid<Garbage>();
 
             //Act
             var result = first.SequenceEqual(second);
@@ -464,8 +464,8 @@ public class GridExtensionsTests
         public void WhenFirstAndSecondDoNotHaveTheSameNumberOfItems_ReturnFalse()
         {
             //Arrange
-            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
-            var second = first.Concat(new List<Cell<Dummy>> { Fixture.Create<Cell<Dummy>>() }).ToGrid();
+            var first = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
+            var second = first.Concat(new List<Cell<Garbage>> { Dummy.Create<Cell<Garbage>>() }).ToGrid();
 
             //Act
             var result = first.SequenceEqual(second);
@@ -479,7 +479,7 @@ public class GridExtensionsTests
         public void WhenBothGridsAreSameReference_ReturnTrue()
         {
             //Arrange
-            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var first = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
             var second = first;
 
             //Act
@@ -493,7 +493,7 @@ public class GridExtensionsTests
         public void WhenBothGridsAreEqual_ReturnTrue()
         {
             //Arrange
-            var first = Fixture.CreateMany<Cell<Dummy>>().ToGrid();
+            var first = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
             var second = first.ToGrid();
 
             //Act
@@ -507,13 +507,13 @@ public class GridExtensionsTests
         public void WhenBothGridsAreEqualButSecondIsScrambled_ReturnTrue()
         {
             //Arrange
-            var first = new Grid<Dummy>
+            var first = new Grid<Garbage>
             {
-                { 0, 0, Fixture.Create<Dummy>() },
-                { 1, 0, Fixture.Create<Dummy>() },
-                { 2, 0, Fixture.Create<Dummy>() },
+                { 0, 0, Dummy.Create<Garbage>() },
+                { 1, 0, Dummy.Create<Garbage>() },
+                { 2, 0, Dummy.Create<Garbage>() },
             };
-            var second = new Grid<Dummy>
+            var second = new Grid<Garbage>
             {
                 { 1, 0, first[1, 0] },
                 { 0, 0, first[0, 0] },
