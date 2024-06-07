@@ -39,7 +39,7 @@ public class CachingStack<T> : ICachingStack<T>, IEquatable<CachingStack<T>>
 
     public CachingStack()
     {
-        _items = new ObservableList<T>();
+        _items = [];
         CollectionChanged += OnCollectionChanged;
     }
 

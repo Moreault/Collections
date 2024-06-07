@@ -4,7 +4,7 @@
 public class OverlapGridExtensionsTests
 {
     [TestClass]
-    public class ToOverlapGrid : ToolBX.Collections.UnitTesting.Tester
+    public class ToOverlapGrid : Tester
     {
         [TestMethod]
         public void WhenCellsIsNull_Throw()

@@ -10,6 +10,8 @@ global using System.Text.Json;
 global using Newtonsoft.Json;
 global using ToolBX.Collections.ReadOnly;
 global using ToolBX.Collections.ReadOnly.Json;
+global using ToolBX.Collections.UnitTesting.Extensions;
 global using ToolBX.Dummies;
 global using ToolBX.Eloquentest;
 global using ToolBX.Eloquentest.Dummies;
+global using WhiteJackalStudio.TestTools;

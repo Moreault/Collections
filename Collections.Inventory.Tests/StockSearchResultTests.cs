@@ -1,15 +1,13 @@
-﻿using ToolBX.Dummies;
-using ToolBX.Eloquentest.Dummies;
-
-namespace Collections.Inventory.Tests;
+﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public class StockSearchResultTests : ToolBX.Collections.UnitTesting.RecordTester<StockSearchResult<GarbageItem>>
+public class StockSearchResultTests : RecordTester<StockSearchResult<GarbageItem>>
 {
     protected override void InitializeTest()
     {
         base.InitializeTest();
         JsonSerializerOptions.WithInventoryConverters();
+        Dummy.Options.MaximumDepth = 4;
     }
 
     [TestMethod]
@@ -132,7 +130,7 @@ public class StockSearchResultTests : ToolBX.Collections.UnitTesting.RecordTeste
         var result = searchResult.Group();
 
         //Assert
-        result.Should().BeEquivalentTo(searchResult.Select(x => new GroupedEntry<GarbageItem>(x.Item, x.Quantity, new List<int> { x.Index })));
+        result.Should().BeEquivalentTo(searchResult.Select(x => new GroupedEntry<GarbageItem>(x.Item, x.Quantity, [x.Index])));
     }
 
     [TestMethod]
@@ -150,7 +148,7 @@ public class StockSearchResultTests : ToolBX.Collections.UnitTesting.RecordTeste
 
         //Assert
         var expectedGroupedEntry = new GroupedEntry<GarbageItem>(duplicate.Item, entries.Where(x => x.Item == duplicate.Item).Sum(x => x.Quantity), entries.Where(x => x.Item.Equals(duplicate.Item)).Select(x => x.Index).ToList());
-        var expectedEntries = searchResult.Where(x => !x.Item.Equals(duplicate.Item)).Select(x => new GroupedEntry<GarbageItem>(x.Item, x.Quantity, new List<int> { x.Index })).Append(expectedGroupedEntry).ToList();
+        var expectedEntries = searchResult.Where(x => !x.Item.Equals(duplicate.Item)).Select(x => new GroupedEntry<GarbageItem>(x.Item, x.Quantity, [x.Index])).Append(expectedGroupedEntry).ToList();
         result.Should().BeEquivalentTo(expectedEntries);
     }
 

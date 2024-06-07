@@ -1,8 +1,14 @@
 ﻿namespace Collections.ReadOnly.Tests;
 
 [TestClass]
-public class ReadOnlyListTests : ToolBX.Collections.UnitTesting.RecordTester<ReadOnlyList<Garbage>>
+public class ReadOnlyListTests : RecordTester<ReadOnlyList<Garbage>>
 {
+    protected override void InitializeTest()
+    {
+        base.InitializeTest();
+        Dummy.WithCollectionCustomizations();
+    }
+
     [TestMethod]
     public void Empty_Always_ReturnsEmptyReadOnlyList()
     {
@@ -162,7 +168,7 @@ public class ReadOnlyListTests : ToolBX.Collections.UnitTesting.RecordTester<Rea
         var result = instance.ToString();
 
         //Assert
-        result.Should().Be("Empty ReadOnlyList<Dummy>");
+        result.Should().Be("Empty ReadOnlyList<Garbage>");
     }
 
     [TestMethod]
@@ -175,7 +181,7 @@ public class ReadOnlyListTests : ToolBX.Collections.UnitTesting.RecordTester<Rea
         var result = instance.ToString();
 
         //Assert
-        result.Should().Be("ReadOnlyList<Dummy> with 3 elements");
+        result.Should().Be("ReadOnlyList<Garbage> with 3 elements");
     }
 
     [TestMethod]

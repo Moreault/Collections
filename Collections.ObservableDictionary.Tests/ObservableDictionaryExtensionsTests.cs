@@ -1,7 +1,7 @@
 ﻿namespace Collections.ObservableDictionary.Tests;
 
 [TestClass]
-public sealed class ObservableDictionaryExtensionsTests : ToolBX.Collections.UnitTesting.Tester
+public sealed class ObservableDictionaryExtensionsTests : Tester
 {
     [TestMethod]
     public void ToObservableDictionaryKeySelector_WhenSourceIsNull_Throw()

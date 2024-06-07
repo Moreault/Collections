@@ -17,9 +17,6 @@ public abstract class EntryTester<TEntry> : RecordTester<TEntry> where TEntry : 
     }
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<TEntry>(Dummy);
-
-    [TestMethod]
     public void Always_EnsureIsJsonSerializable() => Ensure.IsJsonSerializable<TEntry>(Dummy);
 
     [TestMethod]

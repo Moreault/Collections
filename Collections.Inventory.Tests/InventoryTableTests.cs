@@ -336,7 +336,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<GarbageItem>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>> { new(item, newQuantity) }
+                    NewValues = [new(item, newQuantity)]
                 }
             });
     }
@@ -373,7 +373,7 @@ public class InventoryTableTests : InventoryTester<InventoryTable<GarbageItem>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>> { new(item, quantity) }
+                    NewValues = [new(item, quantity)]
                 }
             });
     }
@@ -702,10 +702,10 @@ public class InventoryTableTests : InventoryTester<InventoryTable<GarbageItem>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(entry.Item, quantity)
-                    }
+                    ]
                 }
             });
     }

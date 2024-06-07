@@ -147,8 +147,8 @@ public class CachingListTests : ObservableListTester<CachingList<Garbage>, Garba
             {
                 new()
                 {
-                    OldValues = new List<Garbage>
-                    {
+                    OldValues =
+                    [
                         items[0],
                         items[1],
                         items[2],
@@ -156,7 +156,7 @@ public class CachingListTests : ObservableListTester<CachingList<Garbage>, Garba
                         items[4],
                         items[5],
                         items[6],
-                    }
+                    ]
                 }
             });
     }

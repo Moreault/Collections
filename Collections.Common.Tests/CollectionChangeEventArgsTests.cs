@@ -1,7 +1,7 @@
 namespace Collections.Common.Tests;
 
 [TestClass]
-public class CollectionChangeEventArgsTests : ToolBX.Collections.UnitTesting.RecordTester<CollectionChangeEventArgs<CollectionChangeEventArgsTests.Garbage>>
+public class CollectionChangeEventArgsTests : RecordTester<CollectionChangeEventArgs<CollectionChangeEventArgsTests.Garbage>>
 {
     public sealed record Garbage
     {

@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <PackageReference Include="ToolBX.Eloquentest.Dummies" Version="3.0.0-beta0k" />
+    <PackageReference Include="WhiteJackalStudio.TestTools" Version="1.0.0-beta0h" />
   </ItemGroup>
 
   <ItemGroup>

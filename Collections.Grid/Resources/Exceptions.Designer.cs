@@ -70,7 +70,7 @@ namespace ToolBX.Collections.Grid.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Can&apos;t convert collection to Grid : columnCount must be a positive number greater than zero but its value was {0}.
         /// </summary>
         internal static string CannotConvertToGridFromColumnCount {
             get {
@@ -84,6 +84,24 @@ namespace ToolBX.Collections.Grid.Resources {
         internal static string CannotRemoveItemAtIndexBecauseThereIsNothingThere {
             get {
                 return ResourceManager.GetString("CannotRemoveItemAtIndexBecauseThereIsNothingThere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grid cannot be converted to 2D array because it has negative indices.
+        /// </summary>
+        internal static string To2dArrayNegativeIndexes {
+            get {
+                return ResourceManager.GetString("To2dArrayNegativeIndexes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string ToJaggedArrayNegativeIndexes {
+            get {
+                return ResourceManager.GetString("ToJaggedArrayNegativeIndexes", resourceCulture);
             }
         }
     }

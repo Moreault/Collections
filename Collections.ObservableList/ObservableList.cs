@@ -121,7 +121,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public ObservableList()
     {
-        _items = new List<T>();
+        _items = [];
     }
 
     public ObservableList(params T[] items) : this(items as IEnumerable<T>)
@@ -372,7 +372,7 @@ public class ObservableList<T> : IObservableList<T>, IEquatable<IEnumerable<T>>
 
     public void Insert(int index, params T[] items) => Insert(index, items as IEnumerable<T>);
 
-    public void Insert(params T[] items) => Insert(items == null! ? new List<T> { default! } : items as IEnumerable<T>);
+    public void Insert(params T[] items) => Insert(items == null! ? [default!] : items as IEnumerable<T>);
 
     public void Insert(IEnumerable<T> items) => Insert(0, items);
 

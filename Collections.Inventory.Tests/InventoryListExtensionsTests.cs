@@ -1,7 +1,7 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public sealed class InventoryListExtensionsTests : ToolBX.Collections.UnitTesting.Tester
+public sealed class InventoryListExtensionsTests : Tester
 {
     [TestMethod]
     public void ToInventoryListType_WhenCollectionIsNull_Throw()

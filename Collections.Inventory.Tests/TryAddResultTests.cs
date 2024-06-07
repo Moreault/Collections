@@ -1,7 +1,7 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public sealed class TryAddResultTests : ToolBX.Collections.UnitTesting.Tester
+public sealed class TryAddResultTests : Tester
 {
     [TestMethod]
     public void Total_Always_ReturnAddedPlusNotAdded()

@@ -2,9 +2,9 @@
 
 public sealed class InventoryListCustomization : GenericCollectionCustomizationBase
 {
-    public override IEnumerable<Type> Types => [typeof(InventoryList<>)];
+    protected override IEnumerable<Type> Types => [typeof(InventoryList<>)];
 
-    protected override object Factory(Dummy dummy, Type type)
+    protected override object Factory(IDummy dummy, Type type)
     {
         var elementType = type.GetGenericArguments()[0];
         var entryType = typeof(Entry<>).MakeGenericType(elementType);

@@ -87,7 +87,7 @@ var array = grid.To2dArray();
 //Or turn a 2d array into a grid
 var grid = array.ToGrid();
 
-//Yep, even jagged arrays if you like those! I'm not judging! (I am)
+//Yep, even jagged arrays if you like those! I'm not judging! (or am I?)
 var jagged = grid.ToJaggedArray();
 
 //And also turn it back into a grid!
@@ -96,6 +96,8 @@ grid = jagged.ToGrid();
 //Or into an overlap grid!
 var overlapGrid = grid.ToOverlapGrid();
 ```
+
+As of version 3.0.0, `ToJaggedArray` and `To2dArray` are _explicitly_ unsupported if the `Grid<T>` has negative indexes. Before, it would throw an `ArgumentOutOfRangeException`.
 
 # Columns, Rows & Count
 There are `ColumnCount` and `RowCount` properties which return the total number of columns and rows respectively. Also `FirstColumn`, `LastColumn`, `FirstRow` and `LastRow` that behave as you would expect them to.

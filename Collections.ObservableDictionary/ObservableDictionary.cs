@@ -28,7 +28,7 @@
 
     public class ObservableDictionary<TKey, TValue> : IObservableDictionary<TKey, TValue>, IEquatable<ObservableDictionary<TKey, TValue>> where TKey : notnull
     {
-        private readonly IDictionary<TKey, TValue> _items;
+        private readonly Dictionary<TKey, TValue> _items;
 
         public ICollection<TKey> Keys => _items.Keys;
         public ICollection<TValue> Values => _items.Values;
@@ -46,8 +46,8 @@
                         _items[key] = value;
                         CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>>
                         {
-                            OldValues = new List<KeyValuePair<TKey, TValue>> { new(key, oldValue) },
-                            NewValues = new List<KeyValuePair<TKey, TValue>> { new(key, value) }
+                            OldValues = [new(key, oldValue)],
+                            NewValues = [new(key, value)]
                         });
                     }
                 }
@@ -59,7 +59,8 @@
         public event CollectionChangeEventHandler<KeyValuePair<TKey, TValue>>? CollectionChanged;
 
         public int Count => _items.Count;
-        public bool IsReadOnly => _items.IsReadOnly;
+
+        public bool IsReadOnly => ((IDictionary<TKey, TValue>)_items).IsReadOnly;
 
         public ObservableDictionary()
         {
@@ -115,10 +116,10 @@
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            _items.Add(item);
+            _items.Add(item.Key, item.Value);
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>>
             {
-                NewValues = new List<KeyValuePair<TKey, TValue>> { item }
+                NewValues = [item]
             });
         }
 
@@ -131,7 +132,7 @@
             if (!list.Any()) return;
 
             foreach (var item in list)
-                _items.Add(item);
+                _items.Add(item.Key, item.Value);
 
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>>
             {
@@ -160,7 +161,7 @@
                 throw new InvalidOperationException(Exceptions.RemoveAtLeastOneInexistantItem);
 
             foreach (var item in list)
-                _items.Remove(item);
+                _items.Remove(item.Key);
 
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>>
             {
@@ -171,10 +172,10 @@
         public void Remove(KeyValuePair<TKey, TValue> item)
         {
             if (!Contains(item)) throw new InvalidOperationException(string.Format(Exceptions.RemoveInexistantKeyValue, item.Key, item.Value));
-            _items.Remove(item);
+            _items.Remove(item.Key);
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>>
             {
-                OldValues = new List<KeyValuePair<TKey, TValue>> { item }
+                OldValues = [item]
             });
         }
 
@@ -200,7 +201,7 @@
             _items.Remove(key);
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>>
             {
-                OldValues = new List<KeyValuePair<TKey, TValue>> { new(key, item.Value!) }
+                OldValues = [new(key, item.Value!)]
             });
         }
 
@@ -281,11 +282,11 @@
 
         public void TryRemove(KeyValuePair<TKey, TValue> item)
         {
-            var wasRemoved = _items.Remove(item);
+            var wasRemoved = _items.Remove(item.Key);
             if (wasRemoved && CollectionChanged != null)
                 CollectionChanged(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>>
                 {
-                    OldValues = new List<KeyValuePair<TKey, TValue>> { item }
+                    OldValues = [item]
                 });
         }
 
@@ -312,7 +313,7 @@
             if (wasRemoved && CollectionChanged != null)
                 CollectionChanged(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>>
                 {
-                    OldValues = new List<KeyValuePair<TKey, TValue>> { new(key, item.Value!) }
+                    OldValues = [new(key, item.Value!)]
                 });
         }
 
@@ -359,9 +360,9 @@
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
         {
-            var result = _items.Remove(item);
+            var result = _items.Remove(item.Key);
             if (result)
-                CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>> { OldValues = new List<KeyValuePair<TKey, TValue>> { item } });
+                CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>> { OldValues = [item] });
 
             return result;
         }
@@ -372,7 +373,7 @@
 
             var result = _items.Remove(key);
             if (result)
-                CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>> { OldValues = new List<KeyValuePair<TKey, TValue>> { new(key, oldItem!) } });
+                CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<KeyValuePair<TKey, TValue>> { OldValues = [new(key, oldItem!)] });
 
             return result;
         }
@@ -381,22 +382,24 @@
 
         public bool ContainsKey(TKey key) => _items.ContainsKey(key);
 
-        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => _items.CopyTo(array, arrayIndex);
+        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => ((IDictionary<TKey, TValue>)_items).CopyTo(array, arrayIndex);
 
         bool IDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value) => _items.TryGetValue(key, out value!);
 
-        public bool Equals(IObservableDictionary<TKey, TValue>? other)
-        {
-            if (other is null) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return this.SequenceEqual(other);
-        }
+        public bool Equals(IObservableDictionary<TKey, TValue>? other) => other is IEnumerable < KeyValuePair < TKey, TValue>> pairs && Equals(pairs);
 
         public bool Equals(ObservableDictionary<TKey, TValue>? other) => Equals(other as IObservableDictionary<TKey, TValue>);
 
         public static bool operator ==(ObservableDictionary<TKey, TValue>? a, ObservableDictionary<TKey, TValue>? b) => a is null && b is null || a is not null && a.Equals(b);
 
         public static bool operator !=(ObservableDictionary<TKey, TValue>? a, ObservableDictionary<TKey, TValue>? b) => !(a == b);
+
+        public bool Equals(IEnumerable<KeyValuePair<TKey, TValue>>? other)
+        {
+            if (other is null) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return this.SequenceEqual(other);
+        }
 
         public override bool Equals(object? obj) => Equals(obj as IObservableDictionary<TKey, TValue>);
 

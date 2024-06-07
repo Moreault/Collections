@@ -4,6 +4,30 @@
 public sealed class EntryTests : EntryTester<Entry<GarbageItem>>
 {
     [TestMethod]
+    public void Quantity_WhenIsZero_DoNotThrow()
+    {
+        //Arrange
+
+        //Act
+        var action = () => new Entry<GarbageItem> { Quantity = 0 };
+
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void Quantity_WhenIsNegative_Throw()
+    {
+        //Arrange
+
+        //Act
+        var action = () => new Entry<GarbageItem> { Quantity = -Dummy.Create<int>() };
+
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>().WithMessage($"{Exceptions.QuantityMustBePositive}*");
+    }
+
+    [TestMethod]
     public void ToString_WhenItemIsNull_ReturnNull()
     {
         //Arrange

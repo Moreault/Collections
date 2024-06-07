@@ -17,3 +17,4 @@ global using ToolBX.Collections.UnitTesting.ObservableList;
 global using ToolBX.Eloquentest;
 global using ToolBX.OPEX;
 global using ToolBX.OutWarden;
+global using WhiteJackalStudio.TestTools;

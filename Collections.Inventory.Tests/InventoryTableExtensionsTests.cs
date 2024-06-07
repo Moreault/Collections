@@ -4,7 +4,7 @@
 public class InventoryTableExtensionsTests
 {
     [TestClass]
-    public class ToInventory_EnumerableOfDummy : ToolBX.Collections.UnitTesting.Tester
+    public class ToInventory_EnumerableOfDummy : Tester
     {
         [TestMethod]
         public void WhenCollectionIsNull_Throw()
@@ -102,7 +102,7 @@ public class InventoryTableExtensionsTests
     }
 
     [TestClass]
-    public class ToInventory_EnumerableOfEntries : ToolBX.Collections.UnitTesting.Tester
+    public class ToInventory_EnumerableOfEntries : Tester
     {
         [TestMethod]
         public void WhenEntriesNull_Throw()

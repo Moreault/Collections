@@ -1,7 +1,7 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public sealed class CachingStackExtensionsTests : ToolBX.Collections.UnitTesting.Tester
+public sealed class CachingStackExtensionsTests : Tester
 {
     [TestMethod]
     public void WhenSourceIsNull_Throw()

@@ -1,7 +1,7 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<CachingDictionary<int, Garbage>>
+public class CachingDictionaryTests : Tester<CachingDictionary<int, Garbage>>
 {
     protected override void InitializeTest()
     {
@@ -164,14 +164,14 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         {
             new()
             {
-                OldValues = new List<KeyValuePair<int, Garbage>>
-                {
+                OldValues =
+                [
                     items[0],
                     items[1],
                     items[2],
                     items[3],
                     items[4]
-                }
+                ]
             }
         });
     }
@@ -533,8 +533,8 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
             {
                 new()
                 {
-                    OldValues = new List<KeyValuePair<int, Garbage>>{ item },
-                    NewValues = new List<KeyValuePair<int, Garbage>>{ new(item.Key, value) }
+                    OldValues = [item],
+                    NewValues = [new(item.Key, value)]
                 }
             });
     }
@@ -598,7 +598,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new() { NewValues = new List<KeyValuePair<int, Garbage>> { item } }
+                new() { NewValues = [item] }
             });
     }
 
@@ -739,7 +739,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         {
             new()
             {
-                NewValues = new List<KeyValuePair<int, Garbage>>{ item }
+                NewValues = [item]
             }
         });
     }
@@ -796,7 +796,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         {
             new()
             {
-                NewValues = new List<KeyValuePair<int, Garbage>>{ item }
+                NewValues = [item]
             }
         });
     }
@@ -863,7 +863,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
             {
                 new()
                 {
-                    NewValues = new List<KeyValuePair<int, Garbage>>{ item1, item2 }
+                    NewValues = [item1, item2]
                 }
             });
     }
@@ -1086,7 +1086,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -1140,7 +1140,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -1194,7 +1194,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -1248,7 +1248,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -1311,7 +1311,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1424,7 +1424,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1537,7 +1537,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1640,7 +1640,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1743,7 +1743,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1856,7 +1856,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -2085,7 +2085,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new(){OldValues = new List<KeyValuePair<int, Garbage>>{toRemove}}
+            new(){OldValues = [toRemove]}
         });
     }
 
@@ -2184,7 +2184,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new(){OldValues = new List<KeyValuePair<int, Garbage>>{toRemove}}
+            new(){OldValues = [toRemove]}
         });
     }
 
@@ -2578,7 +2578,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -2933,7 +2933,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be("Empty CachingDictionary<Int32, Dummy>");
+        result.Should().Be("Empty CachingDictionary<Int32, Garbage>");
     }
 
     [TestMethod]
@@ -2947,7 +2947,7 @@ public class CachingDictionaryTests : ToolBX.Collections.UnitTesting.Tester<Cach
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be($"CachingDictionary<Int32, Dummy> with {items.Count} items");
+        result.Should().Be($"CachingDictionary<Int32, Garbage> with {items.Count} items");
     }
 
     [TestMethod]

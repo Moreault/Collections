@@ -97,10 +97,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
         {
             new()
             {
-                NewValues = new List<Entry<GarbageItem>>
-                {
+                NewValues =
+                [
                     new(item, stackSize)
-                }
+                ]
             }
         });
     }
@@ -254,10 +254,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
         {
             new()
             {
-                NewValues = new List<Entry<GarbageItem>>
-                {
+                NewValues =
+                [
                     new(item, 145)
-                }
+                ]
             }
         });
     }
@@ -395,10 +395,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
         {
             new()
             {
-                NewValues = new List<Entry<GarbageItem>>
-                {
+                NewValues =
+                [
                     new(item, quantity)
-                }
+                ]
             }
         });
     }
@@ -464,10 +464,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
         {
             new()
             {
-                NewValues = new List<Entry<GarbageItem>>
-                {
+                NewValues =
+                [
                     new(item, quantity)
-                }
+                ]
             }
         });
     }
@@ -499,7 +499,7 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
     }
 
     [TestClass]
-    public class Insert : ToolBX.Collections.UnitTesting.Tester<InventoryList<GarbageItem>>
+    public class Insert : Tester<InventoryList<GarbageItem>>
     {
         [TestMethod]
         public void Insert_WhenIsEmptyAndInsertAtIndexZero_Add()
@@ -557,10 +557,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(item, quantity)
-                    }
+                    ]
                 }
             });
         }
@@ -622,10 +622,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(item, quantity)
-                    }
+                    ]
                 }
             });
         }
@@ -672,10 +672,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(item, quantity)
-                    }
+                    ]
                 }
             });
         }
@@ -728,10 +728,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(item, quantity)
-                    }
+                    ]
                 }
             });
         }
@@ -819,10 +819,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(item ,quantity)
-                    }
+                    ]
                 }
             });
         }
@@ -867,10 +867,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(item ,quantity)
-                    }
+                    ]
                 }
             });
         }
@@ -979,10 +979,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         new(item, 99)
-                    }
+                    ]
                 }
             });
     }
@@ -1064,10 +1064,10 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         new(item, 99)
-                    }
+                    ]
                 }
             });
     }
@@ -1126,7 +1126,7 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>{new(item.Item, quantity)}
+                    OldValues = [new(item.Item, quantity)]
                 }
             });
     }
@@ -1208,7 +1208,7 @@ public class InventoryListTests : InventoryTester<InventoryList<GarbageItem>>
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>{new(item.Item, quantity)}
+                    OldValues = [new(item.Item, quantity)]
                 }
             });
     }

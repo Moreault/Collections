@@ -1,7 +1,7 @@
 ﻿namespace Collections.ReadOnly.Tests;
 
 [TestClass]
-public sealed class ImmutableListVersusReadOnlyList : ToolBX.Collections.UnitTesting.Tester
+public sealed class ImmutableListVersusReadOnlyList : Tester
 {
     [TestMethod]
     public void ImmutableList_WhenComparedToEquivalentObjectOfSameType_ReturnsTrue()
@@ -69,7 +69,7 @@ public sealed class ImmutableListVersusReadOnlyList : ToolBX.Collections.UnitTes
         var result = instance.ToString();
 
         //Assert
-        result.Should().Be("System.Collections.Immutable.ImmutableList`1[Collections.ReadOnly.Tests.Dummy]");
+        result.Should().Be("System.Collections.Immutable.ImmutableList`1[Collections.ReadOnly.Tests.Garbage]");
     }
 
     [TestMethod]
@@ -82,7 +82,7 @@ public sealed class ImmutableListVersusReadOnlyList : ToolBX.Collections.UnitTes
         var result = instance.ToString();
 
         //Assert
-        result.Should().Be("Empty ReadOnlyList<Dummy>");
+        result.Should().Be("Empty ReadOnlyList<Garbage>");
     }
 
     [TestMethod]
@@ -95,7 +95,7 @@ public sealed class ImmutableListVersusReadOnlyList : ToolBX.Collections.UnitTes
         var result = instance.ToString();
 
         //Assert
-        result.Should().Be($"ReadOnlyList<Dummy> with {instance.Count} elements");
+        result.Should().Be($"ReadOnlyList<Garbage> with {instance.Count} elements");
     }
 
 }

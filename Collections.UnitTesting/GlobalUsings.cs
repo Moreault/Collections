@@ -22,6 +22,8 @@ global using ToolBX.Dummies;
 global using ToolBX.Dummies.Customizations;
 global using ToolBX.Eloquentest;
 global using ToolBX.Eloquentest.Dummies;
+global using ToolBX.Mathemancy;
 global using ToolBX.OPEX;
 global using ToolBX.Reflection4Humans.Extensions;
 global using ToolBX.Reflection4Humans.TypeFetcher;
+global using WhiteJackalStudio.TestTools;

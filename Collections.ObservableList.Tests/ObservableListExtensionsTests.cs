@@ -1,9 +1,7 @@
-﻿using ToolBX.Dummies;
-
-namespace Collections.ObservableList.Tests;
+﻿namespace Collections.ObservableList.Tests;
 
 [TestClass]
-public class ObservableListExtensionsTests : ToolBX.Collections.UnitTesting.Tester
+public class ObservableListExtensionsTests : Tester
 {
     [TestMethod]
     public void ToObservableList_WhenCollectionIsNull_Throw()

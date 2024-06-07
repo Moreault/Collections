@@ -1,16 +1,13 @@
-using Newtonsoft.Json.Linq;
-using ToolBX.Dummies;
-using ToolBX.Eloquentest.Dummies;
-
 namespace Collections.ObservableDictionary.Tests;
 
 [TestClass]
-public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<ObservableDictionary<int, Garbage>>
+public class ObservableDictionaryTests : Tester<ObservableDictionary<int, Garbage>>
 {
     protected override void InitializeTest()
     {
         base.InitializeTest();
         JsonSerializerOptions.WithObservableDictionaryConverters();
+        Dummy.WithCollectionCustomizations();
     }
 
     [TestMethod]
@@ -71,10 +68,9 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
     {
         //Arrange
         var dictionary = Dummy.Create<Dictionary<int, Garbage>>();
-        var comparer = Dummy.Create<EqualityComparer<int>>();
 
         //Act
-        var result = new ObservableDictionary<int, Garbage>(dictionary, comparer);
+        var result = new ObservableDictionary<int, Garbage>(dictionary, EqualityComparer<int>.Default);
 
         //Assert
         result.Should().BeEquivalentTo(dictionary);
@@ -227,8 +223,8 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
             {
                 new()
                 {
-                    OldValues = new List<KeyValuePair<int, Garbage>>{ item },
-                    NewValues = new List<KeyValuePair<int, Garbage>>{ new(item.Key, value) }
+                    OldValues = [item],
+                    NewValues = [new(item.Key, value)]
                 }
             });
     }
@@ -292,7 +288,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new() { NewValues = new List<KeyValuePair<int, Garbage>> { item } }
+                new() { NewValues = [item] }
             });
     }
 
@@ -433,7 +429,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         {
             new()
             {
-                NewValues = new List<KeyValuePair<int, Garbage>>{ item }
+                NewValues = [item]
             }
         });
     }
@@ -490,7 +486,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         {
             new()
             {
-                NewValues = new List<KeyValuePair<int, Garbage>>{ item }
+                NewValues = [item]
             }
         });
     }
@@ -557,7 +553,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
             {
                 new()
                 {
-                    NewValues = new List<KeyValuePair<int, Garbage>>{ item1, item2 }
+                    NewValues = [item1, item2]
                 }
             });
     }
@@ -772,7 +768,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -826,7 +822,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -880,7 +876,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -934,7 +930,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -997,7 +993,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1110,7 +1106,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1223,7 +1219,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1326,7 +1322,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1429,7 +1425,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1542,7 +1538,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Garbage>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -2792,7 +2788,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { content.Single(x => x.Key == key) } }
+            new() { OldValues = [content.Single(x => x.Key == key)] }
         });
     }
 
@@ -2897,7 +2893,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         //Assert
         triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Garbage>> { content.Single(x => x.Equals(item)) } }
+            new() { OldValues = [content.Single(x => x.Equals(item))] }
         });
     }
 
@@ -2926,7 +2922,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be("Empty ObservableDictionary<Int32, Dummy>");
+        result.Should().Be("Empty ObservableDictionary<Int32, Garbage>");
     }
 
     [TestMethod]
@@ -2940,7 +2936,7 @@ public class ObservableDictionaryTests : ToolBX.Collections.UnitTesting.Tester<O
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be($"ObservableDictionary<Int32, Dummy> with {items.Count} items");
+        result.Should().Be($"ObservableDictionary<Int32, Garbage> with {items.Count} items");
     }
 
     [TestMethod]

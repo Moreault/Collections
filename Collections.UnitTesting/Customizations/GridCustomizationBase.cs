@@ -2,7 +2,7 @@
 
 public abstract class GridCustomizationBase : GenericCollectionCustomizationBase
 {
-    protected override object Factory(Dummy dummy, Type type)
+    protected override object Factory(IDummy dummy, Type type)
     {
         var elementType = type.GetGenericArguments()[0];
         var cellType = typeof(Cell<>).MakeGenericType(elementType);

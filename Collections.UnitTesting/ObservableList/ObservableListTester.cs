@@ -1,7 +1,4 @@
-﻿using System.Xml;
-using System.Xml.Serialization;
-
-namespace ToolBX.Collections.UnitTesting.ObservableList;
+﻿namespace ToolBX.Collections.UnitTesting.ObservableList;
 
 public abstract class ObservableListTester<TList, TItem> : Tester<TList> where TList : ObservableList<TItem>, new()
 {
@@ -1342,15 +1339,15 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         {
             new()
             {
-                OldValues = new List<TItem>
-                {
+                OldValues =
+                [
                     items[0],
                     items[1],
                     items[2],
                     items[3],
                     items[4],
                     items[5],
-                }
+                ]
             }
         });
     }
@@ -1518,15 +1515,15 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
             {
                 new()
                 {
-                    OldValues = new List<TItem>
-                    {
+                    OldValues =
+                    [
                         items[6],
                         items[7],
                         items[8],
                         items[9],
                         items[10],
                         items[11],
-                    }
+                    ]
                 }
             });
     }
@@ -1604,7 +1601,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         Instance.TryRemoveAll(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = new List<TItem> { item, item, item } } });
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = [item, item, item] } });
     }
 
     [TestMethod]
@@ -1680,7 +1677,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         Instance.RemoveAll(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = new List<TItem> { item, item, item } } });
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = [item, item, item] } });
     }
 
     [TestMethod]
@@ -2329,7 +2326,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         Instance.TryRemoveAll(x => x!.Equals(toRemove));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = new List<TItem> { toRemove, toRemove, toRemove } } });
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = [toRemove, toRemove, toRemove] } });
     }
 
     [TestMethod]
@@ -2410,7 +2407,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         Instance.RemoveAll(x => x!.Equals(toRemove));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = new List<TItem> { toRemove, toRemove } } });
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<TItem>> { new() { OldValues = [toRemove, toRemove] } });
     }
 
     [TestMethod]

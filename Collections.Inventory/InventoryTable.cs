@@ -53,10 +53,10 @@ public class InventoryTable<T> : Inventory<T>
         if (result.Added > 0)
             OnCollectionChanged(new CollectionChangeEventArgs<Entry<T>>
             {
-                NewValues = new List<Entry<T>>
-            {
+                NewValues =
+            [
                 new(item, result.Added)
-            }
+            ]
             });
         return result;
     }

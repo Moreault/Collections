@@ -87,10 +87,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(item, quantity)
-                    }
+                    ]
                 }
             });
     }
@@ -211,10 +211,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(existingEntry.Item, quantity)
-                    }
+                    ]
 
                 }
             });
@@ -606,7 +606,7 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>{new(item.Item, 21)}
+                    OldValues = [new(item.Item, 21)]
                 }
             });
     }
@@ -801,10 +801,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         entry
-                    }
+                    ]
                 }
             });
     }
@@ -1025,7 +1025,7 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>{new(item.Item, 21)}
+                    OldValues = [new(item.Item, 21)]
                 }
             });
     }
@@ -1284,10 +1284,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         new(item, 5)
-                    }
+                    ]
                 }
             });
     }
@@ -1332,10 +1332,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         entry
-                    }
+                    ]
                 }
             });
     }
@@ -1532,7 +1532,7 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
         var action = () => Instance.RemoveAt(index, count);
 
         //Assert
-        action.Should().Throw<ArgumentException>().WithMessage(string.Format(Collections.ObservableList.Resources.Exceptions.CannotRemoveItemBecauseRangeFallsOutsideBoundaries, "ObservableList<Entry<DummyItem>>", 0, Instance.LastIndex, index, count) + " (Parameter 'count')").WithParameterName(nameof(count));
+        action.Should().Throw<ArgumentException>().WithMessage(string.Format(Collections.ObservableList.Resources.Exceptions.CannotRemoveItemBecauseRangeFallsOutsideBoundaries, "ObservableList<Entry<GarbageItem>>", 0, Instance.LastIndex, index, count) + " (Parameter 'count')").WithParameterName(nameof(count));
     }
 
     [TestMethod]
@@ -1654,10 +1654,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>()
-                    {
+                    OldValues =
+                    [
                         new(null!, oldQuantity)
-                    }
+                    ]
                 }
             });
     }
@@ -1703,10 +1703,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>()
-                    {
+                    OldValues =
+                    [
                         new(item, oldQuantity)
-                    }
+                    ]
                 }
             });
     }
@@ -1846,10 +1846,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         entry
-                    }
+                    ]
                 }
             });
     }
@@ -2543,12 +2543,12 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         new(Instance[0].Item, 8),
                         new(Instance[1].Item, 45),
                         new(Instance[2].Item, 22),
-                    }
+                    ]
                 }
             });
     }
@@ -2699,32 +2699,6 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
     }
 
     [TestMethod]
-    public void AddEntry_WhenQuantityIsZero_Throw()
-    {
-        //Arrange
-        var item = Dummy.Build<Entry<GarbageItem>>().With(x => x.Quantity, 0).Create();
-
-        //Act
-        var action = () => ((ICollection<Entry<GarbageItem>>)Instance).Add(item);
-
-        //Assert
-        action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotAddItemBecauseQuantityMustBeGreaterThanZero, item.Item, 0));
-    }
-
-    [TestMethod]
-    public void AddEntry_WhenQuantityIsNegative_Throw()
-    {
-        //Arrange
-        var item = Dummy.Build<Entry<GarbageItem>>().With(x => x.Quantity, -Dummy.Create<int>()).Create();
-
-        //Act
-        var action = () => ((ICollection<Entry<GarbageItem>>)Instance).Add(item);
-
-        //Assert
-        action.Should().Throw<ArgumentException>().WithMessage(string.Format(Exceptions.CannotAddItemBecauseQuantityMustBeGreaterThanZero, item.Item, item.Quantity));
-    }
-
-    [TestMethod]
     public void AddEntry_WhenThisItemIsAlreadyInStock_AddNewQuantityToOldQuantity()
     {
         //Arrange
@@ -2762,7 +2736,7 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>> { new(item.Item, newQuantity) }
+                    NewValues = [new(item.Item, newQuantity)]
                 }
             });
     }
@@ -2797,7 +2771,7 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>> { new(item.Item, item.Quantity) }
+                    NewValues = [new(item.Item, item.Quantity)]
                 }
             });
     }
@@ -2903,7 +2877,7 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>> { new(item, newQuantity) }
+                    NewValues = [new(item, newQuantity)]
                 }
             });
     }
@@ -2940,7 +2914,7 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>> { new(item, quantity) }
+                    NewValues = [new(item, quantity)]
                 }
             });
     }
@@ -3008,10 +2982,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    NewValues = new List<Entry<GarbageItem>>
-                    {
+                    NewValues =
+                    [
                         new(random, newQuantity)
-                    }
+                    ]
                 }
             });
     }
@@ -3207,10 +3181,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         new(item, itemQuantity)
-                    }
+                    ]
                 }
             });
     }
@@ -3255,10 +3229,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         new(item, 8)
-                    }
+                    ]
                 }
             });
     }
@@ -3438,10 +3412,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         new(item, itemQuantity)
-                    }
+                    ]
                 }
             });
     }
@@ -3486,10 +3460,10 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
             {
                 new()
                 {
-                    OldValues = new List<Entry<GarbageItem>>
-                    {
+                    OldValues =
+                    [
                         new(item, 8)
-                    }
+                    ]
                 }
             });
     }

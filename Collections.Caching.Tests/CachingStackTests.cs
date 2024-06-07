@@ -1,7 +1,7 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingStack<Garbage>>
+public class CachingStackTests : Tester<CachingStack<Garbage>>
 {
     protected override void InitializeTest()
     {
@@ -238,14 +238,14 @@ public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingSt
             {
                 new()
                 {
-                    OldValues = new List<Garbage>
-                    {
+                    OldValues =
+                    [
                         items[0],
                         items[1],
                         items[2],
                         items[3],
                         items[4],
-                    }
+                    ]
                 }
             });
     }
@@ -436,15 +436,15 @@ public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingSt
             {
                 new()
                 {
-                    OldValues = new List<Garbage>
-                    {
+                    OldValues =
+                    [
                         items[6],
                         items[7],
                         items[8],
                         items[9],
                         items[10],
                         items[11],
-                    }
+                    ]
                 }
             });
     }
@@ -612,15 +612,15 @@ public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingSt
             {
                 new()
                 {
-                    OldValues = new List<Garbage>
-                    {
+                    OldValues =
+                    [
                         items[0],
                         items[1],
                         items[2],
                         items[3],
                         items[4],
                         items[5],
-                    }
+                    ]
                 }
             });
     }
@@ -894,7 +894,7 @@ public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingSt
             {
                 new()
                 {
-                    OldValues = new List<Garbage> { item }
+                    OldValues = [item]
                 }
             });
     }
@@ -944,7 +944,7 @@ public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingSt
             {
                 new()
                 {
-                    OldValues = new List<Garbage> { items.Last() }
+                    OldValues = [items.Last()]
                 }
             });
     }
@@ -1007,7 +1007,7 @@ public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingSt
             {
                 new()
                 {
-                    OldValues = new List<Garbage> { item }
+                    OldValues = [item]
                 }
             });
     }
@@ -1057,7 +1057,7 @@ public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingSt
             {
                 new()
                 {
-                    OldValues = new List<Garbage> { items.Last() }
+                    OldValues = [items.Last()]
                 }
             });
     }
@@ -1222,7 +1222,7 @@ public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingSt
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be("Empty CachingStack<Dummy>");
+        result.Should().Be("Empty CachingStack<Garbage>");
     }
 
     [TestMethod]
@@ -1236,7 +1236,7 @@ public class CachingStackTests : ToolBX.Collections.UnitTesting.Tester<CachingSt
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be("CachingStack<Dummy> with 3 items");
+        result.Should().Be("CachingStack<Garbage> with 3 items");
     }
 
     [TestMethod]

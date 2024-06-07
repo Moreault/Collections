@@ -8,3 +8,4 @@ global using System.Linq;
 global using ToolBX.Collections.ObservableList;
 global using ToolBX.Collections.UnitTesting.ObservableList;
 global using ToolBX.Eloquentest;
+global using WhiteJackalStudio.TestTools;

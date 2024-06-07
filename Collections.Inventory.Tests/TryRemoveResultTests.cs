@@ -1,7 +1,7 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public sealed class TryRemoveResultTests : ToolBX.Collections.UnitTesting.Tester
+public sealed class TryRemoveResultTests : Tester
 {
     [TestMethod]
     public void Total_Always_ReturnRemovedPlusNotRemoved()

@@ -1,6565 +1,3072 @@
+using Collections.Grid.Tests.Customizations;
+
 namespace Collections.Grid.Tests;
 
 [TestClass]
-public class GridTests
+public class GridTests : Tester<Grid<Garbage>>
 {
-    [TestClass]
-    public class ColumnCount : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    protected override void InitializeTest()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnZero()
-        {
-            //Arrange
-
-            //Act
-            var result = Instance.ColumnCount;
-
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenHasOnlyOneItemAtColumnZero_ReturnOne()
-        {
-            //Arrange
-            Instance[0, Dummy.Create<int>()] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.ColumnCount;
-
-            //Assert
-            result.Should().Be(1);
-        }
-
-        [TestMethod]
-        public void WhenHasOneItemAtNegativeColumnIndex_ReturnDifferenceBetweenThatAndZero()
-        {
-            //Arrange
-            Instance[-3, Dummy.Create<int>()] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.ColumnCount;
-
-            //Assert
-            result.Should().Be(4);
-        }
-
-        [TestMethod]
-        public void WhenHasOneItemAtColumnIndexGreaterThanZero_ReturnNumberOfColumns()
-        {
-            //Arrange
-            Instance[5, Dummy.Create<int>()] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.ColumnCount;
-
-            //Assert
-            result.Should().Be(6);
-        }
-
-        [TestMethod]
-        public void WhenHasOneItemInNegativeColumnIndexAndOneAtPositiveGreaterThanZero_ReturnDifference()
-        {
-            //Arrange
-            Instance[-3, Dummy.Create<int>()] = Dummy.Create<string>();
-            Instance[5, Dummy.Create<int>()] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.ColumnCount;
-
-            //Assert
-            result.Should().Be(9);
-        }
-
-        [TestMethod]
-        public void WhenHasABunchOfColumns_ReturnDifferenceBetweenMinimumAndMaximum()
-        {
-            //Arrange
-            Instance[-3, Dummy.Create<int>()] = Dummy.Create<string>();
-            Instance[-5, Dummy.Create<int>()] = Dummy.Create<string>();
-            Instance[5, Dummy.Create<int>()] = Dummy.Create<string>();
-            Instance[7, Dummy.Create<int>()] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.ColumnCount;
-
-            //Assert
-            result.Should().Be(13);
-        }
+        base.InitializeTest();
+        Dummy.WithCollectionCustomizations();
     }
 
-    [TestClass]
-    public class RowCount : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void ColumnCount_WhenIsEmpty_ReturnZero()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnZero()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = Instance.RowCount;
+        //Act
+        var result = Instance.ColumnCount;
 
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenHasOnlyOneItemAtRowZero_ReturnOne()
-        {
-            //Arrange
-            Instance[Dummy.Create<int>(), 0] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.RowCount;
-
-            //Assert
-            result.Should().Be(1);
-        }
-
-        [TestMethod]
-        public void WhenHasOneItemAtNegativeRowIndex_ReturnDifferenceBetweenThatAndZero()
-        {
-            //Arrange
-            Instance[Dummy.Create<int>(), -3] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.RowCount;
-
-            //Assert
-            result.Should().Be(4);
-        }
-
-        [TestMethod]
-        public void WhenHasOneItemAtRowIndexGreaterThanZero_ReturnNumberOfRows()
-        {
-            //Arrange
-            Instance[Dummy.Create<int>(), 5] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.RowCount;
-
-            //Assert
-            result.Should().Be(6);
-        }
-
-        [TestMethod]
-        public void WhenHasOneItemInNegativeRowIndexAndOneAtPositiveGreaterThanZero_ReturnDifference()
-        {
-            //Arrange
-            Instance[Dummy.Create<int>(), -3] = Dummy.Create<string>();
-            Instance[Dummy.Create<int>(), 5] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.RowCount;
-
-            //Assert
-            result.Should().Be(9);
-        }
-
-        [TestMethod]
-        public void WhenHasABunchOfRows_ReturnDifferenceBetweenMinimumAndMaximum()
-        {
-            //Arrange
-            Instance[Dummy.Create<int>(), -3] = Dummy.Create<string>();
-            Instance[Dummy.Create<int>(), -5] = Dummy.Create<string>();
-            Instance[Dummy.Create<int>(), 5] = Dummy.Create<string>();
-            Instance[Dummy.Create<int>(), 7] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.RowCount;
-
-            //Assert
-            result.Should().Be(13);
-        }
+        //Assert
+        result.Should().Be(0);
     }
 
-    [TestClass]
-    public class FirstColumn : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ColumnCount_WhenHasOnlyOneItemAtColumnZero_ReturnOne()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnZero()
-        {
-            //Arrange
+        //Arrange
+        Instance[0, Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
-            //Act
-            var result = Instance.FirstColumn;
+        //Act
+        var result = Instance.ColumnCount;
 
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenOnlyContainsItemsAtColumnZero_ReturnZero()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[0, Dummy.Create<int>()] = item;
-
-            //Act
-            var result = Instance.FirstColumn;
-
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenContainsSomethingInTheNegatives_ReturnThatIndex()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[Dummy.Create<int>(), Dummy.Create<int>()] = item;
-
-            var negativeIndex = -Dummy.Create<int>();
-            Instance[negativeIndex, Dummy.Create<int>()] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.FirstColumn;
-
-            //Assert
-            result.Should().Be(negativeIndex);
-        }
-
-        [TestMethod]
-        public void WhenContainsSomethingGreaterThanZero_ReturnThatIndex()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[Dummy.Number.Between(10, 30).Create(), Dummy.Create<int>()] = item;
-
-            Instance[5, Dummy.Create<int>()] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.FirstColumn;
-
-            //Assert
-            result.Should().Be(5);
-        }
+        //Assert
+        result.Should().Be(1);
     }
 
-    [TestClass]
-    public class LastColumn : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ColumnCount_WhenHasOneItemAtNegativeColumnIndex_ReturnDifferenceBetweenThatAndZero()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnZero()
-        {
-            //Arrange
+        //Arrange
+        Instance[-3, Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
-            //Act
-            var result = Instance.LastColumn;
+        //Act
+        var result = Instance.ColumnCount;
 
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenOnlyContainsItemsAtColumnZero_ReturnZero()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[0, Dummy.Create<int>()] = item;
-
-            //Act
-            var result = Instance.LastColumn;
-
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenHighestIsSomethingInTheNegatives_ReturnThatIndex()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[-20, Dummy.Create<int>()] = item;
-
-            var negativeIndex = -5;
-            Instance[negativeIndex, Dummy.Create<int>()] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.LastColumn;
-
-            //Assert
-            result.Should().Be(negativeIndex);
-        }
-
-        [TestMethod]
-        public void WhenHighestIsSomethingGreaterThanZero_ReturnThatIndex()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[Dummy.Number.Between(0, 20).Create(), Dummy.Create<int>()] = item;
-
-            Instance[35, Dummy.Create<int>()] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.LastColumn;
-
-            //Assert
-            result.Should().Be(35);
-        }
+        //Assert
+        result.Should().Be(4);
     }
 
-    [TestClass]
-    public class FirstRow : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ColumnCount_WhenHasOneItemAtColumnIndexGreaterThanZero_ReturnNumberOfColumns()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnZero()
-        {
-            //Arrange
+        //Arrange
+        Instance[5, Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
-            //Act
-            var result = Instance.FirstRow;
+        //Act
+        var result = Instance.ColumnCount;
 
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenOnlyContainsItemsAtRowZero_ReturnZero()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[Dummy.Create<int>(), 0] = item;
-
-            //Act
-            var result = Instance.FirstRow;
-
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenContainsSomethingInTheNegatives_ReturnThatIndex()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[Dummy.Create<int>(), Dummy.Create<int>()] = item;
-
-            var negativeIndex = -Dummy.Create<int>();
-            Instance[Dummy.Create<int>(), negativeIndex] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.FirstRow;
-
-            //Assert
-            result.Should().Be(negativeIndex);
-        }
-
-        [TestMethod]
-        [Ignore("Flaky")]
-        public void WhenContainsSomethingGreaterThanZero_ReturnThatIndex()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[Dummy.Number.Between(10, 30).Create(), Dummy.Create<int>()] = item;
-
-            Instance[Dummy.Create<int>(), 5] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.FirstRow;
-
-            //Assert
-            result.Should().Be(5);
-        }
+        //Assert
+        result.Should().Be(6);
     }
 
-    [TestClass]
-    public class LastRow : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ColumnCount_WhenHasOneItemInNegativeColumnIndexAndOneAtPositiveGreaterThanZero_ReturnDifference()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnZero()
-        {
-            //Arrange
+        //Arrange
+        Instance[-3, Dummy.Create<int>()] = Dummy.Create<Garbage>();
+        Instance[5, Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
-            //Act
-            var result = Instance.LastRow;
+        //Act
+        var result = Instance.ColumnCount;
 
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenOnlyContainsItemsAtRowZero_ReturnZero()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[Dummy.Create<int>(), 0] = item;
-
-            //Act
-            var result = Instance.LastRow;
-
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenHighestIsSomethingInTheNegatives_ReturnThatIndex()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[Dummy.Create<int>(), -15] = item;
-
-            var negativeIndex = -2;
-            Instance[Dummy.Create<int>(), negativeIndex] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.LastRow;
-
-            //Assert
-            result.Should().Be(negativeIndex);
-        }
-
-        [TestMethod]
-        public void WhenHighestIsSomethingGreaterThanZero_ReturnThatIndex()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Garbage>();
-            foreach (var item in items)
-                Instance[Dummy.Create<int>(), Dummy.Number.Between(10, 30).Create()] = item;
-
-            Instance[Dummy.Create<int>(), 35] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.LastRow;
-
-            //Assert
-            result.Should().Be(35);
-        }
+        //Assert
+        result.Should().Be(9);
     }
 
-    [TestClass]
-    public class Count : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void ColumnCount_WhenHasABunchOfColumns_ReturnDifferenceBetweenMinimumAndMaximum()
     {
-        [TestMethod]
-        public void WhenIsEmpty_ReturnZero()
-        {
-            //Arrange
+        //Arrange
+        Instance[-3, Dummy.Create<int>()] = Dummy.Create<Garbage>();
+        Instance[-5, Dummy.Create<int>()] = Dummy.Create<Garbage>();
+        Instance[5, Dummy.Create<int>()] = Dummy.Create<Garbage>();
+        Instance[7, Dummy.Create<int>()] = Dummy.Create<Garbage>();
 
-            //Act
-            var result = Instance.Count;
+        //Act
+        var result = Instance.ColumnCount;
 
-            //Assert
-            result.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void WhenThereIsOneItem_ReturnOne()
-        {
-            //Arrange
-            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.Count;
-
-            //Assert
-            result.Should().Be(1);
-        }
-
-        [TestMethod]
-        public void WhenThereAreTwoItemsAtOppositeSidesOfTheGrid_ReturnTwo()
-        {
-            //Arrange
-            Instance[-10, -10] = Dummy.Create<string>();
-            Instance[10, 10] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.Count;
-
-            //Assert
-            result.Should().Be(2);
-        }
-
-        [TestMethod]
-        public void WhenThereIsABunchOfItems_ReturnExactNumberOfItemsRegardlessOfColumnAndRowCount()
-        {
-            //Arrange
-            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<string>();
-            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<string>();
-            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.Count;
-
-            //Assert
-            result.Should().Be(3);
-        }
+        //Assert
+        result.Should().Be(13);
     }
 
-    [TestClass]
-    public class Indexer_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void WhenIsEmpty_ReturnZero()
     {
-        [TestMethod]
-        public void WhenThereIsNothingAtIndex_ReturnDefaultValue()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = Instance[2, 3];
+        //Act
+        var result = Instance.RowCount;
 
-            //Assert
-            result.Should().BeNull();
-        }
+        //Assert
+        result.Should().Be(0);
+    }
 
-        [TestMethod]
-        public void WhenThereIsValueAtIndex_ReturnValue()
-        {
-            //Arrange
-            var x = Dummy.Create<int>();
-            var y = Dummy.Create<int>();
-            var value = Dummy.Create<string>();
-            Instance[x, y] = value;
+    [TestMethod]
+    public void WhenHasOnlyOneItemAtRowZero_ReturnOne()
+    {
+        //Arrange
+        Instance[Dummy.Create<int>(), 0] = Dummy.Create<Garbage>();
 
-            //Act
-            var result = Instance[x, y];
+        //Act
+        var result = Instance.RowCount;
 
-            //Assert
-            result.Should().Be(value);
-        }
+        //Assert
+        result.Should().Be(1);
+    }
 
-        [TestMethod]
-        public void WhenThereIsNothingAtGivenIndex_AddValueAtIndex()
-        {
-            //Arrange
-            var x = Dummy.Create<int>();
-            var y = Dummy.Create<int>();
-            var value = Dummy.Create<string>();
+    [TestMethod]
+    public void WhenHasOneItemAtNegativeRowIndex_ReturnDifferenceBetweenThatAndZero()
+    {
+        //Arrange
+        Instance[Dummy.Create<int>(), -3] = Dummy.Create<Garbage>();
 
-            //Act
-            Instance[x, y] = value;
+        //Act
+        var result = Instance.RowCount;
 
-            //Assert
-            Instance[x, y].Should().Be(value);
-        }
+        //Assert
+        result.Should().Be(4);
+    }
 
-        [TestMethod]
-        public void WhenThereIsNothingAtGivenIndex_TriggerOnChange()
-        {
-            //Arrange
-            var x = Dummy.Create<int>();
-            var y = Dummy.Create<int>();
-            var value = Dummy.Create<string>();
+    [TestMethod]
+    public void WhenHasOneItemAtRowIndexGreaterThanZero_ReturnNumberOfRows()
+    {
+        //Arrange
+        Instance[Dummy.Create<int>(), 5] = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        //Act
+        var result = Instance.RowCount;
 
-            //Act
-            Instance[x, y] = value;
+        //Assert
+        result.Should().Be(6);
+    }
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+    [TestMethod]
+    public void WhenHasOneItemInNegativeRowIndexAndOneAtPositiveGreaterThanZero_ReturnDifference()
+    {
+        //Arrange
+        Instance[Dummy.Create<int>(), -3] = Dummy.Create<Garbage>();
+        Instance[Dummy.Create<int>(), 5] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.RowCount;
+
+        //Assert
+        result.Should().Be(9);
+    }
+
+    [TestMethod]
+    public void WhenHasABunchOfRows_ReturnDifferenceBetweenMinimumAndMaximum()
+    {
+        //Arrange
+        Instance[Dummy.Create<int>(), -3] = Dummy.Create<Garbage>();
+        Instance[Dummy.Create<int>(), -5] = Dummy.Create<Garbage>();
+        Instance[Dummy.Create<int>(), 5] = Dummy.Create<Garbage>();
+        Instance[Dummy.Create<int>(), 7] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.RowCount;
+
+        //Assert
+        result.Should().Be(13);
+    }
+
+    [TestMethod]
+    public void FirstColumn_WhenIsEmpty_ReturnZero()
+    {
+        //Arrange
+
+        //Act
+        var result = Instance.FirstColumn;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void FirstColumn_WhenOnlyContainsItemsAtColumnZero_ReturnZero()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[0, Dummy.Create<int>()] = item;
+
+        //Act
+        var result = Instance.FirstColumn;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void FirstColumn_WhenContainsSomethingInTheNegatives_ReturnThatIndex()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = item;
+
+        var negativeIndex = -Dummy.Create<int>();
+        Instance[negativeIndex, Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.FirstColumn;
+
+        //Assert
+        result.Should().Be(negativeIndex);
+    }
+
+    [TestMethod]
+    public void FirstColumn_WhenContainsSomethingGreaterThanZero_ReturnThatIndex()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[Dummy.Number.Between(10, 30).Create(), Dummy.Create<int>()] = item;
+
+        Instance[5, Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.FirstColumn;
+
+        //Assert
+        result.Should().Be(5);
+    }
+
+    [TestMethod]
+    public void LastColumn_WhenIsEmpty_ReturnZero()
+    {
+        //Arrange
+
+        //Act
+        var result = Instance.LastColumn;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void LastColumn_WhenOnlyContainsItemsAtColumnZero_ReturnZero()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[0, Dummy.Create<int>()] = item;
+
+        //Act
+        var result = Instance.LastColumn;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void LastColumn_WhenHighestIsSomethingInTheNegatives_ReturnThatIndex()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[-20, Dummy.Create<int>()] = item;
+
+        var negativeIndex = -5;
+        Instance[negativeIndex, Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.LastColumn;
+
+        //Assert
+        result.Should().Be(negativeIndex);
+    }
+
+    [TestMethod]
+    public void WhenHighestIsSomethingGreaterThanZero_ReturnThatIndex()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[Dummy.Number.Between(0, 20).Create(), Dummy.Create<int>()] = item;
+
+        Instance[35, Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.LastColumn;
+
+        //Assert
+        result.Should().Be(35);
+    }
+
+    [TestMethod]
+    public void FirstRow_WhenIsEmpty_ReturnZero()
+    {
+        //Arrange
+
+        //Act
+        var result = Instance.FirstRow;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void FirstRow_WhenOnlyContainsItemsAtRowZero_ReturnZero()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[Dummy.Create<int>(), 0] = item;
+
+        //Act
+        var result = Instance.FirstRow;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void FirstRow_WhenContainsSomethingInTheNegatives_ReturnThatIndex()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[Dummy.Create<int>(), Dummy.Create<int>()] = item;
+
+        var negativeIndex = -Dummy.Create<int>();
+        Instance[Dummy.Create<int>(), negativeIndex] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.FirstRow;
+
+        //Assert
+        result.Should().Be(negativeIndex);
+    }
+
+    [TestMethod]
+    [Ignore("Flaky")]
+    public void FirstRow_WhenContainsSomethingGreaterThanZero_ReturnThatIndex()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[Dummy.Number.Between(10, 30).Create(), Dummy.Create<int>()] = item;
+
+        Instance[Dummy.Create<int>(), 5] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.FirstRow;
+
+        //Assert
+        result.Should().Be(5);
+    }
+
+    [TestMethod]
+    public void LastRow_WhenIsEmpty_ReturnZero()
+    {
+        //Arrange
+
+        //Act
+        var result = Instance.LastRow;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void LastRow_WhenOnlyContainsItemsAtRowZero_ReturnZero()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[Dummy.Create<int>(), 0] = item;
+
+        //Act
+        var result = Instance.LastRow;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void LastRow_WhenHighestIsSomethingInTheNegatives_ReturnThatIndex()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[Dummy.Create<int>(), -15] = item;
+
+        var negativeIndex = -2;
+        Instance[Dummy.Create<int>(), negativeIndex] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.LastRow;
+
+        //Assert
+        result.Should().Be(negativeIndex);
+    }
+
+    [TestMethod]
+    public void LastRow_WhenHighestIsSomethingGreaterThanZero_ReturnThatIndex()
+    {
+        //Arrange
+        var items = Dummy.CreateMany<Garbage>();
+        foreach (var item in items)
+            Instance[Dummy.Create<int>(), Dummy.Number.Between(10, 30).Create()] = item;
+
+        Instance[Dummy.Create<int>(), 35] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.LastRow;
+
+        //Assert
+        result.Should().Be(35);
+    }
+
+    [TestMethod]
+    public void Count_WhenIsEmpty_ReturnZero()
+    {
+        //Arrange
+
+        //Act
+        var result = Instance.Count;
+
+        //Assert
+        result.Should().Be(0);
+    }
+
+    [TestMethod]
+    public void Count_WhenThereIsOneItem_ReturnOne()
+    {
+        //Arrange
+        Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.Count;
+
+        //Assert
+        result.Should().Be(1);
+    }
+
+    [TestMethod]
+    public void Count_WhenThereAreTwoItemsAtOppositeSidesOfTheGrid_ReturnTwo()
+    {
+        //Arrange
+        Instance[-10, -10] = Dummy.Create<Garbage>();
+        Instance[10, 10] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.Count;
+
+        //Assert
+        result.Should().Be(2);
+    }
+
+    [TestMethod]
+    public void Count_WhenThereIsABunchOfItems_ReturnExactNumberOfItemsRegardlessOfColumnAndRowCount()
+    {
+        //Arrange
+        Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
+        Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
+        Instance[Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.Count;
+
+        //Assert
+        result.Should().Be(3);
+    }
+
+    [TestMethod]
+    public void IndexerXY_WhenThereIsNothingAtIndex_ReturnDefaultValue()
+    {
+        //Arrange
+
+        //Act
+        var result = Instance[2, 3];
+
+        //Assert
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void IndexerXY_WhenThereIsValueAtIndex_ReturnValue()
+    {
+        //Arrange
+        var x = Dummy.Create<int>();
+        var y = Dummy.Create<int>();
+        var value = Dummy.Create<Garbage>();
+        Instance[x, y] = value;
+
+        //Act
+        var result = Instance[x, y];
+
+        //Assert
+        result.Should().Be(value);
+    }
+
+    [TestMethod]
+    public void IndexerXY_WhenThereIsNothingAtGivenIndex_AddValueAtIndex()
+    {
+        //Arrange
+        var x = Dummy.Create<int>();
+        var y = Dummy.Create<int>();
+        var value = Dummy.Create<Garbage>();
+
+        //Act
+        Instance[x, y] = value;
+
+        //Assert
+        Instance[x, y].Should().Be(value);
+    }
+
+    [TestMethod]
+    public void IndexerXY_WhenThereIsNothingAtGivenIndex_TriggerOnChange()
+    {
+        //Arrange
+        var x = Dummy.Create<int>();
+        var y = Dummy.Create<int>();
+        var value = Dummy.Create<Garbage>();
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance[x, y] = value;
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<string>> { new(x, y, value) } }
+                new() { NewValues = [new(x, y, value)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenThereIsSomethingAtGivenIndex_ReplaceExistingValueByNewValue()
-        {
-            //Arrange
-            var x = Dummy.Create<int>();
-            var y = Dummy.Create<int>();
-            var oldValue = Dummy.Create<string>();
-            Instance[x, y] = oldValue;
-            var newValue = Dummy.Create<string>();
+    [TestMethod]
+    public void IndexerXY_WhenThereIsSomethingAtGivenIndex_ReplaceExistingValueByNewValue()
+    {
+        //Arrange
+        var x = Dummy.Create<int>();
+        var y = Dummy.Create<int>();
+        var oldValue = Dummy.Create<Garbage>();
+        Instance[x, y] = oldValue;
+        var newValue = Dummy.Create<Garbage>();
 
-            //Act
-            Instance[x, y] = newValue;
+        //Act
+        Instance[x, y] = newValue;
 
-            //Assert
-            Instance[x, y].Should().Be(newValue);
+        //Assert
+        Instance[x, y].Should().Be(newValue);
 
-        }
+    }
 
-        [TestMethod]
-        public void WhenThereIsSomethingAtGivenIndex_TriggerOnChange()
-        {
-            //Arrange
-            var x = Dummy.Create<int>();
-            var y = Dummy.Create<int>();
-            var oldValue = Dummy.Create<string>();
-            Instance[x, y] = oldValue;
-            var newValue = Dummy.Create<string>();
+    [TestMethod]
+    public void IndexerXY_WhenThereIsSomethingAtGivenIndex_TriggerOnChange()
+    {
+        //Arrange
+        var x = Dummy.Create<int>();
+        var y = Dummy.Create<int>();
+        var oldValue = Dummy.Create<Garbage>();
+        Instance[x, y] = oldValue;
+        var newValue = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance[x, y] = newValue;
+        //Act
+        Instance[x, y] = newValue;
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<string>> { new(x, y, newValue) },
-                    OldValues = new List<Cell<string>> { new(x, y, oldValue) }
+                    NewValues = [new(x, y, newValue)],
+                    OldValues = [new(x, y, oldValue)]
                 }
             });
-        }
     }
 
-    [TestClass]
-    public class Indexer_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void IndexerCoordinates_WhenThereIsNothingAtIndex_ReturnDefaultValue()
     {
-        [TestMethod]
-        public void WhenThereIsNothingAtIndex_ReturnDefaultValue()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = Instance[new Vector2<int>(2, 3)];
+        //Act
+        var result = Instance[new Vector2<int>(2, 3)];
 
-            //Assert
-            result.Should().BeNull();
-        }
+        //Assert
+        result.Should().BeNull();
+    }
 
-        [TestMethod]
-        public void WhenThereIsValueAtIndex_ReturnValue()
-        {
-            //Arrange
-            var coordinates = Dummy.Create<Vector2<int>>();
-            var value = Dummy.Create<string>();
-            Instance[coordinates] = value;
+    [TestMethod]
+    public void IndexerCoordinates_WhenThereIsValueAtIndex_ReturnValue()
+    {
+        //Arrange
+        var coordinates = Dummy.Create<Vector2<int>>();
+        var value = Dummy.Create<Garbage>();
+        Instance[coordinates] = value;
 
-            //Act
-            var result = Instance[coordinates];
+        //Act
+        var result = Instance[coordinates];
 
-            //Assert
-            result.Should().Be(value);
-        }
+        //Assert
+        result.Should().Be(value);
+    }
 
-        [TestMethod]
-        public void WhenThereIsNothingAtGivenIndex_AddValueAtIndex()
-        {
-            //Arrange
-            var coordinates = Dummy.Create<Vector2<int>>();
-            var value = Dummy.Create<string>();
+    [TestMethod]
+    public void IndexerCoordinates_WhenThereIsNothingAtGivenIndex_AddValueAtIndex()
+    {
+        //Arrange
+        var coordinates = Dummy.Create<Vector2<int>>();
+        var value = Dummy.Create<Garbage>();
 
-            //Act
-            Instance[coordinates] = value;
+        //Act
+        Instance[coordinates] = value;
 
-            //Assert
-            Instance[coordinates].Should().Be(value);
-        }
+        //Assert
+        Instance[coordinates].Should().Be(value);
+    }
 
-        [TestMethod]
-        public void WhenThereIsNothingAtGivenIndex_TriggerOnChange()
-        {
-            //Arrange
-            var coordinates = Dummy.Create<Vector2<int>>();
-            var value = Dummy.Create<string>();
+    [TestMethod]
+    public void IndexerCoordinates_WhenThereIsNothingAtGivenIndex_TriggerOnChange()
+    {
+        //Arrange
+        var coordinates = Dummy.Create<Vector2<int>>();
+        var value = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance[coordinates] = value;
+        //Act
+        Instance[coordinates] = value;
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<string>> { new(coordinates, value) } }
+                new() { NewValues = [new(coordinates, value)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenThereIsSomethingAtGivenIndex_ReplaceExistingValueByNewValue()
-        {
-            //Arrange
-            var coordinates = Dummy.Create<Vector2<int>>();
-            var oldValue = Dummy.Create<string>();
-            Instance[coordinates] = oldValue;
-            var newValue = Dummy.Create<string>();
+    [TestMethod]
+    public void IndexerCoordinates_WhenThereIsSomethingAtGivenIndex_ReplaceExistingValueByNewValue()
+    {
+        //Arrange
+        var coordinates = Dummy.Create<Vector2<int>>();
+        var oldValue = Dummy.Create<Garbage>();
+        Instance[coordinates] = oldValue;
+        var newValue = Dummy.Create<Garbage>();
 
-            //Act
-            Instance[coordinates] = newValue;
+        //Act
+        Instance[coordinates] = newValue;
 
-            //Assert
-            Instance[coordinates].Should().Be(newValue);
+        //Assert
+        Instance[coordinates].Should().Be(newValue);
 
-        }
+    }
 
-        [TestMethod]
-        public void WhenThereIsSomethingAtGivenIndex_TriggerOnChange()
-        {
-            //Arrange
-            var coordinates = Dummy.Create<Vector2<int>>();
-            var oldValue = Dummy.Create<string>();
-            Instance[coordinates] = oldValue;
-            var newValue = Dummy.Create<string>();
+    [TestMethod]
+    public void IndexerCoordinates_WhenThereIsSomethingAtGivenIndex_TriggerOnChange()
+    {
+        //Arrange
+        var coordinates = Dummy.Create<Vector2<int>>();
+        var oldValue = Dummy.Create<Garbage>();
+        Instance[coordinates] = oldValue;
+        var newValue = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance[coordinates] = newValue;
+        //Act
+        Instance[coordinates] = newValue;
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<string>> { new(coordinates, newValue) },
-                    OldValues = new List<Cell<string>> { new(coordinates, oldValue) }
+                    NewValues = [new(coordinates, newValue)],
+                    OldValues = [new(coordinates, oldValue)]
                 }
             });
-        }
     }
 
-    [TestClass]
-    public class IndexesOf_Item : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void IndexesOfItem_WhenGridIsEmpty_ReturnEmpty()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_ReturnEmpty()
-        {
-            //Arrange
-            var item = Dummy.Create<string>();
+        //Arrange
+        var item = Dummy.Create<Garbage>();
 
-            //Act
-            var result = Instance.IndexesOf(item);
+        //Act
+        var result = Instance.IndexesOf(item);
 
-            //Assert
-            result.Should().BeEmpty();
-        }
+        //Assert
+        result.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenThereAreNoOccurences_ReturnEmpty()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>();
-            foreach (var cell in cells)
-                Instance.Add(cell.Index, cell.Value);
+    [TestMethod]
+    public void IndexesOfItem_WhenThereAreNoOccurrences_ReturnEmpty()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var cell in cells)
+            Instance.Add(cell.Index, cell.Value);
 
-            var item = Dummy.Create<string>();
+        var item = Dummy.Create<Garbage>();
 
-            //Act
-            var result = Instance.IndexesOf(item);
+        //Act
+        var result = Instance.IndexesOf(item);
 
-            //Assert
-            result.Should().BeEmpty();
-        }
+        //Assert
+        result.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenThereIsOnlyOneOccurence_ReturnListWithOnlyThatOneItem()
-        {
-            //Arrange
-            var item = Dummy.Create<string>();
-            var index = Dummy.Create<Vector2<int>>();
-            Instance[index] = item;
+    [TestMethod]
+    public void IndexesOfItem_WhenThereIsOnlyOneOccurence_ReturnListWithOnlyThatOneItem()
+    {
+        //Arrange
+        var item = Dummy.Create<Garbage>();
+        var index = Dummy.Create<Vector2<int>>();
+        Instance[index] = item;
 
-            //Act
-            var result = Instance.IndexesOf(item);
+        //Act
+        var result = Instance.IndexesOf(item);
 
-            //Assert
-            result.Should().BeEquivalentTo(new List<Vector2<int>> { index });
-        }
+        //Assert
+        result.Should().BeEquivalentTo(new List<Vector2<int>> { index });
+    }
 
-        [TestMethod]
-        public void WhenThereAreMultipleOccurences_ReturnAllOccurences()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>();
-            foreach (var cell in cells)
-                Instance.Add(cell.Index, cell.Value);
+    [TestMethod]
+    public void IndexesOfItem_WhenThereAreMultipleOccurences_ReturnAllOccurences()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var cell in cells)
+            Instance.Add(cell.Index, cell.Value);
 
-            var indexes = Dummy.CreateMany<Vector2<int>>().ToList();
-            var item = Dummy.Create<string>();
-            foreach (var index in indexes)
-                Instance.Add(index, item);
+        var indexes = Dummy.CreateMany<Vector2<int>>().ToList();
+        var item = Dummy.Create<Garbage>();
+        foreach (var index in indexes)
+            Instance.Add(index, item);
 
-            //Act
-            var result = Instance.IndexesOf(item);
+        //Act
+        var result = Instance.IndexesOf(item);
 
-            //Assert
-            result.Should().BeEquivalentTo(indexes);
-        }
+        //Assert
+        result.Should().BeEquivalentTo(indexes);
+    }
 
-        [TestMethod]
-        public void WhenSeekingNullAndThereAreNoOccurences_ReturnEmpty()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>();
-            foreach (var cell in cells)
-                Instance.Add(cell.Index, cell.Value);
+    [TestMethod]
+    public void IndexesOfItem_WhenSeekingNullAndThereAreNoOccurrences_ReturnEmpty()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var cell in cells)
+            Instance.Add(cell.Index, cell.Value);
 
-            //Act
-            var result = Instance.IndexesOf((string)null!);
+        //Act
+        var result = Instance.IndexesOf((Garbage)null!);
 
-            //Assert
-            result.Should().BeEmpty();
-        }
+        //Assert
+        result.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenSeekingNullAndThereIsOnlyOneOccurence_ReturnListWithOnlyThatOneItem()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void IndexesOfItem_WhenSeekingNullAndThereIsOnlyOneOccurence_ReturnListWithOnlyThatOneItem()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance[index] = null;
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var cell in cells)
+            Instance.Add(cell.Index, cell.Value);
+
+        //Act
+        var result = Instance.IndexesOf((Garbage)null!);
+
+        //Assert
+        result.Should().BeEquivalentTo(new List<Vector2<int>> { index });
+    }
+
+    [TestMethod]
+    public void IndexesOfItem_WhenSeekingNullAndThereAreMultipleOccurrences_ReturnAllOccurrences()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var cell in cells)
+            Instance.Add(cell.Index, cell.Value);
+
+        var indexes = Dummy.CreateMany<Vector2<int>>().ToList();
+        foreach (var index in indexes)
+            Instance.Add(index, null);
+
+        //Act
+        var result = Instance.IndexesOf((Garbage)null!);
+
+        //Assert
+        result.Should().BeEquivalentTo(indexes);
+    }
+
+    [TestMethod]
+    public void IndexesOfPredicate_WhenMatchIsNull_Throw()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var cell in cells)
+            Instance[cell.Index] = cell.Value;
+
+        Func<Garbage, bool> match = null!;
+
+        //Act
+        var action = () => Instance.IndexesOf(match!);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [TestMethod]
+    public void IndexesOfPredicate_WhenGridIsEmpty_ReturnEmpty()
+    {
+        //Arrange
+
+        //Act
+        var result = Instance.IndexesOf(x => x == Dummy.Create<Garbage>());
+
+        //Assert
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void IndexesOfPredicate_WhenNothingMatches_ReturnEmpty()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var cell in cells)
+            Instance[cell.Index] = cell.Value;
+
+        //Act
+        var result = Instance.IndexesOf(x => x == Dummy.Create<Garbage>());
+
+        //Assert
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void IndexesOfPredicate_WhenOneThingMatches_ReturnItsIndex()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var cell in cells)
+            Instance[cell.Index] = cell.Value;
+
+        var targetCell = cells.GetRandom();
+
+        //Act
+        var result = Instance.IndexesOf(x => x == targetCell.Value);
+
+        //Assert
+        result.Should().BeEquivalentTo(new List<Vector2<int>> { targetCell.Index });
+    }
+
+    [TestMethod]
+    public void IndexesOfPredicate_WhenMultipleThingsMatch_ReturnAllTheIndexes()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var cell in cells)
+            Instance[cell.Index] = cell.Value;
+
+        var sameValue = Dummy.Create<Garbage>();
+        var sameCells = Dummy.Build<Cell<Garbage>>().With(x => x.Value, sameValue).CreateMany().ToList();
+        foreach (var cell in sameCells)
+            Instance[cell.Index] = cell.Value;
+
+        //Act
+        var result = Instance.IndexesOf(x => x == sameValue);
+
+        //Assert
+        result.Should().BeEquivalentTo(sameCells.Select(x => x.Index));
+    }
+
+    [TestMethod]
+    public void IndexesOfPredicate_WhenGridContainsNullValues_DoNotThrow()
+    {
+        //Arrange
+        var indexesOfNulls = Dummy.CreateMany<Vector2<int>>().ToList();
+        foreach (var index in indexesOfNulls)
             Instance[index] = null;
 
-            var cells = Dummy.CreateMany<Cell<string>>();
-            foreach (var cell in cells)
-                Instance.Add(cell.Index, cell.Value);
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var cell in cells)
+            Instance[cell.Index] = cell.Value;
 
-            //Act
-            var result = Instance.IndexesOf((string)null!);
+        var targetCell = cells.GetRandom();
 
-            //Assert
-            result.Should().BeEquivalentTo(new List<Vector2<int>> { index });
-        }
+        //Act
+        var result = Instance.IndexesOf(x => x == targetCell.Value);
 
-        [TestMethod]
-        public void WhenSeekingNullAndThereAreMultipleOccurences_ReturnAllOccurences()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>();
-            foreach (var cell in cells)
-                Instance.Add(cell.Index, cell.Value);
-
-            var indexes = Dummy.CreateMany<Vector2<int>>().ToList();
-            foreach (var index in indexes)
-                Instance.Add(index, null);
-
-            //Act
-            var result = Instance.IndexesOf((string)null!);
-
-            //Assert
-            result.Should().BeEquivalentTo(indexes);
-        }
+        //Assert
+        result.Should().BeEquivalentTo(new List<Vector2<int>> { targetCell.Index });
     }
 
-    [TestClass]
-    public class IndexesOf_Predicate : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void IndexesOfPredicate_WhenGridContainsNullValuesAndMatchIsNull_ReturnIndexesOfNullValues()
     {
-        [TestMethod]
-        public void WhenMatchIsNull_Throw()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
+        //Arrange
+        var indexesOfNulls = Dummy.CreateMany<Vector2<int>>().ToList();
+        foreach (var index in indexesOfNulls)
+            Instance[index] = null;
 
-            Func<string, bool> match = null!;
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var cell in cells)
+            Instance[cell.Index] = cell.Value;
 
-            //Act
-            var action = () => Instance.IndexesOf(match!);
+        var targetCell = cells.GetRandom();
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>();
-        }
+        //Act
+        var result = Instance.IndexesOf(x => x == null);
 
-        [TestMethod]
-        public void WhenGridIsEmpty_ReturnEmpty()
-        {
-            //Arrange
-
-            //Act
-            var result = Instance.IndexesOf(x => x == "abc");
-
-            //Assert
-            result.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenNothingMatches_ReturnEmpty()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            //Act
-            var result = Instance.IndexesOf(x => x == "abc");
-
-            //Assert
-            result.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenOneThingMatches_ReturnItsIndex()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var targetCell = cells.GetRandom();
-
-            //Act
-            var result = Instance.IndexesOf(x => x == targetCell.Value);
-
-            //Assert
-            result.Should().BeEquivalentTo(new List<Vector2<int>> { targetCell.Index });
-        }
-
-        [TestMethod]
-        public void WhenMultipleThingsMatch_ReturnAllTheIndexes()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var sameValue = Dummy.Create<string>();
-            var sameCells = Dummy.Build<Cell<string>>().With(x => x.Value, sameValue).CreateMany().ToList();
-            foreach (var cell in sameCells)
-                Instance[cell.Index] = cell.Value;
-
-            //Act
-            var result = Instance.IndexesOf(x => x == sameValue);
-
-            //Assert
-            result.Should().BeEquivalentTo(sameCells.Select(x => x.Index));
-        }
-
-        [TestMethod]
-        public void WhenGridContainsNullValues_DoNotThrow()
-        {
-            //Arrange
-            var indexesOfNulls = Dummy.CreateMany<Vector2<int>>().ToList();
-            foreach (var index in indexesOfNulls)
-                Instance[index] = null;
-
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var targetCell = cells.GetRandom();
-
-            //Act
-            var result = Instance.IndexesOf(x => x == targetCell.Value);
-
-            //Assert
-            result.Should().BeEquivalentTo(new List<Vector2<int>> { targetCell.Index });
-        }
-
-        [TestMethod]
-        public void WhenGridContainsNullValuesAndMatchIsNull_ReturnIndexesOfNullValues()
-        {
-            //Arrange
-            var indexesOfNulls = Dummy.CreateMany<Vector2<int>>().ToList();
-            foreach (var index in indexesOfNulls)
-                Instance[index] = null;
-
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var targetCell = cells.GetRandom();
-
-            //Act
-            var result = Instance.IndexesOf(x => x == null);
-
-            //Assert
-            result.Should().BeEquivalentTo(indexesOfNulls);
-        }
+        //Assert
+        result.Should().BeEquivalentTo(indexesOfNulls);
     }
 
-    [TestClass]
-    public class Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void Boundaries_WhenGridIsEmpty_AllValuesAreZero()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_AllValuesAreZero()
+        //Arrange
+
+        //Act
+        var result = Instance.Boundaries;
+
+        //Assert
+        result.Should().BeEquivalentTo(new Boundaries<int>());
+    }
+
+    [TestMethod]
+    public void Boundaries_WhenGridHasItems_ReturnBoundaries()
+    {
+        //Arrange
+        Instance[3, 5] = Dummy.Create<Garbage>();
+        Instance[-4, 9] = Dummy.Create<Garbage>();
+        Instance[2, -14] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.Boundaries;
+
+        //Assert
+        result.Should().BeEquivalentTo(new Boundaries<int>
         {
-            //Arrange
+            Top = -14,
+            Right = 3,
+            Bottom = 9,
+            Left = -4
+        });
+    }
 
-            //Act
-            var result = Instance.Boundaries;
+    [TestMethod]
+    public void ConstructorCells_WhenCollectionIsNull_Throw()
+    {
+        //Arrange
+        IEnumerable<Cell<Garbage>> cells = null!;
 
-            //Assert
-            result.Should().BeEquivalentTo(new Boundaries<int>());
-        }
+        //Act
+        var action = () => new Grid<Garbage>(cells);
 
-        [TestMethod]
-        public void WhenGridHasItems_ReturnBoundaries()
-        {
-            //Arrange
-            Instance[3, 5] = Dummy.Create<Garbage>();
-            Instance[-4, 9] = Dummy.Create<Garbage>();
-            Instance[2, -14] = Dummy.Create<Garbage>();
+        //Assert
+        action.Should().Throw<ArgumentNullException>();
+    }
 
-            //Act
-            var result = Instance.Boundaries;
+    [TestMethod]
+    public void ConstructorCells_WhenCollectionIsEmpty_InstantiateEmptyGrid()
+    {
+        //Arrange
+        var cells = Array.Empty<Cell<Garbage>>();
 
-            //Assert
-            result.Should().BeEquivalentTo(new Boundaries<int>
+        //Act
+        var result = new Grid<Garbage>(cells);
+
+        //Assert
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void ConstructorCells_WhenCollectionIsNotEmpty_InstantiateWithContents()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        //Act
+        var result = new Grid<Garbage>(cells);
+
+        //Assert
+        result.Should().BeEquivalentTo(cells);
+    }
+
+    [TestMethod]
+    public void ConstructorKeyValuePairs_WhenCollectionIsNull_Throw()
+    {
+        //Arrange
+        IEnumerable<KeyValuePair<Vector2<int>, Garbage>> pairs = null!;
+
+        //Act
+        var action = () => new Grid<Garbage>(pairs);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [TestMethod]
+    public void ConstructorKeyValuePairs_WhenCollectionIsEmpty_InstantiateEmptyGrid()
+    {
+        //Arrange
+        var pairs = Array.Empty<KeyValuePair<Vector2<int>, Garbage>>();
+
+        //Act
+        var result = new Grid<Garbage>(pairs);
+
+        //Assert
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void ConstructorKeyValuePairs_WhenCollectionIsNotEmpty_InstantiateWithContents()
+    {
+        //Arrange
+        var pairs = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
+
+        //Act
+        var result = new Grid<Garbage>(pairs);
+
+        //Assert
+        result.Should().BeEquivalentTo(pairs.Select(x => new Cell<Garbage>(x.Key, x.Value)));
+    }
+
+    [TestMethod]
+    public void Constructor2dArray_WhenCollectionIsNull_Throw()
+    {
+        //Arrange
+        Garbage[,] array = null!;
+
+        //Act
+        var action = () => new Grid<Garbage>(array);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [TestMethod]
+    public void Constructor2dArray_WhenCollectionIsEmpty_InstantiateEmptyGrid()
+    {
+        //Arrange
+        var array = new Garbage[0, 0];
+
+        //Act
+        var result = new Grid<Garbage>(array);
+
+        //Assert
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void Constructor2dArray_WhenCollectionIsNotEmpty_InstantiateWithContents()
+    {
+        //Arrange
+        var array = Dummy.Create<Garbage[,]>();
+
+        //Act
+        var result = new Grid<Garbage>(array);
+
+        //Assert
+        result.Should().BeEquivalentTo(array.ToGrid());
+    }
+
+    [TestMethod]
+    public void ConstructorJaggedArray_WhenCollectionIsNull_Throw()
+    {
+        //Arrange
+        Garbage[][] array = null!;
+
+        //Act
+        var action = () => new Grid<Garbage>(array);
+
+        //Assert
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [TestMethod]
+    public void ConstructorJaggedArray_WhenCollectionIsEmpty_InstantiateEmptyGrid()
+    {
+        //Arrange
+        var array = Array.Empty<Garbage[]>();
+
+        //Act
+        var result = new Grid<Garbage>(array);
+
+        //Assert
+        result.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void ConstructorJaggedArray_WhenCollectionIsNotEmpty_InstantiateWithContents()
+    {
+        //Arrange
+        var array = Dummy.Create<Garbage[][]>();
+
+        //Act
+        var result = new Grid<Garbage>(array);
+
+        //Assert
+        result.Should().BeEquivalentTo(array.ToGrid());
+    }
+
+    [TestMethod]
+    public void AddXY_WhenIndexIsNegative_AddAtIndex()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        //Act
+        Instance.Add(index.X, index.Y, item);
+
+        //Assert
+        Instance[index].Should().Be(item);
+    }
+
+    [TestMethod]
+    public void AddXY_WhenIndexIsNegative_TriggerEvent()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance.Add(index.X, index.Y, item);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                Top = -14,
-                Right = 3,
-                Bottom = 9,
-                Left = -4
+                new() { NewValues = [new(index, item)] }
             });
-        }
     }
 
-    [TestClass]
-    public class Constructor_Cells : ToolBX.Collections.UnitTesting.Tester
+    [TestMethod]
+    public void AddXY_WhenIndexIsPositive_AddAtIndex()
     {
-        [TestMethod]
-        public void WhenCollectionIsNull_Throw()
-        {
-            //Arrange
-            IEnumerable<Cell<Garbage>> cells = null!;
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            //Act
-            var action = () => new Grid<Garbage>(cells);
+        //Act
+        Instance.Add(index.X, index.Y, item);
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void WhenCollectionIsEmpty_InstantiateEmptyGrid()
-        {
-            //Arrange
-            var cells = Array.Empty<Cell<Garbage>>();
-
-            //Act
-            var result = new Grid<Garbage>(cells);
-
-            //Assert
-            result.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenCollectionIsNotEmpty_InstantiateWithContents()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-
-            //Act
-            var result = new Grid<Garbage>(cells);
-
-            //Assert
-            result.Should().BeEquivalentTo(cells);
-        }
+        //Assert
+        Instance[index].Should().Be(item);
     }
 
-    [TestClass]
-    public class Constructor_KeyValuePairs : ToolBX.Collections.UnitTesting.Tester
+    [TestMethod]
+    public void AddXY_WhenIndexIsPositive_TriggerEvent()
     {
-        [TestMethod]
-        public void WhenCollectionIsNull_Throw()
-        {
-            //Arrange
-            IEnumerable<KeyValuePair<Vector2<int>, Garbage>> pairs = null!;
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            //Act
-            var action = () => new Grid<Garbage>(pairs);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>();
-        }
+        //Act
+        Instance.Add(index.X, index.Y, item);
 
-        [TestMethod]
-        public void WhenCollectionIsEmpty_InstantiateEmptyGrid()
-        {
-            //Arrange
-            var pairs = Array.Empty<KeyValuePair<Vector2<int>, Garbage>>();
-
-            //Act
-            var result = new Grid<Garbage>(pairs);
-
-            //Assert
-            result.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenCollectionIsNotEmpty_InstantiateWithContents()
-        {
-            //Arrange
-            var pairs = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
-
-            //Act
-            var result = new Grid<Garbage>(pairs);
-
-            //Assert
-            result.Should().BeEquivalentTo(pairs.Select(x => new Cell<Garbage>(x.Key, x.Value)));
-        }
-    }
-
-    [TestClass]
-    public class Constructor_2dArray : ToolBX.Collections.UnitTesting.Tester
-    {
-        [TestMethod]
-        public void WhenCollectionIsNull_Throw()
-        {
-            //Arrange
-            Garbage[,] array = null!;
-
-            //Act
-            var action = () => new Grid<Garbage>(array);
-
-            //Assert
-            action.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void WhenCollectionIsEmpty_InstantiateEmptyGrid()
-        {
-            //Arrange
-            var array = new Garbage[0, 0];
-
-            //Act
-            var result = new Grid<Garbage>(array);
-
-            //Assert
-            result.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenCollectionIsNotEmpty_InstantiateWithContents()
-        {
-            //Arrange
-            var array = Dummy.Create<Garbage[,]>();
-
-            //Act
-            var result = new Grid<Garbage>(array);
-
-            //Assert
-            result.Should().BeEquivalentTo(array.ToGrid());
-        }
-    }
-
-    [TestClass]
-    public class Constructor_JaggedArray : ToolBX.Collections.UnitTesting.Tester
-    {
-        [TestMethod]
-        public void WhenCollectionIsNull_Throw()
-        {
-            //Arrange
-            Garbage[][] array = null!;
-
-            //Act
-            var action = () => new Grid<Garbage>(array);
-
-            //Assert
-            action.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void WhenCollectionIsEmpty_InstantiateEmptyGrid()
-        {
-            //Arrange
-            var array = Array.Empty<Garbage[]>();
-
-            //Act
-            var result = new Grid<Garbage>(array);
-
-            //Assert
-            result.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenCollectionIsNotEmpty_InstantiateWithContents()
-        {
-            //Arrange
-            var array = Dummy.Create<Garbage[][]>();
-
-            //Act
-            var result = new Grid<Garbage>(array);
-
-            //Assert
-            result.Should().BeEquivalentTo(array.ToGrid());
-        }
-    }
-
-    [TestClass]
-    public class Add_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
-    {
-        [TestMethod]
-        public void WhenIndexIsNegative_AddAtIndex()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<string>();
-
-            //Act
-            Instance.Add(index.X, index.Y, item);
-
-            //Assert
-            Instance[index].Should().Be(item);
-        }
-
-        [TestMethod]
-        public void WhenIndexIsNegative_TriggerEvent()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<string>();
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.Add(index.X, index.Y, item);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<string>> { new(index, item) } }
+                new() { NewValues = [new(index, item)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_AddAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void AddXY_WhenItemIsNull_AddNullAtIndex()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.Add(index.X, index.Y, item);
+        //Act
+        Instance.Add(index.X, index.Y, null);
 
-            //Assert
-            Instance[index].Should().Be(item);
-        }
+        //Assert
+        Instance[index].Should().BeNull();
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_TriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void AddXY_WhenItemIsNull_DoNotTriggerEvent()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Add(index.X, index.Y, item);
+        //Act
+        Instance.Add(index.X, index.Y, null);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new() { NewValues = new List<Cell<string>> { new(index, item) } }
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsNull_AddNullAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-
-            //Act
-            Instance.Add(index.X, index.Y, null);
-
-            //Assert
-            Instance[index].Should().BeNull();
-        }
-
-        [TestMethod]
-        public void WhenItemIsNull_DoNotTriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.Add(index.X, index.Y, null);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = Array.Empty<Cell<string>>(),
-                    NewValues = new List<Cell<string>> { new(index, null) }
+                    OldValues = Array.Empty<Cell<Garbage>>(),
+                    NewValues = [new(index, null)]
                 }
             });
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtIndex_Throw()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-            Instance.Add(index.X, index.Y, Dummy.Create<string>());
-
-            //Act
-            var action = () => Instance.Add(index.X, index.Y, item);
-
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
-
-        [TestMethod]
-        public void WhenAddingNullAtExistingIndex_Throw()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            Instance.Add(index.X, index.Y, Dummy.Create<string>());
-
-            //Act
-            var action = () => Instance.Add(index.X, index.Y, null);
-
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
-
-
     }
 
-    [TestClass]
-    public class Add_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void AddXY_WhenThereIsAlreadySomethingAtIndex_Throw()
     {
-        [TestMethod]
-        public void WhenIndexIsNegative_AddAtIndex()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<string>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance.Add(index.X, index.Y, Dummy.Create<Garbage>());
 
-            //Act
-            Instance.Add(index, item);
+        //Act
+        var action = () => Instance.Add(index.X, index.Y, item);
 
-            //Assert
-            Instance[index].Should().Be(item);
-        }
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
 
-        [TestMethod]
-        public void WhenIndexIsNegative_TriggerEvent()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void AddXY_WhenAddingNullAtExistingIndex_Throw()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance.Add(index.X, index.Y, Dummy.Create<Garbage>());
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        //Act
+        var action = () => Instance.Add(index.X, index.Y, null);
 
-            //Act
-            Instance.Add(index, item);
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+    [TestMethod]
+    public void AddCoordinates_WhenIndexIsNegative_AddAtIndex()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        //Act
+        Instance.Add(index, item);
+
+        //Assert
+        Instance[index].Should().Be(item);
+    }
+
+    [TestMethod]
+    public void AddCoordinates_WhenIndexIsNegative_TriggerEvent()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance.Add(index, item);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<string>> { new(index, item) } }
+                new() { NewValues = [new(index, item)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_AddAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void AddCoordinates_WhenIndexIsPositive_AddAtIndex()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            //Act
-            Instance.Add(index, item);
+        //Act
+        Instance.Add(index, item);
 
-            //Assert
-            Instance[index].Should().Be(item);
-        }
+        //Assert
+        Instance[index].Should().Be(item);
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_TriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void AddCoordinates_WhenIndexIsPositive_TriggerEvent()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Add(index, item);
+        //Act
+        Instance.Add(index, item);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<string>> { new(index, item) } }
+                new() { NewValues = [new(index, item)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenItemIsNull_AddNullAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void AddCoordinates_WhenItemIsNull_AddNullAtIndex()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.Add(index, null);
+        //Act
+        Instance.Add(index, null);
 
-            //Assert
-            Instance[index].Should().BeNull();
-        }
+        //Assert
+        Instance[index].Should().BeNull();
+    }
 
-        [TestMethod]
-        public void WhenItemIsNullButInNewCell_TriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void AddCoordinates_WhenItemIsNullButInNewCell_TriggerEvent()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Add(index, null);
+        //Act
+        Instance.Add(index, null);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = Array.Empty<Cell<string>>(),
-                    NewValues = new List<Cell<string>> { new(index, null) }
+                    OldValues = Array.Empty<Cell<Garbage>>(),
+                    NewValues = [new(index, null)]
                 }
             });
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtIndex_Throw()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-            Instance.Add(index.X, index.Y, Dummy.Create<string>());
-
-            //Act
-            var action = () => Instance.Add(index, item);
-
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
-
-        [TestMethod]
-        public void WhenAddingNullAtExistingIndex_Throw()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            Instance.Add(index.X, index.Y, Dummy.Create<string>());
-
-            //Act
-            var action = () => Instance.Add(index, null);
-
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
     }
 
-    [TestClass]
-    public class Add_ValueType : ToolBX.Collections.UnitTesting.Tester<Grid<bool>>
+    [TestMethod]
+    public void AddCoordinates_WhenThereIsAlreadySomethingAtIndex_Throw()
     {
-        [TestMethod]
-        public void WhenIndexIsNegative_AddAtIndex()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<bool>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance.Add(index.X, index.Y, Dummy.Create<Garbage>());
 
-            //Act
-            Instance.Add(index.X, index.Y, item);
+        //Act
+        var action = () => Instance.Add(index, item);
 
-            //Assert
-            Instance[index].Should().Be(item);
-        }
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
 
-        [TestMethod]
-        public void WhenIndexIsNegative_TriggerEvent()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<bool>();
+    [TestMethod]
+    public void AddCoordinates_WhenAddingNullAtExistingIndex_Throw()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance.Add(index.X, index.Y, Dummy.Create<Garbage>());
 
-            var eventArgs = new List<GridChangedEventArgs<bool>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        //Act
+        var action = () => Instance.Add(index, null);
 
-            //Act
-            Instance.Add(index.X, index.Y, item);
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<bool>>
+    [TestMethod]
+    public void AddValueType_WhenIndexIsNegative_AddAtIndex()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        //Act
+        Instance.Add(index.X, index.Y, item);
+
+        //Assert
+        Instance[index].Should().Be(item);
+    }
+
+    [TestMethod]
+    public void AddValueType_WhenIndexIsNegative_TriggerEvent()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance.Add(index.X, index.Y, item);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<bool>> { new(index, item) } }
+                new() { NewValues = [new(index, item)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_AddAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<bool>();
+    [TestMethod]
+    public void AddValueType_WhenIndexIsPositive_AddAtIndex()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            //Act
-            Instance.Add(index.X, index.Y, item);
+        //Act
+        Instance.Add(index.X, index.Y, item);
 
-            //Assert
-            Instance[index].Should().Be(item);
-        }
+        //Assert
+        Instance[index].Should().Be(item);
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_TriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<bool>();
+    [TestMethod]
+    public void AddValueType_WhenIndexIsPositive_TriggerEvent()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<bool>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Add(index.X, index.Y, item);
+        //Act
+        Instance.Add(index.X, index.Y, item);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<bool>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<bool>> { new(index, item) } }
+                new() { NewValues = [new(index, item)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenItemIsDefaultValue_AddDefaultValueAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void AddValueType_WhenItemIsDefaultValue_AddDefaultValueAtIndex()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.Add(index.X, index.Y, default);
+        //Act
+        Instance.Add(index.X, index.Y, default);
 
-            //Assert
-            Instance[index].Should().Be(default);
-        }
+        //Assert
+        Instance[index].Should().Be(default);
+    }
 
-        [TestMethod]
-        public void WhenItemIsDefaultValue_TriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void AddValueType_WhenItemIsDefaultValue_TriggerEvent()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<bool>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Add(index.X, index.Y, default);
+        //Act
+        Instance.Add(index.X, index.Y, default);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<bool>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = Array.Empty<Cell<bool>>(),
-                    NewValues = new List<Cell<bool>> { new(index, default) }
+                    OldValues = Array.Empty<Cell<Garbage>>(),
+                    NewValues = [new(index, default)]
                 }
             });
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtIndex_Throw()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<bool>();
-            Instance.Add(index.X, index.Y, Dummy.Create<bool>());
-
-            //Act
-            var action = () => Instance.Add(index.X, index.Y, item);
-
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
-
-        [TestMethod]
-        public void WhenAddingNegativeIndexWithDefaultValue_UpdateFirstRow()
-        {
-            //Arrange
-            var index = -Dummy.Create<Vector2<int>>();
-
-            //Act
-            Instance.Add(index, default);
-
-            //Assert
-            Instance.FirstRow.Should().Be(index.Y);
-        }
-
-        [TestMethod]
-        public void WhenAddingNegativeIndexWithDefaultValue_UpdateFirstColumn()
-        {
-            //Arrange
-            var index = -Dummy.Create<Vector2<int>>();
-
-            //Act
-            Instance.Add(index, default);
-
-            //Assert
-            Instance.FirstColumn.Should().Be(index.X);
-        }
     }
 
-    [TestClass]
-    public class TryAdd_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void AddValueType_WhenThereIsAlreadySomethingAtIndex_Throw()
     {
-        [TestMethod]
-        public void WhenIndexIsNegative_AddAtIndex()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<string>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance.Add(index.X, index.Y, Dummy.Create<Garbage>());
 
-            //Act
-            Instance.TryAdd(index.X, index.Y, item);
+        //Act
+        var action = () => Instance.Add(index.X, index.Y, item);
 
-            //Assert
-            Instance[index].Should().Be(item);
-        }
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
 
-        [TestMethod]
-        public void WhenIndexIsNegative_TriggerEvent()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void AddValueType_WhenAddingNegativeIndexWithDefaultValue_UpdateFirstRow()
+    {
+        //Arrange
+        var index = -Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        //Act
+        Instance.Add(index, default);
 
-            //Act
-            Instance.TryAdd(index.X, index.Y, item);
+        //Assert
+        Instance.FirstRow.Should().Be(index.Y);
+    }
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+    [TestMethod]
+    public void AddValueType_WhenAddingNegativeIndexWithDefaultValue_UpdateFirstColumn()
+    {
+        //Arrange
+        var index = -Dummy.Create<Vector2<int>>();
+
+        //Act
+        Instance.Add(index, default);
+
+        //Assert
+        Instance.FirstColumn.Should().Be(index.X);
+    }
+
+    [TestMethod]
+    public void TryAddXY_WhenIndexIsNegative_AddAtIndex()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        //Act
+        Instance.TryAdd(index.X, index.Y, item);
+
+        //Assert
+        Instance[index].Should().Be(item);
+    }
+
+    [TestMethod]
+    public void TryAddXY_WhenIndexIsNegative_TriggerEvent()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance.TryAdd(index.X, index.Y, item);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<string>> { new(index, item) } }
+                new() { NewValues = [new(index, item)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_AddAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void TryAddXY_WhenIndexIsPositive_AddAtIndex()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            //Act
-            Instance.TryAdd(index.X, index.Y, item);
+        //Act
+        Instance.TryAdd(index.X, index.Y, item);
 
-            //Assert
-            Instance[index].Should().Be(item);
-        }
+        //Assert
+        Instance[index].Should().Be(item);
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_TriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void TryAddXY_WhenIndexIsPositive_TriggerEvent()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.TryAdd(index.X, index.Y, item);
+        //Act
+        Instance.TryAdd(index.X, index.Y, item);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<string>> { new(index, item) } }
+                new() { NewValues = [new(index, item)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenItemIsNull_AddNullAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void TryAddXY_WhenItemIsNull_AddNullAtIndex()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.TryAdd(index.X, index.Y, null);
+        //Act
+        Instance.TryAdd(index.X, index.Y, null);
 
-            //Assert
-            Instance[index].Should().BeNull();
-        }
+        //Assert
+        Instance[index].Should().BeNull();
+    }
 
-        [TestMethod]
-        public void WhenItemIsNull_TriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void TryAddXY_WhenItemIsNull_TriggerEvent()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.TryAdd(index.X, index.Y, null);
+        //Act
+        Instance.TryAdd(index.X, index.Y, null);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = Array.Empty<Cell<string>>(),
-                    NewValues = new List<Cell<string>> { new(index, null) }
+                    OldValues = Array.Empty<Cell<Garbage>>(),
+                    NewValues = [new(index, null)]
                 }
             });
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtIndex_DoNotReplace()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-
-            var originalItem = Dummy.Create<string>();
-            Instance.Add(index.X, index.Y, originalItem);
-
-            //Act
-            Instance.TryAdd(index.X, index.Y, item);
-
-            //Assert
-            Instance[index].Should().Be(originalItem);
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtIndex_DoNotThrow()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-            Instance.Add(index.X, index.Y, Dummy.Create<string>());
-
-            //Act
-            var action = () => Instance.TryAdd(index.X, index.Y, item);
-
-            //Assert
-            action.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void WhenAddingNullAtExistingIndex_DoNotThrow()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            Instance.Add(index.X, index.Y, Dummy.Create<string>());
-
-            //Act
-            var action = () => Instance.TryAdd(index.X, index.Y, null);
-
-            //Assert
-            action.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void WhenAddingNullAtExistingIndex_DoNotReplace()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var originalItem = Dummy.Create<string>();
-            Instance.Add(index.X, index.Y, originalItem);
-
-            //Act
-            Instance.TryAdd(index.X, index.Y, null);
-
-            //Assert
-            Instance[index].Should().Be(originalItem);
-        }
     }
 
-    [TestClass]
-    public class TryAdd_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void TryAddXY_WhenThereIsAlreadySomethingAtIndex_DoNotReplace()
     {
-        [TestMethod]
-        public void WhenIndexIsNegative_AddAtIndex()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<string>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            //Act
-            Instance.TryAdd(index, item);
+        var originalItem = Dummy.Create<Garbage>();
+        Instance.Add(index.X, index.Y, originalItem);
 
-            //Assert
-            Instance[index].Should().Be(item);
-        }
+        //Act
+        Instance.TryAdd(index.X, index.Y, item);
 
-        [TestMethod]
-        public void WhenIndexIsNegative_TriggerEvent()
-        {
-            //Arrange
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-            var item = Dummy.Create<string>();
+        //Assert
+        Instance[index].Should().Be(originalItem);
+    }
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+    [TestMethod]
+    public void TryAddXY_WhenThereIsAlreadySomethingAtIndex_DoNotThrow()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance.Add(index.X, index.Y, Dummy.Create<Garbage>());
 
-            //Act
-            Instance.TryAdd(index, item);
+        //Act
+        var action = () => Instance.TryAdd(index.X, index.Y, item);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void TryAddXY_WhenAddingNullAtExistingIndex_DoNotThrow()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance.Add(index.X, index.Y, Dummy.Create<Garbage>());
+
+        //Act
+        var action = () => Instance.TryAdd(index.X, index.Y, null);
+
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void TryAddXY_WhenAddingNullAtExistingIndex_DoNotReplace()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var originalItem = Dummy.Create<Garbage>();
+        Instance.Add(index.X, index.Y, originalItem);
+
+        //Act
+        Instance.TryAdd(index.X, index.Y, null);
+
+        //Assert
+        Instance[index].Should().Be(originalItem);
+    }
+
+    [TestMethod]
+    public void TryAddCoordinates_WhenIndexIsNegative_AddAtIndex()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        //Act
+        Instance.TryAdd(index, item);
+
+        //Assert
+        Instance[index].Should().Be(item);
+    }
+
+    [TestMethod]
+    public void TryAddCoordinates_WhenIndexIsNegative_TriggerEvent()
+    {
+        //Arrange
+        var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
+        var item = Dummy.Create<Garbage>();
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance.TryAdd(index, item);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<string>> { new(index, item) } }
+                new() { NewValues = [new(index, item)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_AddAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void TryAddCoordinates_WhenIndexIsPositive_AddAtIndex()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            //Act
-            Instance.TryAdd(index, item);
+        //Act
+        Instance.TryAdd(index, item);
 
-            //Assert
-            Instance[index].Should().Be(item);
-        }
+        //Assert
+        Instance[index].Should().Be(item);
+    }
 
-        [TestMethod]
-        public void WhenIndexIsPositive_TriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
+    [TestMethod]
+    public void TryAddCoordinates_WhenIndexIsPositive_TriggerEvent()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.TryAdd(index, item);
+        //Act
+        Instance.TryAdd(index, item);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
-                new() { NewValues = new List<Cell<string>> { new(index, item) } }
+                new() { NewValues = [new(index, item)] }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenItemIsNull_AddNullAtIndex()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void TryAddCoordinates_WhenItemIsNull_AddNullAtIndex()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.TryAdd(index, null);
+        //Act
+        Instance.TryAdd(index, null);
 
-            //Assert
-            Instance[index].Should().BeNull();
-        }
+        //Assert
+        Instance[index].Should().BeNull();
+    }
 
-        [TestMethod]
-        public void WhenItemIsNull_TriggerEvent()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void TryAddCoordinates_WhenItemIsNull_TriggerEvent()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.TryAdd(index, null);
+        //Act
+        Instance.TryAdd(index, null);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = Array.Empty<Cell<string>>(),
-                    NewValues = new List<Cell<string>> { new(index, null) }
+                    OldValues = Array.Empty<Cell<Garbage>>(),
+                    NewValues = [new(index, null)]
                 }
             });
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtIndex_DoNotReplace()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-
-            var originalItem = Dummy.Create<string>();
-            Instance.Add(index.X, index.Y, originalItem);
-
-            //Act
-            Instance.TryAdd(index, item);
-
-            //Assert
-            Instance[index].Should().Be(originalItem);
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtIndex_DoNotThrow()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-            Instance.Add(index.X, index.Y, Dummy.Create<string>());
-
-            //Act
-            var action = () => Instance.TryAdd(index, item);
-
-            //Assert
-            action.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void WhenAddingNullAtExistingIndex_DoNotThrow()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            Instance.Add(index.X, index.Y, Dummy.Create<string>());
-
-            //Act
-            var action = () => Instance.TryAdd(index, null);
-
-            //Assert
-            action.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void WhenAddingNullAtExistingIndex_DoNotReplace()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var originalItem = Dummy.Create<string>();
-            Instance.Add(index.X, index.Y, originalItem);
-
-            //Act
-            Instance.TryAdd(index, null);
-
-            //Assert
-            Instance[index].Should().Be(originalItem);
-        }
     }
 
-    [TestClass]
-    public class Add_Cells_Params : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void TryAddCoordinates_WhenThereIsAlreadySomethingAtIndex_DoNotReplace()
     {
-        [TestMethod]
-        public void WhenCellsIsEmpty_DoNotModify()
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+
+        var originalItem = Dummy.Create<Garbage>();
+        Instance.Add(index.X, index.Y, originalItem);
+
+        //Act
+        Instance.TryAdd(index, item);
+
+        //Assert
+        Instance[index].Should().Be(originalItem);
+    }
+
+    [TestMethod]
+    public void TryAddCoordinates_WhenThereIsAlreadySomethingAtIndex_DoNotThrow()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance.Add(index.X, index.Y, Dummy.Create<Garbage>());
+
+        //Act
+        var action = () => Instance.TryAdd(index, item);
+
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void TryAddCoordinates_WhenAddingNullAtExistingIndex_DoNotThrow()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance.Add(index.X, index.Y, Dummy.Create<Garbage>());
+
+        //Act
+        var action = () => Instance.TryAdd(index, null);
+
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void TryAddCoordinates_WhenAddingNullAtExistingIndex_DoNotReplace()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var originalItem = Dummy.Create<Garbage>();
+        Instance.Add(index.X, index.Y, originalItem);
+
+        //Act
+        Instance.TryAdd(index, null);
+
+        //Assert
+        Instance[index].Should().Be(originalItem);
+    }
+
+    [TestMethod]
+    public void AddCellsParams_WhenCellsIsEmpty_DoNotModify()
+    {
+        //Arrange
+        var cells = Array.Empty<Cell<Garbage>>();
+        var copy = Instance.Copy();
+
+        //Act
+        Instance.Add(cells);
+
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
+
+    [TestMethod]
+    public void AddCellsParams_WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
+        Instance.Add(cells);
+
+        //Act
+        var action = () => Instance.Add(cells);
+
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [TestMethod]
+    public void AddCellsParams_WhenAddingToNewCoordinates_Add()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
+
+        //Act
+        Instance.Add(cells);
+
+        //Assert
+        Instance.Should().Contain(cells);
+    }
+
+    [TestMethod]
+    public void AddCellsParams_WhenAddingToNewCoordinates_TriggerChange()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
+
+        var triggered = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+
+        //Act
+        Instance.Add(cells);
+
+        //Assert
+        triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
         {
-            //Arrange
-            var cells = Array.Empty<Cell<Garbage>>();
-            var copy = Instance.Copy();
+            new(){NewValues = cells}
+        });
+    }
 
-            //Act
-            Instance.Add(cells);
+    [TestMethod]
+    public void AddCellsEnumerable_WhenCellsIsNull_Throw()
+    {
+        //Arrange
+        IEnumerable<Cell<Garbage>> cells = null!;
 
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
+        //Act
+        var action = () => Instance.Add(cells);
 
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
+        //Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(cells));
+    }
+
+    [TestMethod]
+    public void AddCellsEnumerable_WhenCellsIsEmpty_DoNotModify()
+    {
+        //Arrange
+        var cells = new List<Cell<Garbage>>();
+        var copy = Instance.Copy();
+
+        //Act
+        Instance.Add(cells);
+
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
+
+    [TestMethod]
+    public void AddCellsEnumerable_WhenThereIsAlreadySomethingAtCoordinates_Throw()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        Instance.Add(cells);
+
+        //Act
+        var action = () => Instance.Add(cells);
+
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [TestMethod]
+    public void AddCellsEnumerable_WhenAddingToNewCoordinates_Add()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        //Act
+        Instance.Add(cells);
+
+        //Assert
+        Instance.Should().Contain(cells);
+    }
+
+    [TestMethod]
+    public void AddCellsEnumerable_WhenAddingToNewCoordinates_TriggerChange()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        var triggered = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+
+        //Act
+        Instance.Add(cells);
+
+        //Assert
+        triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
         {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
-            Instance.Add(cells);
+            new(){NewValues = cells}
+        });
+    }
 
-            //Act
-            var action = () => Instance.Add(cells);
+    [TestMethod]
+    public void TryAddCellsParams_WhenCellsIsNull_DoNotThrow()
+    {
+        //Arrange
+        Cell<Garbage>[] cells = null!;
 
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
+        //Act
+        var action = () => Instance.TryAdd(cells);
 
-        [TestMethod]
-        public void WhenAddingToNewCoordinates_Add()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
+        //Assert
+        action.Should().NotThrow();
+    }
 
-            //Act
-            Instance.Add(cells);
+    [TestMethod]
+    public void TryAddCellsParams_WhenCellsIsEmpty_DoNotModify()
+    {
+        //Arrange
+        var cells = Array.Empty<Cell<Garbage>>();
+        var copy = Instance.Copy();
 
-            //Assert
-            Instance.Should().Contain(cells);
-        }
+        //Act
+        Instance.TryAdd(cells);
 
-        [TestMethod]
-        public void WhenAddingToNewCoordinates_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
 
-            var triggered = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+    [TestMethod]
+    public void TryAddCellsParams_WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
+    {
+        //Arrange
+        var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        Instance.Add(alreadyThereCells);
 
-            //Act
-            Instance.Add(cells);
+        var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        var cells = alreadyThereCells.Concat(newCells).ToArray();
 
-            //Assert
-            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Act
+        var action = () => Instance.TryAdd(cells);
+
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void TryAddCellsParams_WhenThereIsAlreadySomethingAtCoordinates_StillAddThoseThatAreNotAlreadyIn()
+    {
+        //Arrange
+        var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        Instance.Add(alreadyThereCells);
+
+        var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        var cells = alreadyThereCells.Concat(newCells).ToArray();
+
+        //Act
+        Instance.TryAdd(cells);
+
+        //Assert
+        Instance.Should().BeEquivalentTo(cells);
+    }
+
+    [TestMethod]
+    public void TryAddCellsParams_WhenAddingToNewCoordinates_Add()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
+
+        //Act
+        Instance.TryAdd(cells);
+
+        //Assert
+        Instance.Should().Contain(cells);
+    }
+
+    [TestMethod]
+    public void TryAddCellsParams_WhenAddingToNewCoordinates_TriggerChange()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
+
+        var triggered = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+
+        //Act
+        Instance.TryAdd(cells);
+
+        //Assert
+        triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new(){NewValues = cells}
             });
-        }
     }
 
-    [TestClass]
-    public class Add_Cells_Enumerable : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void TryAddCellsEnumerable_WhenCellsIsNull_DoNotThrow()
     {
-        [TestMethod]
-        public void WhenCellsIsNull_Throw()
-        {
-            //Arrange
-            IEnumerable<Cell<Garbage>> cells = null!;
+        //Arrange
+        IEnumerable<Cell<Garbage>> cells = null!;
 
-            //Act
-            var action = () => Instance.Add(cells);
+        //Act
+        var action = () => Instance.TryAdd(cells);
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(cells));
-        }
+        //Assert
+        action.Should().NotThrow();
+    }
 
-        [TestMethod]
-        public void WhenCellsIsEmpty_DoNotModify()
-        {
-            //Arrange
-            var cells = new List<Cell<Garbage>>();
-            var copy = Instance.Copy();
+    [TestMethod]
+    public void TryAddCellsEnumerable_WhenCellsIsEmpty_DoNotModify()
+    {
+        //Arrange
+        var cells = new List<Cell<Garbage>>();
+        var copy = Instance.Copy();
 
-            //Act
-            Instance.Add(cells);
+        //Act
+        Instance.TryAdd(cells);
 
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
 
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtCoordinates_Throw()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            Instance.Add(cells);
+    [TestMethod]
+    public void TryAddCellsEnumerable_WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
+    {
+        //Arrange
+        var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        Instance.Add(alreadyThereCells);
 
-            //Act
-            var action = () => Instance.Add(cells);
+        var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        var cells = alreadyThereCells.Concat(newCells).ToList();
 
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
+        //Act
+        var action = () => Instance.TryAdd(cells);
 
-        [TestMethod]
-        public void WhenAddingToNewCoordinates_Add()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        //Assert
+        action.Should().NotThrow();
+    }
 
-            //Act
-            Instance.Add(cells);
+    [TestMethod]
+    public void TryAddCellsEnumerable_WhenThereIsAlreadySomethingAtCoordinates_StillAddThoseThatAreNotAlreadyIn()
+    {
+        //Arrange
+        var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        Instance.Add(alreadyThereCells);
 
-            //Assert
-            Instance.Should().Contain(cells);
-        }
+        var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        var cells = alreadyThereCells.Concat(newCells).ToList();
 
-        [TestMethod]
-        public void WhenAddingToNewCoordinates_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        //Act
+        Instance.TryAdd(cells);
 
-            var triggered = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+        //Assert
+        Instance.Should().BeEquivalentTo(cells);
+    }
 
-            //Act
-            Instance.Add(cells);
+    [TestMethod]
+    public void TryAddCellsEnumerable_WhenAddingToNewCoordinates_Add()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
 
-            //Assert
-            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Act
+        Instance.TryAdd(cells);
+
+        //Assert
+        Instance.Should().Contain(cells);
+    }
+
+    [TestMethod]
+    public void TryAddCellsEnumerable_WhenAddingToNewCoordinates_TriggerChange()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        var triggered = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => triggered.Add(args);
+
+        //Act
+        Instance.TryAdd(cells);
+
+        //Assert
+        triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new(){NewValues = cells}
             });
-        }
     }
 
-    [TestClass]
-    public class TryAdd_Cells_Params : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void RemoveAtXY_WhenThereIsNoItemAtIndex_Throw()
     {
-        [TestMethod]
-        public void WhenCellsIsNull_DoNotThrow()
-        {
-            //Arrange
-            Cell<Garbage>[] cells = null!;
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Act
-            var action = () => Instance.TryAdd(cells);
+        //Act
+        var action = () => Instance.RemoveAt(index.X, index.Y);
 
-            //Assert
-            action.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void WhenCellsIsEmpty_DoNotModify()
-        {
-            //Arrange
-            var cells = Array.Empty<Cell<Garbage>>();
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.TryAdd(cells);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
-        {
-            //Arrange
-            var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            Instance.Add(alreadyThereCells);
-
-            var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            var cells = alreadyThereCells.Concat(newCells).ToArray();
-
-            //Act
-            var action = () => Instance.TryAdd(cells);
-
-            //Assert
-            action.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtCoordinates_StillAddThoseThatAreNotAlreadyIn()
-        {
-            //Arrange
-            var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            Instance.Add(alreadyThereCells);
-
-            var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            var cells = alreadyThereCells.Concat(newCells).ToArray();
-
-            //Act
-            Instance.TryAdd(cells);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(cells);
-        }
-
-        [TestMethod]
-        public void WhenAddingToNewCoordinates_Add()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
-
-            //Act
-            Instance.TryAdd(cells);
-
-            //Assert
-            Instance.Should().Contain(cells);
-        }
-
-        [TestMethod]
-        public void WhenAddingToNewCoordinates_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToArray();
-
-            var triggered = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => triggered.Add(args);
-
-            //Act
-            Instance.TryAdd(cells);
-
-            //Assert
-            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
-            {
-                new(){NewValues = cells}
-            });
-        }
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
     }
 
-    [TestClass]
-    public class TryAdd_Cells_Enumerable : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void RemoveAtXY_WhenThereIsItemAtIndex_RemoveItem()
     {
-        [TestMethod]
-        public void WhenCellsIsNull_DoNotThrow()
-        {
-            //Arrange
-            IEnumerable<Cell<Garbage>> cells = null!;
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance[index] = Dummy.Create<Garbage>();
 
-            //Act
-            var action = () => Instance.TryAdd(cells);
+        //Act
+        Instance.RemoveAt(index.X, index.Y);
 
-            //Assert
-            action.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void WhenCellsIsEmpty_DoNotModify()
-        {
-            //Arrange
-            var cells = new List<Cell<Garbage>>();
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.TryAdd(cells);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtCoordinates_DoNotThrow()
-        {
-            //Arrange
-            var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            Instance.Add(alreadyThereCells);
-
-            var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            var cells = alreadyThereCells.Concat(newCells).ToList();
-
-            //Act
-            var action = () => Instance.TryAdd(cells);
-
-            //Assert
-            action.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void WhenThereIsAlreadySomethingAtCoordinates_StillAddThoseThatAreNotAlreadyIn()
-        {
-            //Arrange
-            var alreadyThereCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            Instance.Add(alreadyThereCells);
-
-            var newCells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            var cells = alreadyThereCells.Concat(newCells).ToList();
-
-            //Act
-            Instance.TryAdd(cells);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(cells);
-        }
-
-        [TestMethod]
-        public void WhenAddingToNewCoordinates_Add()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-
-            //Act
-            Instance.TryAdd(cells);
-
-            //Assert
-            Instance.Should().Contain(cells);
-        }
-
-        [TestMethod]
-        public void WhenAddingToNewCoordinates_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-
-            var triggered = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => triggered.Add(args);
-
-            //Act
-            Instance.TryAdd(cells);
-
-            //Assert
-            triggered.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
-            {
-                new(){NewValues = cells}
-            });
-        }
+        //Assert
+        Instance[index].Should().BeNull();
     }
 
-    [TestClass]
-    public class RemoveAt_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void RemoveAtXY_WhenThereIsItemAtIndex_TriggerChange()
     {
-        [TestMethod]
-        public void WhenThereIsNoItemAtIndex_Throw()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance[index] = item;
 
-            //Act
-            var action = () => Instance.RemoveAt(index.X, index.Y);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
+        //Act
+        Instance.RemoveAt(index.X, index.Y);
 
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_RemoveItem()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            Instance[index] = Dummy.Create<string>();
-
-            //Act
-            Instance.RemoveAt(index.X, index.Y);
-
-            //Assert
-            Instance[index].Should().BeNull();
-        }
-
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_TriggerChange()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-            Instance[index] = item;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.RemoveAt(index.X, index.Y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>> { new() { OldValues = new List<Cell<string>> { new(index, item) } } });
-        }
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>> { new() { OldValues = [new(index, item)] } });
     }
 
-    [TestClass]
-    public class TryRemoveAt_XY : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void TryRemoveAtXY_WhenThereIsNoItemAtIndex_DoNotThrow()
     {
-        [TestMethod]
-        public void WhenThereIsNoItemAtIndex_DoNotThrow()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Act
-            var action = () => Instance.TryRemoveAt(index.X, index.Y);
+        //Act
+        var action = () => Instance.TryRemoveAt(index.X, index.Y);
 
-            //Assert
-            action.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_RemoveItem()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            Instance[index] = Dummy.Create<string>();
-
-            //Act
-            Instance.TryRemoveAt(index.X, index.Y);
-
-            //Assert
-            Instance[index].Should().BeNull();
-        }
-
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_TriggerChange()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-            Instance[index] = item;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TryRemoveAt(index.X, index.Y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>> { new() { OldValues = new List<Cell<string>> { new(index, item) } } });
-        }
+        //Assert
+        action.Should().NotThrow();
     }
 
-    [TestClass]
-    public class RemoveAt_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void TryRemoveAtXY_WhenThereIsItemAtIndex_RemoveItem()
     {
-        [TestMethod]
-        public void WhenThereIsNoItemAtIndex_Throw()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance[index] = Dummy.Create<Garbage>();
 
-            //Act
-            var action = () => Instance.RemoveAt(index);
+        //Act
+        Instance.TryRemoveAt(index.X, index.Y);
 
-            //Assert
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
-
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_RemoveItem()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            Instance[index] = Dummy.Create<string>();
-
-            //Act
-            Instance.RemoveAt(index);
-
-            //Assert
-            Instance[index].Should().BeNull();
-        }
-
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_TriggerChange()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-            Instance[index] = item;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.RemoveAt(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>> { new() { OldValues = new List<Cell<string>> { new(index, item) } } });
-        }
+        //Assert
+        Instance[index].Should().BeNull();
     }
 
-    [TestClass]
-    public class TryRemoveAt_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void TryRemoveAtXY_WhenThereIsItemAtIndex_TriggerChange()
     {
-        [TestMethod]
-        public void WhenThereIsNoItemAtIndex_Throw()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance[index] = item;
 
-            //Act
-            var action = () => Instance.TryRemoveAt(index);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Assert
-            action.Should().NotThrow();
-        }
+        //Act
+        Instance.TryRemoveAt(index.X, index.Y);
 
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_RemoveItem()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            Instance[index] = Dummy.Create<string>();
-
-            //Act
-            Instance.TryRemoveAt(index);
-
-            //Assert
-            Instance[index].Should().BeNull();
-        }
-
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_TriggerChange()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<string>();
-            Instance[index] = item;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TryRemoveAt(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>> { new() { OldValues = new List<Cell<string>> { new(index, item) } } });
-        }
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>> { new() { OldValues = [new(index, item)] } });
     }
 
-    [TestClass]
-    public class RemoveAll_Item : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void RemoveAtCoordinates_WhenThereIsNoItemAtIndex_Throw()
     {
-        [TestMethod]
-        public void WhenItemIsNull_RemoveAllKeysThatPointToNullReferences()
-        {
-            //Arrange
-            var keys = Dummy.CreateMany<Vector2<int>>().ToList();
-            foreach (var key in keys)
-                Instance[key] = null;
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            var nonNullEntries = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var entry in nonNullEntries)
-                Instance[entry.Index] = entry.Value;
+        //Act
+        var action = () => Instance.RemoveAt(index);
 
-            //Act
-            Instance.RemoveAll((string)null!);
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
 
-            //Assert
-            Instance.Should().NotContain(x => x.Value == null);
-        }
+    [TestMethod]
+    public void RemoveAtCoordinates_WhenThereIsItemAtIndex_RemoveItem()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance[index] = Dummy.Create<Garbage>();
 
-        [TestMethod]
-        public void WhenItemIsNull_DoNotRemoveNonNullReferences()
-        {
-            //Arrange
-            var keys = Dummy.CreateMany<Vector2<int>>().ToList();
-            foreach (var key in keys)
-                Instance[key] = null;
+        //Act
+        Instance.RemoveAt(index);
 
-            var nonNullEntries = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var entry in nonNullEntries)
-                Instance[entry.Index] = entry.Value;
+        //Assert
+        Instance[index].Should().BeNull();
+    }
 
-            //Act
-            Instance.RemoveAll((string)null!);
+    [TestMethod]
+    public void RemoveAtCoordinates_WhenThereIsItemAtIndex_TriggerChange()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance[index] = item;
 
-            //Assert
-            Instance.Should().Contain(new Grid<string>(nonNullEntries));
-        }
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-        [TestMethod]
-        public void WhenItemIsNull_TriggerEvent()
-        {
-            //Arrange
-            var keys = Dummy.CreateMany<Vector2<int>>().ToList();
-            foreach (var key in keys)
-                Instance[key] = null;
+        //Act
+        Instance.RemoveAt(index);
 
-            var nonNullEntries = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var entry in nonNullEntries)
-                Instance[entry.Index] = entry.Value;
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>> { new() { OldValues = [new(index, item)] } });
+    }
 
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+    [TestMethod]
+    public void TryRemoveAtCoordinates_WhenThereIsNoItemAtIndex_Throw()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.RemoveAll((string)null!);
+        //Act
+        var action = () => Instance.TryRemoveAt(index);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void TryRemoveAtCoordinates_WhenThereIsItemAtIndex_RemoveItem()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance[index] = Dummy.Create<Garbage>();
+
+        //Act
+        Instance.TryRemoveAt(index);
+
+        //Assert
+        Instance[index].Should().BeNull();
+    }
+
+    [TestMethod]
+    public void TryRemoveAtCoordinates_WhenThereIsItemAtIndex_TriggerChange()
+    {
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance[index] = item;
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance.TryRemoveAt(index);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>> { new() { OldValues = [new(index, item)] } });
+    }
+
+    [TestMethod]
+    public void RemoveAllItem_WhenItemIsNull_RemoveAllKeysThatPointToNullReferences()
+    {
+        //Arrange
+        var keys = Dummy.CreateMany<Vector2<int>>().ToList();
+        foreach (var key in keys)
+            Instance[key] = null;
+
+        var nonNullEntries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in nonNullEntries)
+            Instance[entry.Index] = entry.Value;
+
+        //Act
+        Instance.RemoveAll((Garbage)null!);
+
+        //Assert
+        Instance.Should().NotContain(x => x.Value == null);
+    }
+
+    [TestMethod]
+    public void RemoveAllItem_WhenItemIsNull_DoNotRemoveNonNullReferences()
+    {
+        //Arrange
+        var keys = Dummy.CreateMany<Vector2<int>>().ToList();
+        foreach (var key in keys)
+            Instance[key] = null;
+
+        var nonNullEntries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in nonNullEntries)
+            Instance[entry.Index] = entry.Value;
+
+        //Act
+        Instance.RemoveAll((Garbage)null!);
+
+        //Assert
+        Instance.Should().Contain(new Grid<Garbage>(nonNullEntries));
+    }
+
+    [TestMethod]
+    public void RemoveAllItem_WhenItemIsNull_TriggerEvent()
+    {
+        //Arrange
+        var keys = Dummy.CreateMany<Vector2<int>>().ToList();
+        foreach (var key in keys)
+            Instance[key] = null;
+
+        var nonNullEntries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in nonNullEntries)
+            Instance[entry.Index] = entry.Value;
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance.RemoveAll((Garbage)null!);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = keys.Select(x => new Cell<string>(x, null)).ToList()
+                    OldValues = keys.Select(x => new Cell<Garbage>(x, null)).ToList()
                 }
             });
-        }
-
-        [TestMethod]
-        public void WhenThereIsNoOccurenceOfItemInGrid_DoNotModifyCollection()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var copy = Instance.Copy();
-
-            var item = Dummy.Create<string>();
-
-            //Act
-            Instance.RemoveAll(item);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenThereIsNoOccurenceOfItemInGrid_DoNotTriggerEvent()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            var item = Dummy.Create<string>();
-
-            //Act
-            Instance.RemoveAll(item);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenThereAreOccurencesOfItemInGrid_RemoveAllThoseOccurences()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var item = Dummy.Create<string>();
-            var keys = Dummy.CreateMany<Vector2<int>>();
-            foreach (var key in keys)
-                Instance[key] = item;
-
-            //Act
-            Instance.RemoveAll(item);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>(entries));
-        }
-
-        [TestMethod]
-        public void WhenThereAreOccurencesOfItemInGrid_TriggerEvent()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var item = Dummy.Create<string>();
-            var keys = Dummy.CreateMany<Vector2<int>>().ToList();
-            foreach (var key in keys)
-                Instance[key] = item;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.RemoveAll(item);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    OldValues = keys.Select(x => new Cell<string>(x, item)).ToList()
-                }
-            });
-        }
     }
 
-    [TestClass]
-    public class RemoveAll_Predicate : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void RemoveAllItem_WhenThereIsNoOccurenceOfItemInGrid_DoNotModifyCollection()
     {
-        [TestMethod]
-        public void WhenMatchIsNull_Throw()
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
+
+        var copy = Instance.Copy();
+
+        var item = Dummy.Create<Garbage>();
+
+        //Act
+        Instance.RemoveAll(item);
+
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
+
+    [TestMethod]
+    public void RemoveAllItem_WhenThereIsNoOccurenceOfItemInGrid_DoNotTriggerEvent()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        var item = Dummy.Create<Garbage>();
+
+        //Act
+        Instance.RemoveAll(item);
+
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void RemoveAllItem_WhenThereAreOccurrencesOfItemInGrid_RemoveAllThoseOccurences()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
+
+        var item = Dummy.Create<Garbage>();
+        var keys = Dummy.CreateMany<Vector2<int>>();
+        foreach (var key in keys)
+            Instance[key] = item;
+
+        //Act
+        Instance.RemoveAll(item);
+
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>(entries));
+    }
+
+    [TestMethod]
+    public void RemoveAllItem_WhenThereAreOccurrencesOfItemInGrid_TriggerEvent()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
+
+        var item = Dummy.Create<Garbage>();
+        var keys = Dummy.CreateMany<Vector2<int>>().ToList();
+        foreach (var key in keys)
+            Instance[key] = item;
+
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+
+        //Act
+        Instance.RemoveAll(item);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
         {
-            //Arrange
-            Func<Garbage?, bool> match = null!;
+            new()
+            {
+                OldValues = keys.Select(x => new Cell<Garbage>(x, item)).ToList()
+            }
+        });
+    }
 
-            //Act
-            var action = () => Instance.RemoveAll(match);
+    [TestMethod]
+    public void RemoveAllPredicate_WhenMatchIsNull_Throw()
+    {
+        //Arrange
+        Func<Garbage?, bool> match = null!;
 
-            //Assert
-            action.Should().Throw<ArgumentNullException>();
-        }
+        //Act
+        var action = () => Instance.RemoveAll(match);
 
-        [TestMethod]
-        public void WhenNoItemsMatch_DoNotModifyGrid()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
+        //Assert
+        action.Should().Throw<ArgumentNullException>();
+    }
 
-            var copy = Instance.Copy();
+    [TestMethod]
+    public void RemoveAllPredicate_WhenNoItemsMatch_DoNotModifyGrid()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-            //Act
-            Instance.RemoveAll(x => x.Id > int.MaxValue);
+        var copy = Instance.Copy();
 
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
+        //Act
+        Instance.RemoveAll(x => x.Id > int.MaxValue);
 
-        [TestMethod]
-        public void WhenNoItemsMatch_DoNotTriggerEvent()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+    [TestMethod]
+    public void RemoveAllPredicate_WhenNoItemsMatch_DoNotTriggerEvent()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-            //Act
-            Instance.RemoveAll(x => x.Id > int.MaxValue);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
+        //Act
+        Instance.RemoveAll(x => x.Id > int.MaxValue);
 
-        [TestMethod]
-        public void WhenItemsMatch_RemoveThoseItems()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
 
-            var value = Dummy.Create<string>();
-            var dummies = Dummy.Build<Garbage>().With(x => x.Value, value).CreateMany();
-            var items = dummies.Select(x => new Cell<Garbage>(Dummy.Create<Vector2<int>>(), x)).ToList();
-            foreach (var item in items)
-                Instance[item.Index] = item.Value;
+    [TestMethod]
+    public void RemoveAllPredicate_WhenItemsMatch_RemoveThoseItems()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-            //Act
-            Instance.RemoveAll(x => x.Value == value);
+        var value = Dummy.Create<string>();
+        var dummies = Dummy.Build<Garbage>().With(x => x.Value, value).CreateMany();
+        var items = dummies.Select(x => new Cell<Garbage>(Dummy.Create<Vector2<int>>(), x)).ToList();
+        foreach (var item in items)
+            Instance[item.Index] = item.Value;
 
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>(entries));
-        }
+        //Act
+        Instance.RemoveAll(x => x.Value == value);
 
-        [TestMethod]
-        public void WhenItemsMatch_TriggerEvent()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>(entries));
+    }
 
-            var value = Dummy.Create<string>();
-            var dummies = Dummy.Build<Garbage>().With(x => x.Value, value).CreateMany();
-            var items = dummies.Select(x => new Cell<Garbage>(Dummy.Create<Vector2<int>>(), x)).ToList();
-            foreach (var item in items)
-                Instance[item.Index] = item.Value;
+    [TestMethod]
+    public void RemoveAllPredicate_WhenItemsMatch_TriggerEvent()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var value = Dummy.Create<string>();
+        var dummies = Dummy.Build<Garbage>().With(x => x.Value, value).CreateMany();
+        var items = dummies.Select(x => new Cell<Garbage>(Dummy.Create<Vector2<int>>(), x)).ToList();
+        foreach (var item in items)
+            Instance[item.Index] = item.Value;
 
-            //Act
-            Instance.RemoveAll(x => x.Value == value);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Act
+        Instance.RemoveAll(x => x.Value == value);
+
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
                     OldValues = items
                 }
             });
-        }
     }
 
-    [TestClass]
-    public class Contains_Coordinates_Item : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ContainsCoordinatesItem_WhenThereIsItemAtIndex_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_ReturnTrue()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<Garbage>();
-            Instance[index] = item;
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance[index] = item;
 
-            //Act
-            var result = Instance.Contains(index, item);
+        //Act
+        var result = Instance.Contains(index, item);
 
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenSomethingElseIsAtIndex_ReturnFalse()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<Garbage>();
-            Instance[index] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.Contains(index, item);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenItemIsSomewhereInGridButNotAtIndex_ReturnFalse()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var index = Dummy.Create<Vector2<int>>();
-            var item = entries.GetRandom().Value;
-
-            //Act
-            var result = Instance.Contains(index, item);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenThereIsNothingAtIndexAndItemIsNull_ReturnTrue()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var index = Dummy.Create<Vector2<int>>();
-
-            //Act
-            var result = Instance.Contains(index, null);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenThereIsSomethingAtIndexAndItemIsNull_ReturnFalse()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var index = entries.GetRandom().Index;
-
-
-            //Act
-            var result = Instance.Contains(index, null);
-
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class Contains_XY_Item : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ContainsCoordinatesItem_WhenSomethingElseIsAtIndex_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenThereIsItemAtIndex_ReturnTrue()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<Garbage>();
-            Instance[index] = item;
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance[index] = Dummy.Create<Garbage>();
 
-            //Act
-            var result = Instance.Contains(index.X, index.Y, item);
+        //Act
+        var result = Instance.Contains(index, item);
 
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenSomethingElseIsAtIndex_ReturnFalse()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var index = Dummy.Create<Vector2<int>>();
-            var item = Dummy.Create<Garbage>();
-            Instance[index] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.Contains(index.X, index.Y, item);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenItemIsSomewhereInGridButNotAtIndex_ReturnFalse()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var index = Dummy.Create<Vector2<int>>();
-            var item = entries.GetRandom().Value;
-
-            //Act
-            var result = Instance.Contains(index.X, index.Y, item);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenThereIsNothingAtIndexAndItemIsNull_ReturnTrue()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var index = Dummy.Create<Vector2<int>>();
-
-            //Act
-            var result = Instance.Contains(index.X, index.Y, null);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenThereIsSomethingAtIndexAndItemIsNull_ReturnFalse()
-        {
-            //Arrange
-            var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var entry in entries)
-                Instance[entry.Index] = entry.Value;
-
-            var index = entries.GetRandom().Index;
-
-
-            //Act
-            var result = Instance.Contains(index.X, index.Y, null);
-
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class Contains_Item : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ContainsCoordinatesItem_WhenItemIsSomewhereInGridButNotAtIndex_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenGridIsEmptyAndSeekingNull_ReturnFalse()
-        {
-            //Arrange
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-            //Act
-            var result = Instance.Contains(null);
+        var index = Dummy.Create<Vector2<int>>();
+        var item = entries.GetRandom().Value;
 
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Act
+        var result = Instance.Contains(index, item);
 
-        [TestMethod]
-        public void WhenGridIsEmptyAndSeekingSomething_ReturnFalse()
-        {
-            //Arrange
-            var item = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.Contains(item);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenThereIsAtLeastOneNullValueSomewhereAndSeekingNull_ReturnTrue()
-        {
-            //Arrange
-            var indexes = Dummy.CreateMany<Vector2<int>>().ToList();
-            foreach (var index in indexes)
-                Instance[index] = null;
-
-            //Act
-            var result = Instance.Contains(null);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenThereAreNoNullValuesAndSeekingNull_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            //Act
-            var result = Instance.Contains(null);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenThereIsAtLeastOneOccurenceOfItemInGrid_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            //Act
-            var result = Instance.Contains(cells.GetRandom().Value);
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class Contains_XY : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ContainsCoordinatesItem_WhenThereIsNothingAtIndexAndItemIsNull_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_ReturnFalse()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-            //Act
-            var result = Instance.Contains(index.X, index.Y);
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Act
+        var result = Instance.Contains(index, null);
 
-        [TestMethod]
-        public void WhenThereWasSomethingThereButItWasRemoved_ReturnFalse()
-        {
-            //Arrange
-            var cell = Dummy.Create<Cell<Garbage>>();
-            Instance[cell.Index] = cell.Value;
+        //Assert
+        result.Should().BeTrue();
+    }
 
-            Instance.RemoveAt(cell.Index);
+    [TestMethod]
+    public void ContainsCoordinatesItem_WhenThereIsSomethingAtIndexAndItemIsNull_ReturnFalse()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-            //Act
-            var result = Instance.Contains(cell.Index.X, cell.Index.Y);
+        var index = entries.GetRandom().Index;
 
-            //Assert
-            result.Should().BeFalse();
-        }
 
-        [TestMethod]
-        public void WhenThereIsSomethingAtIndex_ReturnTrue()
-        {
-            //Arrange
-            var cell = Dummy.Create<Cell<Garbage>>();
-            Instance[cell.Index] = cell.Value;
+        //Act
+        var result = Instance.Contains(index, null);
 
-            //Act
-            var result = Instance.Contains(cell.Index.X, cell.Index.Y);
+        //Assert
+        result.Should().BeFalse();
+    }
 
-            //Assert
-            result.Should().BeTrue();
-        }
+    [TestMethod]
+    public void ContainsXYItem_WhenThereIsItemAtIndex_ReturnTrue()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
 
-        [TestMethod]
-        public void WhenThereIsNullAtIndex_ReturnTrue()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance[index] = item;
+
+        //Act
+        var result = Instance.Contains(index.X, index.Y, item);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void ContainsXYItem_WhenSomethingElseIsAtIndex_ReturnFalse()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
+
+        var index = Dummy.Create<Vector2<int>>();
+        var item = Dummy.Create<Garbage>();
+        Instance[index] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.Contains(index.X, index.Y, item);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void ContainsXYItem_WhenItemIsSomewhereInGridButNotAtIndex_ReturnFalse()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
+
+        var index = Dummy.Create<Vector2<int>>();
+        var item = entries.GetRandom().Value;
+
+        //Act
+        var result = Instance.Contains(index.X, index.Y, item);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void ContainsXYItem_WhenThereIsNothingAtIndexAndItemIsNull_ReturnTrue()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
+
+        var index = Dummy.Create<Vector2<int>>();
+
+        //Act
+        var result = Instance.Contains(index.X, index.Y, null);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void ContainsXYItem_WhenThereIsSomethingAtIndexAndItemIsNull_ReturnFalse()
+    {
+        //Arrange
+        var entries = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var entry in entries)
+            Instance[entry.Index] = entry.Value;
+
+        var index = entries.GetRandom().Index;
+
+
+        //Act
+        var result = Instance.Contains(index.X, index.Y, null);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void ContainsItem_WhenGridIsEmptyAndSeekingNull_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = Instance.Contains(null);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void ContainsItem_WhenGridIsEmptyAndSeekingSomething_ReturnFalse()
+    {
+        //Arrange
+        var item = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.Contains(item);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void ContainsItem_WhenThereIsAtLeastOneNullValueSomewhereAndSeekingNull_ReturnTrue()
+    {
+        //Arrange
+        var indexes = Dummy.CreateMany<Vector2<int>>().ToList();
+        foreach (var index in indexes)
             Instance[index] = null;
 
-            //Act
-            var result = Instance.Contains(index.X, index.Y);
+        //Act
+        var result = Instance.Contains(null);
 
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class Contains_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ContainsItem_WhenThereAreNoNullValuesAndSeekingNull_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_ReturnFalse()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-
-            //Act
-            var result = Instance.Contains(index);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenThereWasSomethingThereButItWasRemoved_ReturnFalse()
-        {
-            //Arrange
-            var cell = Dummy.Create<Cell<Garbage>>();
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var cell in cells)
             Instance[cell.Index] = cell.Value;
 
-            Instance.RemoveAt(cell.Index);
+        //Act
+        var result = Instance.Contains(null);
 
-            //Act
-            var result = Instance.Contains(cell.Index);
+        //Assert
+        result.Should().BeFalse();
+    }
 
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenThereIsSomethingAtIndex_ReturnTrue()
-        {
-            //Arrange
-            var cell = Dummy.Create<Cell<Garbage>>();
+    [TestMethod]
+    public void ContainsItem_WhenThereIsAtLeastOneOccurenceOfItemInGrid_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var cell in cells)
             Instance[cell.Index] = cell.Value;
 
-            //Act
-            var result = Instance.Contains(cell.Index);
+        //Act
+        var result = Instance.Contains(cells.GetRandom().Value);
 
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenThereIsNullAtIndex_ReturnTrue()
-        {
-            //Arrange
-            var index = Dummy.Create<Vector2<int>>();
-            Instance[index] = null;
-
-            //Act
-            var result = Instance.Contains(index);
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class FloodFill_XY_NewValue : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void ContainsXY_WhenGridIsEmpty_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
-        {
-            //Arrange
-            var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
-            var newValue = Dummy.Create<string>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
+        //Act
+        var result = Instance.Contains(index.X, index.Y);
 
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.FloodFill(index.X, index.Y, newValue);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillOutsideBoundaries_DoNotTriggerChange()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
-            var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
-            var newValue = Dummy.Create<string>();
-
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(index.X, index.Y, newValue);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillUsingSameValue_DoNotModifyGrid()
-        {
-            //Arrange
-            Instance[4, 4] = "A";
-            Instance[4, 5] = "A";
-            Instance[4, 6] = "A";
-            Instance[5, 4] = "A";
-            Instance[6, 4] = "A";
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[4, 0] = "B";
-            Instance[4, 1] = "B";
-            Instance[4, 2] = "B";
-            Instance[4, 3] = "B";
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.FloodFill(4, 5, "A");
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillUsingSameValue_DoNotTriggerChange()
-        {
-            //Arrange
-            Instance[4, 4] = "A";
-            Instance[4, 5] = "A";
-            Instance[4, 6] = "A";
-            Instance[5, 4] = "A";
-            Instance[6, 4] = "A";
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[4, 0] = "B";
-            Instance[4, 1] = "B";
-            Instance[4, 2] = "B";
-            Instance[4, 3] = "B";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(4, 5, "A");
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFloodValueSurroundedByDifferentNeighbors_OnlyChangeThatOneOccurence()
-        {
-            //Arrange
-            Instance[-1, 0] = "A";
-            Instance[0, 0] = "A";
-            Instance[1, 0] = "A";
-            Instance[-1, 1] = "A";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "A";
-            Instance[-1, 2] = "A";
-            Instance[0, 2] = "A";
-            Instance[1, 2] = "A";
-
-            //Act
-            Instance.FloodFill(0, 1, "C");
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { -1, 0, "A" },
-                { 0, 0, "A" },
-                { 1, 0, "A" },
-                { -1, 1, "A" },
-                { 0, 1, "C" },
-                { 1, 1, "A" },
-                { -1, 2, "A" },
-                { 0, 2, "A" },
-                { 1, 2, "A" },
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFloodValueSurroundedByDifferentNeighbors_TriggerEvent()
-        {
-            //Arrange
-            Instance[-1, 0] = "A";
-            Instance[0, 0] = "A";
-            Instance[1, 0] = "A";
-            Instance[-1, 1] = "A";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "A";
-            Instance[-1, 2] = "A";
-            Instance[0, 2] = "A";
-            Instance[1, 2] = "A";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(0, 1, "C");
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>{new(0,1, "C")},
-                    OldValues = new List<Cell<string>>{new(0,1,"B")}
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnEmptyGrid_DoNothing()
-        {
-            //Arrange
-
-            //Act
-            Instance.FloodFill(1, 2, "F");
-
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnEmptyGrid_DoNotTriggerChangeEvent()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(1, 2, "F");
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAreaWithSimilarNeighbors_ChangeAllNeighborsToNewValue()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            //Act
-            Instance.FloodFill(1, 2, "D");
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { 0, 0, "D" },
-                { 1, 0, "D" },
-                { 2, 0, "D" },
-                { 3, 0, "D" },
-                { 0, 1, "D" },
-                { 1, 1, "D" },
-                { 2, 1, "D" },
-                { 3, 1, "D" },
-                { 0, 2, "D" },
-                { 1, 2, "D" },
-                { 2, 2, "D" },
-                { 3, 2, "D" },
-                { 0, 3, "D" },
-                { 1, 3, "D" },
-                { 2, 3, "D" },
-                { 3, 3, "D" },
-                { 0, 4, "C" },
-                { 1, 4, "C" },
-                { 2, 4, "C" },
-                { 3, 4, "C" },
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAreaWithSimilarNeighbors_TriggerChangeEventOnce()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(1, 2, "D");
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>
-                    {
-                        new(0, 0, "D"),
-                        new(1, 0, "D"),
-                        new(2, 0, "D"),
-                        new(3, 0, "D"),
-                        new(0, 1, "D"),
-                        new(1, 1, "D"),
-                        new(2, 1, "D"),
-                        new(3, 1, "D"),
-                        new(0, 2, "D"),
-                        new(1, 2, "D"),
-                        new(2, 2, "D"),
-                        new(3, 2, "D"),
-                        new(0, 3, "D"),
-                        new(1, 3, "D"),
-                        new(2, 3, "D"),
-                        new(3, 3, "D"),
-                    },
-                    OldValues = new List<Cell<string>>
-                    {
-                        new(0, 0, "B"),
-                        new(1, 0, "B"),
-                        new(2, 0, "B"),
-                        new(3, 0, "B"),
-                        new(0, 1, "B"),
-                        new(1, 1, "B"),
-                        new(2, 1, "B"),
-                        new(3, 1, "B"),
-                        new(0, 2, "B"),
-                        new(1, 2, "B"),
-                        new(2, 2, "B"),
-                        new(3, 2, "B"),
-                        new(0, 3, "B"),
-                        new(1, 3, "B"),
-                        new(2, 3, "B"),
-                        new(3, 3, "B"),
-                    }
-                }
-            });
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class FloodFill_Coordinates_NewValue : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void ContainsXY_WhenThereWasSomethingThereButItWasRemoved_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
-        {
-            //Arrange
-            var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
-            var newValue = Dummy.Create<string>();
+        //Arrange
+        var cell = Dummy.Create<Cell<Garbage>>();
+        Instance[cell.Index] = cell.Value;
 
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
+        Instance.RemoveAt(cell.Index);
 
-            var copy = Instance.Copy();
+        //Act
+        var result = Instance.Contains(cell.Index.X, cell.Index.Y);
 
-            //Act
-            Instance.FloodFill(index, newValue);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillOutsideBoundaries_DoNotTriggerChange()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
-            var index = new Vector2<int>(Instance.Boundaries.Left - 1, Instance.Boundaries.Bottom + 1);
-            var newValue = Dummy.Create<string>();
-
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(index, newValue);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillUsingSameValue_DoNotModifyGrid()
-        {
-            //Arrange
-            Instance[4, 4] = "A";
-            Instance[4, 5] = "A";
-            Instance[4, 6] = "A";
-            Instance[5, 4] = "A";
-            Instance[6, 4] = "A";
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[4, 0] = "B";
-            Instance[4, 1] = "B";
-            Instance[4, 2] = "B";
-            Instance[4, 3] = "B";
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(4, 5), "A");
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillUsingSameValue_DoNotTriggerChange()
-        {
-            //Arrange
-            Instance[4, 4] = "A";
-            Instance[4, 5] = "A";
-            Instance[4, 6] = "A";
-            Instance[5, 4] = "A";
-            Instance[6, 4] = "A";
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[4, 0] = "B";
-            Instance[4, 1] = "B";
-            Instance[4, 2] = "B";
-            Instance[4, 3] = "B";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(4, 5), "A");
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFloodValueSurroundedByDifferentNeighbors_OnlyChangeThatOneOccurence()
-        {
-            //Arrange
-            Instance[-1, 0] = "A";
-            Instance[0, 0] = "A";
-            Instance[1, 0] = "A";
-            Instance[-1, 1] = "A";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "A";
-            Instance[-1, 2] = "A";
-            Instance[0, 2] = "A";
-            Instance[1, 2] = "A";
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(0, 1), "C");
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { -1, 0, "A" },
-                { 0, 0, "A" },
-                { 1, 0, "A" },
-                { -1, 1, "A" },
-                { 0, 1, "C" },
-                { 1, 1, "A" },
-                { -1, 2, "A" },
-                { 0, 2, "A" },
-                { 1, 2, "A" },
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFloodValueSurroundedByDifferentNeighbors_TriggerEvent()
-        {
-            //Arrange
-            Instance[-1, 0] = "A";
-            Instance[0, 0] = "A";
-            Instance[1, 0] = "A";
-            Instance[-1, 1] = "A";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "A";
-            Instance[-1, 2] = "A";
-            Instance[0, 2] = "A";
-            Instance[1, 2] = "A";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(0, 1), "C");
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>{new(0,1, "C")},
-                    OldValues = new List<Cell<string>>{new(0,1,"B")}
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnEmptyGrid_DoNothing()
-        {
-            //Arrange
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(1, 2), "F");
-
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnEmptyGrid_DoNotTriggerChangeEvent()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(1, 2), "F");
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAreaWithSimilarNeighbors_ChangeAllNeighborsToNewValue()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            //Act
-            Instance.FloodFill(1, 2, "D");
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { 0, 0, "D" },
-                { 1, 0, "D" },
-                { 2, 0, "D" },
-                { 3, 0, "D" },
-                { 0, 1, "D" },
-                { 1, 1, "D" },
-                { 2, 1, "D" },
-                { 3, 1, "D" },
-                { 0, 2, "D" },
-                { 1, 2, "D" },
-                { 2, 2, "D" },
-                { 3, 2, "D" },
-                { 0, 3, "D" },
-                { 1, 3, "D" },
-                { 2, 3, "D" },
-                { 3, 3, "D" },
-                { 0, 4, "C" },
-                { 1, 4, "C" },
-                { 2, 4, "C" },
-                { 3, 4, "C" },
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAreaWithSimilarNeighbors_TriggerChangeEventOnce()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(1, 2), "D");
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>
-                    {
-                        new(0, 0, "D"),
-                        new(1, 0, "D"),
-                        new(2, 0, "D"),
-                        new(3, 0, "D"),
-                        new(0, 1, "D"),
-                        new(1, 1, "D"),
-                        new(2, 1, "D"),
-                        new(3, 1, "D"),
-                        new(0, 2, "D"),
-                        new(1, 2, "D"),
-                        new(2, 2, "D"),
-                        new(3, 2, "D"),
-                        new(0, 3, "D"),
-                        new(1, 3, "D"),
-                        new(2, 3, "D"),
-                        new(3, 3, "D"),
-                    },
-                    OldValues = new List<Cell<string>>
-                    {
-                        new(0, 0, "B"),
-                        new(1, 0, "B"),
-                        new(2, 0, "B"),
-                        new(3, 0, "B"),
-                        new(0, 1, "B"),
-                        new(1, 1, "B"),
-                        new(2, 1, "B"),
-                        new(3, 1, "B"),
-                        new(0, 2, "B"),
-                        new(1, 2, "B"),
-                        new(2, 2, "B"),
-                        new(3, 2, "B"),
-                        new(0, 3, "B"),
-                        new(1, 3, "B"),
-                        new(2, 3, "B"),
-                        new(3, 3, "B"),
-                    }
-                }
-            });
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class FloodFill_XY_NewValue_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void ContainsXY_WhenThereIsSomethingAtIndex_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
-            var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
-            var newValue = Dummy.Create<string>();
+        //Arrange
+        var cell = Dummy.Create<Cell<Garbage>>();
+        Instance[cell.Index] = cell.Value;
 
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
+        //Act
+        var result = Instance.Contains(cell.Index.X, cell.Index.Y);
 
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.FloodFill(index.X, index.Y, newValue, boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillOutsideBoundaries_DoNotTriggerChange()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
-            var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
-            var newValue = Dummy.Create<string>();
-
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(index.X, index.Y, newValue, boundaries);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillUsingSameValue_DoNotModifyGrid()
-        {
-            //Arrange
-            Instance[4, 4] = "A";
-            Instance[4, 5] = "A";
-            Instance[4, 6] = "A";
-            Instance[5, 4] = "A";
-            Instance[6, 4] = "A";
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[4, 0] = "B";
-            Instance[4, 1] = "B";
-            Instance[4, 2] = "B";
-            Instance[4, 3] = "B";
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.FloodFill(4, 5, "A", Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillUsingSameValue_DoNotTriggerChange()
-        {
-            //Arrange
-            Instance[4, 4] = "A";
-            Instance[4, 5] = "A";
-            Instance[4, 6] = "A";
-            Instance[5, 4] = "A";
-            Instance[6, 4] = "A";
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[4, 0] = "B";
-            Instance[4, 1] = "B";
-            Instance[4, 2] = "B";
-            Instance[4, 3] = "B";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(4, 5, "A", Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFloodValueSurroundedByDifferentNeighbors_OnlyChangeThatOneOccurence()
-        {
-            //Arrange
-            Instance[-1, 0] = "A";
-            Instance[0, 0] = "A";
-            Instance[1, 0] = "A";
-            Instance[-1, 1] = "A";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "A";
-            Instance[-1, 2] = "A";
-            Instance[0, 2] = "A";
-            Instance[1, 2] = "A";
-
-            //Act
-            Instance.FloodFill(0, 1, "C", Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { -1, 0, "A" },
-                { 0, 0, "A" },
-                { 1, 0, "A" },
-                { -1, 1, "A" },
-                { 0, 1, "C" },
-                { 1, 1, "A" },
-                { -1, 2, "A" },
-                { 0, 2, "A" },
-                { 1, 2, "A" },
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFloodValueSurroundedByDifferentNeighbors_TriggerEvent()
-        {
-            //Arrange
-            Instance[-1, 0] = "A";
-            Instance[0, 0] = "A";
-            Instance[1, 0] = "A";
-            Instance[-1, 1] = "A";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "A";
-            Instance[-1, 2] = "A";
-            Instance[0, 2] = "A";
-            Instance[1, 2] = "A";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(0, 1, "C", Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>{new(0,1, "C")},
-                    OldValues = new List<Cell<string>>{new(0,1,"B")}
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnEmptyGridWithLargeBoundaries_FillEntireBoundaries()
-        {
-            //Arrange
-
-            //Act
-            Instance.FloodFill(1, 2, "F", new Boundaries<int>(0, 2, 2, 0));
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                {0,0, "F"},
-                {1,0, "F"},
-                {2,0, "F"},
-                {0,1, "F"},
-                {1,1, "F"},
-                {2,1, "F"},
-                {0,2, "F"},
-                {1,2, "F"},
-                {2,2, "F"},
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnEmptyGridWithLargeBoundaries_TriggerChangeEventOnce()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(1, 2, "F", new Boundaries<int>(0, 2, 2, 0));
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>
-                    {
-                        new(0,0, "F"),
-                        new(1,0, "F"),
-                        new(2,0, "F"),
-                        new(0,1, "F"),
-                        new(1,1, "F"),
-                        new(2,1, "F"),
-                        new(0,2, "F"),
-                        new(1,2, "F"),
-                        new(2,2, "F"),
-                    },
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAreaWithSimilarNeighbors_ChangeAllNeighborsToNewValue()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            //Act
-            Instance.FloodFill(1, 2, "D", Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { 0, 0, "D" },
-                { 1, 0, "D" },
-                { 2, 0, "D" },
-                { 3, 0, "D" },
-                { 0, 1, "D" },
-                { 1, 1, "D" },
-                { 2, 1, "D" },
-                { 3, 1, "D" },
-                { 0, 2, "D" },
-                { 1, 2, "D" },
-                { 2, 2, "D" },
-                { 3, 2, "D" },
-                { 0, 3, "D" },
-                { 1, 3, "D" },
-                { 2, 3, "D" },
-                { 3, 3, "D" },
-                { 0, 4, "C" },
-                { 1, 4, "C" },
-                { 2, 4, "C" },
-                { 3, 4, "C" },
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAreaWithSimilarNeighbors_TriggerChangeEventOnce()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(1, 2, "D", Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>
-                    {
-                        new(0, 0, "D"),
-                        new(1, 0, "D"),
-                        new(2, 0, "D"),
-                        new(3, 0, "D"),
-                        new(0, 1, "D"),
-                        new(1, 1, "D"),
-                        new(2, 1, "D"),
-                        new(3, 1, "D"),
-                        new(0, 2, "D"),
-                        new(1, 2, "D"),
-                        new(2, 2, "D"),
-                        new(3, 2, "D"),
-                        new(0, 3, "D"),
-                        new(1, 3, "D"),
-                        new(2, 3, "D"),
-                        new(3, 3, "D"),
-                    },
-                    OldValues = new List<Cell<string>>
-                    {
-                        new(0, 0, "B"),
-                        new(1, 0, "B"),
-                        new(2, 0, "B"),
-                        new(3, 0, "B"),
-                        new(0, 1, "B"),
-                        new(1, 1, "B"),
-                        new(2, 1, "B"),
-                        new(3, 1, "B"),
-                        new(0, 2, "B"),
-                        new(1, 2, "B"),
-                        new(2, 2, "B"),
-                        new(3, 2, "B"),
-                        new(0, 3, "B"),
-                        new(1, 3, "B"),
-                        new(2, 3, "B"),
-                        new(3, 3, "B"),
-                    }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnAreaWithSimilarNeighbors_FillOnlyWithinBoundaries()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            //Act
-            Instance.FloodFill(1, 2, "D", new Boundaries<int>(1, 2, 3, 0));
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { 0, 0, "B" },
-                { 1, 0, "B" },
-                { 2, 0, "B" },
-                { 3, 0, "B" },
-                { 0, 1, "D" },
-                { 1, 1, "D" },
-                { 2, 1, "D" },
-                { 3, 1, "B" },
-                { 0, 2, "D" },
-                { 1, 2, "D" },
-                { 2, 2, "D" },
-                { 3, 2, "B" },
-                { 0, 3, "D" },
-                { 1, 3, "D" },
-                { 2, 3, "D" },
-                { 3, 3, "B" },
-                { 0, 4, "C" },
-                { 1, 4, "C" },
-                { 2, 4, "C" },
-                { 3, 4, "C" },
-            });
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class FloodFill_Coordinates_NewValue_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void ContainsXY_WhenThereIsNullAtIndex_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenTryingToFillOutsideBoundaries_DoNotModifyGrid()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
-            var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
-            var newValue = Dummy.Create<string>();
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance[index] = null;
 
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
+        //Act
+        var result = Instance.Contains(index.X, index.Y);
 
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.FloodFill(index, newValue, boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillOutsideBoundaries_DoNotTriggerChange()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
-            var index = new Vector2<int>(boundaries.Left - 1, boundaries.Bottom + 1);
-            var newValue = Dummy.Create<string>();
-
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(index, newValue, boundaries);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillUsingSameValue_DoNotModifyGrid()
-        {
-            //Arrange
-            Instance[4, 4] = "A";
-            Instance[4, 5] = "A";
-            Instance[4, 6] = "A";
-            Instance[5, 4] = "A";
-            Instance[6, 4] = "A";
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[4, 0] = "B";
-            Instance[4, 1] = "B";
-            Instance[4, 2] = "B";
-            Instance[4, 3] = "B";
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(4, 5), "A", Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillUsingSameValue_DoNotTriggerChange()
-        {
-            //Arrange
-            Instance[4, 4] = "A";
-            Instance[4, 5] = "A";
-            Instance[4, 6] = "A";
-            Instance[5, 4] = "A";
-            Instance[6, 4] = "A";
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[4, 0] = "B";
-            Instance[4, 1] = "B";
-            Instance[4, 2] = "B";
-            Instance[4, 3] = "B";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(4, 5), "A", Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToFloodValueSurroundedByDifferentNeighbors_OnlyChangeThatOneOccurence()
-        {
-            //Arrange
-            Instance[-1, 0] = "A";
-            Instance[0, 0] = "A";
-            Instance[1, 0] = "A";
-            Instance[-1, 1] = "A";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "A";
-            Instance[-1, 2] = "A";
-            Instance[0, 2] = "A";
-            Instance[1, 2] = "A";
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(0, 1), "C", Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { -1, 0, "A" },
-                { 0, 0, "A" },
-                { 1, 0, "A" },
-                { -1, 1, "A" },
-                { 0, 1, "C" },
-                { 1, 1, "A" },
-                { -1, 2, "A" },
-                { 0, 2, "A" },
-                { 1, 2, "A" },
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFloodValueSurroundedByDifferentNeighbors_TriggerEvent()
-        {
-            //Arrange
-            Instance[-1, 0] = "A";
-            Instance[0, 0] = "A";
-            Instance[1, 0] = "A";
-            Instance[-1, 1] = "A";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "A";
-            Instance[-1, 2] = "A";
-            Instance[0, 2] = "A";
-            Instance[1, 2] = "A";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(0, 1), "C", Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>{new(0,1, "C")},
-                    OldValues = new List<Cell<string>>{new(0,1,"B")}
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnEmptyGridWithLargeBoundaries_FillEntireBoundaries()
-        {
-            //Arrange
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(1, 2), "F", new Boundaries<int>(0, 2, 2, 0));
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                {0,0, "F"},
-                {1,0, "F"},
-                {2,0, "F"},
-                {0,1, "F"},
-                {1,1, "F"},
-                {2,1, "F"},
-                {0,2, "F"},
-                {1,2, "F"},
-                {2,2, "F"},
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnEmptyGridWithLargeBoundaries_TriggerChangeEventOnce()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(1, 2), "F", new Boundaries<int>(0, 2, 2, 0));
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>
-                    {
-                        new(0,0, "F"),
-                        new(1,0, "F"),
-                        new(2,0, "F"),
-                        new(0,1, "F"),
-                        new(1,1, "F"),
-                        new(2,1, "F"),
-                        new(0,2, "F"),
-                        new(1,2, "F"),
-                        new(2,2, "F"),
-                    },
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAreaWithSimilarNeighbors_ChangeAllNeighborsToNewValue()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            //Act
-            Instance.FloodFill(1, 2, "D", Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { 0, 0, "D" },
-                { 1, 0, "D" },
-                { 2, 0, "D" },
-                { 3, 0, "D" },
-                { 0, 1, "D" },
-                { 1, 1, "D" },
-                { 2, 1, "D" },
-                { 3, 1, "D" },
-                { 0, 2, "D" },
-                { 1, 2, "D" },
-                { 2, 2, "D" },
-                { 3, 2, "D" },
-                { 0, 3, "D" },
-                { 1, 3, "D" },
-                { 2, 3, "D" },
-                { 3, 3, "D" },
-                { 0, 4, "C" },
-                { 1, 4, "C" },
-                { 2, 4, "C" },
-                { 3, 4, "C" },
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAreaWithSimilarNeighbors_TriggerChangeEventOnce()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            var eventArgs = new List<GridChangedEventArgs<string>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(1, 2), "D", Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<string>>
-            {
-                new()
-                {
-                    NewValues = new List<Cell<string>>
-                    {
-                        new(0, 0, "D"),
-                        new(1, 0, "D"),
-                        new(2, 0, "D"),
-                        new(3, 0, "D"),
-                        new(0, 1, "D"),
-                        new(1, 1, "D"),
-                        new(2, 1, "D"),
-                        new(3, 1, "D"),
-                        new(0, 2, "D"),
-                        new(1, 2, "D"),
-                        new(2, 2, "D"),
-                        new(3, 2, "D"),
-                        new(0, 3, "D"),
-                        new(1, 3, "D"),
-                        new(2, 3, "D"),
-                        new(3, 3, "D"),
-                    },
-                    OldValues = new List<Cell<string>>
-                    {
-                        new(0, 0, "B"),
-                        new(1, 0, "B"),
-                        new(2, 0, "B"),
-                        new(3, 0, "B"),
-                        new(0, 1, "B"),
-                        new(1, 1, "B"),
-                        new(2, 1, "B"),
-                        new(3, 1, "B"),
-                        new(0, 2, "B"),
-                        new(1, 2, "B"),
-                        new(2, 2, "B"),
-                        new(3, 2, "B"),
-                        new(0, 3, "B"),
-                        new(1, 3, "B"),
-                        new(2, 3, "B"),
-                        new(3, 3, "B"),
-                    }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToFillAnAreaWithSimilarNeighbors_FillOnlyWithinBoundaries()
-        {
-            //Arrange
-            Instance[0, 0] = "B";
-            Instance[1, 0] = "B";
-            Instance[2, 0] = "B";
-            Instance[3, 0] = "B";
-            Instance[0, 1] = "B";
-            Instance[1, 1] = "B";
-            Instance[2, 1] = "B";
-            Instance[3, 1] = "B";
-            Instance[0, 2] = "B";
-            Instance[1, 2] = "B";
-            Instance[2, 2] = "B";
-            Instance[3, 2] = "B";
-            Instance[0, 3] = "B";
-            Instance[1, 3] = "B";
-            Instance[2, 3] = "B";
-            Instance[3, 3] = "B";
-            Instance[0, 4] = "C";
-            Instance[1, 4] = "C";
-            Instance[2, 4] = "C";
-            Instance[3, 4] = "C";
-
-            //Act
-            Instance.FloodFill(new Vector2<int>(1, 2), "D", new Boundaries<int>(1, 2, 3, 0));
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<string>
-            {
-                { 0, 0, "B" },
-                { 1, 0, "B" },
-                { 2, 0, "B" },
-                { 3, 0, "B" },
-                { 0, 1, "D" },
-                { 1, 1, "D" },
-                { 2, 1, "D" },
-                { 3, 1, "B" },
-                { 0, 2, "D" },
-                { 1, 2, "D" },
-                { 2, 2, "D" },
-                { 3, 2, "B" },
-                { 0, 3, "D" },
-                { 1, 3, "D" },
-                { 2, 3, "D" },
-                { 3, 3, "B" },
-                { 0, 4, "C" },
-                { 1, 4, "C" },
-                { 2, 4, "C" },
-                { 3, 4, "C" },
-            });
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class FloodClear_XY : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
+    [TestMethod]
+    public void ContainsCoordinates_WhenGridIsEmpty_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModify()
-        {
-            //Arrange
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.FloodClear(Dummy.Create<int>(), Dummy.Create<int>());
+        //Act
+        var result = Instance.Contains(index);
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(Dummy.Create<int>(), Dummy.Create<int>());
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToClearOutsideBoundaries_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.FloodClear(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToClearOutsideBoundaries_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenOneItemIsSurroundedByDifferentNeighbors_OnlyClearThatItem()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(1, 1);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                {0, 0, 1},
-                {1, 0, 1},
-                {2, 0, 1},
-                {0, 1, 1},
-                {2, 1, 1},
-                {0, 2, 1},
-                {1, 2, 1},
-                {2, 2, 1},
-            });
-        }
-
-        [TestMethod]
-        public void WhenOneItemIsSurroundedByDifferentNeighbors_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(1, 1);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
-            {
-                new()
-                {
-                    OldValues = new List<Cell<int>>
-                    {
-                        new(1, 1, 2)
-                    }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_ClearAllTheOnesItTouches()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(0, 1);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                {1, 1, 2}
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(1, 0);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
-            {
-                new()
-                {
-                    OldValues = new List<Cell<int>>
-                    {
-                        new(0, 0, 1),
-                        new(1, 0, 1),
-                        new(2, 0, 1),
-                        new(0, 1, 1),
-                        new(2, 1, 1),
-                        new(0, 2, 1),
-                        new(1, 2, 1),
-                        new(2, 2, 1),
-                    }
-                }
-            });
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class FloodClear_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
+    [TestMethod]
+    public void ContainsCoordinates_WhenThereWasSomethingThereButItWasRemoved_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModify()
-        {
-            //Arrange
+        //Arrange
+        var cell = Dummy.Create<Cell<Garbage>>();
+        Instance[cell.Index] = cell.Value;
 
-            //Act
-            Instance.FloodClear(Dummy.Create<Vector2<int>>());
+        Instance.RemoveAt(cell.Index);
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
+        //Act
+        var result = Instance.Contains(cell.Index);
 
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(Dummy.Create<Vector2<int>>());
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToClearOutsideBoundaries_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var copy = Instance.Copy();
-
-            var index = new Vector2<int>(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
-
-            //Act
-            Instance.FloodClear(index);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToClearOutsideBoundaries_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            var index = new Vector2<int>(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
-
-            //Act
-            Instance.FloodClear(index);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenOneItemIsSurroundedByDifferentNeighbors_OnlyClearThatItem()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(new Vector2<int>(1, 1));
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                {0, 0, 1},
-                {1, 0, 1},
-                {2, 0, 1},
-                {0, 1, 1},
-                {2, 1, 1},
-                {0, 2, 1},
-                {1, 2, 1},
-                {2, 2, 1},
-            });
-        }
-
-        [TestMethod]
-        public void WhenOneItemIsSurroundedByDifferentNeighbors_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(new Vector2<int>(1, 1));
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
-            {
-                new()
-                {
-                    OldValues = new List<Cell<int>>
-                    {
-                        new(1, 1, 2)
-                    }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_ClearAllTheOnesItTouches()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(new Vector2<int>(0, 1));
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                {1, 1, 2}
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(new Vector2<int>(1, 0));
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
-            {
-                new()
-                {
-                    OldValues = new List<Cell<int>>
-                    {
-                        new(0, 0, 1),
-                        new(1, 0, 1),
-                        new(2, 0, 1),
-                        new(0, 1, 1),
-                        new(2, 1, 1),
-                        new(0, 2, 1),
-                        new(1, 2, 1),
-                        new(2, 2, 1),
-                    }
-                }
-            });
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class FloodClear_XY_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
+    [TestMethod]
+    public void ContainsCoordinates_WhenThereIsSomethingAtIndex_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModify()
-        {
-            //Arrange
+        //Arrange
+        var cell = Dummy.Create<Cell<Garbage>>();
+        Instance[cell.Index] = cell.Value;
 
-            //Act
-            Instance.FloodClear(Dummy.Create<int>(), Dummy.Create<int>(), Dummy.Create<Boundaries<int>>());
+        //Act
+        var result = Instance.Contains(cell.Index);
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(Dummy.Create<int>(), Dummy.Create<int>(), Dummy.Create<Boundaries<int>>());
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToClearOutsideBoundaries_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.FloodClear(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1, Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToClearOutsideBoundaries_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1, Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenOneItemIsSurroundedByDifferentNeighbors_OnlyClearThatItem()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(1, 1, Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                {0, 0, 1},
-                {1, 0, 1},
-                {2, 0, 1},
-                {0, 1, 1},
-                {2, 1, 1},
-                {0, 2, 1},
-                {1, 2, 1},
-                {2, 2, 1},
-            });
-        }
-
-        [TestMethod]
-        public void WhenOneItemIsSurroundedByDifferentNeighbors_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(1, 1, Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
-            {
-                new()
-                {
-                    OldValues = new List<Cell<int>>
-                    {
-                        new(1, 1, 2)
-                    }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_ClearAllTheOnesItTouches()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(0, 1, Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                {1, 1, 2}
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(1, 0, Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
-            {
-                new()
-                {
-                    OldValues = new List<Cell<int>>
-                    {
-                        new(0, 0, 1),
-                        new(1, 0, 1),
-                        new(2, 0, 1),
-                        new(0, 1, 1),
-                        new(2, 1, 1),
-                        new(0, 2, 1),
-                        new(1, 2, 1),
-                        new(2, 2, 1),
-                    }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_ConstrainDeletionToBoundaries()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(0, 1, new Boundaries<int> { Bottom = 1, Right = 2 });
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                { 1, 1, 2 },
-                { 0, 2, 1 },
-                { 1, 2, 1 },
-                { 2, 2, 1 },
-            });
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class FloodClear_Coordinates_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
+    [TestMethod]
+    public void ContainsCoordinates_WhenThereIsNullAtIndex_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModify()
-        {
-            //Arrange
+        //Arrange
+        var index = Dummy.Create<Vector2<int>>();
+        Instance[index] = null;
 
-            //Act
-            Instance.FloodClear(Dummy.Create<Vector2<int>>(), Dummy.Create<Boundaries<int>>());
+        //Act
+        var result = Instance.Contains(index);
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(Dummy.Create<Vector2<int>>(), Dummy.Create<Boundaries<int>>());
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToClearOutsideBoundaries_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var copy = Instance.Copy();
-
-            var index = new Vector2<int>(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
-
-            //Act
-            Instance.FloodClear(index, Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToClearOutsideBoundaries_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            var index = new Vector2<int>(Instance.Boundaries.Right + 1, Instance.Boundaries.Bottom + 1);
-
-            //Act
-            Instance.FloodClear(index, Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenOneItemIsSurroundedByDifferentNeighbors_OnlyClearThatItem()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(new Vector2<int>(1, 1), Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                {0, 0, 1},
-                {1, 0, 1},
-                {2, 0, 1},
-                {0, 1, 1},
-                {2, 1, 1},
-                {0, 2, 1},
-                {1, 2, 1},
-                {2, 2, 1},
-            });
-        }
-
-        [TestMethod]
-        public void WhenOneItemIsSurroundedByDifferentNeighbors_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(new Vector2<int>(1, 1), Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
-            {
-                new()
-                {
-                    OldValues = new List<Cell<int>>
-                    {
-                        new(1, 1, 2)
-                    }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_ClearAllTheOnesItTouches()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(new Vector2<int>(0, 1), Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                {1, 1, 2}
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.FloodClear(new Vector2<int>(1, 0), Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
-            {
-                new()
-                {
-                    OldValues = new List<Cell<int>>
-                    {
-                        new(0, 0, 1),
-                        new(1, 0, 1),
-                        new(2, 0, 1),
-                        new(0, 1, 1),
-                        new(2, 1, 1),
-                        new(0, 2, 1),
-                        new(1, 2, 1),
-                        new(2, 2, 1),
-                    }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenItemIsSurroundedBySameNeighbors_ConstrainDeletionToBoundaries()
-        {
-            //Arrange
-            Instance[0, 0] = 1;
-            Instance[1, 0] = 1;
-            Instance[2, 0] = 1;
-            Instance[0, 1] = 1;
-            Instance[1, 1] = 2;
-            Instance[2, 1] = 1;
-            Instance[0, 2] = 1;
-            Instance[1, 2] = 1;
-            Instance[2, 2] = 1;
-
-            //Act
-            Instance.FloodClear(new Vector2<int>(0, 1), new Boundaries<int> { Bottom = 1, Right = 2 });
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                { 1, 1, 2 },
-                { 0, 2, 1 },
-                { 1, 2, 1 },
-                { 2, 2, 1 },
-            });
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class Resize : ToolBX.Collections.UnitTesting.Tester<Grid<int>>
+    [TestMethod]
+    public void TranslateWithRangeAndXY_WhenRectangleHasZeroSize_DoNotModify()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModifyGrid()
-        {
-            //Arrange
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Act
-            Instance.Resize(Dummy.Create<Boundaries<int>>());
+        var copy = Instance.Copy();
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
+        var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
 
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        //Act
+        Instance.Translate(range, Dummy.Create<int>(), Dummy.Create<int>());
 
-            //Act
-            Instance.Resize(Dummy.Create<Boundaries<int>>());
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToResizeUsingSameSize_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.Resize(Instance.Boundaries);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToResizeUsingSameSize_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.Resize(Instance.Boundaries);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToResizeUsingLargerBoundaries_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.Resize(Instance.Boundaries with { Top = Instance.Boundaries.Top - 1, Left = Instance.Boundaries.Left - 1, Bottom = Instance.Boundaries.Bottom + 1, Right = Instance.Boundaries.Right + 1 });
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenTryingToResizeUsingLargerBoundaries_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<int>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.Resize(Instance.Boundaries with { Top = Instance.Boundaries.Top - 1, Left = Instance.Boundaries.Left - 1, Bottom = Instance.Boundaries.Bottom + 1, Right = Instance.Boundaries.Right + 1 });
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenResizingWithSmallerBoundaries_RemoveExcessItems()
-        {
-            //Arrange
-            Instance[-1, 0] = 1;
-            Instance[0, 0] = 2;
-            Instance[1, 0] = 3;
-            Instance[-1, 1] = 4;
-            Instance[0, 1] = 5;
-            Instance[1, 1] = 6;
-            Instance[-1, 2] = 7;
-            Instance[0, 2] = 8;
-            Instance[1, 2] = 9;
-
-            //Act
-            Instance.Resize(new Boundaries<int>
-            {
-                Bottom = 1,
-                Right = 2,
-                Left = 0
-            });
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                { 0, 0, 2 },
-                { 1, 0, 3 },
-                { 0, 1, 5 },
-                { 1, 1, 6 }
-            });
-        }
-
-        [TestMethod]
-        public void WhenResizingWithSmallerBoundaries_TriggerChange()
-        {
-            //Arrange
-            Instance[-1, 0] = 1;
-            Instance[0, 0] = 2;
-            Instance[1, 0] = 3;
-            Instance[-1, 1] = 4;
-            Instance[0, 1] = 5;
-            Instance[1, 1] = 6;
-            Instance[-1, 2] = 7;
-            Instance[0, 2] = 8;
-            Instance[1, 2] = 9;
-
-            var eventArgs = new List<GridChangedEventArgs<int>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.Resize(new Boundaries<int>
-            {
-                Bottom = 1,
-                Right = 2,
-                Left = 0
-            });
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<int>>
-            {
-                new()
-                {
-                    OldValues = new List<Cell<int>>
-                    {
-                        new(-1,0,1),
-                        new(-1,1,4),
-                        new(-1,2,7),
-                        new(0,2,8),
-                        new(1,2,9),
-                    }
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenResizingWithZeroBoundaries_OnlyContainsItemAtOrigin()
-        {
-            //Arrange
-            Instance[-1, 0] = 1;
-            Instance[0, 0] = 2;
-            Instance[1, 0] = 3;
-            Instance[-1, 1] = 4;
-            Instance[0, 1] = 5;
-            Instance[1, 1] = 6;
-            Instance[-1, 2] = 7;
-            Instance[0, 2] = 8;
-            Instance[1, 2] = 9;
-
-            //Act
-            Instance.Resize(new Boundaries<int>(0, 0, 0, 0));
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<int>
-            {
-                { 0, 0, 2 }
-            });
-        }
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
     }
 
-    [TestClass]
-    public class TranslateAll_XY : ToolBX.Collections.UnitTesting.Tester<Grid<char>>
+    [TestMethod]
+    public void TranslateWithRangeAndXY_WhenRectangleHasZeroSize_DoNotTriggerChange()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModifyGrid()
-        {
-            //Arrange
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Act
-            Instance.TranslateAll(Dummy.Create<int>(), Dummy.Create<int>());
+        var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        //Act
+        Instance.Translate(range, Dummy.Create<int>(), Dummy.Create<int>());
 
-            //Act
-            Instance.TranslateAll(Dummy.Create<int>(), Dummy.Create<int>());
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenZeroIndex_DoNotModifyGrid()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.TranslateAll(0, 0);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenZeroIndex_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(0, 0);
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingToTheLeft_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = -Dummy.Create<int>();
-            var y = 0;
-            var index = new Vector2<int>(x, y);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingToTheLeft_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = -Dummy.Create<int>();
-            var y = 0;
-            var index = new Vector2<int>(x, y);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingUp_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = 0;
-            var y = -Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingUp_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = 0;
-            var y = -Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingToTheRight_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = Dummy.Create<int>();
-            var y = 0;
-            var index = new Vector2<int>(x, y);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingToTheRight_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = Dummy.Create<int>();
-            var y = 0;
-            var index = new Vector2<int>(x, y);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingDown_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = 0;
-            var y = Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingDown_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = 0;
-            var y = Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveUpLeft_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = -Dummy.Create<int>();
-            var y = -Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveUpLeft_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = -Dummy.Create<int>();
-            var y = -Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveUpRight_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = Dummy.Create<int>();
-            var y = -Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveUpRight_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = Dummy.Create<int>();
-            var y = -Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveDownLeft_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = -Dummy.Create<int>();
-            var y = Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveDownLeft_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = -Dummy.Create<int>();
-            var y = Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveDownRight_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = Dummy.Create<int>();
-            var y = Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveDownRight_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var x = Dummy.Create<int>();
-            var y = Dummy.Create<int>();
-            var index = new Vector2<int>(x, y);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(x, y);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
+        //Assert
+        eventArgs.Should().BeEmpty();
     }
 
-    [TestClass]
-    public class TranslateAll_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<char>>
+    [TestMethod]
+    public void TranslateWithRangeAndXY_WhenGridIsEmpty_DoNotModify()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModifyGrid()
-        {
-            //Arrange
-
-            //Act
-            Instance.TranslateAll(Dummy.Create<Vector2<int>>());
-
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(Dummy.Create<Vector2<int>>());
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenZeroIndex_DoNotModifyGrid()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.TranslateAll(new Vector2<int>(0, 0));
-
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
-
-        [TestMethod]
-        public void WhenZeroIndex_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(new Vector2<int>(0, 0));
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingToTheLeft_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(-Dummy.Create<int>(), 0);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingToTheLeft_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(-Dummy.Create<int>(), 0);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingUp_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(0, -Dummy.Create<int>());
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingUp_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(0, -Dummy.Create<int>());
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingToTheRight_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(Dummy.Create<int>(), 0);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingToTheRight_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(Dummy.Create<int>(), 0);
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingDown_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(0, Dummy.Create<int>());
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToTranslateEverythingDown_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(0, Dummy.Create<int>());
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveUpLeft_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveUpLeft_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(-Dummy.Create<int>(), -Dummy.Create<int>());
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveUpRight_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(Dummy.Create<int>(), -Dummy.Create<int>());
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveUpRight_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(Dummy.Create<int>(), -Dummy.Create<int>());
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveDownLeft_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(-Dummy.Create<int>(), Dummy.Create<int>());
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveDownLeft_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(-Dummy.Create<int>(), Dummy.Create<int>());
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveDownRight_Move()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(Dummy.Create<int>(), Dummy.Create<int>());
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<char>(cells.Select(x => new Cell<char>(x.Index + index, x.Value))));
-        }
-
-        [TestMethod]
-        public void WhenTryingToMoveDownRight_TriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<char>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            var index = new Vector2<int>(Dummy.Create<int>(), Dummy.Create<int>());
-
-            var eventArgs = new List<GridChangedEventArgs<char>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.TranslateAll(index);
-
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<char>>
-            {
-                new()
-                {
-                    OldValues = cells,
-                    NewValues = cells.Select(x => new Cell<char>(x.Index + index, x.Value)).ToList()
-                }
-            });
-        }
+        //Arrange
+        var range = Dummy.Create<Rectangle<int>>();
+        var translation = Dummy.Create<Vector2<int>>();
+
+        //Act
+        Instance.Translate(range, translation);
+
+        //Assert
+        Instance.Should().BeEmpty();
     }
 
-    [TestClass]
-    public class Translate_Range_XY : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void TranslateWithRangeAndXY_WhenGridIsEmpty_DoNotTriggerChange()
     {
-        [TestMethod]
-        public void WhenRectangleHasZeroSize_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        //Arrange
+        var range = Dummy.Create<Rectangle<int>>();
 
-            var copy = Instance.Copy();
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
+        //Act
+        Instance.Translate(range, Dummy.Create<int>(), Dummy.Create<int>());
 
-            //Act
-            Instance.Translate(range, Dummy.Create<int>(), Dummy.Create<int>());
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
 
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
+    [TestMethod]
+    public void TranslateWithRangeAndXY_WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-        [TestMethod]
-        public void WhenRectangleHasZeroSize_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        var copy = Instance.Copy();
 
-            var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
+        //Act
+        Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 1, 0);
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.Translate(range, Dummy.Create<int>(), Dummy.Create<int>());
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModify()
-        {
-            //Arrange
-            var range = Dummy.Create<Rectangle<int>>();
-            var translation = Dummy.Create<Vector2<int>>();
-
-            //Act
-            Instance.Translate(range, translation);
-
-            //Assert
-            Instance.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var range = Dummy.Create<Rectangle<int>>();
-
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
-
-            //Act
-            Instance.Translate(range, Dummy.Create<int>(), Dummy.Create<int>());
-
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
-
-            var copy = Instance.Copy();
-
-            //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 1, 0);
-
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[0, 0] },
                 { 1, 1, copy[0, 1] },
@@ -6568,75 +3075,75 @@ public class GridTests
                 { 2, 1, copy[2, 1] },
                 { 2, 2, copy[2, 2] },
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithRangeAndXY_WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 1, 0);
+        //Act
+        Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 1, 0);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Garbage>>
-                    {
+                    OldValues =
+                    [
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
                         new(0, 2, copy[0, 2]),
                         new(1, 0, copy[1, 0]),
                         new(1, 1, copy[1, 1]),
                         new(1, 2, copy[1, 2]),
-                    },
-                    NewValues = new List<Cell<Garbage>>
-                    {
+                    ],
+                    NewValues =
+                    [
                         new(1, 0, copy[0, 0]),
                         new(1, 1, copy[0, 1]),
                         new(1, 2, copy[0, 2]),
-                    }
+                    ]
                 }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithRangeAndXY_WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 3, 0);
+        //Act
+        Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 3, 0);
 
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[1, 0] },
                 { 1, 1, copy[1, 1] },
@@ -6648,148 +3155,144 @@ public class GridTests
                 { 3, 1, copy[0, 1] },
                 { 3, 2, copy[0, 2] },
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverEmptyArea_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithRangeAndXY_WhenMovingRectangleOverEmptyArea_TriggerChange()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 3, 0);
+        //Act
+        Instance.Translate(new Rectangle<int>(0, 0, 1, 3), 3, 0);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Garbage>>
-                    {
+                    NewValues =
+                    [
                         new(3, 0, copy[0, 0]),
                         new(3, 1, copy[0, 1]),
                         new(3, 2, copy[0, 2]),
-                    },
-                    OldValues = new List<Cell<Garbage>>
-                    {
+                    ],
+                    OldValues =
+                    [
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
                         new(0, 2, copy[0, 2]),
-                    }
+                    ]
                 }
             });
-        }
     }
 
-    [TestClass]
-    public class Translate_Range_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void TranslateWithRangeAndCoordinates_WhenRectangleHasZeroSize_DoNotModify()
     {
-        [TestMethod]
-        public void WhenRectangleHasZeroSize_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
-            var translation = Dummy.Create<Vector2<int>>();
+        var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
+        var translation = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.Translate(range, translation);
+        //Act
+        Instance.Translate(range, translation);
 
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
 
-        [TestMethod]
-        public void WhenRectangleHasZeroSize_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+    [TestMethod]
+    public void TranslateWithRangeAndCoordinates_WhenRectangleHasZeroSize_DoNotTriggerChange()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
-            var translation = Dummy.Create<Vector2<int>>();
+        var range = new Rectangle<int>(Dummy.Create<Vector2<int>>(), 0, 0);
+        var translation = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(range, translation);
+        //Act
+        Instance.Translate(range, translation);
 
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModify()
-        {
-            //Arrange
-            var range = Dummy.Create<Rectangle<int>>();
-            var translation = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void TranslateWithRangeAndCoordinates_WhenGridIsEmpty_DoNotModify()
+    {
+        //Arrange
+        var range = Dummy.Create<Rectangle<int>>();
+        var translation = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.Translate(range, translation);
+        //Act
+        Instance.Translate(range, translation);
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
+        //Assert
+        Instance.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var range = Dummy.Create<Rectangle<int>>();
-            var translation = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void TranslateWithRangeAndCoordinates_WhenGridIsEmpty_DoNotTriggerChange()
+    {
+        //Arrange
+        var range = Dummy.Create<Rectangle<int>>();
+        var translation = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(range, translation);
+        //Act
+        Instance.Translate(range, translation);
 
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithRangeAndCoordinates_WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(1, 0));
+        //Act
+        Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(1, 0));
 
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[0, 0] },
                 { 1, 1, copy[0, 1] },
@@ -6798,75 +3301,75 @@ public class GridTests
                 { 2, 1, copy[2, 1] },
                 { 2, 2, copy[2, 2] },
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithRangeAndCoordinates_WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(1, 0));
+        //Act
+        Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(1, 0));
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Garbage>>
-                    {
+                    OldValues =
+                    [
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
                         new(0, 2, copy[0, 2]),
                         new(1, 0, copy[1, 0]),
                         new(1, 1, copy[1, 1]),
                         new(1, 2, copy[1, 2]),
-                    },
-                    NewValues = new List<Cell<Garbage>>
-                    {
+                    ],
+                    NewValues =
+                    [
                         new(1, 0, copy[0, 0]),
                         new(1, 1, copy[0, 1]),
                         new(1, 2, copy[0, 2]),
-                    }
+                    ]
                 }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithRangeAndCoordinates_WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(3, 0));
+        //Act
+        Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(3, 0));
 
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[1, 0] },
                 { 1, 1, copy[1, 1] },
@@ -6878,144 +3381,140 @@ public class GridTests
                 { 3, 1, copy[0, 1] },
                 { 3, 2, copy[0, 2] },
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverEmptyArea_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithRangeAndCoordinates_WhenMovingRectangleOverEmptyArea_TriggerChange()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(3, 0));
+        //Act
+        Instance.Translate(new Rectangle<int>(0, 0, 1, 3), new Vector2<int>(3, 0));
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Garbage>>
-                    {
+                    NewValues =
+                    [
                         new(3, 0, copy[0, 0]),
                         new(3, 1, copy[0, 1]),
                         new(3, 2, copy[0, 2]),
-                    },
-                    OldValues = new List<Cell<Garbage>>
-                    {
+                    ],
+                    OldValues =
+                    [
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
                         new(0, 2, copy[0, 2]),
-                    }
+                    ]
                 }
             });
-        }
     }
 
-    [TestClass]
-    public class Translate_Boundaries_XY : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void TranslateWithBoundariesAndXY_WhenRectangleHasZeroBoundaries_DoNotModify()
     {
-        [TestMethod]
-        public void WhenRectangleHasZeroBoundaries_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var boundaries = new Boundaries<int>(0, 0, 0, 0);
+        var boundaries = new Boundaries<int>(0, 0, 0, 0);
 
-            //Act
-            Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
+        //Act
+        Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
 
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
 
-        [TestMethod]
-        public void WhenRectangleHasZeroSize_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+    [TestMethod]
+    public void TranslateWithBoundariesAndXY_WhenRectangleHasZeroSize_DoNotTriggerChange()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var boundaries = new Boundaries<int>(0, 0, 0, 0);
+        var boundaries = new Boundaries<int>(0, 0, 0, 0);
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
+        //Act
+        Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
 
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModify()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndXY_WhenGridIsEmpty_DoNotModify()
+    {
+        //Arrange
+        var boundaries = Dummy.Create<Boundaries<int>>();
 
-            //Act
-            Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
+        //Act
+        Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
+        //Assert
+        Instance.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndXY_WhenGridIsEmpty_DoNotTriggerChange()
+    {
+        //Arrange
+        var boundaries = Dummy.Create<Boundaries<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
+        //Act
+        Instance.Translate(boundaries, Dummy.Create<int>(), Dummy.Create<int>());
 
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndXY_WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 1, 0);
+        //Act
+        Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 1, 0);
 
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[0, 0] },
                 { 1, 1, copy[0, 1] },
@@ -7024,75 +3523,75 @@ public class GridTests
                 { 2, 1, copy[2, 1] },
                 { 2, 2, copy[2, 2] },
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndXY_WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 1, 0);
+        //Act
+        Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 1, 0);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Garbage>>
-                    {
+                    OldValues =
+                    [
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
                         new(0, 2, copy[0, 2]),
                         new(1, 0, copy[1, 0]),
                         new(1, 1, copy[1, 1]),
                         new(1, 2, copy[1, 2]),
-                    },
-                    NewValues = new List<Cell<Garbage>>
-                    {
+                    ],
+                    NewValues =
+                    [
                         new(1, 0, copy[0, 0]),
                         new(1, 1, copy[0, 1]),
                         new(1, 2, copy[0, 2]),
-                    }
+                    ]
                 }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndXY_WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 3, 0);
+        //Act
+        Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 3, 0);
 
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[1, 0] },
                 { 1, 1, copy[1, 1] },
@@ -7104,148 +3603,144 @@ public class GridTests
                 { 3, 1, copy[0, 1] },
                 { 3, 2, copy[0, 2] },
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverEmptyArea_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndXY_WhenMovingRectangleOverEmptyArea_TriggerChange()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 3, 0);
+        //Act
+        Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, 3, 0);
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Garbage>>
-                    {
+                    NewValues =
+                    [
                         new(3, 0, copy[0, 0]),
                         new(3, 1, copy[0, 1]),
                         new(3, 2, copy[0, 2]),
-                    },
-                    OldValues = new List<Cell<Garbage>>
-                    {
+                    ],
+                    OldValues =
+                    [
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
                         new(0, 2, copy[0, 2]),
-                    }
+                    ]
                 }
             });
-        }
     }
 
-    [TestClass]
-    public class Translate_Boundaries_Coordinates : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void TranslateWithBoundariesAndCoordinates_WhenRectangleHasZeroBoundaries_DoNotModify()
     {
-        [TestMethod]
-        public void WhenRectangleHasZeroBoundaries_DoNotModify()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var boundaries = new Boundaries<int>(0, 0, 0, 0);
-            var translation = Dummy.Create<Vector2<int>>();
+        var boundaries = new Boundaries<int>(0, 0, 0, 0);
+        var translation = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.Translate(boundaries, translation);
+        //Act
+        Instance.Translate(boundaries, translation);
 
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
 
-        [TestMethod]
-        public void WhenRectangleHasZeroSize_DoNotTriggerChange()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+    [TestMethod]
+    public void TranslateWithBoundariesAndCoordinates_WhenRectangleHasZeroSize_DoNotTriggerChange()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var boundaries = new Boundaries<int>(0, 0, 0, 0);
-            var translation = Dummy.Create<Vector2<int>>();
+        var boundaries = new Boundaries<int>(0, 0, 0, 0);
+        var translation = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(boundaries, translation);
+        //Act
+        Instance.Translate(boundaries, translation);
 
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotModify()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
-            var translation = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndCoordinates_WhenGridIsEmpty_DoNotModify()
+    {
+        //Arrange
+        var boundaries = Dummy.Create<Boundaries<int>>();
+        var translation = Dummy.Create<Vector2<int>>();
 
-            //Act
-            Instance.Translate(boundaries, translation);
+        //Act
+        Instance.Translate(boundaries, translation);
 
-            //Assert
-            Instance.Should().BeEmpty();
-        }
+        //Assert
+        Instance.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenGridIsEmpty_DoNotTriggerChange()
-        {
-            //Arrange
-            var boundaries = Dummy.Create<Boundaries<int>>();
-            var translation = Dummy.Create<Vector2<int>>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndCoordinates_WhenGridIsEmpty_DoNotTriggerChange()
+    {
+        //Arrange
+        var boundaries = Dummy.Create<Boundaries<int>>();
+        var translation = Dummy.Create<Vector2<int>>();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(boundaries, translation);
+        //Act
+        Instance.Translate(boundaries, translation);
 
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndCoordinates_WhenMovingRectangleOverAnotherAreaOfTheGrid_SquashExistingItemsWithMovedOnes()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(1, 0));
+        //Act
+        Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(1, 0));
 
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[0, 0] },
                 { 1, 1, copy[0, 1] },
@@ -7254,75 +3749,75 @@ public class GridTests
                 { 2, 1, copy[2, 1] },
                 { 2, 2, copy[2, 2] },
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndCoordinates_WhenMovingRectangleOverAnotherAreaOfTheGrid_TriggerChange()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(1, 0));
+        //Act
+        Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(1, 0));
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Cell<Garbage>>
-                    {
+                    OldValues =
+                    [
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
                         new(0, 2, copy[0, 2]),
                         new(1, 0, copy[1, 0]),
                         new(1, 1, copy[1, 1]),
                         new(1, 2, copy[1, 2]),
-                    },
-                    NewValues = new List<Cell<Garbage>>
-                    {
+                    ],
+                    NewValues =
+                    [
                         new(1, 0, copy[0, 0]),
                         new(1, 1, copy[0, 1]),
                         new(1, 2, copy[0, 2]),
-                    }
+                    ]
                 }
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndCoordinates_WhenMovingRectangleOverEmptyArea_MoveThoseItemsToNewPositions()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(3, 0));
+        //Act
+        Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(3, 0));
 
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 1, 0, copy[1, 0] },
                 { 1, 1, copy[1, 1] },
@@ -7334,224 +3829,148 @@ public class GridTests
                 { 3, 1, copy[0, 1] },
                 { 3, 2, copy[0, 2] },
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenMovingRectangleOverEmptyArea_TriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void TranslateWithBoundariesAndCoordinates_WhenMovingRectangleOverEmptyArea_TriggerChange()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(3, 0));
+        //Act
+        Instance.Translate(new Boundaries<int> { Right = 1, Bottom = 3 }, new Vector2<int>(3, 0));
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Garbage>>
-                    {
+                    NewValues =
+                    [
                         new(3, 0, copy[0, 0]),
                         new(3, 1, copy[0, 1]),
                         new(3, 2, copy[0, 2]),
-                    },
-                    OldValues = new List<Cell<Garbage>>
-                    {
+                    ],
+                    OldValues =
+                    [
                         new(0, 0, copy[0, 0]),
                         new(0, 1, copy[0, 1]),
                         new(0, 2, copy[0, 2]),
-                    }
+                    ]
                 }
             });
-        }
     }
 
-    [TestClass]
-    public class Copy : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void Copy_WhenGridIsEmpty_ReturnEmptyGrid()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_ReturnEmptyGrid()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = Instance.Copy();
+        //Act
+        var result = Instance.Copy();
 
-            //Assert
-            result.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenGridIsNotEmpty_ReturnExactCopy()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
-
-            //Act
-            var result = Instance.Copy();
-
-            //Assert
-            result.Should().BeEquivalentTo(Instance);
-            result.Should().NotBeSameAs(Instance);
-        }
+        //Assert
+        result.Should().BeEmpty();
     }
 
-    [TestClass]
-    public class Copy_Boundaries : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void Copy_WhenGridIsNotEmpty_ReturnExactCopy()
     {
-        [TestMethod]
-        public void WhenBoundariesAreEqualToGrid_ReturnExactCopyOfGrid()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>().ToList();
-            foreach (var cell in cells)
-                Instance[cell.Index] = cell.Value;
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var cell in cells)
+            Instance[cell.Index] = cell.Value;
 
-            //Act
-            var result = Instance.Copy(Instance.Boundaries);
+        //Act
+        var result = Instance.Copy();
 
-            //Assert
-            result.Should().BeEquivalentTo(Instance);
-            result.Should().NotBeSameAs(Instance);
-        }
-
-        [TestMethod]
-        public void WhenBoundariesAreOutsideGrid_ReturnEmpty()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<string>();
-            Instance[1, 4] = Dummy.Create<string>();
-            Instance[2, 3] = Dummy.Create<string>();
-            Instance[3, 2] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.Copy(new Boundaries<int> { Top = -14, Left = -8, Right = -4, Bottom = -7 });
-
-            //Assert
-            result.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void WhenBoundariesAreInsideGrid_ReturnThatPartOfGrid()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<string>();
-            Instance[1, 4] = Dummy.Create<string>();
-            Instance[2, 3] = Dummy.Create<string>();
-            Instance[3, 2] = Dummy.Create<string>();
-
-            //Act
-            var result = Instance.Copy(new Boundaries<int> { Top = 0, Bottom = 2, Left = 0, Right = 3 });
-
-            //Assert
-            result.Should().BeEquivalentTo(new Grid<string>
-            {
-                { 0, 0, Instance[0, 0] },
-                { 3, 2, Instance[3, 2] },
-            });
-        }
-
-        [TestMethod]
-        public void WhenGridIsEmpty_ReturnEmptyGrid()
-        {
-            //Arrange
-
-            //Act
-            var result = Instance.Copy(Dummy.Create<Boundaries<int>>());
-
-            //Assert
-            result.Should().BeEmpty();
-        }
+        //Assert
+        result.Should().BeEquivalentTo(Instance);
+        result.Should().NotBeSameAs(Instance);
     }
 
-    [TestClass]
-    public class Swap : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void Swap_WhenCurrentAndDestinationAreEqual_DoNotModifyGrid()
     {
-        [TestMethod]
-        public void WhenCurrentAndDestinationAreEqual_DoNotModifyGrid()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var copy = Instance.Copy();
+        var copy = Instance.Copy();
 
-            //Act
-            Instance.Swap(new Vector2<int>(1, 0), new Vector2<int>(1, 0));
+        //Act
+        Instance.Swap(new Vector2<int>(1, 0), new Vector2<int>(1, 0));
 
-            //Assert
-            Instance.Should().BeEquivalentTo(copy);
-        }
+        //Assert
+        Instance.Should().BeEquivalentTo(copy);
+    }
 
-        [TestMethod]
-        public void WhenCurrentAndDestinationAreEqual_DoNotTriggerChange()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void Swap_WhenCurrentAndDestinationAreEqual_DoNotTriggerChange()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Swap(new Vector2<int>(1, 0), new Vector2<int>(1, 0));
+        //Act
+        Instance.Swap(new Vector2<int>(1, 0), new Vector2<int>(1, 0));
 
-            //Assert
-            eventArgs.Should().BeEmpty();
-        }
+        //Assert
+        eventArgs.Should().BeEmpty();
+    }
 
-        [TestMethod]
-        public void WhenCurrentAndDestinationAreDifferent_Swap()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void Swap_WhenCurrentAndDestinationAreDifferent_Swap()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var firstItem = Instance[2, 0];
-            var secondItem = Instance[1, 2];
+        var firstItem = Instance[2, 0];
+        var secondItem = Instance[1, 2];
 
-            //Act
-            Instance.Swap(new Vector2<int>(2, 0), new Vector2<int>(1, 2));
+        //Act
+        Instance.Swap(new Vector2<int>(2, 0), new Vector2<int>(1, 2));
 
-            //Assert
-            Instance.Should().BeEquivalentTo(new Grid<Garbage>
+        //Assert
+        Instance.Should().BeEquivalentTo(new Grid<Garbage>
             {
                 { 0, 0, Instance[0, 0] },
                 { 1, 0, Instance[1, 0] },
@@ -7563,2020 +3982,1953 @@ public class GridTests
                 { 1, 2, firstItem },
                 { 2, 2, Instance[2, 2] },
             });
-        }
+    }
 
-        [TestMethod]
-        public void WhenCurrentAndDestinationAreDifferent_TriggerChangeWithNewIndexes()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
-            Instance[0, 1] = Dummy.Create<Garbage>();
-            Instance[1, 1] = Dummy.Create<Garbage>();
-            Instance[2, 1] = Dummy.Create<Garbage>();
-            Instance[0, 2] = Dummy.Create<Garbage>();
-            Instance[1, 2] = Dummy.Create<Garbage>();
-            Instance[2, 2] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void Swap_WhenCurrentAndDestinationAreDifferent_TriggerChangeWithNewIndexes()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+        Instance[0, 1] = Dummy.Create<Garbage>();
+        Instance[1, 1] = Dummy.Create<Garbage>();
+        Instance[2, 1] = Dummy.Create<Garbage>();
+        Instance[0, 2] = Dummy.Create<Garbage>();
+        Instance[1, 2] = Dummy.Create<Garbage>();
+        Instance[2, 2] = Dummy.Create<Garbage>();
 
-            var firstItem = Instance[2, 0];
-            var secondItem = Instance[1, 2];
+        var firstItem = Instance[2, 0];
+        var secondItem = Instance[1, 2];
 
-            var eventArgs = new List<GridChangedEventArgs<Garbage>>();
-            Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
+        var eventArgs = new List<GridChangedEventArgs<Garbage>>();
+        Instance.CollectionChanged += (sender, args) => eventArgs.Add(args);
 
-            //Act
-            Instance.Swap(new Vector2<int>(2, 0), new Vector2<int>(1, 2));
+        //Act
+        Instance.Swap(new Vector2<int>(2, 0), new Vector2<int>(1, 2));
 
-            //Assert
-            eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
+        //Assert
+        eventArgs.Should().BeEquivalentTo(new List<GridChangedEventArgs<Garbage>>
             {
                 new()
                 {
-                    NewValues = new List<Cell<Garbage>> { new(2,0, secondItem), new(1, 2, firstItem) },
-                    OldValues = new List<Cell<Garbage>> { new(2,0, firstItem), new(1, 2, secondItem) },
+                    NewValues = [new(2,0, secondItem), new(1, 2, firstItem)],
+                    OldValues = [new(2,0, firstItem), new(1, 2, secondItem)],
                 }
             });
-        }
     }
 
-    [TestClass]
-    public class ToStringMethod : ToolBX.Collections.UnitTesting.Tester<Grid<string>>
+    [TestMethod]
+    public void ToString_WhenGridIsEmpty_ReturnEmptyMessage()
     {
-        [TestMethod]
-        public void WhenGridIsEmpty_ReturnEmptyMessage()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = Instance.ToString();
+        //Act
+        var result = Instance.ToString();
 
-            //Assert
-            result.Should().BeEquivalentTo("Empty Grid<String>");
-        }
-
-        [TestMethod]
-        public void WhenGridIsNotEmpty_ReturnCount()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<string>>(5).ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance.ToString();
-
-            //Assert
-            result.Should().BeEquivalentTo("Grid<String> with 5 items");
-        }
+        //Assert
+        result.Should().BeEquivalentTo("Empty Grid<Garbage>");
     }
 
-    [TestClass]
-    public class Equals_Object : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void ToString_WhenGridIsNotEmpty_ReturnCount()
     {
-        [TestMethod]
-        public void WhenOtherIsSimilarGrid_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>(5).ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var other = Instance.Copy();
+        //Act
+        var result = Instance.ToString();
 
-            //Act
-            var result = Instance.Equals((object)other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentGrid_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
-
-            //Act
-            var result = Instance.Equals((object)other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSimilar2dArray_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.To2dArray();
-
-            //Act
-            var result = Instance.Equals((object)other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferent2dArray_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.Build<Cell<Garbage>>().With(x => x.Index, new Vector2<int>(Dummy.Number.Between(-5, 5).Create(), Dummy.Number.Between(-5, 5).Create())).CreateMany().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Dummy.Create<Garbage[,]>();
-
-            //Act
-            var result = Instance.Equals((object)other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSimilarJaggedArray_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToJaggedArray();
-
-            //Act
-            var result = Instance.Equals((object)other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentJaggedArray_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Dummy.Create<Garbage[][]>();
-
-            //Act
-            var result = Instance.Equals((object)other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSimilarCells_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance.Equals((object)cells);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentCells_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
-
-            //Act
-            var result = Instance.Equals((object)other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsSimilarKeyValuePairs_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToDictionary();
-
-            //Act
-            var result = Instance.Equals((object)other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentKeyValuePairs_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Dummy.Create<Dictionary<Vector2<int>, Garbage>>();
-
-            //Act
-            var result = Instance.Equals((object)other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherIsDifferentUnsupportedType_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Dummy.Create<int>();
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Assert
+        result.Should().BeEquivalentTo("Grid<Garbage> with 5 items");
     }
 
-    [TestClass]
-    public class Equals_Grid : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsSimilarGrid_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenOtherGridIsNull_ReturnFalse()
-        {
-            //Arrange
-            Grid<Garbage> other = null!;
+        //Arrange
+        var cells = Dummy.Build<Cell<Garbage>>().With(x => x.Index, new Vector2<int>(Dummy.Number.Between(-5, 5).Create(), Dummy.Number.Between(-5, 5).Create())).CreateMany().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Act
-            var result = Instance.Equals(other);
+        var other = Instance.Copy();
 
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Act
+        var result = Instance.Equals((object)other);
 
-        [TestMethod]
-        public void WhenOtherGridIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
+        //Assert
+        result.Should().BeTrue();
+    }
 
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsDifferentGrid_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.Build<Cell<Garbage>>().With(x => x.Index, new Vector2<int>(Dummy.Number.Between(-5, 5).Create(), Dummy.Number.Between(-5, 5).Create())).CreateMany().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Act
-            var result = Instance.Equals(other);
+        var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Act
+        var result = Instance.Equals((object)other);
 
-        [TestMethod]
-        public void WhenOtherGridIsSameReference_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        //Assert
+        result.Should().BeFalse();
+    }
 
-            //Act
-            var result = Instance.Equals(Instance);
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsSimilar2dArray_ReturnTrue()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Assert
-            result.Should().BeTrue();
-        }
+        var other = Instance.To2dArray();
 
-        [TestMethod]
-        public void WhenOtherGridAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        //Act
+        var result = Instance.Equals((object)other);
 
-            var other = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToGrid();
+        //Assert
+        result.Should().BeTrue();
+    }
 
-            //Act
-            var result = Instance.Equals(other);
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsDifferent2dArray_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Assert
-            result.Should().BeFalse();
-        }
+        var other = Dummy.Create<Garbage[,]>();
 
-        [TestMethod]
-        public void WhenOtherGridAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        //Act
+        var result = Instance.Equals((object)other);
 
-            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToGrid();
+        //Assert
+        result.Should().BeFalse();
+    }
 
-            //Act
-            var result = Instance.Equals(other);
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsSimilarJaggedArray_ReturnTrue()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Assert
-            result.Should().BeFalse();
-        }
+        var other = Instance.ToJaggedArray();
 
-        [TestMethod]
-        public void WhenOtherGridAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
+        //Act
+        var result = Instance.Equals((object)other);
 
-            var other = Instance.Copy();
+        //Assert
+        result.Should().BeTrue();
+    }
 
-            //Act
-            var result = Instance.Equals(other);
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsDifferentJaggedArray_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Assert
-            result.Should().BeTrue();
-        }
+        var other = Dummy.Create<Garbage[][]>();
 
-        [TestMethod]
-        public void WhenOtherIsGridButOrderedDifferently_ReturnTrue()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
+        //Act
+        var result = Instance.Equals((object)other);
 
-            var other = new Grid<Garbage>
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsSimilarCells_ReturnTrue()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        var result = Instance.Equals((object)cells);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsDifferentCells_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        //Act
+        var result = Instance.Equals((object)other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsSimilarKeyValuePairs_ReturnTrue()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToDictionary();
+
+        //Act
+        var result = Instance.Equals((object)other);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsDifferentKeyValuePairs_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Dummy.Create<Dictionary<Vector2<int>, Garbage>>();
+
+        //Act
+        var result = Instance.Equals((object)other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithObject_WhenOtherIsDifferentUnsupportedType_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Dummy.Create<int>();
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithGrid_WhenOtherGridIsNull_ReturnFalse()
+    {
+        //Arrange
+        Grid<Garbage> other = null!;
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithGrid_WhenOtherGridIsDifferent_ReturnFalse()
+    {
+        //Arrange
+        var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithGrid_WhenOtherGridIsSameReference_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        var result = Instance.Equals(Instance);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsWithGrid_WhenOtherGridAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToGrid();
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithGrid_WhenOtherGridAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToGrid();
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithGrid_WhenOtherGridAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.Copy();
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsWithGrid_WhenOtherIsGridButOrderedDifferently_ReturnTrue()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
+
+        var other = new Grid<Garbage>
             {
                 { 1,0, Instance[1,0] },
                 { 0,0, Instance[0,0] },
                 { 2,0, Instance[2,0] },
             };
 
-            //Act
-            var result = Instance.Equals(other);
+        //Act
+        var result = Instance.Equals(other);
 
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeTrue();
+    }
 
-        [TestMethod]
-        public void WhenOtherIsCellsButOrderedDifferently_ReturnTrue()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 0] = Dummy.Create<Garbage>();
-            Instance[2, 0] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void EqualsWithGrid_WhenOtherIsCellsButOrderedDifferently_ReturnTrue()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 0] = Dummy.Create<Garbage>();
+        Instance[2, 0] = Dummy.Create<Garbage>();
 
-            var other = new List<Cell<Garbage>>
+        var other = new List<Cell<Garbage>>
             {
                 new(1, 0, Instance[1, 0]),
                 new(0, 0, Instance[0, 0]),
                 new(2, 0, Instance[2, 0]),
             };
 
-            //Act
-            var result = Instance.Equals(other);
+        //Act
+        var result = Instance.Equals(other);
 
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class EqualsOperator_Grid : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsOperatorWithGrid_WhenBothAreNull_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnTrue()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = (Grid<Garbage>)null! == (Grid<Garbage>)null!;
+        //Act
+        var result = (Grid<Garbage>)null! == (Grid<Garbage>)null!;
 
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenGridIsNull_ReturnFalse()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! == Dummy.CreateMany<Cell<Garbage>>().ToGrid();
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridIsNull_ReturnFalse()
-        {
-            //Arrange
-            IEnumerable<Cell<Garbage>> other = null!;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToGrid();
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToGrid();
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.Copy();
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class NotEqualsOperator_Grid : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsOperatorWithGrid_WhenGridIsNull_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnFalse()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = (Grid<Garbage>)null! != (Grid<Garbage>)null!;
+        //Act
+        var result = (Grid<Garbage>)null! == Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenGridIsNull_ReturnTrue()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! != Dummy.CreateMany<Cell<Garbage>>().ToGrid();
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridIsNull_ReturnTrue()
-        {
-            //Arrange
-            IEnumerable<Cell<Garbage>> other = null!;
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridIsDifferent_ReturnTrue()
-        {
-            //Arrange
-            var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToGrid();
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToGrid();
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenOtherGridAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.Copy();
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class Equals_Cells : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsOperatorWithGrid_WhenOtherGridIsNull_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenCellsIsNull_ReturnFalse()
-        {
-            //Arrange
-            IEnumerable<Cell<Garbage>> other = null!;
+        //Arrange
+        IEnumerable<Cell<Garbage>> other = null!;
 
-            //Act
-            var result = Instance.Equals(other);
+        //Act
+        var result = Instance == other;
 
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenCellsIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenCellsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
-
-            //Act
-            var result = Instance.Equals(differentCells);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenCellsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToList();
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenCellsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToList();
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class EqualsOperator_Cells : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsOperatorWithGrid_WhenOtherGridIsDifferent_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnTrue()
-        {
-            //Arrange
+        //Arrange
+        var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
-            //Act
-            var result = (Grid<Garbage>)null! == (IEnumerable<Cell<Garbage>>)null!;
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Act
+        var result = Instance == other;
 
-        [TestMethod]
-        public void WhenGridIsNull_ReturnFalse()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! == Dummy.CreateMany<Cell<Garbage>>().ToList();
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenCellsIsNull_ReturnFalse()
-        {
-            //Arrange
-            IEnumerable<Cell<Garbage>> other = null!;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenCellsIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenCellsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
-
-            //Act
-            var result = Instance == differentCells;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenCellsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToList();
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenCellsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToList();
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class NotEqualsOperator_Cells : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsOperatorWithGrid_WhenOtherGridAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnFalse()
-        {
-            //Arrange
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Act
-            var result = (Grid<Garbage>)null! != (IEnumerable<Cell<Garbage>>)null!;
+        var other = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToGrid();
 
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Act
+        var result = Instance == other;
 
-        [TestMethod]
-        public void WhenGridIsNull_ReturnTrue()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! != Dummy.CreateMany<Cell<Garbage>>().ToList();
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenCellsIsNull_ReturnTrue()
-        {
-            //Arrange
-            IEnumerable<Cell<Garbage>> other = null!;
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenCellsIsDifferent_ReturnTrue()
-        {
-            //Arrange
-            var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenCellsAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
-
-            //Act
-            var result = Instance != differentCells;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenCellsAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToList();
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenCellsAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToList();
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class Equals_KeyValuePairs : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsOperatorWithGrid_WhenOtherGridAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenKeyValuePairsIsNull_ReturnFalse()
-        {
-            //Arrange
-            IEnumerable<KeyValuePair<Vector2<int>, Garbage>> other = null!;
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Act
-            var result = Instance.Equals(other);
+        var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToGrid();
 
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Act
+        var result = Instance == other;
 
-        [TestMethod]
-        public void WhenKeyValuePairsIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance.Equals(other);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Garbage>(differentCells).ToDictionary();
-
-            //Act
-            var result = Instance.Equals(other!);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToDictionary();
-            foreach (var ((x, y), _) in Instance)
-                other[new Vector2<int>(x, y)] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance.Equals(other!);
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToDictionary();
-
-            //Act
-            var result = Instance.Equals(other!);
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class EqualsOperator_KeyValuePairs : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsOperatorWithGrid_WhenOtherGridAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnTrue()
-        {
-            //Arrange
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            //Act
-            var result = (Grid<Garbage>)null! == (IEnumerable<KeyValuePair<Vector2<int>, Garbage>>)null!;
+        var other = Instance.Copy();
 
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Act
+        var result = Instance == other;
 
-        [TestMethod]
-        public void WhenGridIsNull_ReturnFalse()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! == Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsIsNull_ReturnFalse()
-        {
-            //Arrange
-            IEnumerable<KeyValuePair<Vector2<int>, Garbage>> other = null!;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Garbage>(differentCells).ToDictionary();
-
-            //Act
-            var result = Instance == other!;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToDictionary();
-            foreach (var ((x, y), _) in Instance)
-                other[new Vector2<int>(x, y)] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance == other!;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToDictionary();
-
-            //Act
-            var result = Instance == other!;
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Assert
+        result.Should().BeTrue();
     }
 
-    [TestClass]
-    public class NotEqualsOperator_KeyValuePairs : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void NotEqualsOperatorWithGrid_WhenBothAreNull_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnFalse()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = (Grid<Garbage>)null! != (IEnumerable<KeyValuePair<Vector2<int>, Garbage>>)null!;
+        //Act
+        var result = (Grid<Garbage>)null! != (Grid<Garbage>)null!;
 
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenGridIsNull_ReturnTrue()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! != Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsIsNull_ReturnTrue()
-        {
-            //Arrange
-            IEnumerable<KeyValuePair<Vector2<int>, Garbage>> other = null!;
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsIsDifferent_ReturnTrue()
-        {
-            //Arrange
-            var other = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Garbage>(differentCells).ToDictionary();
-
-            //Act
-            var result = Instance != other!;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToDictionary();
-            foreach (var ((x, y), _) in Instance)
-                other[new Vector2<int>(x, y)] = Dummy.Create<Garbage>();
-
-            //Act
-            var result = Instance != other!;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenKeyValuePairsAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToDictionary();
-
-            //Act
-            var result = Instance != other!;
-
-            //Assert
-            result.Should().BeFalse();
-        }
+        //Assert
+        result.Should().BeFalse();
     }
 
-    [TestClass]
-    public class Equals_2dArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void NotEqualsOperatorWithGrid_WhenGridIsNull_ReturnTrue()
     {
-        [TestMethod]
-        public void WhenArrayIsNull_ReturnFalse()
-        {
-            //Arrange
-            Garbage[,] other = null!;
+        //Arrange
 
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
+        //Act
+        var result = (Grid<Garbage>)null! != Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
-        [TestMethod]
-        public void WhenBothAreEmpty_ReturnTrue()
-        {
-            //Arrange
-            var other = new Garbage[0, 0];
+        //Assert
+        result.Should().BeTrue();
+    }
 
-            //Act
-            //Assert
-            Ensure.Equality(Instance, other);
-        }
+    [TestMethod]
+    public void NotEqualsOperatorWithGrid_WhenOtherGridIsNull_ReturnTrue()
+    {
+        //Arrange
+        IEnumerable<Cell<Garbage>> other = null!;
 
-        [TestMethod]
-        public void WhenGridIsEmptyButArrayIsNot_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.Create<Garbage[,]>();
+        //Act
+        var result = Instance != other;
 
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
+        //Assert
+        result.Should().BeTrue();
+    }
 
-        }
+    [TestMethod]
+    public void NotEqualsOperatorWithGrid_WhenOtherGridIsDifferent_ReturnTrue()
+    {
+        //Arrange
+        var other = Dummy.CreateMany<Cell<Garbage>>().ToGrid();
 
-        [TestMethod]
-        public void WhenGridContainsItemsButArrayIsEmpty_ReturnFalse()
-        {
-            //Arrange
-            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var other = new Garbage[0, 0];
+        //Act
+        var result = Instance != other;
 
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
+        //Assert
+        result.Should().BeTrue();
+    }
 
-        [TestMethod]
-        public void WhenGridAndArrayContainNullValuesAtCorrespondingPositions_ReturnTrue()
-        {
-            // Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = null;
+    [TestMethod]
+    public void NotEqualsOperatorWithGrid_WhenOtherGridAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var other = Instance.To2dArray();
+        var other = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToGrid();
 
-            // Act
-            // Assert
-            Ensure.Equality(Instance, other);
-        }
+        //Act
+        var result = Instance != other;
 
-        [TestMethod]
-        public void WhenArrayHasAnExtraRow_ReturnFalse()
-        {
-            // Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Dummy.Create<Garbage>();
+        //Assert
+        result.Should().BeTrue();
+    }
 
-            var otherGrid = Instance.ToGrid();
-            for (var x = 0; x < 3; x++)
-                otherGrid[x, 3] = Dummy.Create<Garbage>();
+    [TestMethod]
+    public void NotEqualsOperatorWithGrid_WhenOtherGridAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var other = otherGrid.To2dArray();
+        var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToGrid();
 
-            // Act
-            // Assert
-            Ensure.Inequality(Instance, other);
-        }
+        //Act
+        var result = Instance != other;
 
-        [TestMethod]
-        public void WhenGridHasAnExtraRow_ReturnFalse()
-        {
-            // Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Dummy.Create<Garbage>();
+        //Assert
+        result.Should().BeTrue();
+    }
 
-            var otherGrid = Instance.ToGrid();
-            otherGrid.RemoveAt(0, 2);
-            otherGrid.RemoveAt(1, 2);
-            otherGrid.RemoveAt(2, 2);
+    [TestMethod]
+    public void NotEqualsOperatorWithGrid_WhenOtherGridAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
 
-            var other = otherGrid.To2dArray();
+        var other = Instance.Copy();
 
-            // Act
-            // Assert
-            Ensure.Inequality(Instance, other);
-        }
+        //Act
+        var result = Instance != other;
 
-        [TestMethod]
-        public void WhenArrayHasAnExtraColumn_ReturnFalse()
-        {
-            //Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Dummy.Create<Garbage>();
+        //Assert
+        result.Should().BeFalse();
+    }
 
-            var otherGrid = Instance.ToGrid();
+    [TestMethod]
+    public void EqualsWithCells_WhenCellsIsNull_ReturnFalse()
+    {
+        //Arrange
+        IEnumerable<Cell<Garbage>> other = null!;
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithCells_WhenCellsIsDifferent_ReturnFalse()
+    {
+        //Arrange
+        var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithCells_WhenCellsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+
+        //Act
+        var result = Instance.Equals(differentCells);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithCells_WhenCellsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToList();
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithCells_WhenCellsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToList();
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithCells_WhenBothAreNull_ReturnTrue()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! == (IEnumerable<Cell<Garbage>>)null!;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithCells_WhenGridIsNull_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! == Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithCells_WhenCellsIsNull_ReturnFalse()
+    {
+        //Arrange
+        IEnumerable<Cell<Garbage>> other = null!;
+
+        //Act
+        var result = Instance == other;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithCells_WhenCellsIsDifferent_ReturnFalse()
+    {
+        //Arrange
+        var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        var result = Instance == other;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithCells_WhenCellsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+
+        //Act
+        var result = Instance == differentCells;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithCells_WhenCellsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToList();
+
+        //Act
+        var result = Instance == other;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithCells_WhenCellsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToList();
+
+        //Act
+        var result = Instance == other;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithCells_WhenBothAreNull_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! != (IEnumerable<Cell<Garbage>>)null!;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithCells_WhenGridIsNull_ReturnTrue()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! != Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithCells_WhenCellsIsNull_ReturnTrue()
+    {
+        //Arrange
+        IEnumerable<Cell<Garbage>> other = null!;
+
+        //Act
+        var result = Instance != other;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithCells_WhenCellsIsDifferent_ReturnTrue()
+    {
+        //Arrange
+        var other = Dummy.CreateMany<Cell<Garbage>>().ToList();
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        var result = Instance != other;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithCells_WhenCellsAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+
+        //Act
+        var result = Instance != differentCells;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithCells_WhenCellsAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.Select(x => new Cell<Garbage>(x.Index, Dummy.Create<Garbage>())).ToList();
+
+        //Act
+        var result = Instance != other;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithCells_WhenCellsAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToList();
+
+        //Act
+        var result = Instance != other;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithKeyValuePairs_WhenKeyValuePairsIsNull_ReturnFalse()
+    {
+        //Arrange
+        IEnumerable<KeyValuePair<Vector2<int>, Garbage>> other = null!;
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithKeyValuePairs_WhenKeyValuePairsIsDifferent_ReturnFalse()
+    {
+        //Arrange
+        var other = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        var result = Instance.Equals(other);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithKeyValuePairs_WhenKeyValuePairsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+        var other = new Grid<Garbage>(differentCells).ToDictionary();
+
+        //Act
+        var result = Instance.Equals(other!);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithKeyValuePairs_WhenKeyValuePairsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToDictionary();
+        foreach (var ((x, y), _) in Instance)
+            other[new Vector2<int>(x, y)] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance.Equals(other!);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWithKeyValuePairs_WhenKeyValuePairsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToDictionary();
+
+        //Act
+        var result = Instance.Equals(other!);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithKeyValuePairs_WhenBothAreNull_ReturnTrue()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! == (IEnumerable<KeyValuePair<Vector2<int>, Garbage>>)null!;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithKeyValuePairs_WhenGridIsNull_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! == Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithKeyValuePairs_WhenKeyValuePairsIsNull_ReturnFalse()
+    {
+        //Arrange
+        IEnumerable<KeyValuePair<Vector2<int>, Garbage>> other = null!;
+
+        //Act
+        var result = Instance == other;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithKeyValuePairs_WhenKeyValuePairsIsDifferent_ReturnFalse()
+    {
+        //Arrange
+        var other = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        var result = Instance == other;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithKeyValuePairs_WhenKeyValuePairsAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+        var other = new Grid<Garbage>(differentCells).ToDictionary();
+
+        //Act
+        var result = Instance == other!;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithKeyValuePairs_WhenKeyValuePairsAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToDictionary();
+        foreach (var ((x, y), _) in Instance)
+            other[new Vector2<int>(x, y)] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance == other!;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithKeyValuePairs_WhenKeyValuePairsAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToDictionary();
+
+        //Act
+        var result = Instance == other!;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithKeyValuePairs_WhenBothAreNull_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! != (IEnumerable<KeyValuePair<Vector2<int>, Garbage>>)null!;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithKeyValuePairs_WhenGridIsNull_ReturnTrue()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! != Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithKeyValuePairs_WhenKeyValuePairsIsNull_ReturnTrue()
+    {
+        //Arrange
+        IEnumerable<KeyValuePair<Vector2<int>, Garbage>> other = null!;
+
+        //Act
+        var result = Instance != other;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithKeyValuePairs_WhenKeyValuePairsIsDifferent_ReturnTrue()
+    {
+        //Arrange
+        var other = Dummy.CreateMany<KeyValuePair<Vector2<int>, Garbage>>().ToList();
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        var result = Instance != other;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithKeyValuePairs_WhenKeyValuePairsAndGridHaveSameItemsAtDifferentIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+        var other = new Grid<Garbage>(differentCells).ToDictionary();
+
+        //Act
+        var result = Instance != other!;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithKeyValuePairs_WhenKeyValuePairsAndGridHaveDifferentItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToDictionary();
+        foreach (var ((x, y), _) in Instance)
+            other[new Vector2<int>(x, y)] = Dummy.Create<Garbage>();
+
+        //Act
+        var result = Instance != other!;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithKeyValuePairs_WhenKeyValuePairsAndGridHaveSameItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToDictionary();
+
+        //Act
+        var result = Instance != other!;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenArrayIsNull_ReturnFalse()
+    {
+        //Arrange
+        Garbage[,] other = null!;
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenBothAreEmpty_ReturnTrue()
+    {
+        //Arrange
+        var other = new Garbage[0, 0];
+
+        //Act
+        //Assert
+        Ensure.Equality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenGridIsEmptyButArrayIsNot_ReturnFalse()
+    {
+        //Arrange
+        var other = Dummy.Create<Garbage[,]>();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenGridContainsItemsButArrayIsEmpty_ReturnFalse()
+    {
+        //Arrange
+        Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
+
+        var other = new Garbage[0, 0];
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenGridAndArrayContainNullValuesAtCorrespondingPositions_ReturnTrue()
+    {
+        // Arrange
+        for (var x = 0; x < 3; x++)
             for (var y = 0; y < 3; y++)
-                otherGrid[3, y] = Dummy.Create<Garbage>();
+                Instance[x, y] = null;
 
-            var other = otherGrid.To2dArray();
+        var other = Instance.To2dArray();
 
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenGridHasAnExtraColumn_ReturnFalse()
-        {
-            //Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Dummy.Create<Garbage>();
-
-            var otherGrid = Instance.ToGrid();
-            otherGrid.RemoveAt(2, 0);
-            otherGrid.RemoveAt(2, 1);
-            otherGrid.RemoveAt(2, 2);
-
-            var other = otherGrid.To2dArray();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-
-        [TestMethod]
-        public void WhenGridHasMoreColumnsThanArray_ReturnFalse()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 3] = Dummy.Create<Garbage>();
-            Instance[2, 4] = Dummy.Create<Garbage>();
-
-            var other = new Garbage[2, 0];
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.Create<Garbage[,]>();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Garbage>(differentCells).To2dArray();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.To2dArray();
-            foreach (var ((x, y), _) in Instance)
-                other[x, y] = Dummy.Create<Garbage>();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.To2dArray();
-
-            //Act
-            //Assert
-            Ensure.Equality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenGridHasANegativeX_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.To2dArray();
-
-            Instance[-Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenGridHasANegativeY_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.To2dArray();
-
-            Instance[Dummy.Create<int>(), -Dummy.Create<int>()] = Dummy.Create<Garbage>();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
+        // Act
+        // Assert
+        Ensure.Equality(Instance, other);
     }
 
-    [TestClass]
-    public class EqualsOperator_2dArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsWith2dArray_WhenArrayHasAnExtraRow_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnTrue()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! == (Garbage[,])null!;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenGridIsNull_ReturnFalse()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! == Dummy.Create<Garbage[,]>();
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenArrayIsNull_ReturnFalse()
-        {
-            //Arrange
-            Garbage[,] other = null!;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-    }
-
-    [TestClass]
-    public class NotEqualsOperator_2dArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
-    {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnFalse()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! != (Garbage[,])null!;
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenGridIsNull_ReturnTrue()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! != Dummy.Create<Garbage[,]>();
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenArrayIsNull_ReturnTrue()
-        {
-            //Arrange
-            Garbage[,] other = null!;
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
-    }
-
-    [TestClass]
-    public class Equals_JaggedArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
-    {
-        [TestMethod]
-        public void WhenArrayIsNull_ReturnFalse()
-        {
-            //Arrange
-            Garbage[][] other = null!;
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenBothAreEmpty_ReturnTrue()
-        {
-            //Arrange
-            var other = Array.Empty<Garbage[]>();
-
-            //Act
-            //Assert
-            Ensure.Equality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenGridIsEmptyButArrayIsNot_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.Create<Garbage[][]>();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-
-        }
-
-        [TestMethod]
-        public void WhenGridContainsItemsButArrayIsEmpty_ReturnFalse()
-        {
-            //Arrange
-            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
-
-            var other = Array.Empty<Garbage[]>();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenGridAndArrayContainNullValuesAtCorrespondingPositions_ReturnTrue()
-        {
-            // Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = null;
-
-            var other = Instance.ToJaggedArray();
-
-            // Act
-            // Assert
-            Ensure.Equality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayHasAnExtraRow_ReturnFalse()
-        {
-            // Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Dummy.Create<Garbage>();
-
-            var otherGrid = Instance.ToGrid();
-            for (var x = 0; x < 3; x++)
-                otherGrid[x, 3] = Dummy.Create<Garbage>();
-
-            var other = otherGrid.ToJaggedArray();
-
-            // Act
-            // Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenGridHasAnExtraRow_ReturnFalse()
-        {
-            // Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Dummy.Create<Garbage>();
-
-            var otherGrid = Instance.ToGrid();
-            otherGrid.RemoveAt(0, 2);
-            otherGrid.RemoveAt(1, 2);
-            otherGrid.RemoveAt(2, 2);
-
-            var other = otherGrid.ToJaggedArray();
-
-            // Act
-            // Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayHasAnExtraColumn_ReturnFalse()
-        {
-            //Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Dummy.Create<Garbage>();
-
-            var otherGrid = Instance.ToGrid();
+        // Arrange
+        for (var x = 0; x < 3; x++)
             for (var y = 0; y < 3; y++)
-                otherGrid[3, y] = Dummy.Create<Garbage>();
+                Instance[x, y] = Dummy.Create<Garbage>();
 
-            var other = otherGrid.ToJaggedArray();
+        var otherGrid = Instance.ToGrid();
+        for (var x = 0; x < 3; x++)
+            otherGrid[x, 3] = Dummy.Create<Garbage>();
 
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
+        var other = otherGrid.To2dArray();
 
-        [TestMethod]
-        public void WhenGridHasAnExtraColumn_ReturnFalse()
-        {
-            //Arrange
-            for (var x = 0; x < 3; x++)
-                for (var y = 0; y < 3; y++)
-                    Instance[x, y] = Dummy.Create<Garbage>();
-
-            var otherGrid = Instance.ToGrid();
-            otherGrid.RemoveAt(2, 0);
-            otherGrid.RemoveAt(2, 1);
-            otherGrid.RemoveAt(2, 2);
-
-            var other = otherGrid.ToJaggedArray();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenGridHasMoreColumnsThanArray_ReturnFalse()
-        {
-            //Arrange
-            Instance[0, 0] = Dummy.Create<Garbage>();
-            Instance[1, 3] = Dummy.Create<Garbage>();
-            Instance[2, 4] = Dummy.Create<Garbage>();
-
-            var other = new Garbage[2][];
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayIsDifferent_ReturnFalse()
-        {
-            //Arrange
-            var other = Dummy.Create<Garbage[][]>();
-
-            var cells = Dummy.CreateMany<Cell<Garbage>>();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
-            var other = new Grid<Garbage>(differentCells).ToJaggedArray();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToJaggedArray();
-            foreach (var ((x, y), _) in Instance)
-                other[x][y] = Dummy.Create<Garbage>();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToJaggedArray();
-
-            //Act
-            //Assert
-            Ensure.Equality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenGridHasANegativeX_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToJaggedArray();
-
-            Instance[-Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
-
-        [TestMethod]
-        public void WhenGridHasANegativeY_ReturnFalse()
-        {
-            //Arrange
-            var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            foreach (var (index, value) in cells)
-                Instance[index] = value;
-
-            var other = Instance.ToJaggedArray();
-
-            Instance[Dummy.Create<int>(), -Dummy.Create<int>()] = Dummy.Create<Garbage>();
-
-            //Act
-            //Assert
-            Ensure.Inequality(Instance, other);
-        }
+        // Act
+        // Assert
+        Ensure.Inequality(Instance, other);
     }
 
-    [TestClass]
-    public class EqualsOperator_JaggedArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsWith2dArray_WhenGridHasAnExtraRow_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnTrue()
-        {
-            //Arrange
+        // Arrange
+        for (var x = 0; x < 3; x++)
+            for (var y = 0; y < 3; y++)
+                Instance[x, y] = Dummy.Create<Garbage>();
 
-            //Act
-            var result = (Grid<Garbage>)null! == (Garbage[][])null!;
+        var otherGrid = Instance.ToGrid();
+        otherGrid.RemoveAt(0, 2);
+        otherGrid.RemoveAt(1, 2);
+        otherGrid.RemoveAt(2, 2);
 
-            //Assert
-            result.Should().BeTrue();
-        }
+        var other = otherGrid.To2dArray();
 
-        [TestMethod]
-        public void WhenGridIsNull_ReturnFalse()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! == Dummy.Create<Garbage[][]>();
-
-            //Assert
-            result.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void WhenArrayIsNull_ReturnFalse()
-        {
-            //Arrange
-            Garbage[][] other = null!;
-
-            //Act
-            var result = Instance == other;
-
-            //Assert
-            result.Should().BeFalse();
-        }
+        // Act
+        // Assert
+        Ensure.Inequality(Instance, other);
     }
 
-    [TestClass]
-    public class NotEqualsOperator_JaggedArray : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsWith2dArray_WhenArrayHasAnExtraColumn_ReturnFalse()
     {
-        [TestMethod]
-        public void WhenBothAreNull_ReturnFalse()
-        {
-            //Arrange
+        //Arrange
+        for (var x = 0; x < 3; x++)
+            for (var y = 0; y < 3; y++)
+                Instance[x, y] = Dummy.Create<Garbage>();
 
-            //Act
-            var result = (Grid<Garbage>)null! != (Garbage[][])null!;
+        var otherGrid = Instance.ToGrid();
+        for (var y = 0; y < 3; y++)
+            otherGrid[3, y] = Dummy.Create<Garbage>();
 
-            //Assert
-            result.Should().BeFalse();
-        }
+        var other = otherGrid.To2dArray();
 
-        [TestMethod]
-        public void WhenGridIsNull_ReturnTrue()
-        {
-            //Arrange
-
-            //Act
-            var result = (Grid<Garbage>)null! != Dummy.Create<Garbage[][]>();
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void WhenArrayIsNull_ReturnTrue()
-        {
-            //Arrange
-            Garbage[][] other = null!;
-
-            //Act
-            var result = Instance != other;
-
-            //Assert
-            result.Should().BeTrue();
-        }
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
     }
 
-    [TestClass]
-    public class Enumerator : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void EqualsWith2dArray_WhenGridHasAnExtraColumn_ReturnFalse()
     {
-        [TestMethod]
-        public void Always_Enumerates()
+        //Arrange
+        for (var x = 0; x < 3; x++)
+            for (var y = 0; y < 3; y++)
+                Instance[x, y] = Dummy.Create<Garbage>();
+
+        var otherGrid = Instance.ToGrid();
+        otherGrid.RemoveAt(2, 0);
+        otherGrid.RemoveAt(2, 1);
+        otherGrid.RemoveAt(2, 2);
+
+        var other = otherGrid.To2dArray();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenGridHasMoreColumnsThanArray_ReturnFalse()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 3] = Dummy.Create<Garbage>();
+        Instance[2, 4] = Dummy.Create<Garbage>();
+
+        var other = new Garbage[2, 0];
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenArrayIsDifferent_ReturnFalse()
+    {
+        //Arrange
+        var other = Dummy.Create<Garbage[,]>();
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+        var other = new Grid<Garbage>(differentCells).To2dArray();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.To2dArray();
+        foreach (var ((x, y), _) in Instance)
+            other[x, y] = Dummy.Create<Garbage>();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.To2dArray();
+
+        //Act
+        //Assert
+        Ensure.Equality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenGridHasANegativeX_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.To2dArray();
+
+        Instance[-Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWith2dArray_WhenGridHasANegativeY_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.To2dArray();
+
+        Instance[Dummy.Create<int>(), -Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWith2dArray_WhenBothAreNull_ReturnTrue()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! == (Garbage[,])null!;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWith2dArray_WhenGridIsNull_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! == Dummy.Create<Garbage[,]>();
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWith2dArray_WhenArrayIsNull_ReturnFalse()
+    {
+        //Arrange
+        Garbage[,] other = null!;
+
+        //Act
+        var result = Instance == other;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWith2dArray_WhenBothAreNull_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! != (Garbage[,])null!;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWith2dArray_WhenGridIsNull_ReturnTrue()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! != Dummy.Create<Garbage[,]>();
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWith2dArray_WhenArrayIsNull_ReturnTrue()
+    {
+        //Arrange
+        Garbage[,] other = null!;
+
+        //Act
+        var result = Instance != other;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenArrayIsNull_ReturnFalse()
+    {
+        //Arrange
+        Garbage[][] other = null!;
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenBothAreEmpty_ReturnTrue()
+    {
+        //Arrange
+        var other = Array.Empty<Garbage[]>();
+
+        //Act
+        //Assert
+        Ensure.Equality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenGridIsEmptyButArrayIsNot_ReturnFalse()
+    {
+        //Arrange
+        var other = Dummy.Create<Garbage[][]>();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenGridContainsItemsButArrayIsEmpty_ReturnFalse()
+    {
+        //Arrange
+        Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
+
+        var other = Array.Empty<Garbage[]>();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenGridAndArrayContainNullValuesAtCorrespondingPositions_ReturnTrue()
+    {
+        // Arrange
+        for (var x = 0; x < 3; x++)
+            for (var y = 0; y < 3; y++)
+                Instance[x, y] = null;
+
+        var other = Instance.ToJaggedArray();
+
+        // Act
+        // Assert
+        Ensure.Equality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenArrayHasAnExtraRow_ReturnFalse()
+    {
+        // Arrange
+        for (var x = 0; x < 3; x++)
+            for (var y = 0; y < 3; y++)
+                Instance[x, y] = Dummy.Create<Garbage>();
+
+        var otherGrid = Instance.ToGrid();
+        for (var x = 0; x < 3; x++)
+            otherGrid[x, 3] = Dummy.Create<Garbage>();
+
+        var other = otherGrid.ToJaggedArray();
+
+        // Act
+        // Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenGridHasAnExtraRow_ReturnFalse()
+    {
+        // Arrange
+        for (var x = 0; x < 3; x++)
+            for (var y = 0; y < 3; y++)
+                Instance[x, y] = Dummy.Create<Garbage>();
+
+        var otherGrid = Instance.ToGrid();
+        otherGrid.RemoveAt(0, 2);
+        otherGrid.RemoveAt(1, 2);
+        otherGrid.RemoveAt(2, 2);
+
+        var other = otherGrid.ToJaggedArray();
+
+        // Act
+        // Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenArrayHasAnExtraColumn_ReturnFalse()
+    {
+        //Arrange
+        for (var x = 0; x < 3; x++)
+            for (var y = 0; y < 3; y++)
+                Instance[x, y] = Dummy.Create<Garbage>();
+
+        var otherGrid = Instance.ToGrid();
+        for (var y = 0; y < 3; y++)
+            otherGrid[3, y] = Dummy.Create<Garbage>();
+
+        var other = otherGrid.ToJaggedArray();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenGridHasAnExtraColumn_ReturnFalse()
+    {
+        //Arrange
+        for (var x = 0; x < 3; x++)
+            for (var y = 0; y < 3; y++)
+                Instance[x, y] = Dummy.Create<Garbage>();
+
+        var otherGrid = Instance.ToGrid();
+        otherGrid.RemoveAt(2, 0);
+        otherGrid.RemoveAt(2, 1);
+        otherGrid.RemoveAt(2, 2);
+
+        var other = otherGrid.ToJaggedArray();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenGridHasMoreColumnsThanArray_ReturnFalse()
+    {
+        //Arrange
+        Instance[0, 0] = Dummy.Create<Garbage>();
+        Instance[1, 3] = Dummy.Create<Garbage>();
+        Instance[2, 4] = Dummy.Create<Garbage>();
+
+        var other = new Garbage[2][];
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenArrayIsDifferent_ReturnFalse()
+    {
+        //Arrange
+        var other = Dummy.Create<Garbage[][]>();
+
+        var cells = Dummy.CreateMany<Cell<Garbage>>();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenArrayAndGridHaveSameItemsAtDifferentIndexes_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var differentCells = cells.Select(x => Dummy.Build<Cell<Garbage>>().With(y => y.Value, x.Value).Create()).ToList();
+        var other = new Grid<Garbage>(differentCells).ToJaggedArray();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenArrayAndGridHaveDifferentItemsAtSameIndexes_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToJaggedArray();
+        foreach (var ((x, y), _) in Instance)
+            other[x][y] = Dummy.Create<Garbage>();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenArrayAndGridHaveSameItemsAtSameIndexes_ReturnTrue()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToJaggedArray();
+
+        //Act
+        //Assert
+        Ensure.Equality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenGridHasANegativeX_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToJaggedArray();
+
+        Instance[-Dummy.Create<int>(), Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsWithJaggedArray_WhenGridHasANegativeY_ReturnFalse()
+    {
+        //Arrange
+        Dummy.Customize(new PositiveIndexCellCustomization());
+        var cells = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        foreach (var (index, value) in cells)
+            Instance[index] = value;
+
+        var other = Instance.ToJaggedArray();
+
+        Instance[Dummy.Create<int>(), -Dummy.Create<int>()] = Dummy.Create<Garbage>();
+
+        //Act
+        //Assert
+        Ensure.Inequality(Instance, other);
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithJaggedArray_WhenBothAreNull_ReturnTrue()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! == (Garbage[][])null!;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithJaggedArray_WhenGridIsNull_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! == Dummy.Create<Garbage[][]>();
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void EqualsOperatorWithJaggedArray_WhenArrayIsNull_ReturnFalse()
+    {
+        //Arrange
+        Garbage[][] other = null!;
+
+        //Act
+        var result = Instance == other;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithJaggedArray_WhenBothAreNull_ReturnFalse()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! != (Garbage[][])null!;
+
+        //Assert
+        result.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithJaggedArray_WhenGridIsNull_ReturnTrue()
+    {
+        //Arrange
+
+        //Act
+        var result = (Grid<Garbage>)null! != Dummy.Create<Garbage[][]>();
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void NotEqualsOperatorWithJaggedArray_WhenArrayIsNull_ReturnTrue()
+    {
+        //Arrange
+        Garbage[][] other = null!;
+
+        //Act
+        var result = Instance != other;
+
+        //Assert
+        result.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void Enumerator_Always_Enumerates()
+    {
+        //Arrange
+        Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
+
+        var enumeratedItems = new List<Cell<Garbage>>();
+
+        //Act
+        foreach (var item in Instance)
+            enumeratedItems.Add(item);
+
+        //Assert
+        enumeratedItems.Should().NotBeEmpty();
+        enumeratedItems.Should().BeEquivalentTo(Instance);
+        enumeratedItems.Should().HaveCount(Instance.Count);
+    }
+
+    [TestMethod]
+    public void Enumerator_WhenUsingResetAfterCollectionChanged_Throw()
+    {
+        //Arrange
+        Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
+
+        using var enumerator = Instance.GetEnumerator();
+
+        //Act
+        var action = () =>
         {
-            //Arrange
-            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
-
-            var enumeratedItems = new List<Cell<Garbage>>();
-
-            //Act
-            foreach (var item in Instance)
-                enumeratedItems.Add(item);
-
-            //Assert
-            enumeratedItems.Should().NotBeEmpty();
-            enumeratedItems.Should().BeEquivalentTo(Instance);
-            enumeratedItems.Should().HaveCount(Instance.Count);
-        }
-
-        [TestMethod]
-        public void Enumerator_WhenUsingResetAfterCollectionChanged_Throw()
-        {
-            //Arrange
-            Instance.Add(Dummy.CreateMany<Cell<Garbage>>());
-
-            using var enumerator = Instance.GetEnumerator();
-
-            //Act
-            var action = () =>
+            while (enumerator.MoveNext())
             {
-                while (enumerator.MoveNext())
-                {
-                    Instance.Add(Dummy.Create<Cell<Garbage>>());
-                    enumerator.Reset();
-                }
-            };
+                Instance.Add(Dummy.Create<Cell<Garbage>>());
+                enumerator.Reset();
+            }
+        };
 
-            //Assert
-            action.Should().Throw<InvalidOperationException>();
-        }
+        //Assert
+        action.Should().Throw<InvalidOperationException>();
     }
 
-    [TestClass]
-    public class HashCode : Tester<Grid<Garbage>>
+    [TestMethod]
+    public void HashCode_Always_ReturnInternalCollectionHashCode()
     {
-        [TestMethod]
-        public void Always_ReturnInternalCollectionHashCode()
-        {
-            //Arrange
+        //Arrange
 
-            //Act
-            var result = Instance.GetHashCode();
+        //Act
+        var result = Instance.GetHashCode();
 
-            //Assert
-            result.Should().Be(GetFieldValue<Dictionary<Vector2<int>, Garbage>>("_items")!.GetHashCode());
-        }
+        //Assert
+        result.Should().Be(GetFieldValue<Dictionary<Vector2<int>, Garbage>>("_items")!.GetHashCode());
     }
 
-    [TestClass]
-    public class Equality : ToolBX.Collections.UnitTesting.Tester
+    [TestMethod]
+    public void Equality_Always_EnsureValueEquality() => Ensure.ValueEquality<Grid<Garbage>>(Dummy);
+
+    [TestMethod]
+    public void Serialization_WhenSerializingJsonUsingNewtonsoft_DeserializeEquivalentObject()
     {
-        [TestMethod]
-        public void Always_EnsureValueEquality() => Ensure.ValueEquality<Grid<Garbage>>(Dummy);
+        //Arrange
+        var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        Instance.Add(items);
+
+        var json = JsonConvert.SerializeObject(Instance);
+
+        //Act
+        var result = JsonConvert.DeserializeObject<Grid<Garbage>>(json);
+
+        //Assert
+        result.Should().BeEquivalentTo(Instance);
     }
 
-    [TestClass]
-    public class Serialization : ToolBX.Collections.UnitTesting.Tester<Grid<Garbage>>
+    [TestMethod]
+    public void Serialization_WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
     {
-        [TestMethod]
-        public void WhenSerializingJsonUsingNewtonsoft_DeserializeEquivalentObject()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            Instance.Add(items);
+        //Arrange
+        var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
+        Instance.Add(items);
 
-            var json = JsonConvert.SerializeObject(Instance);
+        JsonSerializerOptions.WithGridConverters();
 
-            //Act
-            var result = JsonConvert.DeserializeObject<Grid<Garbage>>(json);
+        var json = System.Text.Json.JsonSerializer.Serialize(Instance, JsonSerializerOptions);
 
-            //Assert
-            result.Should().BeEquivalentTo(Instance);
-        }
+        //Act
+        var result = System.Text.Json.JsonSerializer.Deserialize<Grid<Garbage>>(json, JsonSerializerOptions);
 
-        [TestMethod]
-        public void WhenSerializingJsonUsingSystemText_DeserializeEquivalentObject()
-        {
-            //Arrange
-            var items = Dummy.CreateMany<Cell<Garbage>>().ToList();
-            Instance.Add(items);
-
-            JsonSerializerOptions.WithGridConverters();
-
-            var json = System.Text.Json.JsonSerializer.Serialize(Instance, JsonSerializerOptions);
-
-            //Act
-            var result = System.Text.Json.JsonSerializer.Deserialize<Grid<Garbage>>(json, JsonSerializerOptions);
-
-            //Assert
-            result.Should().BeEquivalentTo(Instance);
-        }
+        //Assert
+        result.Should().BeEquivalentTo(Instance);
     }
-
 }

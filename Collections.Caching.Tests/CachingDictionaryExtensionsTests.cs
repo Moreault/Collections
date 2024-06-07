@@ -1,7 +1,7 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public sealed class CachingDictionaryExtensionsTests : ToolBX.Collections.UnitTesting.Tester
+public sealed class CachingDictionaryExtensionsTests : Tester
 {
     [TestMethod]
     public void ToCachingDictionaryKey_WhenSourceIsNull_Throw()

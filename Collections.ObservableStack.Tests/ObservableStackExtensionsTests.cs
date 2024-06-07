@@ -1,7 +1,7 @@
 ﻿namespace Collections.ObservableStack.Tests;
 
 [TestClass]
-public sealed class ObservableStackExtensionsTests : ToolBX.Collections.UnitTesting.Tester
+public sealed class ObservableStackExtensionsTests : Tester
 {
     [TestMethod]
     public void ToObservableStack_WhenSourceIsNull_Throw()

@@ -160,11 +160,11 @@ namespace ToolBX.Collections.Inventory.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Quantity must be at least 1.
         /// </summary>
-        internal static string QuantityMustBeAtLeastOne {
+        internal static string QuantityMustBePositive {
             get {
-                return ResourceManager.GetString("QuantityMustBeAtLeastOne", resourceCulture);
+                return ResourceManager.GetString("QuantityMustBePositive", resourceCulture);
             }
         }
     }

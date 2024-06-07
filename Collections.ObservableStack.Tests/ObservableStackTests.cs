@@ -1,17 +1,13 @@
-using System.Collections;
-using ToolBX.Collections.ObservableStack.Json;
-using ToolBX.Dummies;
-using ToolBX.Eloquentest.Dummies;
-
 namespace Collections.ObservableStack.Tests;
 
 [TestClass]
-public class ObservableStackTests : ToolBX.Collections.UnitTesting.Tester<ObservableStack<Garbage>>
+public class ObservableStackTests : Tester<ObservableStack<Garbage>>
 {
     protected override void InitializeTest()
     {
         base.InitializeTest();
         JsonSerializerOptions.WithObservableStackConverters();
+        Dummy.WithCollectionCustomizations();
     }
 
     [TestMethod]
@@ -375,7 +371,7 @@ public class ObservableStackTests : ToolBX.Collections.UnitTesting.Tester<Observ
             {
                 new()
                 {
-                    OldValues = new List<Garbage> { item }
+                    OldValues = [item]
                 }
             });
     }
@@ -425,7 +421,7 @@ public class ObservableStackTests : ToolBX.Collections.UnitTesting.Tester<Observ
             {
                 new()
                 {
-                    OldValues = new List<Garbage> { items.Last() }
+                    OldValues = [items.Last()]
                 }
             });
     }
@@ -488,7 +484,7 @@ public class ObservableStackTests : ToolBX.Collections.UnitTesting.Tester<Observ
             {
                 new()
                 {
-                    OldValues = new List<Garbage> { item }
+                    OldValues = [item]
                 }
             });
     }
@@ -538,7 +534,7 @@ public class ObservableStackTests : ToolBX.Collections.UnitTesting.Tester<Observ
             {
                 new()
                 {
-                    OldValues = new List<Garbage> { items.Last() }
+                    OldValues = [items.Last()]
                 }
             });
     }
@@ -703,7 +699,7 @@ public class ObservableStackTests : ToolBX.Collections.UnitTesting.Tester<Observ
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be("Empty ObservableStack<Dummy>");
+        result.Should().Be("Empty ObservableStack<Garbage>");
     }
 
     [TestMethod]
@@ -717,7 +713,7 @@ public class ObservableStackTests : ToolBX.Collections.UnitTesting.Tester<Observ
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be("ObservableStack<Dummy> with 3 items");
+        result.Should().Be("ObservableStack<Garbage> with 3 items");
     }
 
     [TestMethod]

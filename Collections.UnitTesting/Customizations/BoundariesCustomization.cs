@@ -1,16 +1,11 @@
-﻿using ToolBX.Mathemancy;
+﻿namespace ToolBX.Collections.UnitTesting.Customizations;
 
-namespace ToolBX.Collections.UnitTesting.Customizations;
-
-public class BoundariesCustomization : ICustomization
+public class BoundariesCustomization : CustomizationBase
 {
-    public IEnumerable<Type> Types { get; } = [typeof(Boundaries<>)];
+    protected override IEnumerable<Type> Types { get; } = [typeof(Boundaries<>)];
 
-    public IDummyBuilder Build(Dummy dummy, Type type)
+    protected override IDummyBuilder BuildMe(IDummy dummy, Type type)
     {
-        if (dummy is null) throw new ArgumentNullException(nameof(dummy));
-        if (type is null) throw new ArgumentNullException(nameof(type));
-
         return dummy.Build<object>().FromFactory(() =>
         {
             var top = dummy.Create<int>();
@@ -18,7 +13,6 @@ public class BoundariesCustomization : ICustomization
             var right = left + dummy.Create<int>();
             var bottom = top + dummy.Create<int>();
             return new Boundaries<int>(top, right, bottom, left);
-            //TODO These shouldn't be required but were required by AutoFixture
-        })/*.Without(y => y.Top).Without(y => y.Right).Without(y => y.Bottom).Without(y => y.Left));*/;
+        });
     }
 }
