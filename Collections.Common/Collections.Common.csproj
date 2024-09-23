@@ -26,7 +26,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.OPEX" Version="2.2.0" />
+		<PackageReference Include="ToolBX.OPEX" Version="3.0.0-beta1" />
 	</ItemGroup>
 
 	<ItemGroup>

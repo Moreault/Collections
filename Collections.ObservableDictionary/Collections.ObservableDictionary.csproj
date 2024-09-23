@@ -19,9 +19,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.OutWarden" Version="2.2.0" />
-		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="3.0.0-beta0a" />
-		<PackageReference Include="ToolBX.Reflection4Humans.ValueEquality" Version="3.0.0-beta0a" />
+		<PackageReference Include="ToolBX.OutWarden" Version="3.0.0-beta1" />
+		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="3.0.0-beta5" />
+		<PackageReference Include="ToolBX.Reflection4Humans.ValueEquality" Version="3.0.0-beta5" />
 	</ItemGroup>
 
 	<ItemGroup>
