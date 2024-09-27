@@ -6,7 +6,7 @@ public sealed class CellCustomization : CustomizationBase
 
     protected override IDummyBuilder BuildMe(IDummy dummy, Type type) => dummy.Build<object>().FromFactory(() =>
     {
-        var position = new Vector2<int>(dummy.Number.Between(-10, 10).Create(), dummy.Number.Between(-10, 10).Create());
+        var position = new Vector2<int>(dummy.Number.Between(-25, 25).Create(), dummy.Number.Between(-25, 25).Create());
         var elementType = type.GetGenericArguments()[0];
         var cellType = typeof(Cell<>).MakeGenericType(elementType);
 

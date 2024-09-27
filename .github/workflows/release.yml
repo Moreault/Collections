@@ -29,7 +29,15 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
 
     - name: Pack projects
-      run: dotnet pack --no-build -c Release -o nupkg /p:PackageVersion=${{ github.event.release.tag_name }}
+      run: |
+        dotnet pack ./Collections.Caching/Collections.Caching.csproj --no-build -c Release -o nupkg /p:PackageVersion=${{ github.event.release.tag_name }}
+        dotnet pack ./Collections.Common/Collections.Common.csproj --no-build -c Release -o nupkg /p:PackageVersion=${{ github.event.release.tag_name }}
+        dotnet pack ./Collections.Grid/Collections.Grid.csproj --no-build -c Release -o nupkg /p:PackageVersion=${{ github.event.release.tag_name }}
+        dotnet pack ./Collections.Inventory/Collections.Inventory.csproj --no-build -c Release -o nupkg /p:PackageVersion=${{ github.event.release.tag_name }}
+        dotnet pack ./Collections.ObservableDictionary/Collections.ObservableDictionary.csproj --no-build -c Release -o nupkg /p:PackageVersion=${{ github.event.release.tag_name }}
+        dotnet pack ./Collections.ObservableList/Collections.ObservableList.csproj --no-build -c Release -o nupkg /p:PackageVersion=${{ github.event.release.tag_name }}
+        dotnet pack ./Collections.ObservableStack/Collections.ObservableStack.csproj --no-build -c Release -o nupkg /p:PackageVersion=${{ github.event.release.tag_name }}
+        dotnet pack ./Collections.ReadOnly/Collections.ReadOnly.csproj --no-build -c Release -o nupkg /p:PackageVersion=${{ github.event.release.tag_name }}
       
     - name: Publish to NuGet
       run: dotnet nuget push ./nupkg/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
