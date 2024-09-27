@@ -1,26 +1,22 @@
-﻿using ToolBX.Reflection4Humans.ValueEquality;
-
-namespace ToolBX.Collections.Grid;
+﻿namespace ToolBX.Collections.Grid;
 
 public delegate void GridChangedEvent<T>(object sender, GridChangedEventArgs<T> args);
 
 public sealed record GridChangedEventArgs<T>
 {
-    //TODO 3.0.0 : IReadOnlyList<Cell<T>>
-    public IList<Cell<T>> OldValues
+    public IReadOnlyList<Cell<T>> OldValues
     {
         get => _oldValues;
         init => _oldValues = value ?? throw new ArgumentNullException(nameof(value));
     }
-    private readonly IList<Cell<T>> _oldValues = Array.Empty<Cell<T>>();
+    private readonly IReadOnlyList<Cell<T>> _oldValues = [];
 
-    //TODO 3.0.0 : IReadOnlyList<Cell<T>>
-    public IList<Cell<T>> NewValues
+    public IReadOnlyList<Cell<T>> NewValues
     {
         get => _newValues;
         init => _newValues = value ?? throw new ArgumentNullException(nameof(value));
     }
-    private readonly IList<Cell<T>> _newValues = Array.Empty<Cell<T>>();
+    private readonly IReadOnlyList<Cell<T>> _newValues = [];
 
     public bool Equals(GridChangedEventArgs<T>? other)
     {

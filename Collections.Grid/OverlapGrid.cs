@@ -5,7 +5,7 @@
 /// </summary>
 public class OverlapGrid<T> : IEnumerable<Cell<T>>, IEquatable<OverlapGrid<T>>, IEquatable<IEnumerable<Cell<T>>>
 {
-    private readonly List<Cell<T>> _items = new();
+    private readonly List<Cell<T>> _items = [];
 
     public IReadOnlyList<T> this[int columnIndex, int rowIndex] => this[new Vector2<int>(columnIndex, rowIndex)];
 
@@ -91,7 +91,7 @@ public class OverlapGrid<T> : IEnumerable<Cell<T>>, IEquatable<OverlapGrid<T>>, 
     {
         if (cells == null) throw new ArgumentNullException(nameof(cells));
 
-        var list = cells as IList<Cell<T>> ?? cells.ToArray();
+        var list = cells as IReadOnlyList<Cell<T>> ?? cells.ToArray();
         _items.AddRange(list);
         CollectionChanged?.Invoke(this, new GridChangedEventArgs<T>
         {

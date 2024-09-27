@@ -1,6 +1,4 @@
-﻿using ToolBX.Collections.Inventory.Resources;
-
-namespace ToolBX.Collections.Inventory;
+﻿namespace ToolBX.Collections.Inventory;
 
 public class InventoryStackFullException : Exception
 {

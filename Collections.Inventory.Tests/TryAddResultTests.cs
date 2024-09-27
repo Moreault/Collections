@@ -7,7 +7,7 @@ public sealed class TryAddResultTests : Tester
     public void Total_Always_ReturnAddedPlusNotAdded()
     {
         //Arrange
-        var instance = Fixture.Create<TryAddResult>();
+        var instance = Dummy.Create<TryAddResult>();
 
         //Act
         var total = instance.Total;
@@ -20,7 +20,7 @@ public sealed class TryAddResultTests : Tester
     public void ToString_WhenAddedIsZero_ReturnNoneWereAdded()
     {
         //Arrange
-        var instance = new TryAddResult(0, Fixture.Create<int>());
+        var instance = new TryAddResult(0, Dummy.Create<int>());
 
         //Act
         var result = instance.ToString();
@@ -33,7 +33,7 @@ public sealed class TryAddResultTests : Tester
     public void ToString_WhenAddedIsNotZeroButNotAddedIs_ReturnAllItemsWereAdded()
     {
         //Arrange
-        var instance = new TryAddResult(Fixture.Create<int>(), 0);
+        var instance = new TryAddResult(Dummy.Create<int>(), 0);
 
         //Act
         var result = instance.ToString();
@@ -46,7 +46,7 @@ public sealed class TryAddResultTests : Tester
     public void ToString_WhenAddedAndNotAddedAreNotZero_ReturnItemsOutOfXAdded()
     {
         //Arrange
-        var instance = Fixture.Create<TryAddResult>();
+        var instance = Dummy.Create<TryAddResult>();
 
         //Act
         var result = instance.ToString();
@@ -56,11 +56,11 @@ public sealed class TryAddResultTests : Tester
     }
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<TryAddResult>(Fixture);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<TryAddResult>(Dummy);
 
     [TestMethod]
-    public void Ensure_ValueHashCode() => Ensure.ValueHashCode<TryAddResult>(Fixture);
+    public void Ensure_ValueHashCode() => Ensure.ValueHashCode<TryAddResult>(Dummy, JsonSerializerOptions);
 
     [TestMethod]
-    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<TryAddResult>(Fixture);
+    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<TryAddResult>(Dummy);
 }

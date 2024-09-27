@@ -1,20 +1,8 @@
 ﻿namespace ToolBX.Collections.UnitTesting.Customizations;
 
-public class OverlapGridSpecimenBuilder : ISpecimenBuilder
+public sealed class OverlapGridCustomization : GridCustomizationBase
 {
-    public object Create(object request, ISpecimenContext context)
-    {
-        if (request is Type type && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(OverlapGrid<>))
-        {
-            var elementType = type.GetGenericArguments()[0];
-            var cellType = typeof(Cell<>).MakeGenericType(elementType);
+    protected override IEnumerable<Type> Types => [typeof(OverlapGrid<>)];
 
-            var listType = typeof(List<>).MakeGenericType(cellType);
-            var list = context.Resolve(listType);
-
-            return Activator.CreateInstance(typeof(OverlapGrid<>).MakeGenericType(elementType), list)!;
-        }
-
-        return new NoSpecimen();
-    }
+    protected override object Convert<T>(IEnumerable<Cell<T>> source) => source.ToOverlapGrid();
 }

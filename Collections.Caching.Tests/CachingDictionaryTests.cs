@@ -1,12 +1,12 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
+public class CachingDictionaryTests : Tester<CachingDictionary<int, Garbage>>
 {
     protected override void InitializeTest()
     {
         base.InitializeTest();
-        Fixture.WithCollectionCustomizations();
+        Dummy.WithCollectionCustomizations();
         JsonSerializerOptions.WithCachingConverters();
     }
 
@@ -14,11 +14,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsLessThanZeroAndContainsItems_ClearAllItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        Instance.Limit = -Fixture.Create<int>();
+        Instance.Limit = -Dummy.Create<int>();
 
         //Assert
         Instance.Should().BeEmpty();
@@ -28,17 +28,17 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsLessThanZeroAndContainsItems_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
-        Instance.Limit = -Fixture.Create<int>();
+        Instance.Limit = -Dummy.Create<int>();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new()
             {
@@ -53,7 +53,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         //Arrange
 
         //Act
-        Instance.Limit = -Fixture.Create<int>();
+        Instance.Limit = -Dummy.Create<int>();
 
         //Assert
         Instance.Should().BeEmpty();
@@ -63,11 +63,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsLessThanZeroAndEmpty_DoNotTrigger()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
-        Instance.Limit = -Fixture.Create<int>();
+        Instance.Limit = -Dummy.Create<int>();
 
         //Assert
         triggers.Should().BeEmpty();
@@ -77,7 +77,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsZeroAndContainsItems_ClearAllItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -91,14 +91,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsLessThanZero_PreventAddingItemsAfter()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        Instance.Limit = -Fixture.Create<int>();
+        Instance.Limit = -Dummy.Create<int>();
 
         //Assert
-        Instance.Add(Fixture.CreateMany<KeyValuePair<int, Dummy>>());
+        Instance.Add(Dummy.CreateMany<KeyValuePair<int, Garbage>>());
         Instance.Should().BeEmpty();
     }
 
@@ -106,17 +106,17 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsZeroAndContainsItems_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Limit = 0;
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new()
             {
@@ -129,14 +129,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsSetToHalfCollection_RemoveOlderHalf()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
         //Act
         Instance.Limit = 5;
 
         //Assert
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
         {
             { items[5].Key, items[5].Value },
             { items[6].Key, items[6].Value },
@@ -150,28 +150,28 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsSetToHalfCollection_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Limit = 5;
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new()
             {
-                OldValues = new List<KeyValuePair<int, Dummy>>
-                {
+                OldValues =
+                [
                     items[0],
                     items[1],
                     items[2],
                     items[3],
                     items[4]
-                }
+                ]
             }
         });
     }
@@ -180,16 +180,16 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsSetToHalfCollection_PreventAddingMoreItemsPastLimit()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
         //Act
         Instance.Limit = 5;
 
         //Assert
-        var newItem = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var newItem = Dummy.Create<KeyValuePair<int, Garbage>>();
         Instance.Add(newItem);
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
         {
             { items[6].Key, items[6].Value },
             { items[7].Key, items[7].Value },
@@ -203,7 +203,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsSetToCollectionSize_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
         //Act
@@ -217,10 +217,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsSetToCollectionSize_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -234,17 +234,17 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsSetToCollectionSize_NextItemAddedRemovesOldest()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
-        var newItem = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var newItem = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.Limit = 10;
 
         //Assert
         Instance.Add(newItem);
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
         {
             { items[1].Key, items[1].Value },
             { items[2].Key, items[2].Value },
@@ -263,7 +263,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsSetToMoreThanCollectionSize_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
         //Act
@@ -277,10 +277,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsSetToMoreThanCollectionSize_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -294,16 +294,16 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Limit_WhenLimitIsSetToMoreThanCollectionSize_NextItemIsAddedWithoutRemovingAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
         //Act
         Instance.Limit = 15;
 
         //Assert
-        var newItem = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var newItem = Dummy.Create<KeyValuePair<int, Garbage>>();
         Instance.Add(newItem);
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
         {
             { items[0].Key, items[0].Value },
             { items[1].Key, items[1].Value },
@@ -316,7 +316,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
             { items[8].Key, items[8].Value },
             { items[9].Key, items[9].Value },
             { newItem.Key, newItem.Value },
-        }); 
+        });
     }
 
     [TestMethod]
@@ -325,7 +325,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         //Arrange
 
         //Act
-        Instance.TrimStartDownTo(Fixture.Create<int>());
+        Instance.TrimStartDownTo(Dummy.Create<int>());
 
         //Assert
         Instance.Should().BeEmpty();
@@ -335,11 +335,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TrimStartDownTo_WhenEmpty_DoNotTrigger()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
-        Instance.TrimStartDownTo(Fixture.Create<int>());
+        Instance.TrimStartDownTo(Dummy.Create<int>());
 
         //Assert
         triggers.Should().BeEmpty();
@@ -349,14 +349,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TrimStartDownTo_WhenContainsItems_RemoveOldestItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
         //Act
         Instance.TrimStartDownTo(5);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
         {
             { items[5].Key, items[5].Value },
             { items[6].Key, items[6].Value },
@@ -372,7 +372,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         //Arrange
 
         //Act
-        Instance.TrimEndDownTo(Fixture.Create<int>());
+        Instance.TrimEndDownTo(Dummy.Create<int>());
 
         //Assert
         Instance.Should().BeEmpty();
@@ -382,11 +382,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TrimEndDownTo_WhenEmpty_DoNotTrigger()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
-        Instance.TrimEndDownTo(Fixture.Create<int>());
+        Instance.TrimEndDownTo(Dummy.Create<int>());
 
         //Assert
         triggers.Should().BeEmpty();
@@ -396,14 +396,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TrimEndDownTo_WhenContainsItems_RemoveNewestItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(10).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(10).ToList();
         Instance.Add(items);
 
         //Act
         Instance.TrimEndDownTo(5);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
         {
             { items[0].Key, items[0].Value },
             { items[1].Key, items[1].Value },
@@ -429,7 +429,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Keys_WhenContainsItems_ReturnAllKeys()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -455,7 +455,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Values_WhenContainsItems_ReturnAllValues()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -469,11 +469,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Indexer_WhenThereIsNothingWithKey_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        var action = () => Instance[Fixture.Create<int>()];
+        var action = () => Instance[Dummy.Create<int>()];
 
         //Assert
         action.Should().Throw<KeyNotFoundException>();
@@ -483,7 +483,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Indexer_WhenThereIsSomethingWithKey_ReturnValueAssociatedWithKey()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -499,11 +499,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Indexer_WhenThereIsSomethingWithKey_SwapValues()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
-        var value = Fixture.Create<Dummy>();
+        var value = Dummy.Create<Garbage>();
 
         //Act
         Instance[item.Key] = value;
@@ -516,25 +516,25 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Indexer_WhenThereIsSomethingWithKey_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
-        var value = Fixture.Create<Dummy>();
+        var value = Dummy.Create<Garbage>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance[item.Key] = value;
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new()
                 {
-                    OldValues = new List<KeyValuePair<int, Dummy>>{ item },
-                    NewValues = new List<KeyValuePair<int, Dummy>>{ new(item.Key, value) }
+                    OldValues = [item],
+                    NewValues = [new(item.Key, value)]
                 }
             });
     }
@@ -543,12 +543,12 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Indexer_WhenPassingTheSameValueToTheSameKey_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -562,16 +562,16 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Indexer_WhenKeyDoesNotExist_AddNewEntry()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance[item.Key] = item.Value;
 
         //Assert
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
             {
                 { items[0].Key, items[0].Value },
                 { items[1].Key, items[1].Value },
@@ -584,21 +584,21 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Indexer_WhenKeyDoesNotExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance[item.Key] = item.Value;
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new() { NewValues = new List<KeyValuePair<int, Dummy>> { item } }
+                new() { NewValues = [item] }
             });
     }
 
@@ -618,7 +618,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Count_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>(5).ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>(5).ToList();
         Instance.Add(items);
 
         //Act
@@ -644,38 +644,38 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryGetValue_WhenKeyIsNotInCollection_ReturnFailure()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        var result = Instance.TryGetValue(Fixture.Create<int>());
+        var result = Instance.TryGetValue(Dummy.Create<int>());
 
         //Assert
-        result.Should().Be(Result<Dummy>.Failure());
+        result.Should().Be(Result<Garbage>.Failure());
     }
 
     [TestMethod]
     public void TryGetValue_WhenKeyHasNullValueInCollection_ReturnSuccessWithNull()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var key = Fixture.Create<int>();
+        var key = Dummy.Create<int>();
         Instance[key] = null!;
 
         //Act
         var result = Instance.TryGetValue(key);
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(null!));
+        result.Should().Be(Result<Garbage>.Success(null!));
     }
 
     [TestMethod]
     public void TryGetValue_WhenKeyHasValue_ReturnSuccess()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -684,14 +684,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         var result = Instance.TryGetValue(item.Key);
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(item.Value));
+        result.Should().Be(Result<Garbage>.Success(item.Value));
     }
 
     [TestMethod]
     public void AddKeyValue_WhenKeyAlreadyExists_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -707,10 +707,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddKeyValue_WhenKeyDoesNotAlreadyExist_Add()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.Add(item.Key, item.Value);
@@ -723,23 +723,23 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddKeyValue_WhenKeyDoesNotAlreadyExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Add(item.Key, item.Value);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new()
             {
-                NewValues = new List<KeyValuePair<int, Dummy>>{ item }
+                NewValues = [item]
             }
         });
     }
@@ -748,7 +748,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddKeyValuePair_WhenKeyAlreadyExists_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -764,10 +764,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddKeyValuePair_WhenKeyDoesNotAlreadyExist_Add()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.Add(item);
@@ -780,23 +780,23 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddKeyValuePair_WhenKeyDoesNotAlreadyExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Add(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new()
             {
-                NewValues = new List<KeyValuePair<int, Dummy>>{ item }
+                NewValues = [item]
             }
         });
     }
@@ -805,7 +805,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddParams_WhenKeyAlreadyExists_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item1 = items.GetRandom();
@@ -822,17 +822,17 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddParams_WhenKeyDoesNotAlreadyExist_Add()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item1 = Fixture.Create<KeyValuePair<int, Dummy>>();
-        var item2 = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item1 = Dummy.Create<KeyValuePair<int, Garbage>>();
+        var item2 = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.Add(item1, item2);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
             {
                 { items[0].Key, items[0].Value },
                 { items[1].Key, items[1].Value },
@@ -846,24 +846,24 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddParams_WhenKeyDoesNotAlreadyExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item1 = Fixture.Create<KeyValuePair<int, Dummy>>();
-        var item2 = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item1 = Dummy.Create<KeyValuePair<int, Garbage>>();
+        var item2 = Dummy.Create<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Add(item1, item2);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new()
                 {
-                    NewValues = new List<KeyValuePair<int, Dummy>>{ item1, item2 }
+                    NewValues = [item1, item2]
                 }
             });
     }
@@ -872,12 +872,12 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddParams_WhenItemsContainsDuplicateKeys_Throw()
     {
         //Arrange
-        var key = Fixture.Create<int>();
-        var items = new KeyValuePair<int, Dummy>[]
+        var key = Dummy.Create<int>();
+        var items = new KeyValuePair<int, Garbage>[]
         {
-            new(key, Fixture.Create<Dummy>()),
-            new(key, Fixture.Create<Dummy>()),
-            new(key, Fixture.Create<Dummy>())
+            new(key, Dummy.Create<Garbage>()),
+            new(key, Dummy.Create<Garbage>()),
+            new(key, Dummy.Create<Garbage>())
         };
 
         //Act
@@ -891,7 +891,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddEnumerable_WhenItemsIsNull_Throw()
     {
         //Arrange
-        IEnumerable<KeyValuePair<int, Dummy>> items = null!;
+        IEnumerable<KeyValuePair<int, Garbage>> items = null!;
 
         //Act
         var action = () => Instance.Add(items);
@@ -904,10 +904,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddEnumerable_WhenKeyAlreadyExists_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var addedItems = new List<KeyValuePair<int, Dummy>>
+        var addedItems = new List<KeyValuePair<int, Garbage>>
             {
                 items.GetRandom(),
                 items.GetRandom(),
@@ -924,16 +924,16 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddEnumerable_WhenKeyDoesNotAlreadyExist_Add()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var addedItems = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var addedItems = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
 
         //Act
         Instance.Add(addedItems);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new Dictionary<int, Dummy>
+        Instance.Should().BeEquivalentTo(new Dictionary<int, Garbage>
             {
                 { items[0].Key, items[0].Value },
                 { items[1].Key, items[1].Value },
@@ -948,19 +948,19 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddEnumerable_WhenKeyDoesNotAlreadyExist_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var addedItems = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var addedItems = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Add(addedItems);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new()
                 {
@@ -973,12 +973,12 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void AddEnumerable_WhenItemsContainsDuplicateKeys_Throw()
     {
         //Arrange
-        var key = Fixture.Create<int>();
-        var items = new List<KeyValuePair<int, Dummy>>
+        var key = Dummy.Create<int>();
+        var items = new List<KeyValuePair<int, Garbage>>
         {
-            {new(key, Fixture.Create<Dummy>())},
-            {new(key, Fixture.Create<Dummy>())},
-            {new(key, Fixture.Create<Dummy>())},
+            {new(key, Dummy.Create<Garbage>())},
+            {new(key, Dummy.Create<Garbage>())},
+            {new(key, Dummy.Create<Garbage>())},
         };
 
         //Act
@@ -992,7 +992,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Clear_WhenIsAlreadyEmpty_DoNotTrigger()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -1006,7 +1006,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Clear_WhenContainsItems_RemoveEverything()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1020,17 +1020,17 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Clear_WhenContainsItems_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Clear();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = items }
         });
@@ -1040,10 +1040,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePair_WhenKeyValuePairIsNotInCollection_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         var action = () => Instance.Remove(item);
@@ -1056,7 +1056,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePair_WhenKeyValuePairIsInCollection_RemoveIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1072,21 +1072,21 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePair_WhenKeyValuePairIsInCollection_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -1094,10 +1094,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePair_WhenKeyValuePairIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         var action = () => Instance.TryRemove(item);
@@ -1110,7 +1110,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePair_WhenKeyValuePairIsInCollection_RemoveIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1126,21 +1126,21 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePair_WhenKeyValuePairIsInCollection_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -1148,10 +1148,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKey_WhenKeyValuePairIsNotInCollection_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var key = Fixture.Create<int>();
+        var key = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.Remove(key);
@@ -1164,7 +1164,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKey_WhenKeyValuePairIsInCollection_RemoveIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1180,21 +1180,21 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKey_WhenKeyValuePairIsInCollection_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(item.Key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -1202,10 +1202,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKey_WhenKeyValuePairIsNotInCollection_DoNotThrow()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var key = Fixture.Create<int>();
+        var key = Dummy.Create<int>();
 
         //Act
         var action = () => Instance.TryRemove(key);
@@ -1218,7 +1218,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKey_WhenKeyValuePairIsInCollection_RemoveIt()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1234,21 +1234,21 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKey_WhenKeyValuePairIsInCollection_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(item.Key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -1256,7 +1256,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncKeyValue_WhenMatchIsNull_Throw()
     {
         //Arrange
-        Func<KeyValuePair<int, Dummy>, bool> match = null!;
+        Func<KeyValuePair<int, Garbage>, bool> match = null!;
 
         //Act
         var action = () => Instance.Remove(match);
@@ -1281,7 +1281,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncKeyValue_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1297,10 +1297,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncKeyValue_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1309,9 +1309,9 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         Instance.Remove(x => x.Key == item.Key && x.Value.Description == item.Value.Description);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1319,14 +1319,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncKeyValue_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
@@ -1341,25 +1341,25 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncKeyValue_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(x => x.Key > 0 && x.Value.Description == "Seb");
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1369,7 +1369,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncKeyValue_WhenMatchIsNull_Throw()
     {
         //Arrange
-        Func<KeyValuePair<int, Dummy>, bool> match = null!;
+        Func<KeyValuePair<int, Garbage>, bool> match = null!;
 
         //Act
         var action = () => Instance.TryRemove(match);
@@ -1394,7 +1394,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncKeyValue_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1410,10 +1410,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncKeyValue_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1422,9 +1422,9 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         Instance.TryRemove(x => x.Key == item.Key && x.Value.Description == item.Value.Description);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1432,14 +1432,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncKeyValue_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
@@ -1454,25 +1454,25 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncKeyValue_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(x => x.Key > 0 && x.Value.Description == "Seb");
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1507,7 +1507,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncKey_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1523,10 +1523,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncKey_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1535,9 +1535,9 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         Instance.Remove(x => x == item.Key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1545,10 +1545,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncKey_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         //Act
@@ -1562,20 +1562,20 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncKey_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(x => toRemove.Select(y => y.Key).Contains(x));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1610,7 +1610,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncKey_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1626,10 +1626,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncKey_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1638,9 +1638,9 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         Instance.TryRemove(x => x == item.Key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1648,10 +1648,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncKey_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         //Act
@@ -1665,20 +1665,20 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncKey_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(x => toRemove.Select(y => y.Key).Contains(x));
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1688,7 +1688,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncValue_WhenMatchIsNull_Throw()
     {
         //Arrange
-        Func<Dummy, bool> match = null!;
+        Func<Garbage, bool> match = null!;
 
         //Act
         var action = () => Instance.Remove(match);
@@ -1703,7 +1703,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         //Arrange
 
         //Act
-        var action = () => Instance.Remove((Dummy x) => x == null!);
+        var action = () => Instance.Remove((Garbage x) => x == null!);
 
         //Assert
         action.Should().Throw<InvalidOperationException>()/*.WithMessage(Exceptions.RemoveWithNonInexistantPredicate)*/;
@@ -1713,7 +1713,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncValue_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1729,10 +1729,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncValue_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1741,9 +1741,9 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         Instance.Remove(x => x.Description == item.Value.Description);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1751,14 +1751,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncValue_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
@@ -1773,25 +1773,25 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveFuncValue_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(x => x.Description == "Seb");
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1801,7 +1801,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncValue_WhenMatchIsNull_Throw()
     {
         //Arrange
-        Func<Dummy, bool> match = null!;
+        Func<Garbage, bool> match = null!;
 
         //Act
         var action = () => Instance.TryRemove(match);
@@ -1816,7 +1816,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         //Arrange
 
         //Act
-        var action = () => Instance.TryRemove((Dummy x) => x == null!);
+        var action = () => Instance.TryRemove((Garbage x) => x == null!);
 
         //Assert
         action.Should().NotThrow();
@@ -1826,7 +1826,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncValue_WhenPredicateHasExactlyOneMatch_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1842,10 +1842,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncValue_WhenPredicateHasExactlyOneMatch_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         var item = items.GetRandom();
@@ -1854,9 +1854,9 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         Instance.TryRemove(x => x.Description == item.Value.Description);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
-                new(){OldValues = new List<KeyValuePair<int, Dummy>>{item}}
+                new(){OldValues = [item]}
             });
     }
 
@@ -1864,14 +1864,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncValue_WhenPredicateHasExactlyMultipleMatches_RemoveThatOneMatch()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
@@ -1886,25 +1886,25 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveFuncValue_WhenPredicateHasExactlyMultipleMatches_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = new List<KeyValuePair<int, Dummy>>
+        var toRemove = new List<KeyValuePair<int, Garbage>>
             {
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
-                new(Fixture.Create<int>(), Fixture.Build<Dummy>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
+                new(Dummy.Create<int>(), Dummy.Build<Garbage>().With(x => x.Description, "Seb").Create()),
             };
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(x => x.Description == "Seb");
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
             {
                 new(){OldValues = toRemove}
             });
@@ -1914,10 +1914,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Contains_WhenItemIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         var result = Instance.Contains(item);
@@ -1930,7 +1930,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Contains_WhenItemIsInCollection_ReturnTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1946,10 +1946,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void ContainsKey_WhenKeyIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var item = Fixture.Create<KeyValuePair<int, Dummy>>();
+        var item = Dummy.Create<KeyValuePair<int, Garbage>>();
 
         //Act
         var result = Instance.ContainsKey(item.Key);
@@ -1962,7 +1962,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void ContainsKey_WhenKeyIsInCollection_ReturnTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -1978,7 +1978,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void Copy_Always_ReturnCopy()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
@@ -1993,11 +1993,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyFromDictionaryInterface_WhenKeyIsNotInDictionary_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(Fixture.Create<int>());
+        ((IDictionary<int, Garbage>)Instance).Remove(Dummy.Create<int>());
 
         //Assert
         Instance.Should().BeEquivalentTo(items);
@@ -2007,11 +2007,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyFromDictionaryInterface_WhenKeyIsNotInDictionary_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        var result = ((IDictionary<int, Dummy>)Instance).Remove(Fixture.Create<int>());
+        var result = ((IDictionary<int, Garbage>)Instance).Remove(Dummy.Create<int>());
 
         //Assert
         result.Should().BeFalse();
@@ -2021,14 +2021,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyFromDictionaryInterface_WhenKeyIsNotInDictionary_DoNotTriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        var result = ((IDictionary<int, Dummy>)Instance).Remove(Fixture.Create<int>());
+        var result = ((IDictionary<int, Garbage>)Instance).Remove(Dummy.Create<int>());
 
         //Assert
         triggers.Should().BeEmpty();
@@ -2038,13 +2038,13 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyFromDictionaryInterface_WhenKeyIsInDictionary_RemoveItemWithKey()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(toRemove.Key);
+        ((IDictionary<int, Garbage>)Instance).Remove(toRemove.Key);
 
         //Assert
         Instance.Should().BeEquivalentTo(items.Where(x => x.Key != toRemove.Key));
@@ -2055,13 +2055,13 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyFromDictionaryInterface_WhenKeyIsInDictionary_ReturnTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
 
         //Act
-        var result = ((IDictionary<int, Dummy>)Instance).Remove(toRemove.Key);
+        var result = ((IDictionary<int, Garbage>)Instance).Remove(toRemove.Key);
 
         //Assert
         result.Should().BeTrue();
@@ -2071,21 +2071,21 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyFromDictionaryInterface_WhenKeyIsInDictionary_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(toRemove.Key);
+        ((IDictionary<int, Garbage>)Instance).Remove(toRemove.Key);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new(){OldValues = new List<KeyValuePair<int, Dummy>>{toRemove}}
+            new(){OldValues = [toRemove]}
         });
     }
 
@@ -2093,11 +2093,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairFromCollection_WhenDoesNotContainItem_DoNotModifyCollection()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(Fixture.Create<KeyValuePair<int, Dummy>>());
+        ((IDictionary<int, Garbage>)Instance).Remove(Dummy.Create<KeyValuePair<int, Garbage>>());
 
         //Assert
         Instance.Should().BeEquivalentTo(items);
@@ -2107,11 +2107,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairFromCollection_WhenDoesNotContainItem_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        var result = ((IDictionary<int, Dummy>)Instance).Remove(Fixture.Create<KeyValuePair<int, Dummy>>());
+        var result = ((IDictionary<int, Garbage>)Instance).Remove(Dummy.Create<KeyValuePair<int, Garbage>>());
 
         //Assert
         result.Should().BeFalse();
@@ -2121,14 +2121,14 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairFromCollection_WhenDoesNotContainItem_DoNotTriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(Fixture.Create<KeyValuePair<int, Dummy>>());
+        ((IDictionary<int, Garbage>)Instance).Remove(Dummy.Create<KeyValuePair<int, Garbage>>());
 
         //Assert
         triggers.Should().BeEmpty();
@@ -2138,13 +2138,13 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairFromCollection_WhenContainsItem_RemoveFromCollection()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(toRemove);
+        ((IDictionary<int, Garbage>)Instance).Remove(toRemove);
 
         //Assert
         Instance.Should().BeEquivalentTo(items.Where(x => x.Key != toRemove.Key));
@@ -2154,13 +2154,13 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairFromCollection_WhenContainsItem_RemoveTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
 
         //Act
-        var result = ((IDictionary<int, Dummy>)Instance).Remove(toRemove);
+        var result = ((IDictionary<int, Garbage>)Instance).Remove(toRemove);
 
         //Assert
         result.Should().BeTrue();
@@ -2170,21 +2170,21 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairFromCollection_WhenContainsItem_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var toRemove = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
-        ((IDictionary<int, Dummy>)Instance).Remove(toRemove);
+        ((IDictionary<int, Garbage>)Instance).Remove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new(){OldValues = new List<KeyValuePair<int, Dummy>>{toRemove}}
+            new(){OldValues = [toRemove]}
         });
     }
 
@@ -2192,7 +2192,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveParamsKeys_WhenKeysNull_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         int[] keys = null!;
@@ -2208,7 +2208,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveParamsKeys_WhenKeysEmpty_DoNothing()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = Array.Empty<int>();
@@ -2224,12 +2224,12 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveParamsKeys_WhenKeysEmpty_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = Array.Empty<int>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -2243,10 +2243,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveParamsKeys_WhenKeysNotEmpty_RemoveKeys()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToArray();
@@ -2262,22 +2262,22 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveParamsKeys_WhenKeysNotEmpty_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToArray();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2287,7 +2287,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveEnumerableKeys_WhenKeysNull_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         List<int> keys = null!;
@@ -2303,7 +2303,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveEnumerableKeys_WhenKeysEmpty_DoNothing()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = new List<int>();
@@ -2319,12 +2319,12 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveEnumerableKeys_WhenKeysEmpty_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = new List<int>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -2338,10 +2338,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveEnumerableKeys_WhenKeysNotEmpty_RemoveKeys()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToList();
@@ -2357,22 +2357,22 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveEnumerableKeys_WhenKeysNotEmpty_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToList();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2382,7 +2382,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveParamsKeys_WhenKeysNull_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         int[] keys = null!;
@@ -2398,7 +2398,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveParamsKeys_WhenKeysEmpty_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = Array.Empty<int>();
@@ -2414,10 +2414,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveParamsKeys_WhenKeysNotEmpty_RemoveKeys()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToArray();
@@ -2433,22 +2433,22 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveParamsKeys_WhenKeysNotEmpty_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToArray();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2458,7 +2458,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveEnumerableKeys_WhenKeysNull_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         List<int> keys = null!;
@@ -2474,7 +2474,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveEnumerableKeys_WhenKeysEmpty_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var keys = new List<int>();
@@ -2490,10 +2490,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveEnumerableKeys_WhenKeysNotEmpty_RemoveKeys()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToList();
@@ -2509,22 +2509,22 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveEnumerableKeys_WhenKeysNotEmpty_Trigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         var keys = toRemove.Select(x => x.Key).ToList();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(keys);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2534,11 +2534,11 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveSingleKeyValuePair_WhenItemIsNotInCollection_Throw()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
-        var action = () => Instance.Remove(Fixture.Create<KeyValuePair<int, Dummy>>());
+        var action = () => Instance.Remove(Dummy.Create<KeyValuePair<int, Garbage>>());
 
         //Assert
         action.Should().Throw<InvalidOperationException>();
@@ -2548,7 +2548,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveSingleKeyValuePair_WhenItemIsInCollection_Remove()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
@@ -2564,21 +2564,21 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveSingleKeyValuePair_WhenItemIsInCollection_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         var item = items.GetRandom();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(item);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
-            new() { OldValues = new List<KeyValuePair<int, Dummy>> { item } }
+            new() { OldValues = [item] }
         });
     }
 
@@ -2586,10 +2586,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairParams_WhenIsNull_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        KeyValuePair<int, Dummy>[] items = null!;
+        KeyValuePair<int, Garbage>[] items = null!;
 
         //Act
         var action = () => Instance.TryRemove(items);
@@ -2602,10 +2602,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairParams_WhenIsEmpty_DoNothing()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = Array.Empty<KeyValuePair<int, Dummy>>();
+        var items = Array.Empty<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.TryRemove(items);
@@ -2618,12 +2618,12 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairParams_WhenIsEmpty_DoNotTriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = Array.Empty<KeyValuePair<int, Dummy>>();
+        var items = Array.Empty<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2637,10 +2637,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairParams_WhenIsNotEmpty_RemoveFromCollection()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
         Instance.Add(toRemove);
 
         //Act
@@ -2654,20 +2654,20 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairParams_WhenIsNotEmpty_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2677,10 +2677,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairEnumerable_WhenIsNull_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        IEnumerable<KeyValuePair<int, Dummy>> items = null!;
+        IEnumerable<KeyValuePair<int, Garbage>> items = null!;
 
         //Act
         var action = () => Instance.TryRemove(items);
@@ -2693,10 +2693,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairEnumerable_WhenIsEmpty_DoNothing()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = new List<KeyValuePair<int, Dummy>>();
+        var items = new List<KeyValuePair<int, Garbage>>();
 
         //Act
         Instance.TryRemove(items);
@@ -2709,12 +2709,12 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairEnumerable_WhenIsEmpty_DoNotTriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = new List<KeyValuePair<int, Dummy>>();
+        var items = new List<KeyValuePair<int, Garbage>>();
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -2728,10 +2728,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairEnumerable_WhenIsNotEmpty_RemoveFromCollection()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         //Act
@@ -2745,20 +2745,20 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void TryRemoveKeyValuePairEnumerable_WhenIsNotEmpty_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TryRemove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2768,10 +2768,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairParams_WhenIsNull_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        KeyValuePair<int, Dummy>[] items = null!;
+        KeyValuePair<int, Garbage>[] items = null!;
 
         //Act
         var action = () => Instance.Remove(items);
@@ -2784,10 +2784,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairParams_WhenIsEmpty_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = Array.Empty<KeyValuePair<int, Dummy>>();
+        var items = Array.Empty<KeyValuePair<int, Garbage>>();
 
         //Act
         var action = () => Instance.Remove(items);
@@ -2800,10 +2800,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairParams_WhenIsNotEmpty_RemoveFromCollection()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
         Instance.Add(toRemove);
 
         //Act
@@ -2817,20 +2817,20 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairParams_WhenIsNotEmpty_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToArray();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToArray();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2840,10 +2840,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairEnumerable_WhenIsNull_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        IEnumerable<KeyValuePair<int, Dummy>> items = null!;
+        IEnumerable<KeyValuePair<int, Garbage>> items = null!;
 
         //Act
         var action = () => Instance.Remove(items);
@@ -2856,10 +2856,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairEnumerable_WhenIsEmpty_Throw()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var items = new List<KeyValuePair<int, Dummy>>();
+        var items = new List<KeyValuePair<int, Garbage>>();
 
         //Act
         var action = () => Instance.Remove(items);
@@ -2872,10 +2872,10 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairEnumerable_WhenIsNotEmpty_RemoveFromCollection()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
         //Act
@@ -2889,20 +2889,20 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void RemoveKeyValuePairEnumerable_WhenIsNotEmpty_TriggerEvent()
     {
         //Arrange
-        var content = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var content = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(content);
 
-        var toRemove = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var toRemove = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(toRemove);
 
-        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>();
+        var triggers = new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.Remove(toRemove);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Dummy>>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<KeyValuePair<int, Garbage>>>
         {
             new() { OldValues = toRemove }
         });
@@ -2912,13 +2912,13 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     public void CopyTo_Always_CopyToArray()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var array = new KeyValuePair<int, Dummy>[items.Count];
+        var array = new KeyValuePair<int, Garbage>[items.Count];
 
         //Act
-        ((ICollection<KeyValuePair<int, Dummy>>)Instance).CopyTo(array, 0);
+        ((ICollection<KeyValuePair<int, Garbage>>)Instance).CopyTo(array, 0);
 
         //Assert
         array.Should().BeEquivalentTo(items);
@@ -2933,31 +2933,31 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be("Empty CachingDictionary<Int32, Dummy>");
+        result.Should().Be("Empty CachingDictionary<Int32, Garbage>");
     }
 
     [TestMethod]
     public void ToString_WhenNotEmpty_ReturnTypeAndCount()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
         //Act
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be($"CachingDictionary<Int32, Dummy> with {items.Count} items");
+        result.Should().Be($"CachingDictionary<Int32, Garbage> with {items.Count} items");
     }
 
     [TestMethod]
     public void GetHashCode_Always_ReturnFromInternalCollection()
     {
         //Arrange
-        var items = Fixture.CreateMany<KeyValuePair<int, Dummy>>().ToList();
+        var items = Dummy.CreateMany<KeyValuePair<int, Garbage>>().ToList();
         Instance.Add(items);
 
-        var internalCollection = GetFieldValue<CachingList<KeyValuePair<int, Dummy>>>("_items")!;
+        var internalCollection = GetFieldValue<CachingList<KeyValuePair<int, Garbage>>>("_items")!;
 
         //Act
         var result = Instance.GetHashCode();
@@ -2967,8 +2967,5 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Dummy>>
     }
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<CachingDictionary<int, Dummy>>(Fixture, JsonSerializerOptions);
-
-    [TestMethod]
-    public void Ensure_EnumeratesAllItems() => Ensure.EnumeratesAllItems<CachingDictionary<int, Dummy>, KeyValuePair<int, Dummy>>(Fixture);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<CachingDictionary<int, Garbage>>(Dummy, JsonSerializerOptions);
 }

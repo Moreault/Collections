@@ -1,18 +1,18 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public sealed class GroupedEntryTests : EntryTester<GroupedEntry<DummyItem>>
+public sealed class GroupedEntryTests : EntryTester<GroupedEntry<GarbageItem>>
 {
     [TestMethod]
     public void Constructor_WhenIndexesIsNull_Throw()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
         IEnumerable<int> indexes = null!;
 
         //Act
-        var action = () => new GroupedEntry<DummyItem>(item, quantity, indexes);
+        var action = () => new GroupedEntry<GarbageItem>(item, quantity, indexes);
 
         //Assert
         action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(indexes));
@@ -22,12 +22,12 @@ public sealed class GroupedEntryTests : EntryTester<GroupedEntry<DummyItem>>
     public void Constructor_WhenIndexesIsNotNull_CreateWithIndexes()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
-        var indexes = Fixture.CreateMany<int>().ToList();
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
+        var indexes = Dummy.CreateMany<int>().ToList();
 
         //Act
-        var result = new GroupedEntry<DummyItem>(item, quantity, indexes);
+        var result = new GroupedEntry<GarbageItem>(item, quantity, indexes);
 
         //Assert
         result.Indexes.Should().BeEquivalentTo(indexes);
@@ -37,16 +37,16 @@ public sealed class GroupedEntryTests : EntryTester<GroupedEntry<DummyItem>>
     public void Constructor_WhenIndexesIsNotNullAndOriginalIndexListIsModified_DoNotAffectGroupedEntry()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
-        var indexes = Fixture.CreateMany<int>().ToList();
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
+        var indexes = Dummy.CreateMany<int>().ToList();
         var original = indexes.ToList();
 
         //Act
-        var result = new GroupedEntry<DummyItem>(item, quantity, indexes);
+        var result = new GroupedEntry<GarbageItem>(item, quantity, indexes);
 
         //Assert
-        indexes.Add(Fixture.Create<int>());
+        indexes.Add(Dummy.Create<int>());
         result.Indexes.Should().BeEquivalentTo(original);
     }
 
@@ -57,7 +57,7 @@ public sealed class GroupedEntryTests : EntryTester<GroupedEntry<DummyItem>>
 
 
         //Act
-        var action = () => new GroupedEntry<DummyItem> { Indexes = null! };
+        var action = () => new GroupedEntry<GarbageItem> { Indexes = null! };
 
         //Assert
         action.Should().Throw<ArgumentNullException>().WithParameterName("value");
@@ -67,14 +67,14 @@ public sealed class GroupedEntryTests : EntryTester<GroupedEntry<DummyItem>>
     public void Indexes_WhenIsNotNullAndOriginalCollectionModified_DoNotAffectGroupedEntry()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
-        var indexes = Fixture.CreateMany<int>().ToList();
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
+        var indexes = Dummy.CreateMany<int>().ToList();
         var original = indexes.ToList();
-        var instance = new GroupedEntry<DummyItem>(item, quantity, indexes);
+        var instance = new GroupedEntry<GarbageItem>(item, quantity, indexes);
 
         //Act
-        indexes.Add(Fixture.Create<int>());
+        indexes.Add(Dummy.Create<int>());
 
         //Assert
         instance.Indexes.Should().BeEquivalentTo(original);
@@ -84,10 +84,10 @@ public sealed class GroupedEntryTests : EntryTester<GroupedEntry<DummyItem>>
     public void Indexes_WhenIsNotNull_ReturnSetValue()
     {
         //Arrange
-        var item = Fixture.Create<DummyItem>();
-        var quantity = Fixture.Create<int>();
-        var indexes = Fixture.CreateMany<int>().ToList();
-        var instance = new GroupedEntry<DummyItem>(item, quantity, indexes);
+        var item = Dummy.Create<GarbageItem>();
+        var quantity = Dummy.Create<int>();
+        var indexes = Dummy.CreateMany<int>().ToList();
+        var instance = new GroupedEntry<GarbageItem>(item, quantity, indexes);
 
         //Act
         var result = instance.Indexes;
@@ -100,7 +100,7 @@ public sealed class GroupedEntryTests : EntryTester<GroupedEntry<DummyItem>>
     public void ToString_WhenItemIsNull_ReturnNull()
     {
         //Arrange
-        var instance = Fixture.Build<GroupedEntry<DummyItem>>().Without(x => x.Item).Create();
+        var instance = Dummy.Build<GroupedEntry<GarbageItem>>().Without(x => x.Item).Create();
 
         //Act
         var result = instance.ToString();
@@ -113,7 +113,7 @@ public sealed class GroupedEntryTests : EntryTester<GroupedEntry<DummyItem>>
     public void ToString_WhenItemIsNotNull_ReturnItemWithQuantity()
     {
         //Arrange
-        var instance = Fixture.Create<GroupedEntry<DummyItem>>();
+        var instance = Dummy.Create<GroupedEntry<GarbageItem>>();
 
         //Act
         var result = instance.ToString();

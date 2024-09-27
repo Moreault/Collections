@@ -54,6 +54,7 @@ public static class GridExtensions
     public static T?[,] To2dArray<T>(this IGrid<T> grid)
     {
         if (grid == null) throw new ArgumentNullException(nameof(grid));
+        if (grid.FirstColumn < 0 || grid.FirstRow < 0) throw new InvalidOperationException(Exceptions.To2dArrayNegativeIndexes);
 
         var array = new T[grid.ColumnCount, grid.RowCount];
         foreach (var ((x, y), value) in grid)
@@ -65,9 +66,10 @@ public static class GridExtensions
     public static T[][] ToJaggedArray<T>(this IGrid<T> grid)
     {
         if (grid == null) throw new ArgumentNullException(nameof(grid));
+        if (grid.FirstColumn < 0 || grid.FirstRow < 0) throw new InvalidOperationException(Exceptions.ToJaggedArrayNegativeIndexes);
 
         var array = new T[grid.ColumnCount][];
-        for (var x = 0; x < array.Length; x++)
+        for (var x = grid.FirstColumn; x < array.Length; x++)
         {
             array[x] = new T[grid.RowCount];
             for (var y = 0; y < grid.RowCount; y++)

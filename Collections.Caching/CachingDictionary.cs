@@ -1,6 +1,4 @@
-﻿using ArgumentNullException = System.ArgumentNullException;
-
-namespace ToolBX.Collections.Caching;
+﻿namespace ToolBX.Collections.Caching;
 
 public interface ICachingDictionary<TKey, TValue> : IObservableDictionary<TKey, TValue> where TKey : notnull
 {
@@ -51,7 +49,7 @@ public class CachingDictionary<TKey, TValue> : ICachingDictionary<TKey, TValue>,
 
     public CachingDictionary()
     {
-        _items = new CachingList<KeyValuePair<TKey, TValue>>();
+        _items = [];
     }
 
     public CachingDictionary(IEnumerable<KeyValuePair<TKey, TValue>> items)

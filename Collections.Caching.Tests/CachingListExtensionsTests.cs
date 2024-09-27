@@ -7,7 +7,7 @@ public sealed class CachingListExtensionsTests : Tester
     public void WhenSourceIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> collection = null!;
+        IEnumerable<Garbage> collection = null!;
 
         //Act
         var action = new Action(() => collection.ToCachingList());
@@ -20,7 +20,7 @@ public sealed class CachingListExtensionsTests : Tester
     public void WhenSourceIsNotNull_InstantiateCachingList()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.ToCachingList();

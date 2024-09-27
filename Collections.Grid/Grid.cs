@@ -293,7 +293,7 @@ public class Grid<T> : IGrid<T>
 
     public void TryAdd(IEnumerable<Cell<T>> cells)
     {
-        var cellsList = cells?.ToList() ?? new List<Cell<T>>();
+        var cellsList = cells?.ToList() ?? [];
         cellsList = cellsList.Where(x => !Contains(x.Index)).ToList();
         if (!cellsList.Any()) return;
         Add(cellsList);
@@ -547,11 +547,14 @@ public class Grid<T> : IGrid<T>
         if (oldItems.Any() || newItems.Any())
             CollectionChanged?.Invoke(this, new GridChangedEventArgs<T> { OldValues = oldItems, NewValues = newItems });
     }
-    //TODO 3.0.0 Return Grid<T>
-    public IGrid<T> Copy() => Copy(Boundaries);
 
-    //TODO 3.0.0 Return Grid<T>
-    public IGrid<T> Copy(Boundaries<int> boundaries)
+    IGrid<T> IGrid<T>.Copy() => Copy(Boundaries);
+
+    public Grid<T> Copy() => Copy(Boundaries);
+
+    IGrid<T> IGrid<T>.Copy(Boundaries<int> boundaries) => Copy(boundaries);
+
+    public Grid<T> Copy(Boundaries<int> boundaries)
     {
         var copy = new Grid<T>();
         foreach (var (key, value) in _items.Where(x => x.Key.X >= boundaries.Left && x.Key.X <= boundaries.Right && x.Key.Y >= boundaries.Top && x.Key.Y <= boundaries.Bottom))
@@ -573,8 +576,8 @@ public class Grid<T> : IGrid<T>
 
         CollectionChanged?.Invoke(this, new GridChangedEventArgs<T>
         {
-            NewValues = new List<Cell<T>> { new(destination, firstItem), new(current, secondItem) },
-            OldValues = new List<Cell<T>> { new(destination, secondItem), new(current, firstItem) }
+            NewValues = [new(destination, firstItem), new(current, secondItem)],
+            OldValues = [new(destination, secondItem), new(current, firstItem)]
         });
     }
 
@@ -704,7 +707,8 @@ public class Grid<T> : IGrid<T>
         {
             for (var y = 0; y < RowCount; y++)
             {
-                if (y > other[x].Length - 1 || !Equals(other[x][y], this[x, y]))
+
+                if ((other[x].IsNullOrEmpty() && this.Any(z => z.X == x)) || (!other[x].IsNullOrEmpty() && y > other[x].Length - 1) || (!other[x].IsNullOrEmpty() && !Equals(other[x][y], this[x, y])))
                 {
                     return false;
                 }
@@ -715,11 +719,14 @@ public class Grid<T> : IGrid<T>
         {
             if (x > ColumnCount - 1) return false;
 
-            for (var y = 0; y < other[x].Length; y++)
+            if (!other[x].IsNullOrEmpty())
             {
-                if (y > RowCount - 1 || !Equals(other[x][y], this[x, y]))
+                for (var y = 0; y < other[x].Length; y++)
                 {
-                    return false;
+                    if (y > RowCount - 1 || !Equals(other[x][y], this[x, y]))
+                    {
+                        return false;
+                    }
                 }
             }
         }

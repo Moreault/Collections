@@ -1,19 +1,8 @@
 ﻿namespace ToolBX.Collections.UnitTesting.Customizations;
 
-public sealed class ObservableDictionarySpecimenBuilder : ISpecimenBuilder
+public sealed class ObservableDictionaryCustomization : DictionaryCustomizationBase
 {
-    public object Create(object request, ISpecimenContext context)
-    {
-        if (request is Type type && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ObservableDictionary<,>))
-        {
-            var keyType = type.GetGenericArguments()[0];
-            var valueType = type.GetGenericArguments()[1];
-            var dictionaryType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
-            var dictionary = context.Resolve(dictionaryType);
+    protected override IEnumerable<Type> Types => [typeof(ObservableDictionary<,>), typeof(IObservableDictionary<,>)];
 
-            return Activator.CreateInstance(typeof(ObservableDictionary<,>).MakeGenericType(keyType, valueType), dictionary)!;
-        }
-
-        return new NoSpecimen();
-    }
+    protected override object Convert<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> source) => source.ToObservableDictionary();
 }

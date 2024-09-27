@@ -1,18 +1,8 @@
 ﻿namespace ToolBX.Collections.UnitTesting.Customizations;
 
-public class ObservableStackSpecimenBuilder : ISpecimenBuilder
+public sealed class ObservableStackCustomization : GenericStackCustomizationBase
 {
-    public object Create(object request, ISpecimenContext context)
-    {
-        if (request is Type type && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ObservableStack<>))
-        {
-            var elementType = type.GetGenericArguments()[0];
-            var stackType = typeof(List<>).MakeGenericType(elementType);
-            var list = context.Resolve(stackType);
+    protected override IEnumerable<Type> Types { get; } = [typeof(ObservableStack<>), typeof(IObservableStack<>)];
 
-            return Activator.CreateInstance(typeof(ObservableStack<>).MakeGenericType(elementType), list)!;
-        }
-
-        return new NoSpecimen();
-    }
+    protected override object Convert<T>(IEnumerable<T> source) => source.ToObservableStack();
 }

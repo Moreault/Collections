@@ -126,4 +126,10 @@
   <data name="CannotConvertToGridFromColumnCount" xml:space="preserve">
 	  <value>Can't convert collection to Grid : columnCount must be a positive number greater than zero but its value was {0}</value>
   </data>
+  <data name="To2dArrayNegativeIndexes" xml:space="preserve">
+	  <value>Grid cannot be converted to 2D array because it has negative indexes</value>
+  </data>
+  <data name="ToJaggedArrayNegativeIndexes" xml:space="preserve">
+	  <value>Grid cannot be converted to jagged array because it has negative indexes</value>
+  </data>
 </root>

@@ -1,20 +1,24 @@
-﻿using Newtonsoft.Json;
-
-namespace Collections.ReadOnly.Tests;
+﻿namespace Collections.ReadOnly.Tests;
 
 [TestClass]
-public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
+public class ReadOnlyListTests : RecordTester<ReadOnlyList<Garbage>>
 {
+    protected override void InitializeTest()
+    {
+        base.InitializeTest();
+        Dummy.WithCollectionCustomizations();
+    }
+
     [TestMethod]
     public void Empty_Always_ReturnsEmptyReadOnlyList()
     {
         //Arrange
 
         //Act
-        var result = ReadOnlyList<Dummy>.Empty;
+        var result = ReadOnlyList<Garbage>.Empty;
 
         //Assert
-        result.Should().BeOfType<ReadOnlyList<Dummy>>();
+        result.Should().BeOfType<ReadOnlyList<Garbage>>();
         result.Should().BeEmpty();
     }
 
@@ -24,8 +28,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
         //Arrange
 
         //Act
-        var result1 = ReadOnlyList<Dummy>.Empty;
-        var result2 = ReadOnlyList<Dummy>.Empty;
+        var result1 = ReadOnlyList<Garbage>.Empty;
+        var result2 = ReadOnlyList<Garbage>.Empty;
 
         //Assert
         result1.Should().BeSameAs(result2);
@@ -35,9 +39,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void Indexer_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var instance = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var instance = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
-        var index = -Fixture.Create<int>();
+        var index = -Dummy.Create<int>();
 
         //Act
         var action = () => instance[index];
@@ -50,7 +54,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void Indexer_WhenIndexIsOutOfRange_Throw()
     {
         //Arrange
-        var instance = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var instance = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
         var index = instance.Count;
 
@@ -65,7 +69,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void Indexer_WhenIndexIsWithinRange_ReturnItem()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
         var instance = items.ToReadOnlyList();
         var index = 1;
 
@@ -82,7 +86,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
         //Arrange
 
         //Act
-        var result = new ReadOnlyList<Dummy>().Count;
+        var result = new ReadOnlyList<Garbage>().Count;
 
         //Assert
         result.Should().Be(0);
@@ -92,7 +96,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void Count_WhenContainsItems_ReturnAmount()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
         var instance = items.ToReadOnlyList();
 
         //Act
@@ -108,7 +112,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
         //Arrange
 
         //Act
-        var result = new ReadOnlyList<Dummy>();
+        var result = new ReadOnlyList<Garbage>();
 
         //Assert
         result.Should().BeEmpty();
@@ -118,10 +122,10 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void Constructors_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> source = null!;
+        IEnumerable<Garbage> source = null!;
 
         //Act
-        var action = () => new ReadOnlyList<Dummy>(source);
+        var action = () => new ReadOnlyList<Garbage>(source);
 
         //Assert
         action.Should().Throw<ArgumentNullException>().WithParameterName(nameof(source));
@@ -131,10 +135,10 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void Constructors_WhenSourceIsNotNull_CopySource()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
-        var result = new ReadOnlyList<Dummy>(source);
+        var result = new ReadOnlyList<Garbage>(source);
 
         //Assert
         result.Should().BeEquivalentTo(source);
@@ -144,11 +148,11 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void Constructors_WhenSourceIsNotNullAndOriginalIsModified_ReadOnlyListIsUnaffected()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
-        var instance = new ReadOnlyList<Dummy>(source);
+        var source = Dummy.CreateMany<Garbage>().ToList();
+        var instance = new ReadOnlyList<Garbage>(source);
 
         //Act
-        source.Add(Fixture.Create<Dummy>());
+        source.Add(Dummy.Create<Garbage>());
 
         //Assert
         instance.Should().NotBeEquivalentTo(source);
@@ -158,33 +162,33 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void ToString_WhenIsEmpty_ReturnEmptyMessage()
     {
         //Arrange
-        var instance = new ReadOnlyList<Dummy>();
+        var instance = new ReadOnlyList<Garbage>();
 
         //Act
         var result = instance.ToString();
 
         //Assert
-        result.Should().Be("Empty ReadOnlyList<Dummy>");
+        result.Should().Be("Empty ReadOnlyList<Garbage>");
     }
 
     [TestMethod]
     public void ToString_WhenIsNotEmpty_ReturnCount()
     {
         //Arrange
-        var instance = new ReadOnlyList<Dummy>(Fixture.CreateMany<Dummy>(3));
+        var instance = new ReadOnlyList<Garbage>(Dummy.CreateMany<Garbage>(3));
 
         //Act
         var result = instance.ToString();
 
         //Assert
-        result.Should().Be("ReadOnlyList<Dummy> with 3 elements");
+        result.Should().Be("ReadOnlyList<Garbage> with 3 elements");
     }
 
     [TestMethod]
     public void ToReadOnlyList_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> source = null!;
+        IEnumerable<Garbage> source = null!;
 
         //Act
         var action = () => source.ToReadOnlyList();
@@ -197,7 +201,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void ToReadOnlyList_WhenSourceIsNotNull_Copy()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.ToReadOnlyList();
@@ -210,8 +214,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithParams_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IReadOnlyList<Dummy> source = null!;
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        IReadOnlyList<Garbage> source = null!;
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var action = () => source.With(items);
@@ -224,7 +228,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithParams_WhenItemsIsEmpty_ReturnCopy()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
         //Act
         var result = source.With();
@@ -237,9 +241,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithParams_WhenOneItem_AddItAtTheEnd()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
 
         //Act
         var result = source.With(item);
@@ -252,9 +256,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithParams_WhenOneItem_InstanceIsUnchanged()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
 
         //Act
         source.With(item);
@@ -267,11 +271,11 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithParams_WhenMultipleItems_AddThemAtTheEnd()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
-        var item1 = Fixture.Create<Dummy>();
-        var item2 = Fixture.Create<Dummy>();
-        var item3 = Fixture.Create<Dummy>();
+        var item1 = Dummy.Create<Garbage>();
+        var item2 = Dummy.Create<Garbage>();
+        var item3 = Dummy.Create<Garbage>();
 
         //Act
         var result = source.With(item1, item2, item3);
@@ -284,11 +288,11 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithParams_WhenMultipleItems_InstanceIsUnchanged()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
-        var item1 = Fixture.Create<Dummy>();
-        var item2 = Fixture.Create<Dummy>();
-        var item3 = Fixture.Create<Dummy>();
+        var item1 = Dummy.Create<Garbage>();
+        var item2 = Dummy.Create<Garbage>();
+        var item3 = Dummy.Create<Garbage>();
 
         //Act
         source.With(item1, item2, item3);
@@ -303,8 +307,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithEnumerable_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IReadOnlyList<Dummy> source = null!;
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        IReadOnlyList<Garbage> source = null!;
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var action = () => source.With(items);
@@ -317,8 +321,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithEnumerable_WhenItemsIsNull_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        IEnumerable<Dummy> items = null!;
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        IEnumerable<Garbage> items = null!;
 
         //Act
         var action = () => source.With(items);
@@ -331,7 +335,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithEnumerable_WhenItemsIsEmpty_ReturnCopy()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
         //Act
         var result = source.With();
@@ -344,12 +348,12 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithEnumerable_WhenOneItem_AddItAtTheEnd()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
 
         //Act
-        var result = source.With(new List<Dummy> { item });
+        var result = source.With(new List<Garbage> { item });
 
         //Assert
         result.Should().BeEquivalentTo(source.Concat(new[] { item }));
@@ -359,12 +363,12 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithEnumerable_WhenOneItem_InstanceIsUnchanged()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
 
         //Act
-        source.With(new List<Dummy> { item });
+        source.With(new List<Garbage> { item });
 
         //Assert
         source.Should().NotContain(item);
@@ -374,9 +378,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithEnumerable_WhenMultipleItems_AddThemAtTheEnd()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.With(items);
@@ -389,8 +393,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithEnumerable_WhenMultipleItems_InstanceIsUnchanged()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         source.With(items);
@@ -403,8 +407,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutPredicate_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IReadOnlyList<Dummy> source = null!;
-        var predicate = Fixture.Create<Func<Dummy, bool>>();
+        IReadOnlyList<Garbage> source = null!;
+        var predicate = Dummy.Create<Func<Garbage, bool>>();
 
         //Act
         var action = () => source.Without(predicate);
@@ -417,8 +421,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutPredicate_WhenPredicateIsNull_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        Func<Dummy, bool> predicate = null!;
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        Func<Garbage, bool> predicate = null!;
 
         //Act
         var action = () => source.Without(predicate);
@@ -431,7 +435,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutPredicate_WhenPredicateDoesNotCorrespondToAnything_DoNotChangeCollection()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
         //Act
         var result = source.Without(x => x.Id < 0);
@@ -444,7 +448,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutPredicate_WhenPredicateIsEqualToEverything_RemoveEverything()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
         //Act
         var result = source.Without(x => x.Id >= 0);
@@ -457,7 +461,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutPredicate_WhenPredicateIsEqualToEverything_DoNotAffectSource()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var original = source.ToReadOnlyList();
 
         //Act
@@ -471,13 +475,13 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutPredicate_WhenPredicateIsOnlyEqualToSomeStuff_OnlyRemoveThat()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
         //Act
         var result = source.Without(x => x.Id == source[1].Id);
 
         //Assert
-        result.Should().BeEquivalentTo(new List<Dummy>
+        result.Should().BeEquivalentTo(new List<Garbage>
             {
                 source[0],
                 source[2],
@@ -488,8 +492,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutParams_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IReadOnlyList<Dummy> source = null!;
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        IReadOnlyList<Garbage> source = null!;
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var action = () => source.Without(items);
@@ -502,7 +506,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutParams_WhenItemsEmpty_ReturnSameThing()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
 
         //Act
         var result = source.Without();
@@ -515,8 +519,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutParams_WhenItemsIsNotEmptyButAlsoNotInCollection_ReturnSameThing()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var result = source.Without(items);
@@ -529,14 +533,14 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutParams_WhenItemsContainsItemsThatAreInSource_RemoveThem()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var item = source[2];
 
         //Act
         var result = source.Without(item);
 
         //Assert
-        result.Should().BeEquivalentTo(new List<Dummy>
+        result.Should().BeEquivalentTo(new List<Garbage>
         {
             source[0],
             source[1]
@@ -547,8 +551,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutEnumerable_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IReadOnlyList<Dummy> source = null!;
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        IReadOnlyList<Garbage> source = null!;
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var action = () => source.Without(items);
@@ -561,8 +565,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutEnumerable_WhenItemsEmpty_ReturnSameThing()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        IEnumerable<Dummy> items = null!;
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        IEnumerable<Garbage> items = null!;
 
         //Act
         var action = () => source.Without(items);
@@ -575,8 +579,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutEnumerable_WhenItemsIsNotEmptyButAlsoNotInCollection_ReturnSameThing()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.Without(items);
@@ -589,8 +593,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutEnumerable_WhenItemsContainsItemsThatAreInSource_RemoveThem()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        var items = new List<Dummy>
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        var items = new List<Garbage>
         {
             source[1],
             source[0]
@@ -600,7 +604,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
         var result = source.Without(items);
 
         //Assert
-        result.Should().BeEquivalentTo(new List<Dummy>
+        result.Should().BeEquivalentTo(new List<Garbage>
         {
             source[2]
         });
@@ -610,9 +614,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtParams_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IReadOnlyList<Dummy> source = null!;
-        var index = Fixture.Create<int>();
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        IReadOnlyList<Garbage> source = null!;
+        var index = Dummy.Create<int>();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var action = () => source.WithAt(index, items);
@@ -625,7 +629,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtParams_WhenItemsIsEmptyButIndexIsWithinRange_DoNotAddAnything()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = 1;
 
         //Act
@@ -639,9 +643,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtParams_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        var index = -Fixture.Create<int>();
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        var index = -Dummy.Create<int>();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var action = () => source.WithAt(index, items);
@@ -654,9 +658,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtParams_WhenIndexIsOutOfRange_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = source.Count + 1;
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var action = () => source.WithAt(index, items);
@@ -669,9 +673,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtParams_WhenIndexIsEqualToCount_AddAtTheEnd()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = source.Count;
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var result = source.WithAt(index, items);
@@ -684,9 +688,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtParams_WhenIndexIsZero_AddAtTheStart()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = 0;
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var result = source.WithAt(index, items);
@@ -699,15 +703,15 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtParams_WhenIndexIsOne_AddBetween()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>(3).ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>(3).ToReadOnlyList();
         var index = 1;
-        var items = Fixture.CreateMany<Dummy>(3).ToArray();
+        var items = Dummy.CreateMany<Garbage>(3).ToArray();
 
         //Act
         var result = source.WithAt(index, items);
 
         //Assert
-        result.Should().ContainInOrder(new List<Dummy>
+        result.Should().ContainInOrder(new List<Garbage>
             {
                 source[0],
                 items[0],
@@ -722,9 +726,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtEnumerable_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IReadOnlyList<Dummy> source = null!;
-        var index = Fixture.Create<int>();
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        IReadOnlyList<Garbage> source = null!;
+        var index = Dummy.Create<int>();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var action = () => source.WithAt(index, items);
@@ -737,9 +741,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtEnumerable_WhenItemsIsNullButIndexIsWithinRange_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = 1;
-        IEnumerable<Dummy> items = null!;
+        IEnumerable<Garbage> items = null!;
 
         //Act
         var action = () => source.WithAt(index, items);
@@ -752,9 +756,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtEnumerable_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        var index = -Fixture.Create<int>();
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        var index = -Dummy.Create<int>();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var action = () => source.WithAt(index, items);
@@ -767,9 +771,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtEnumerable_WhenIndexIsOutOfRange_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = source.Count + 1;
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var action = () => source.WithAt(index, items);
@@ -782,9 +786,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtEnumerable_WhenIndexIsEqualToCount_AddAtTheEnd()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = source.Count;
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.WithAt(index, items);
@@ -797,9 +801,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtEnumerable_WhenIndexIsZero_AddAtTheStart()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = 0;
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = source.WithAt(index, items);
@@ -812,15 +816,15 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithAtEnumerable_WhenIndexIsOne_AddBetween()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>(3).ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>(3).ToReadOnlyList();
         var index = 1;
-        var items = Fixture.CreateMany<Dummy>(3).ToList();
+        var items = Dummy.CreateMany<Garbage>(3).ToList();
 
         //Act
         var result = source.WithAt(index, items);
 
         //Assert
-        result.Should().ContainInOrder(new List<Dummy>
+        result.Should().ContainInOrder(new List<Garbage>
             {
                 source[0],
                 items[0],
@@ -835,8 +839,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutAt_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IReadOnlyList<Dummy> source = null!;
-        var index = Fixture.Create<int>();
+        IReadOnlyList<Garbage> source = null!;
+        var index = Dummy.Create<int>();
 
         //Act
         var action = () => source.WithoutAt(index);
@@ -849,8 +853,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutAt_WhenIndexIsNegative_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        var index = -Fixture.Create<int>();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        var index = -Dummy.Create<int>();
 
         //Act
         var action = () => source.WithoutAt(index);
@@ -863,7 +867,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutAt_WhenIndexIsOutOfRange_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = source.Count;
 
         //Act
@@ -877,14 +881,14 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithoutAt_WhenIndexIsWithinRange_Remove()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var index = 1;
 
         //Act
         var result = source.WithoutAt(index);
 
         //Assert
-        result.Should().BeEquivalentTo(new List<Dummy>
+        result.Should().BeEquivalentTo(new List<Garbage>
         {
             source[0], source[2]
         });
@@ -894,9 +898,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithSwapped_WhenSourceIsNull_Throw()
     {
         //Arrange
-        IReadOnlyList<Dummy> source = null!;
-        var current = Fixture.Create<int>();
-        var destination = Fixture.Create<int>();
+        IReadOnlyList<Garbage> source = null!;
+        var current = Dummy.Create<int>();
+        var destination = Dummy.Create<int>();
 
         //Act
         var action = () => source.WithSwapped(current, destination);
@@ -909,8 +913,8 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithSwapped_WhenCurrentIsNegative_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
-        var current = -Fixture.Create<int>();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
+        var current = -Dummy.Create<int>();
         var destination = 0;
 
         //Act
@@ -924,7 +928,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithSwapped_WhenCurrentIsOutOfRange_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var current = source.Count;
         var destination = 1;
 
@@ -939,9 +943,9 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithSwapped_WhenDestinationIsNegative_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var current = 2;
-        var destination = -Fixture.Create<int>();
+        var destination = -Dummy.Create<int>();
 
         //Act
         var action = () => source.WithSwapped(current, destination);
@@ -954,7 +958,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithSwapped_WhenDestinationIsOutOfRange_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var current = 1;
         var destination = source.Count;
 
@@ -969,7 +973,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithSwapped_WhenBothCurrentAndDestinationAreTheSame_ChangeNothing()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var current = 1;
         var destination = 1;
 
@@ -984,7 +988,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void WithSwapped_WhenBothCurrentAndDestinationAreDifferentAndWithinRange_Swap()
     {
         //Arrange
-        var source = Fixture.CreateMany<Dummy>().ToReadOnlyList();
+        var source = Dummy.CreateMany<Garbage>().ToReadOnlyList();
         var current = 2;
         var destination = 0;
 
@@ -992,7 +996,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
         var result = source.WithSwapped(current, destination);
 
         //Assert
-        result.Should().ContainInOrder(new List<Dummy>
+        result.Should().ContainInOrder(new List<Garbage>
             {
                 source[2],
                 source[1],
@@ -1004,7 +1008,7 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void CreateParams_Always_ReturnNewReadOnlyList()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToArray();
+        var items = Dummy.CreateMany<Garbage>().ToArray();
 
         //Act
         var result = ReadOnlyList.Create(items);
@@ -1017,29 +1021,29 @@ public class ReadOnlyListTests : RecordTester<ReadOnlyList<Dummy>>
     public void CreateEnumerable_Always_ReturnNewReadOnlyList()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
-        var result = ReadOnlyList.Create((IEnumerable<Dummy>)items);
+        var result = ReadOnlyList.Create((IEnumerable<Garbage>)items);
 
         //Assert
         result.Should().BeEquivalentTo(items);
     }
 
     [TestMethod]
-    public void Serialization_WhenUsingSystemText_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<DummyWithListInside>(Fixture, JsonSerializerOptions.WithReadOnlyConverters());
+    public void Serialization_WhenUsingSystemText_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<GarbageWithListInside>(Dummy, JsonSerializerOptions.WithReadOnlyConverters());
 
     [TestMethod]
-    public void Serialization_WhenUsingSystemTextOnListItself_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<ReadOnlyList<Dummy>>(Fixture, JsonSerializerOptions.WithReadOnlyConverters());
+    public void Serialization_WhenUsingSystemTextOnListItself_SerializeAndDeserializeBack() => Ensure.IsJsonSerializable<ReadOnlyList<Garbage>>(Dummy, JsonSerializerOptions.WithReadOnlyConverters());
 
     [TestMethod]
     public void Serialization_WhenUsingNewtonsoftJson_SerializeAndDeserializeBack()
     {
         //Arrange
-        var instance = Fixture.Create<DummyWithListInside>();
+        var instance = Dummy.Create<GarbageWithListInside>();
 
         //Act
-        var result = JsonConvert.DeserializeObject<DummyWithListInside>(JsonConvert.SerializeObject(instance));
+        var result = JsonConvert.DeserializeObject<GarbageWithListInside>(JsonConvert.SerializeObject(instance));
 
         //Assert
         result.Should().BeEquivalentTo(instance);

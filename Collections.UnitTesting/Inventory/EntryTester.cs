@@ -1,12 +1,12 @@
 ﻿namespace ToolBX.Collections.UnitTesting.Inventory;
 
-public abstract class EntryTester<TEntry> : RecordTester<TEntry> where TEntry : EntryBase<DummyItem>
+public abstract class EntryTester<TEntry> : RecordTester<TEntry> where TEntry : EntryBase<GarbageItem>
 {
     [TestMethod]
     public void Deconstructor_Always_Deconstruct()
     {
         //Arrange
-        var instance = Fixture.Create<TEntry>();
+        var instance = Dummy.Create<TEntry>();
 
         //Act
         var (item, quantity) = instance;
@@ -17,14 +17,11 @@ public abstract class EntryTester<TEntry> : RecordTester<TEntry> where TEntry : 
     }
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<TEntry>(Fixture);
+    public void Always_EnsureIsJsonSerializable() => Ensure.IsJsonSerializable<TEntry>(Dummy);
 
     [TestMethod]
-    public void Always_EnsureIsJsonSerializable() => Ensure.IsJsonSerializable<TEntry>(Fixture);
+    public void Always_EnsureItemHasBasicGetSetFunctionality() => Ensure.HasBasicGetSetFunctionality<TEntry>(Dummy, nameof(EntryBase<GarbageItem>.Item));
 
     [TestMethod]
-    public void Always_EnsureItemHasBasicGetSetFunctionality() => Ensure.HasBasicGetSetFunctionality<TEntry>(Fixture, nameof(EntryBase<DummyItem>.Item));
-
-    [TestMethod]
-    public void Always_EnsureQuantityHasBasicGetSetFunctionality() => Ensure.HasBasicGetSetFunctionality<TEntry>(Fixture, nameof(EntryBase<DummyItem>.Quantity));
+    public void Always_EnsureQuantityHasBasicGetSetFunctionality() => Ensure.HasBasicGetSetFunctionality<TEntry>(Dummy, nameof(EntryBase<GarbageItem>.Quantity));
 }

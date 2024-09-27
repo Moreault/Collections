@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>2.2.0-beta1</Version>
+		<Version>3.0.0</Version>
 		<RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
 		<PackageId>ToolBX.$(AssemblyName)</PackageId>
 		<Product>ToolBX.$(AssemblyName)</Product>
@@ -17,8 +17,8 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <PackageReference Include="ToolBX.Eloquentest" Version="2.2.1" />
+    <PackageReference Include="FluentAssertions" Version="6.12.1" />
+    <PackageReference Include="WhiteJackalStudio.TestTools" Version="1.0.0-beta3" />
   </ItemGroup>
 
   <ItemGroup>

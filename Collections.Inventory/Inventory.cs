@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace ToolBX.Collections.Inventory;
+﻿namespace ToolBX.Collections.Inventory;
 
 public interface IInventory<T> : IObservableCollection<Entry<T>>, ICollection<Entry<T>>, IEquatable<IInventory<T>>, IReadOnlyInventory<T>
 {
@@ -153,7 +151,7 @@ public abstract class Inventory<T> : IInventory<T>
 
         CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<Entry<T>>
         {
-            NewValues = new List<Entry<T>> { new(item, quantity) }
+            NewValues = [new(item, quantity)]
         });
     }
 
@@ -227,10 +225,10 @@ public abstract class Inventory<T> : IInventory<T>
 
         CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<Entry<T>>
         {
-            OldValues = new List<Entry<T>>
-            {
+            OldValues =
+            [
                 new(item, quantity)
-            }
+            ]
         });
     }
 
@@ -263,7 +261,7 @@ public abstract class Inventory<T> : IInventory<T>
         if (CollectionChanged != null && removals.Removed > 0)
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<Entry<T>>
             {
-                OldValues = new List<Entry<T>> { new(item, removals.Removed) }
+                OldValues = [new(item, removals.Removed)]
             });
 
         return removals;
@@ -337,10 +335,10 @@ public abstract class Inventory<T> : IInventory<T>
             Items.RemoveAt(indexOf);
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<Entry<T>>
             {
-                OldValues = new List<Entry<T>>
-                {
+                OldValues =
+                [
                     new(item, quantity)
-                }
+                ]
             });
         }
     }

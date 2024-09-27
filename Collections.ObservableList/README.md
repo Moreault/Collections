@@ -41,11 +41,3 @@ private void OnThingsChanged(object sender, CollectionChangeEventArgs<Thing> arg
   }
 }
 ```
-
-### Breaking changes
-
-#### 1.0.X -> 1.1.X
-
--Now uses a List internally instead of an array so it could break in places but signatures remain largely unchanged so do not expect compile errrors
--IndexesOf overloads return IReadOnlyList<T> instead ObservableList<T>
--The DLL now comes packaged with dependencies to the OPEX library and uses its extensions for many of its methods

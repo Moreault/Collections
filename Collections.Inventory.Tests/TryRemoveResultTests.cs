@@ -7,7 +7,7 @@ public sealed class TryRemoveResultTests : Tester
     public void Total_Always_ReturnRemovedPlusNotRemoved()
     {
         //Arrange
-        var instance = Fixture.Create<TryRemoveResult>();
+        var instance = Dummy.Create<TryRemoveResult>();
 
         //Act
         var result = instance.Total;
@@ -20,7 +20,7 @@ public sealed class TryRemoveResultTests : Tester
     public void ToString_WhenNoItemsWereRemoved_ReturnAllItemsCouldNotBeRemoved()
     {
         //Arrange
-        var instance = new TryRemoveResult(0, Fixture.Create<int>());
+        var instance = new TryRemoveResult(0, Dummy.Create<int>());
 
         //Act
         var result = instance.ToString();
@@ -33,7 +33,7 @@ public sealed class TryRemoveResultTests : Tester
     public void ToString_WhenAtLeastOneItemWasRemoved_ReturnHowManyOutOfTotalWereRemoved()
     {
         //Arrange
-        var instance = new TryRemoveResult(Fixture.Create<int>(), Fixture.Create<int>());
+        var instance = new TryRemoveResult(Dummy.Create<int>(), Dummy.Create<int>());
 
         //Act
         var result = instance.ToString();
@@ -43,11 +43,11 @@ public sealed class TryRemoveResultTests : Tester
     }
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<TryRemoveResult>(Fixture);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<TryRemoveResult>(Dummy);
 
     [TestMethod]
-    public void Ensure_ValueHashCode() => Ensure.ValueHashCode<TryRemoveResult>(Fixture);
+    public void Ensure_ValueHashCode() => Ensure.ValueHashCode<TryRemoveResult>(Dummy, JsonSerializerOptions);
 
     [TestMethod]
-    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<TryRemoveResult>(Fixture);
+    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<TryRemoveResult>(Dummy);
 }

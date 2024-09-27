@@ -66,7 +66,7 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
         var item = _items.Pop();
         CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
         {
-            OldValues = new List<T> { item }
+            OldValues = [item]
         });
         return item;
     }
@@ -78,7 +78,7 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
         if (item.IsSuccess)
             CollectionChanged?.Invoke(this, new CollectionChangeEventArgs<T>
             {
-                OldValues = new List<T> { item.Value! }
+                OldValues = [item.Value!]
             });
         return item;
     }

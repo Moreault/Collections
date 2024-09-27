@@ -1,19 +1,8 @@
 ﻿namespace ToolBX.Collections.UnitTesting.Customizations;
 
-public class ObservableListSpecimenBuilder : ISpecimenBuilder
+public sealed class ObservableListCustomization : ListCustomizationBase
 {
-    public object Create(object request, ISpecimenContext context)
-    {
-        if (request is Type type && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ObservableList<>))
-        {
-            var elementType = type.GetGenericArguments()[0];
-            var listType = typeof(List<>).MakeGenericType(elementType);
-            var list = context.Resolve(listType);
+    protected override IEnumerable<Type> Types { get; } = [typeof(ObservableList<>), typeof(IObservableList<>)];
 
-            var toObservableList = typeof(ObservableListExtensions).GetSingleMethod(nameof(ObservableListExtensions.ToObservableList)).MakeGenericMethod(elementType);
-            return toObservableList.Invoke(null, new[] { list })!;
-        }
-
-        return new NoSpecimen();
-    }
+    protected override object Convert<T>(IEnumerable<T> source) => source.ToObservableList();
 }

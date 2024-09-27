@@ -92,10 +92,10 @@ public class InventoryList<T> : Inventory<T>
 
         OnCollectionChanged(new CollectionChangeEventArgs<Entry<T>>
         {
-            NewValues = new List<Entry<T>>
-            {
+            NewValues =
+            [
                 new(item, quantity)
-            }
+            ]
         });
     }
 

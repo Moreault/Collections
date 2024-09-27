@@ -8,3 +8,4 @@ global using ToolBX.Collections.Grid.Resources;
 global using ToolBX.Mathemancy;
 global using ToolBX.OPEX;
 global using ToolBX.Reflection4Humans.Extensions;
+global using ToolBX.Reflection4Humans.ValueEquality;

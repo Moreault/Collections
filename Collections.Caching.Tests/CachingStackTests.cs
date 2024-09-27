@@ -1,12 +1,12 @@
 ﻿namespace Collections.Caching.Tests;
 
 [TestClass]
-public class CachingStackTests : Tester<CachingStack<Dummy>>
+public class CachingStackTests : Tester<CachingStack<Garbage>>
 {
     protected override void InitializeTest()
     {
         base.InitializeTest();
-        Fixture.WithCollectionCustomizations();
+        Dummy.WithCollectionCustomizations();
         JsonSerializerOptions.WithCachingConverters();
     }
 
@@ -38,10 +38,10 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsLessThanZero_RemoveAllItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var value = -Fixture.Create<int>();
+        var value = -Dummy.Create<int>();
 
         //Act
         Instance.Limit = value;
@@ -54,19 +54,19 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsLessThanZero_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
-        var value = -Fixture.Create<int>();
+        var value = -Dummy.Create<int>();
 
         //Act
         Instance.Limit = value;
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new() { OldValues = items }
             });
@@ -76,9 +76,9 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsLessThanZeroButStackWasEmpty_DoNotTrigger()
     {
         //Arrange
-        var value = -Fixture.Create<int>();
+        var value = -Dummy.Create<int>();
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -92,7 +92,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsZero_RemoveAllItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -106,17 +106,17 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsZero_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Limit = 0;
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new() { OldValues = items }
             });
@@ -126,7 +126,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsZeroButStackWasEmpty_DoNotTrigger()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -140,16 +140,16 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsLessThanZero_PreventAddingItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var value = -Fixture.Create<int>();
+        var value = -Dummy.Create<int>();
 
         //Act
         Instance.Limit = value;
 
         //Assert
-        Instance.Push(Fixture.Create<Dummy>());
+        Instance.Push(Dummy.Create<Garbage>());
         Instance.Should().BeEmpty();
     }
 
@@ -157,14 +157,14 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsZero_PreventAddingItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
         Instance.Limit = 0;
 
         //Assert
-        Instance.Push(Fixture.Create<Dummy>());
+        Instance.Push(Dummy.Create<Garbage>());
         Instance.Should().BeEmpty();
     }
 
@@ -172,7 +172,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsEqualToSize_DoNotRemoveItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(6).ToList();
+        var items = Dummy.CreateMany<Garbage>(6).ToList();
         Instance.Push(items);
 
         //Act
@@ -186,10 +186,10 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsEqualToSize_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(6).ToList();
+        var items = Dummy.CreateMany<Garbage>(6).ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -203,14 +203,14 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsHalfSize_RemoveHalfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(10).ToList();
+        var items = Dummy.CreateMany<Garbage>(10).ToList();
         Instance.Push(items);
 
         //Act
         Instance.Limit = 5;
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<Dummy>
+        Instance.Should().BeEquivalentTo(new List<Garbage>
             {
                 items[5],
                 items[6],
@@ -224,28 +224,28 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsHalfSize_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(10).ToList();
+        var items = Dummy.CreateMany<Garbage>(10).ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Limit = 5;
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy>
-                    {
+                    OldValues =
+                    [
                         items[0],
                         items[1],
                         items[2],
                         items[3],
                         items[4],
-                    }
+                    ]
                 }
             });
     }
@@ -254,16 +254,16 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Limit_WhenLimitIsHalfSizeAndAddMoreItems_RemoveItemsAsNewOnesAreAdded()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(10).ToList();
+        var items = Dummy.CreateMany<Garbage>(10).ToList();
         Instance.Push(items);
 
         //Act
         Instance.Limit = 5;
 
         //Assert
-        var newItems = Fixture.CreateMany<Dummy>(3).ToList();
+        var newItems = Dummy.CreateMany<Garbage>(3).ToList();
         Instance.Push(newItems);
-        Instance.Should().BeEquivalentTo(new List<Dummy>
+        Instance.Should().BeEquivalentTo(new List<Garbage>
             {
                 newItems[0],
                 newItems[1],
@@ -277,7 +277,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenMaxSizeIsNegative_Throw()
     {
         //Arrange
-        var maxSize = -Fixture.Create<int>();
+        var maxSize = -Dummy.Create<int>();
 
         //Act
         var action = () => Instance.TrimTopDownTo(maxSize);
@@ -290,7 +290,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenTrimEmptyCollectionToZero_DoNotTriggerEvent()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -304,7 +304,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenContainsItemsAndTrimToZero_RemoveEverything()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -318,17 +318,17 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenContainsItemsAndTrimToZero_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TrimTopDownTo(0);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new() { OldValues = items }
             });
@@ -338,7 +338,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -352,10 +352,10 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -369,7 +369,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -383,10 +383,10 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -400,14 +400,14 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenContainsItemsAndTrimToHalf_RemoveTopHalfOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(12).ToList();
+        var items = Dummy.CreateMany<Garbage>(12).ToList();
         Instance.Push(items);
 
         //Act
         Instance.TrimTopDownTo(6);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<Dummy>
+        Instance.Should().BeEquivalentTo(new List<Garbage>
             {
                 items[0],
                 items[1],
@@ -422,29 +422,29 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimTopDownTo_WhenContainsItemsAndTrimToHalf_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(12).ToList();
+        var items = Dummy.CreateMany<Garbage>(12).ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TrimTopDownTo(6);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy>
-                    {
+                    OldValues =
+                    [
                         items[6],
                         items[7],
                         items[8],
                         items[9],
                         items[10],
                         items[11],
-                    }
+                    ]
                 }
             });
     }
@@ -453,7 +453,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenMaxSizeIsNegative_Throw()
     {
         //Arrange
-        var maxSize = -Fixture.Create<int>();
+        var maxSize = -Dummy.Create<int>();
 
         //Act
         var action = () => Instance.TrimBottomDownTo(maxSize);
@@ -466,7 +466,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenTrimEmptyCollectionToZero_DoNotTriggerEvent()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -480,7 +480,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenContainsItemsAndTrimToZero_RemoveEverything()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -494,17 +494,17 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenContainsItemsAndTrimToZero_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TrimBottomDownTo(0);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new() { OldValues = items }
             });
@@ -514,7 +514,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -528,10 +528,10 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenContainsItemsButTrimIsMoreThanCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -545,7 +545,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotRemoveAnything()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -559,10 +559,10 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenContainsItemsButTrimIsEqualToCount_DoNotTrigger()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
@@ -576,14 +576,14 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenContainsItemsAndTrimToHalf_RemoveTopHalfOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(12).ToList();
+        var items = Dummy.CreateMany<Garbage>(12).ToList();
         Instance.Push(items);
 
         //Act
         Instance.TrimBottomDownTo(6);
 
         //Assert
-        Instance.Should().BeEquivalentTo(new List<Dummy>
+        Instance.Should().BeEquivalentTo(new List<Garbage>
             {
                 items[6],
                 items[7],
@@ -598,29 +598,29 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TrimBottomDownTo_WhenContainsItemsAndTrimToHalf_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(12).ToList();
+        var items = Dummy.CreateMany<Garbage>(12).ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (_, args) => triggers.Add(args);
 
         //Act
         Instance.TrimBottomDownTo(6);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy>
-                    {
+                    OldValues =
+                    [
                         items[0],
                         items[1],
                         items[2],
                         items[3],
                         items[4],
                         items[5],
-                    }
+                    ]
                 }
             });
     }
@@ -641,7 +641,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Count_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -657,7 +657,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
         //Arrange
 
         //Act
-        var result = ((IReadOnlyCollection<Dummy>)Instance).Count;
+        var result = ((IReadOnlyCollection<Garbage>)Instance).Count;
 
         //Assert
         result.Should().Be(0);
@@ -667,11 +667,11 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void CountFromReadOnlyCollection_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
-        var result = ((IReadOnlyCollection<Dummy>)Instance).Count;
+        var result = ((IReadOnlyCollection<Garbage>)Instance).Count;
 
         //Assert
         result.Should().Be(items.Count);
@@ -681,7 +681,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Clear_WhenIsEmpty_DoNotTriggerEvent()
     {
         //Arrange
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -695,7 +695,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Clear_WhenContainsItems_RemoveAll()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -709,17 +709,17 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Clear_WhenContainsItems_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Clear();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
         {
             new() { OldValues = items }
         });
@@ -729,10 +729,10 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Contains_WhenItemIsNotInCollection_ReturnFalse()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
 
         //Act
         var result = Instance.Contains(item);
@@ -745,7 +745,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Contains_WhenItemIsInCollection_ReturnTrue()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         var item = items.GetRandom();
@@ -773,7 +773,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Peek_WhenContainsOnlyOneItem_ReturnThatItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
@@ -787,7 +787,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Peek_WhenContainsItems_ReturnLastItemAdded()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -806,34 +806,34 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
         var result = Instance.TryPeek();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Failure());
+        result.Should().Be(Result<Garbage>.Failure());
     }
 
     [TestMethod]
     public void TryPeek_WhenContainsOnlyOneItem_ReturnThatItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
         var result = Instance.TryPeek();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(item));
+        result.Should().Be(Result<Garbage>.Success(item));
     }
 
     [TestMethod]
     public void TryPeek_WhenContainsItems_ReturnLastItemAdded()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
         //Act
         var result = Instance.TryPeek();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(items.Last()));
+        result.Should().Be(Result<Garbage>.Success(items.Last()));
     }
 
     [TestMethod]
@@ -852,7 +852,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Pop_WhenContainsOnlyOneItem_ReturnThatItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
@@ -866,7 +866,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Pop_WhenContainsOnlyOneItem_RemoveItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
@@ -880,21 +880,21 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Pop_WhenContainsOnlyOneItem_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Pop();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy> { item }
+                    OldValues = [item]
                 }
             });
     }
@@ -903,7 +903,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Pop_WhenContainsItems_ReturnLastItemAdded()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
         //Act
         var result = Instance.Pop();
@@ -916,7 +916,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Pop_WhenContainsItems_RemoveItem()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -930,21 +930,21 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void Pop_WhenContainsItems_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.Pop();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy> { items.Last() }
+                    OldValues = [items.Last()]
                 }
             });
     }
@@ -958,28 +958,28 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
         var result = Instance.TryPop();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Failure());
+        result.Should().Be(Result<Garbage>.Failure());
     }
 
     [TestMethod]
     public void TryPop_WhenContainsOnlyOneItem_ReturnThatItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
         var result = Instance.TryPop();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(item));
+        result.Should().Be(Result<Garbage>.Success(item));
     }
 
     [TestMethod]
     public void TryPop_WhenContainsOnlyOneItem_RemoveItem()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
         //Act
@@ -993,21 +993,21 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TryPop_WhenContainsOnlyOneItem_TriggerEvent()
     {
         //Arrange
-        var item = Fixture.Create<Dummy>();
+        var item = Dummy.Create<Garbage>();
         Instance.Push(item);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryPop();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy> { item }
+                    OldValues = [item]
                 }
             });
     }
@@ -1016,20 +1016,20 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TryPop_WhenContainsItems_ReturnLastItemAdded()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
         //Act
         var result = Instance.TryPop();
 
         //Assert
-        result.Should().Be(Result<Dummy>.Success(items.Last()));
+        result.Should().Be(Result<Garbage>.Success(items.Last()));
     }
 
     [TestMethod]
     public void TryPop_WhenContainsItems_RemoveItem()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
         //Act
@@ -1043,21 +1043,21 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void TryPop_WhenContainsItems_TriggerEvent()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
         Instance.TryPop();
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
-                    OldValues = new List<Dummy> { items.Last() }
+                    OldValues = [items.Last()]
                 }
             });
     }
@@ -1079,7 +1079,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     {
         //Arrange
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -1093,10 +1093,10 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void PushParams_WhenIsNotEmpty_PushAllOfThemToTopOfStack()
     {
         //Arrange
-        var firstItems = Fixture.CreateMany<Dummy>().ToArray();
+        var firstItems = Dummy.CreateMany<Garbage>().ToArray();
         Instance.Push(firstItems);
 
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         Instance.Push(items);
@@ -1109,19 +1109,19 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void PushParams_WhenIsNotEmpty_TriggerEvent()
     {
         //Arrange
-        var firstItems = Fixture.CreateMany<Dummy>().ToArray();
+        var firstItems = Dummy.CreateMany<Garbage>().ToArray();
         Instance.Push(firstItems);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         Instance.Push(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
         {
             new()
             {
@@ -1134,7 +1134,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void PushEnumerable_WhenItemsIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> items = null!;
+        IEnumerable<Garbage> items = null!;
 
         //Act
         var action = () => Instance.Push(items);
@@ -1147,7 +1147,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void PushEnumerable_WhenItemsIsEmpty_DoNotAddNewElements()
     {
         //Arrange
-        var items = new List<Dummy>();
+        var items = new List<Garbage>();
 
         //Act
         Instance.Push(items);
@@ -1160,9 +1160,9 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void PushEnumerable_WhenItemsIsEmpty_DoNotTrigger()
     {
         //Arrange
-        var items = new List<Dummy>();
+        var items = new List<Garbage>();
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
         //Act
@@ -1176,10 +1176,10 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void PushEnumerable_WhenIsNotEmpty_PushAllOfThemToTopOfStack()
     {
         //Arrange
-        var firstItems = Fixture.CreateMany<Dummy>().ToList();
+        var firstItems = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(firstItems);
 
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         Instance.Push(items);
@@ -1192,19 +1192,19 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void PushEnumerable_WhenIsNotEmpty_TriggerEvent()
     {
         //Arrange
-        var firstItems = Fixture.CreateMany<Dummy>().ToList();
+        var firstItems = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(firstItems);
 
-        var triggers = new List<CollectionChangeEventArgs<Dummy>>();
+        var triggers = new List<CollectionChangeEventArgs<Garbage>>();
         Instance.CollectionChanged += (sender, args) => triggers.Add(args);
 
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         Instance.Push(items);
 
         //Assert
-        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Dummy>>
+        triggers.Should().BeEquivalentTo(new List<CollectionChangeEventArgs<Garbage>>
             {
                 new()
                 {
@@ -1222,30 +1222,30 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be("Empty CachingStack<Dummy>");
+        result.Should().Be("Empty CachingStack<Garbage>");
     }
 
     [TestMethod]
     public void ToString_WhenContainsItems_ReturnNumberOfItems()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>(3).ToList();
+        var items = Dummy.CreateMany<Garbage>(3).ToList();
         Instance.Push(items);
 
         //Act
         var result = Instance.ToString();
 
         //Assert
-        result.Should().Be("CachingStack<Dummy> with 3 items");
+        result.Should().Be("CachingStack<Garbage> with 3 items");
     }
 
     [TestMethod]
     public void CopyTo_Always_CopyToArray()
     {
         //Arrange
-        var items = Fixture.CreateMany<Dummy>().ToList();
+        var items = Dummy.CreateMany<Garbage>().ToList();
         Instance.Push(items);
-        var array = new Dummy[items.Count];
+        var array = new Garbage[items.Count];
 
         //Act
         ((ICollection)Instance).CopyTo(array, 0);
@@ -1258,7 +1258,7 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     public void GetHashCode_Always_ReturnFromInternalCollection()
     {
         //Arrange
-        var internalCollection = GetFieldValue<ObservableList<Dummy>>("_items")!;
+        var internalCollection = GetFieldValue<ObservableList<Garbage>>("_items")!;
 
         //Act
         var result = Instance.GetHashCode();
@@ -1268,11 +1268,8 @@ public class CachingStackTests : Tester<CachingStack<Dummy>>
     }
 
     [TestMethod]
-    public void Ensure_ValueEquality() => Ensure.ValueEquality<CachingStack<Dummy>>(Fixture, JsonSerializerOptions);
+    public void Ensure_ValueEquality() => Ensure.ValueEquality<CachingStack<Garbage>>(Dummy, JsonSerializerOptions);
 
     [TestMethod]
-    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<CachingStack<Dummy>>(Fixture, JsonSerializerOptions);
-
-    [TestMethod]
-    public void Ensure_EnumeratesAllItems() => Ensure.EnumeratesAllItems<CachingStack<Dummy>, Dummy>(Fixture);
+    public void Ensure_IsJsonSerializable() => Ensure.IsJsonSerializable<CachingStack<Garbage>>(Dummy, JsonSerializerOptions);
 }

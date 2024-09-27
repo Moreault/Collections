@@ -1,13 +1,37 @@
 ﻿namespace Collections.Inventory.Tests;
 
 [TestClass]
-public sealed class EntryTests : EntryTester<Entry<DummyItem>>
+public sealed class EntryTests : EntryTester<Entry<GarbageItem>>
 {
+    [TestMethod]
+    public void Quantity_WhenIsZero_DoNotThrow()
+    {
+        //Arrange
+
+        //Act
+        var action = () => new Entry<GarbageItem> { Quantity = 0 };
+
+        //Assert
+        action.Should().NotThrow();
+    }
+
+    [TestMethod]
+    public void Quantity_WhenIsNegative_Throw()
+    {
+        //Arrange
+
+        //Act
+        var action = () => new Entry<GarbageItem> { Quantity = -Dummy.Create<int>() };
+
+        //Assert
+        action.Should().Throw<ArgumentOutOfRangeException>().WithMessage($"{Exceptions.QuantityMustBePositive}*");
+    }
+
     [TestMethod]
     public void ToString_WhenItemIsNull_ReturnNull()
     {
         //Arrange
-        var instance = Fixture.Build<Entry<DummyItem>>().Without(x => x.Item).Create();
+        var instance = Dummy.Build<Entry<GarbageItem>>().Without(x => x.Item).Create();
 
         //Act
         var result = instance.ToString();
@@ -20,7 +44,7 @@ public sealed class EntryTests : EntryTester<Entry<DummyItem>>
     public void ToString_WhenItemIsNotNull_ReturnItemWithQuantity()
     {
         //Arrange
-        var instance = Fixture.Create<Entry<DummyItem>>();
+        var instance = Dummy.Create<Entry<GarbageItem>>();
 
         //Act
         var result = instance.ToString();
