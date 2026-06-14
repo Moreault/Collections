@@ -57,8 +57,7 @@ public class ObservableStack<T> : IObservableStack<T>, IEquatable<ObservableStac
 
     public Result<T> TryPeek()
     {
-        var isSuccess = _items.TryPeek(out var result);
-        return isSuccess ? Result<T>.Success(result) : Result<T>.Failure();
+        return _items.TryPeek(out var result) ? Result<T>.Success(result) : Result<T>.Failure();
     }
 
     public T Pop()

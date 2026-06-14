@@ -4089,7 +4089,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         //Arrange
         var observableList = Dummy.Create<TList>();
 
-        using var enumerator = ((IEnumerable)observableList).GetEnumerator() as IEnumerator<TItem>;
+        using var enumerator = (IEnumerator<TItem>)((IEnumerable)observableList).GetEnumerator();
         observableList.RemoveAt(observableList.GetRandomIndex());
 
         //Act
@@ -4104,7 +4104,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
     {
         //Arrange
         var observableList = Dummy.Create<TList>();
-        using var enumerator = ((IEnumerable)observableList).GetEnumerator() as IEnumerator<TItem>;
+        using var enumerator = (IEnumerator<TItem>)((IEnumerable)observableList).GetEnumerator();
 
         //Act
         enumerator.Reset();
@@ -4166,7 +4166,7 @@ public abstract class ObservableListTester<TList, TItem> : Tester<TList> where T
         var result = Instance.GetRandom();
 
         //Assert
-        result.Should().Be(default);
+        result.Should().Be(default!);
     }
 
     [TestMethod]

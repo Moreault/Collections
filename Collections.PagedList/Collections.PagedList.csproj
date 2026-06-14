@@ -15,28 +15,24 @@
 		<RepositoryUrl>https://github.com/Moreault/Collections</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Moreault/Collections</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>Common types for the ToolBX.Collections namespaces. This package should not be referenced by your project directly.</Description>
-		<PackageIcon>collections.common.png</PackageIcon>
+		<Description>An immutable, read-only paginated collection. Ideal as the result type for paginated REST endpoints or any other paged data.</Description>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>pagedlist.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\collections.common.png">
+		<None Include="..\pagedlist.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
+		<None Include="README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.OPEX" Version="4.0.0-beta.1" />
-		<PackageReference Include="ToolBX.Reflection4Humans.ValueEquality" Version="4.0.0-beta.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="README.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
+		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="4.0.0-beta.2" />
 	</ItemGroup>
 
 </Project>

@@ -2,6 +2,8 @@
 
 global using System.Collections;
 global using System.Text.Json;
+global using ToolBX.AssertBox;
+global using ToolBX.AssertBox.Assertions;
 global using ToolBX.Collections.Inventory.Json;
 global using ToolBX.Collections.UnitTesting.Inventory;
 global using ToolBX.OPEX;

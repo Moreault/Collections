@@ -2,7 +2,7 @@
 
 public abstract record EntryBase<T>
 {
-    public T? Item { get; init; }
+    public T Item { get; init; } = default!;
 
     public int Quantity
     {
@@ -22,7 +22,7 @@ public abstract record EntryBase<T>
         Quantity = quantity;
     }
 
-    public void Deconstruct(out T? item, out int quantity)
+    public void Deconstruct(out T item, out int quantity)
     {
         item = Item;
         quantity = Quantity;
