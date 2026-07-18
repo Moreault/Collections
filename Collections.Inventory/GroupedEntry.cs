@@ -27,7 +27,13 @@ public sealed record GroupedEntry<T> : EntryBase<T>
         return base.Equals(other) && Indexes.SequenceEqualOrNull(other.Indexes);
     }
 
-    public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), Indexes.GetValueHashCode());
+    public override int GetHashCode()
+    {
+        var hash = new HashCode();
+        hash.Add(base.GetHashCode());
+        foreach (var index in Indexes) hash.Add(index);
+        return hash.ToHashCode();
+    }
 
     public override string ToString() => $"{base.ToString()} at indexes {string.Join(", ", Indexes)}";
 }

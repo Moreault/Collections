@@ -27,7 +27,12 @@ public sealed record StockSearchResult<T> : IReadOnlyList<IndexedEntry<T>>, IEqu
         return this.SequenceEqual(other);
     }
 
-    public override int GetHashCode() => _items.GetValueHashCode();
+    public override int GetHashCode()
+    {
+        var hash = new HashCode();
+        foreach (var item in _items) hash.Add(item);
+        return hash.ToHashCode();
+    }
 
     public IReadOnlyList<GroupedEntry<T>> Group()
     {

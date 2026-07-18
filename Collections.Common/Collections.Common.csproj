@@ -29,7 +29,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="ToolBX.OPEX" Version="4.0.0" />
-		<PackageReference Include="ToolBX.Reflection4Humans.ValueEquality" Version="4.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

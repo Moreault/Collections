@@ -25,5 +25,11 @@ public sealed record CollectionChangeEventArgs<T>
         return _oldValues.SequenceEqualOrNull(other._oldValues) && _newValues.SequenceEqualOrNull(other._newValues);
     }
 
-    public override int GetHashCode() => this.GetValueHashCode();
+    public override int GetHashCode()
+    {
+        var hash = new HashCode();
+        foreach (var value in _oldValues) hash.Add(value);
+        foreach (var value in _newValues) hash.Add(value);
+        return hash.ToHashCode();
+    }
 }
