@@ -36,9 +36,12 @@ public class OverlapGrid<T> : IEnumerable<Cell<T>>, IEquatable<OverlapGrid<T>>, 
     {
         if (collection == null) throw new ArgumentNullException(nameof(collection));
         _items.AddRange(collection);
+        RecomputeBounds();
     }
 
-    private void OnCollectionChanged(object sender, GridChangedEventArgs<T> args)
+    private void OnCollectionChanged(object sender, GridChangedEventArgs<T> args) => RecomputeBounds();
+
+    private void RecomputeBounds()
     {
         //TODO Apply this new logic to regular Grid<T>
         if (_items.Any())

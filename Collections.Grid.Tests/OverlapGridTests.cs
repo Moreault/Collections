@@ -669,6 +669,29 @@ public class OverlapGridTests : Tester<OverlapGrid<Garbage>>
     }
 
     [TestMethod]
+    public void Constructor_WhenCollectionContainsItems_RecomputeBoundsFromThoseItems()
+    {
+        //Arrange
+        var collection = new List<Cell<Garbage>>
+        {
+            new(5, 7, Dummy.Create<Garbage>()),
+            new(9, 3, Dummy.Create<Garbage>())
+        };
+
+        //Act
+        var result = new OverlapGrid<Garbage>(collection);
+
+        //Assert
+        result.Boundaries.Should().Be(new Boundaries<int>
+        {
+            Top = 3,
+            Right = 9,
+            Bottom = 7,
+            Left = 5,
+        });
+    }
+
+    [TestMethod]
     public void Boundaries_WhenIsEmpty_ReturnZeroes()
     {
         //Arrange
@@ -4169,6 +4192,25 @@ public class OverlapGridTests : Tester<OverlapGrid<Garbage>>
         //Assert
         result.Should().BeEquivalentTo(items);
         result.Should().NotBeSameAs(items);
+    }
+
+    [TestMethod]
+    public void Copy_WhenCopyingACopy_StillContainEveryItem()
+    {
+        //Arrange : the parameterless Copy() clips by Boundaries, so a copied grid must report correct
+        //bounds; otherwise copying it again silently drops everything outside the (0,0) cell.
+        var items = new List<Cell<Garbage>>
+        {
+            new(5, 7, Dummy.Create<Garbage>()),
+            new(9, 3, Dummy.Create<Garbage>())
+        };
+        Instance.Add(items);
+
+        //Act
+        var result = Instance.Copy().Copy();
+
+        //Assert
+        result.Should().BeEquivalentTo(items);
     }
 
     [TestMethod]
