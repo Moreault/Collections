@@ -2,7 +2,7 @@
 
 public abstract record EntryBase<T>
 {
-    public required T Item { get; init; } = default!;
+    public T Item { get; init; } = default!;
 
     public int Quantity
     {
