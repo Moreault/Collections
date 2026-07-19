@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace ToolBX.Collections.Inventory.Json;
 
@@ -7,6 +9,8 @@ public sealed class InventoryListJsonConverterFactory : JsonConverterFactory
 {
     public override bool CanConvert(Type typeToConvert) => typeToConvert.IsGenericType && typeToConvert.GetGenericTypeDefinition() == typeof(InventoryList<>);
 
+    [UnconditionalSuppressMessage("AOT", "IL3050",
+        Justification = "Open generic converters must build the closed converter type via MakeGenericType, which is inherently dynamic and cannot be annotated on this base override (IL3051). AOT consumers must register a source-generated converter for the concrete type instead.")]
     public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
         var elementType = typeToConvert.GetGenericArguments()[0];
@@ -58,9 +62,10 @@ public abstract class InventoryJsonConverterBase<TInventory, TItem> : JsonConver
                     throw new JsonException("Expected StartArray token for 'Items'.");
                 }
 
+                var entryTypeInfo = (JsonTypeInfo<Entry<TItem>>)options.GetTypeInfo(typeof(Entry<TItem>));
                 while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                 {
-                    var entry = JsonSerializer.Deserialize<Entry<TItem>>(ref reader, options)!;
+                    var entry = JsonSerializer.Deserialize(ref reader, entryTypeInfo)!;
                     inventory.Add(entry.Item, entry.Quantity);
                 }
             }
@@ -79,9 +84,10 @@ public abstract class InventoryJsonConverterBase<TInventory, TItem> : JsonConver
 
         writer.WritePropertyName("Items");
         writer.WriteStartArray();
+        var entryTypeInfo = (JsonTypeInfo<Entry<TItem>>)options.GetTypeInfo(typeof(Entry<TItem>));
         foreach (var item in value)
         {
-            JsonSerializer.Serialize(writer, item, options);
+            JsonSerializer.Serialize(writer, item, entryTypeInfo);
         }
         writer.WriteEndArray();
 

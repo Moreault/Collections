@@ -2793,7 +2793,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Garbage>>
         var action = () => Instance.Remove(items);
 
         //Assert
-        action.Should().Throw<ArgumentException>("items should not be empty");
+        action.Should().Throw<ArgumentException>().WithMessage("items should not be empty");
     }
 
     [TestMethod]
@@ -2865,7 +2865,7 @@ public class CachingDictionaryTests : Tester<CachingDictionary<int, Garbage>>
         var action = () => Instance.Remove(items);
 
         //Assert
-        action.Should().Throw<ArgumentException>("items should not be empty");
+        action.Should().Throw<ArgumentException>().WithMessage("items should not be empty");
     }
 
     [TestMethod]

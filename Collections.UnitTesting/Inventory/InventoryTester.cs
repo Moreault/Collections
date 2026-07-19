@@ -3783,7 +3783,7 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
         foreach (var (item, quantity) in entries)
             Instance.Add(item, quantity);
 
-        using var enumerator = ((IEnumerable)Instance).GetEnumerator() as IEnumerator<Entry<GarbageItem>>;
+        using var enumerator = (IEnumerator<Entry<GarbageItem>>)((IEnumerable)Instance).GetEnumerator();
         Instance.RemoveAt(Instance.GetRandomIndex());
 
         //Act
@@ -3800,7 +3800,7 @@ public abstract class InventoryTester<TInventory> : Tester<TInventory> where TIn
         var entries = Dummy.CreateMany<Entry<GarbageItem>>().ToList();
         foreach (var (item, quantity) in entries)
             Instance.Add(item, quantity);
-        using var enumerator = ((IEnumerable)Instance).GetEnumerator() as IEnumerator<Entry<GarbageItem>>;
+        using var enumerator = (IEnumerator<Entry<GarbageItem>>)((IEnumerable)Instance).GetEnumerator();
 
         //Act
         enumerator.Reset();

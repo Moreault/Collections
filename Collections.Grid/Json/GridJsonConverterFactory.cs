@@ -1,9 +1,14 @@
-﻿namespace ToolBX.Collections.Grid.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization.Metadata;
+
+namespace ToolBX.Collections.Grid.Json;
 
 public sealed class GridJsonConverterFactory : JsonConverterFactory
 {
     public override bool CanConvert(Type typeToConvert) => typeToConvert.IsGenericType && typeToConvert.GetGenericTypeDefinition() == typeof(Grid<>);
 
+    [UnconditionalSuppressMessage("AOT", "IL3050",
+        Justification = "Open generic converters must build the closed converter type via MakeGenericType, which is inherently dynamic and cannot be annotated on this base override (IL3051). AOT consumers must register a source-generated converter for the concrete type instead.")]
     public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
         var elementType = typeToConvert.GetGenericArguments()[0];
@@ -60,7 +65,7 @@ public sealed class GridJsonConverter<T> : JsonConverter<Grid<T>>
                             y = reader.GetInt32();
                             break;
                         case "Value":
-                            value = JsonSerializer.Deserialize<T>(ref reader, options);
+                            value = JsonSerializer.Deserialize(ref reader, (JsonTypeInfo<T>)options.GetTypeInfo(typeof(T)));
                             break;
                     }
                 }
@@ -82,7 +87,7 @@ public sealed class GridJsonConverter<T> : JsonConverter<Grid<T>>
             writer.WriteNumber("Y", item.Index.Y);
 
             writer.WritePropertyName("Value");
-            JsonSerializer.Serialize(writer, item.Value, options);
+            JsonSerializer.Serialize(writer, item.Value, (JsonTypeInfo<T?>)options.GetTypeInfo(typeof(T)));
 
             writer.WriteEndObject();
         }

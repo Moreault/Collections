@@ -15,17 +15,17 @@
 		<RepositoryUrl>https://github.com/Moreault/Collections</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Moreault/Collections</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>A stack that triggers an event when its content is changed.</Description>
+		<Description>An immutable, read-only paginated collection. Ideal as the result type for paginated REST endpoints or any other paged data.</Description>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageIcon>observablestack.png</PackageIcon>
+		<PackageIcon>pagedlist.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\observablestack.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
+		<None Include="..\pagedlist.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
 		</None>
-		<None Include="..\README.md">
+		<None Include="README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
@@ -33,11 +33,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="ToolBX.Reflection4Humans.Extensions" Version="4.0.0" />
-		<PackageReference Include="ToolBX.OutWarden" Version="4.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\Collections.Common\Collections.Common.csproj" />
 	</ItemGroup>
 
 </Project>

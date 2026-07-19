@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Collections.Common\Collections.Common.csproj" />
+		<ProjectReference Include="..\Collections.PagedList\Collections.PagedList.csproj" />
 		<ProjectReference Include="..\Collections.UnitTesting\Collections.UnitTesting.csproj" />
 	</ItemGroup>
 
