@@ -2,14 +2,15 @@
 
 public abstract record EntryBase<T>
 {
-    public T Item { get; init; } = default!;
+    public required T Item { get; init; } = default!;
 
     public int Quantity
     {
-        get => _quantity;
-        init => _quantity = value < 0 ? throw new ArgumentOutOfRangeException(nameof(value), value, Exceptions.QuantityMustBePositive) : value;
-    }
-    private readonly int _quantity = 1;
+        get;
+        init => field = value < 0
+            ? throw new ArgumentOutOfRangeException(nameof(value), value, Exceptions.QuantityMustBePositive)
+            : value;
+    } = 1;
 
     protected EntryBase()
     {

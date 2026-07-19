@@ -73,12 +73,15 @@ public abstract class Inventory<T> : IInventory<T>
 
     public int StackSize
     {
-        get => _stackSize;
+        get;
         set
         {
-            if (value <= 0) throw new ArgumentException(string.Format(Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, GetType().GetHumanReadableName(), value));
+            if (value <= 0)
+                throw new ArgumentException(string.Format(
+                    Exceptions.CannotInstantiateBecauseStackSizeMustBeGreaterThanZero, GetType().GetHumanReadableName(),
+                    value));
 
-            if (_stackSize > value)
+            if (field > value)
             {
                 var oldItems = Items.ToList();
                 var changedValues = new List<Entry<T>>();
@@ -96,12 +99,11 @@ public abstract class Inventory<T> : IInventory<T>
                     {
                         OldValues = changedValues
                     });
-
             }
-            _stackSize = value;
+
+            field = value;
         }
-    }
-    private int _stackSize = DefaultValues.StackSize;
+    } = DefaultValues.StackSize;
 
     protected void OnCollectionChanged(CollectionChangeEventArgs<Entry<T>> args) => CollectionChanged?.Invoke(this, args);
 

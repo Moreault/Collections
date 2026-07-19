@@ -4,10 +4,9 @@ public sealed record GroupedEntry<T> : EntryBase<T>
 {
     public IReadOnlyList<int> Indexes
     {
-        get => _indexes;
-        init => _indexes = value?.ToImmutableList() ?? throw new ArgumentNullException(nameof(value));
-    }
-    private readonly IReadOnlyList<int> _indexes = ImmutableList<int>.Empty;
+        get;
+        init => field = value?.ToImmutableList() ?? throw new ArgumentNullException(nameof(value));
+    } = ImmutableList<int>.Empty;
 
     public GroupedEntry()
     {
