@@ -8,6 +8,7 @@ public static class GridAssertionExtensions
 {
     public static Assertions<Grid<T>> Contain<T>(this Assertions<Grid<T>> a, Func<Cell<T>, bool> predicate)
     {
+        ArgumentNullException.ThrowIfNull(predicate);
         Fail.When(
             !a.Subject.Any(predicate),
             MessageBuilder.Expected(a.SubjectExpression, "to contain an element matching the predicate", a.Subject));
@@ -16,6 +17,7 @@ public static class GridAssertionExtensions
 
     public static Assertions<Grid<T>> NotContain<T>(this Assertions<Grid<T>> a, Func<Cell<T>, bool> predicate)
     {
+        ArgumentNullException.ThrowIfNull(predicate);
         Fail.When(
             a.Subject.Any(predicate),
             MessageBuilder.Expected(a.SubjectExpression, "not to contain an element matching the predicate", a.Subject));
@@ -24,6 +26,7 @@ public static class GridAssertionExtensions
 
     public static Assertions<OverlapGrid<T>> Contain<T>(this Assertions<OverlapGrid<T>> a, Func<Cell<T>, bool> predicate)
     {
+        ArgumentNullException.ThrowIfNull(predicate);
         Fail.When(
             !a.Subject.Any(predicate),
             MessageBuilder.Expected(a.SubjectExpression, "to contain an element matching the predicate", a.Subject));
@@ -32,6 +35,7 @@ public static class GridAssertionExtensions
 
     public static Assertions<OverlapGrid<T>> NotContain<T>(this Assertions<OverlapGrid<T>> a, Func<Cell<T>, bool> predicate)
     {
+        ArgumentNullException.ThrowIfNull(predicate);
         Fail.When(
             a.Subject.Any(predicate),
             MessageBuilder.Expected(a.SubjectExpression, "not to contain an element matching the predicate", a.Subject));
